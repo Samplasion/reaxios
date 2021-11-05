@@ -12,6 +12,11 @@ jobs:
       matrix:
         flavor: [profile, release]
     steps:
+      - name: Create tag
+        id: create_tag
+        run: |
+          tag=builds-$(date +%Y%m%d-%H%M)
+          echo "::set-output name=tag::$tag"
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
@@ -25,11 +30,6 @@ jobs:
         run: flutter build macos --${{ matrix.flavor }}
 
       # Publish to a tag
-      - name: Create tag
-        id: create_tag
-        run: |
-          tag=builds-$(date +%Y%m%d-%H%M%S)
-          echo "::set-output name=tag::$tag"
       - name: Create Draft Release
         id: create_release
         uses: actions/create-release@v1
