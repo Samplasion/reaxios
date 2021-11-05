@@ -20,6 +20,7 @@ jobs:
         with:
           channel: stable
       - run: flutter pub get
+      - run: flutter config --enable-macos-desktop
       - name: "Build macOS app: ${{ matrix.flavor }}"
         run: flutter build macos --${{ matrix.flavor }}
 
