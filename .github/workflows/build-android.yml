@@ -1,4 +1,4 @@
-name: Build macOS app
+name: Build Android app
 
 on:
   push:
