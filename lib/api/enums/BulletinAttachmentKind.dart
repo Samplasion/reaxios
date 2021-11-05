@@ -1,0 +1,1 @@
+enum BulletinAttachmentKind { File, Other }

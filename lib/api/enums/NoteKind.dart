@@ -1,0 +1,1 @@
+enum NoteKind { Notice, Note }

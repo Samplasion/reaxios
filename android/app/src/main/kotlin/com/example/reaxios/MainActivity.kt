@@ -1,0 +1,6 @@
+package org.js.samplasion.reaxios
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
