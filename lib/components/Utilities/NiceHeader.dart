@@ -17,7 +17,12 @@ class NiceHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(Icons.auto_graph).iconSize(40).padding(right: 16),
+        if (leading != null) ...[
+          if (leading is Icon)
+            (leading as Icon).iconSize(40).padding(right: 16)
+          else
+            leading!.padding(right: 16),
+        ],
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
