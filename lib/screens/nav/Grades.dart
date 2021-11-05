@@ -145,24 +145,18 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
                 min(650, max(350, MediaQuery.of(context).size.width * 0.75)),
           ),
           child: BigCard(
-            leading:
-                NiceHeader(title: "Media", subtitle: period).padding(bottom: 8),
-            body: Row(
+            leading: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(
-                  child: GradeAvatar(
-                    radius: 36,
-                    grade: Grade.fakeFromDouble(gradeAverage(periodGrades)),
-                  ),
-                  flex: 1,
-                ),
-                Flexible(
-                  child: GradeTimeAverageChart(
-                    grades: periodGrades.reversed.toList(),
-                  ),
-                  flex: 6,
-                ),
+                NiceHeader(title: "Media", subtitle: period).padding(bottom: 8),
+                GradeAvatar(
+                  grade: Grade.fakeFromDouble(gradeAverage(periodGrades)),
+                )
               ],
+            ),
+            body: GradeTimeAverageChart(
+              grades: periodGrades.reversed.toList(),
             ),
           ),
         ).paddingDirectional(start: 16),
@@ -182,24 +176,19 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
                     650, max(350, MediaQuery.of(context).size.width * 0.75)),
               ),
               child: BigCard(
-                leading: NiceHeader(title: "Media", subtitle: "Tutto l'anno")
-                    .padding(bottom: 8),
-                body: Row(
+                leading: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Flexible(
-                      child: GradeAvatar(
-                        radius: 36,
-                        grade: Grade.fakeFromDouble(gradeAverage(grades)),
-                      ),
-                      flex: 1,
-                    ),
-                    Flexible(
-                      child: GradeTimeAverageChart(
-                        grades: grades.reversed.toList(),
-                      ),
-                      flex: 6,
+                    NiceHeader(title: "Media", subtitle: "Tutto l'anno")
+                        .padding(bottom: 8),
+                    GradeAvatar(
+                      grade: Grade.fakeFromDouble(gradeAverage(grades)),
                     ),
                   ],
+                ),
+                body: GradeTimeAverageChart(
+                  grades: grades.reversed.toList(),
                 ),
               ),
             ).paddingDirectional(start: 16),
