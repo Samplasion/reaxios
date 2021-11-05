@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:reaxios/api/utils/utils.dart';
 
 // Matches before a capital letter that is not also at beginning of string.
@@ -222,13 +221,6 @@ class Utils {
 }
 
 extension ColorUtils on Color {
-  charts.Color toChartColor() => charts.Color(
-        r: this.red,
-        g: this.green,
-        b: this.blue,
-        a: this.alpha,
-      );
-
   Color get contrastText => getContrastText(this);
 
   Color darken([double amount = .1]) {
