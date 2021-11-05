@@ -26,7 +26,7 @@ class CardListItem extends StatefulWidget {
   final Widget leading;
   final String title;
   final Widget subtitle;
-  final Widget details;
+  final Widget? details;
   final void Function()? onClick;
   final double radius;
   final double elevation;
@@ -108,13 +108,14 @@ class _CardListItemState extends State<CardListItem> {
         leading: leading.parent(
             ({Widget? child}) => Container(child: child).width(50).height(50)),
         title: title,
-        subtitle: [
+        subtitle: <Widget>[
           description.padding(
-              bottom: widget.details is _Empty ||
+              bottom: widget.details == null ||
+                      widget.details is _Empty ||
                       (description is Container && description.child == null)
                   ? 0
                   : 8),
-          widget.details
+          if (widget.details != null) widget.details!,
         ].toColumn(crossAxisAlignment: CrossAxisAlignment.start),
         enabled: true,
         dense: true,

@@ -4,9 +4,16 @@ import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/utils.dart';
 
 class GradeAvatar extends StatelessWidget {
-  const GradeAvatar({Key? key, required this.grade}) : super(key: key);
+  const GradeAvatar({
+    Key? key,
+    required this.grade,
+    this.showIconIfNaN = true,
+    this.radius = 20,
+  }) : super(key: key);
 
   final Grade grade;
+  final bool showIconIfNaN;
+  final double radius;
 
   Color getColor() {
     if (grade.weight == 0)
@@ -21,9 +28,12 @@ class GradeAvatar extends StatelessWidget {
     final fg = bg.contrastText;
 
     final text = grade.prettyGrade.trim();
-    final child = text.isEmpty ? Icon(Icons.message) : Text(text);
+    final child = text.isEmpty
+        ? (showIconIfNaN ? Icon(Icons.message) : Container())
+        : Text(text);
 
     return CircleAvatar(
+      radius: radius,
       backgroundColor: bg,
       foregroundColor: fg,
       child: child,

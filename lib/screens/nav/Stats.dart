@@ -13,6 +13,7 @@ import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
+import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -190,42 +191,12 @@ class _StatsPaneState extends State<StatsPane> {
       ).padding(horizontal: 16),
       if (currentGrades.isNotEmpty)
         BigCard(
-          leading: Row(
-            children: [
-              Icon(Icons.auto_graph).iconSize(40).padding(right: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Media nel tempo",
-                    style: TextStyle(
-                      // color: fg,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ).padding(bottom: 8),
-                  if (currentPeriod != null)
-                    Text(
-                      currentPeriod.desc,
-                      style: TextStyle(
-                        color:
-                            Theme.of(context).cardTheme.color?.withOpacity(0.6),
-                        fontSize: 12,
-                      ),
-                    )
-                  else
-                    Text(
-                      "Tutto l'anno",
-                      style: TextStyle(
-                        color:
-                            Theme.of(context).cardTheme.color?.withOpacity(0.6),
-                        fontSize: 12,
-                      ),
-                    )
-                ],
-              )
-            ],
-          ).padding(bottom: 8),
+          leading: NiceHeader(
+            title: "Media nel tempo",
+            subtitle:
+                currentPeriod == null ? "Tutto l'anno" : currentPeriod.desc,
+            leading: Icon(Icons.auto_graph).iconSize(40).padding(right: 16),
+          ),
           body: Column(
             children: <Widget>[
               GradeTimeAverageChart(grades: currentGrades),

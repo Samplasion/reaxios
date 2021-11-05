@@ -111,6 +111,7 @@ double gradeAverage(List<Grade> grades) {
 }
 
 Color getGradeColor(double grade, [int shade = 500, int suff = 6]) {
+  if (isNaN(grade)) return Colors.blue[shade]!;
   if (grade < suff)
     return Colors.red[shade]!;
   else if (grade < suff + 0.5)

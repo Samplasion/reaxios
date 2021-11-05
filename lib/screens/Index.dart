@@ -188,6 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
           () {
             widget.store.fetchGrades(session);
             widget.store.fetchPeriods(session);
+            widget.store.fetchSubjects(session);
           }
         ],
         [

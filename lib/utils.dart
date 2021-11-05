@@ -180,6 +180,7 @@ class Utils {
         sub.contains("letteratura")) {
       return Icons.language;
     } else if (sub.contains("ginnastica") ||
+        sub.contains("sport") ||
         sub.contains("motoria") ||
         sub.contains("motorie")) {
       return Icons.directions_bike;
@@ -189,6 +190,8 @@ class Utils {
       return Icons.science;
     } else if (sub.contains("arte") || sub.contains("disegno")) {
       return Icons.art_track;
+    } else if (sub.contains("informatica") || sub.contains("tecnologia")) {
+      return Icons.computer;
     } else if (sub.contains("sistemi") || sub.contains("reti")) {
       return Icons.settings_ethernet;
     } else if (sub.contains("matematica")) {
@@ -207,8 +210,6 @@ class Utils {
       return Icons.map;
     } else if (sub.contains("musica")) {
       return Icons.music_note;
-    } else if (sub.contains("tecnologia")) {
-      return Icons.computer;
     } else if (sub.contains("religione")) {
       return Icons.health_and_safety;
     } else if (sub.contains("filosofia")) {

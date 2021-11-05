@@ -40,6 +40,8 @@ abstract class _RegistroStore with Store {
   ObservableFuture<List<Authorization>>? authorizations;
   @observable
   ObservableFuture<List<MaterialTeacherData>>? materials;
+  @observable
+  ObservableFuture<List<String>>? subjects;
 
   @observable
   bool networkError = false;
@@ -135,6 +137,14 @@ abstract class _RegistroStore with Store {
           .then(_successHandler)
           .catchError(_errorHandler<List<MaterialTeacherData>>(
               <MaterialTeacherData>[]));
+    }
+  }
+
+  fetchSubjects(Axios session, [bool force = false]) {
+    if (subjects == null || force) {
+      subjects = ObservableFuture(session.getSubjects())
+          .then(_successHandler)
+          .catchError(_errorHandler<List<String>>(<String>[]));
     }
   }
 

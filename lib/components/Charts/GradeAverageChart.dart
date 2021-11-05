@@ -53,8 +53,6 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
   List<int> range(int max, [int min = 0]) =>
       List<int>.generate(max - min, (i) => i + min);
 
-  Widget? chart;
-
   @override
   void initState() {
     super.initState();
@@ -62,9 +60,7 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
     widget.store.fetchGrades(widget.session);
     widget.store.grades!.then((grades) {
       SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
-        setState(() {
-          chart = _buildChart(_getEntries(grades), gradeAverage(grades));
-        });
+        if (mounted) setState(() {});
       });
     });
   }

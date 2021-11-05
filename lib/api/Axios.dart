@@ -502,6 +502,25 @@ class Axios {
         .toList();
   }
 
+  Future<List<String>> getSubjects() async {
+    final topics = await getTopics();
+    final assignments = await getAssignments();
+
+    final List<String> res = <String>[];
+    topics.forEach((topic) {
+      if (topic.subject.isNotEmpty) {
+        res.add(topic.subject);
+      }
+    });
+    assignments.forEach((assignment) {
+      if (assignment.subject.isNotEmpty) {
+        res.add(assignment.subject);
+      }
+    });
+
+    return res.toSet().toList();
+  }
+
   Future<void> markBulletinAsRead(Bulletin bulletin) async {
     String result = await this._makeAuthenticatedCall(
       "APP_PROCESS_QUEUE",
