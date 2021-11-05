@@ -114,7 +114,8 @@ class _TopicsPaneState extends State<TopicsPane> {
               child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, i1) {
-                  final e = entries[i].value[i1];
+                  final e = (entries[i].value
+                    ..sort((a, b) => a.lessonHour.compareTo(b.lessonHour)))[i1];
                   return TopicListItem(topic: e);
                 },
                 itemCount: entries[i].value.length,

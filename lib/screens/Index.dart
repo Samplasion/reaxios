@@ -8,11 +8,13 @@ import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
+import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';
 import 'package:reaxios/screens/nav/Authorizations.dart';
+import 'package:reaxios/screens/nav/Calendar.dart';
 import 'package:reaxios/screens/nav/Grades.dart';
 import 'package:reaxios/screens/nav/Materials.dart';
 import 'package:reaxios/screens/nav/Notes.dart';
@@ -138,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
           student: session.student ?? Student.empty(),
           store: widget.store,
         ),
+        CalendarPane(session: session),
         AssignmentsPane(session: session, store: widget.store),
         Builder(
           builder: (_) => FutureBuilder<Period?>(
@@ -176,6 +179,16 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         ],
         [
+          Icon(Icons.calendar_today),
+          Text('Agenda'),
+          true,
+          () {
+            widget.store.fetchAssignments(session);
+            widget.store.fetchTopics(session);
+            widget.store.fetchPeriods(session);
+          }
+        ],
+        [
           Icon(Icons.book),
           Text('Compiti'),
           true,
@@ -192,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         ],
         [
-          Icon(Icons.calendar_today),
+          Icon(Icons.topic),
           Text('Argomenti'),
           true,
           () => widget.store.fetchTopics(session)
@@ -312,9 +325,6 @@ class _HomeScreenState extends State<HomeScreen> {
     // final width = MediaQuery.of(context).size.width;
     if (loading) return null;
 
-    final ThemeData theme = Theme.of(context);
-    final TextStyle textStyle = theme.textTheme.bodyText2!;
-
     return Drawer(
       child: Column(
         // physics: NeverScrollableScrollPhysics(),
@@ -398,31 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.pushNamed(context, "settings");
                           },
                         ),
-                        AboutListTile(
-                          icon: Icon(Icons.info),
-                          // child: Text("Informazioni"),
-                          applicationName: "Registro",
-                          applicationIcon: Image(
-                            width: 48,
-                            height: 48,
-                            image: AssetImage("assets/icon.png"),
-                          ),
-                          applicationLegalese: "\u{a9} 2021 Francesco Arieti",
-                          applicationVersion: "1.0.0",
-                          aboutBoxChildren: [
-                            const SizedBox(height: 24),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      style: textStyle,
-                                      text:
-                                          "Un semplice frontend per il Registro Elettronico Axios."),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                        RegistroAboutListItem(),
                         ListTile(
                           title: Text("Esci"),
                           leading: Icon(Icons.exit_to_app),
