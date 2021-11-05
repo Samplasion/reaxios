@@ -31,8 +31,10 @@ class RegistroAboutListItem extends StatelessWidget {
               TextSpan(text: "\n\n"),
               TextSpan(
                   style: textStyle,
-                  text:
-                      "Un ringraziamento speciale per i codici di decifratura va a "),
+                  text: "Un ringraziamento speciale per i codici "
+                      "di decifratura e di accesso, nonché per un "
+                      "aiuto sostanziale nella comprensione del sistema, "
+                      "va a "),
               TextSpan(
                   style: textStyle.copyWith(fontWeight: FontWeight.bold),
                   text: "Simoman3"),
