@@ -28,11 +28,7 @@ jobs:
       - name: Create tag
         id: create_tag
         run: |
-          if [[ "${{ github.event_name }}" == "schedule" ]]; then
-            tag=builds-$(date +%Y%m%d-%H%M%S)
-          else
-            tag=$(basename "${{ github.ref }}")
-          fi
+          tag=builds-$(date +%Y%m%d-%H%M%S)
           echo "::set-output name=tag::$tag"
       - name: Create Draft Release
         id: create_release
@@ -45,8 +41,14 @@ jobs:
           draft: true
           prerelease: false
 
+      - name: Get the name of the output artifact folder
+        id: folder_name
+        run: |
+          folder=awk '{for(j=1;j<=NF;j++){ $j=toupper(substr($j,1,1)) substr($j,2) }}1' <<<"${{ matrix.flavor }}"
+          echo "::set-output name=folder::$folder"
+
       - name: Zip app
-        run: ditto -c -k --sequesterRsrc --keepParent ./build/macos/Build/Products/Release/Registro.app "Registro-${{ matrix.flavor }}.zip"
+        run: ditto -c -k --sequesterRsrc --keepParent ./build/macos/Build/Products/${{ steps.folder_name.outputs.folder }}/Registro.app "Registro-${{ matrix.flavor }}.zip"
 
       - uses: actions/upload-release-asset@v1.0.1
         env:
