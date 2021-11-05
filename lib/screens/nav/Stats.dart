@@ -45,7 +45,7 @@ class StatsPane extends StatefulWidget {
 class _StatsPaneState extends State<StatsPane> {
   @override
   Widget build(BuildContext context) {
-    return MaxWidthContainer(child: _buildBody());
+    return MaxWidthContainer(child: _buildBody()).center();
   }
 
   Widget _buildBody() {
