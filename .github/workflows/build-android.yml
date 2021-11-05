@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build_macos:
+  build_android:
     runs-on: macos-11
     strategy:
       matrix:
@@ -20,9 +20,10 @@ jobs:
         with:
           channel: stable
       - run: flutter pub get
-      - run: flutter config --enable-macos-desktop
-      - name: "Build macOS app: ${{ matrix.flavor }}"
-        run: flutter build macos --${{ matrix.flavor }}
+      - name: "Build Android APK: ${{ matrix.flavor }}"
+        run: flutter build apk --${{ matrix.flavor }}
+      - name: "Build Android App Bundle: ${{ matrix.flavor }}"
+        run: flutter build appbundle --${{ matrix.flavor }}
 
       # Publish to a tag
       - name: Create tag
@@ -41,22 +42,16 @@ jobs:
           draft: true
           prerelease: false
 
-      - name: Get the name of the output artifact folder
-        id: folder_name
-        run: |
-          folder=$(awk '{for(j=1;j<=NF;j++){ $j=toupper(substr($j,1,1)) substr($j,2) }}1' <<<"${{ matrix.flavor }}")
-          echo "::set-output name=folder::$folder"
-
       - name: Zip app
-        run: ditto -c -k --sequesterRsrc --keepParent ./build/macos/Build/Products/${{ steps.folder_name.outputs.folder }}/Registro.app "Registro-macOS-${{ matrix.flavor }}.zip"
+        run: ditto -c -k --sequesterRsrc --keepParent ./build/app/outputs "Registro-Android-${{ matrix.flavor }}.zip"
 
       - uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Registro-macOS-${{ matrix.flavor }}.zip
-          asset_name: Registro-macOS-${{ matrix.flavor }}.zip
+          asset_path: ./Registro-Android-${{ matrix.flavor }}.zip
+          asset_name: Registro-Android-${{ matrix.flavor }}.zip
           asset_content_type: application/zip
 
       - uses: eregon/publish-release@v1
