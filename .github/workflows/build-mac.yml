@@ -10,7 +10,7 @@ jobs:
     runs-on: macos-11
     strategy:
       matrix:
-        flavor: [profile, release]
+        flavor: [release]
     steps:
       - name: Create tag
         id: create_tag
