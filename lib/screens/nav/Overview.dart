@@ -59,6 +59,13 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     initREData();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+    horizontalController.dispose();
+  }
+
   setState(VoidCallback cb) {
     if (mounted) super.setState(cb);
   }
