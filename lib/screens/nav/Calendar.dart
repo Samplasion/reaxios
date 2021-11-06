@@ -243,10 +243,10 @@ class _CalendarPaneState extends State<CalendarPane> {
           Divider(height: 0, indent: 8, endIndent: 8),
           Expanded(
             child: ListView.builder(
-              shrinkWrap: true,
+              shrinkWrap: false,
               itemBuilder: (context, index) => _events![index],
               itemCount: _events!.length,
-            ).paddingDirectional(top: 16, bottom: 8).scrollable(),
+            ),
           ),
         ],
       ),
@@ -303,6 +303,10 @@ class _CalendarPaneState extends State<CalendarPane> {
       );
     }
 
-    return events.toList();
+    return [
+      SizedBox(height: 16),
+      ...events,
+      SizedBox(height: 8),
+    ];
   }
 }
