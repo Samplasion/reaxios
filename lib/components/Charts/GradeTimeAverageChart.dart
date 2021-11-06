@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
@@ -16,8 +18,13 @@ class _XY {
 
 class GradeTimeAverageChart extends StatefulWidget {
   final List<Grade> grades;
+  final bool dynamic;
 
-  GradeTimeAverageChart({Key? key, required this.grades}) : super(key: key);
+  GradeTimeAverageChart({
+    Key? key,
+    required this.grades,
+    this.dynamic = false,
+  }) : super(key: key);
 
   @override
   _GradeTimeAverageChartState createState() => _GradeTimeAverageChartState();
@@ -26,8 +33,20 @@ class GradeTimeAverageChart extends StatefulWidget {
 class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
   @override
   Widget build(BuildContext context) {
+    final averagesSortedByValue = averages..sort((a, b) => b.compareTo(a));
+
+    double height = 200;
+    double maxY = 10;
+    double minY = 0;
+
+    if (widget.dynamic) {
+      minY = min(3, max(0, (averagesSortedByValue.min - 2).ceilToDouble()));
+      maxY = min(10, (averagesSortedByValue.max + 1).floorToDouble());
+      height = (maxY - minY) * 32;
+    }
+
     return Container(
-      height: 200,
+      height: height,
       child: LineChart(
         LineChartData(
           lineTouchData: LineTouchData(
@@ -70,8 +89,8 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
                 },
                 checkToShowTitle: (_, __, ___, ____, _____) => true),
           ),
-          maxY: 10,
-          minY: 0,
+          maxY: maxY.toDouble(),
+          minY: minY.toDouble(),
           lineBarsData: [
             LineChartBarData(
               spots: averagesXY.map((e) => FlSpot(e.x, e.y)).toList(),

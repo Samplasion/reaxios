@@ -157,6 +157,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
             ),
             body: GradeTimeAverageChart(
               grades: periodGrades.reversed.toList(),
+              dynamic: true,
             ),
           ),
         ).paddingDirectional(start: 16),
@@ -189,6 +190,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
                 ),
                 body: GradeTimeAverageChart(
                   grades: grades.reversed.toList(),
+                  dynamic: true,
                 ),
               ),
             ).paddingDirectional(start: 16),
