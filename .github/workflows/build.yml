@@ -15,9 +15,8 @@ jobs:
     steps:
       - name: Create tag
         id: create_tag
-        # tag=builds-$(date +%Y%m%d-%H%M)
         run: |
-          tag=builds-$(git rev-parse --short HEAD)
+          tag=builds-$(date +%Y%m%d-%H%M)
           echo "::set-output name=tag::$tag"
       - name: Current date
         id: get_date
