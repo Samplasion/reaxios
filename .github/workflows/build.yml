@@ -17,8 +17,13 @@ jobs:
         id: create_tag
         # tag=builds-$(date +%Y%m%d-%H%M)
         run: |
-          # tag=builds-$(git rev-parse --short HEAD)
+          tag=builds-$(git rev-parse --short HEAD)
           echo "::set-output name=tag::$tag"
+      - name: Current date
+        id: get_date
+        run: |
+          date=$(date +"%Y-%m-%d @ %H:%M:%S")
+          echo "::set-output name=date::$date"
 
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
@@ -44,13 +49,25 @@ jobs:
       - name: Zip macOS app
         run: ditto -c -k --sequesterRsrc --keepParent ./build/macos/Build/Products/${{ steps.folder_name.outputs.folder }}/Registro.app "Registro-macOS-${{ matrix.flavor }}.zip"
 
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      # - uses: "marvinpinto/action-automatic-releases@latest"
+      #   with:
+      #     repo_token: "${{ secrets.GITHUB_TOKEN }}"
+      #     automatic_release_tag: "${{ steps.create_release.outputs.id }}"
+      #     prerelease: true
+      #     title: "Release ${{ steps.create_release.outputs.id }}"
+      #     files: |
+      #       Registro-macOS-${{ matrix.flavor }}.zip
+      #       build/app/outputs/bundle/${{ matrix.flavor }}/app-${{ matrix.flavor }}.aab
+      #       build/app/outputs/flutter-apk/app-${{ matrix.flavor }}.apk
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: true
-          title: "Release ${{ steps.create_release.outputs.id }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          tag_name: "${{ steps.create_tag.outputs.tag }}"
+          name: "Release ${{ steps.create_tag.outputs.tag }}"
           files: |
             Registro-macOS-${{ matrix.flavor }}.zip
             build/app/outputs/bundle/${{ matrix.flavor }}/app-${{ matrix.flavor }}.aab
-            build/app/outputs/flutter-apk/${{ matrix.flavor }}/app-${{ matrix.flavor }}.apk
+            build/app/outputs/flutter-apk/app-${{ matrix.flavor }}.apk
+          body: |
+            Built on ${{ steps.get_date.outputs.date }}
