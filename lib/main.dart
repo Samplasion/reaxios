@@ -15,6 +15,7 @@ import 'package:reaxios/screens/Login.dart';
 import 'package:reaxios/screens/NoInternet.dart';
 import 'package:reaxios/screens/Settings.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/utils.dart';
 
 import 'api/utils/ColorSerializer.dart';
@@ -34,9 +35,12 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   await S.Settings.init();
   runApp(RestartWidget(
-    child: Provider(
+    child: MultiProvider(
       child: RegistroElettronicoApp(),
-      create: (context) => RegistroStore(),
+      providers: [
+        Provider(create: (_) => RegistroStore()),
+        Provider(create: (_) => AppInfoStore()..getPackageInfo(), lazy: false),
+      ],
     ),
   ));
 }

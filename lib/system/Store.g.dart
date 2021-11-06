@@ -174,6 +174,21 @@ mixin _$RegistroStore on _RegistroStore, Store {
     });
   }
 
+  final _$subjectsAtom = Atom(name: '_RegistroStore.subjects');
+
+  @override
+  ObservableFuture<List<String>>? get subjects {
+    _$subjectsAtom.reportRead();
+    return super.subjects;
+  }
+
+  @override
+  set subjects(ObservableFuture<List<String>>? value) {
+    _$subjectsAtom.reportWrite(value, super.subjects, () {
+      super.subjects = value;
+    });
+  }
+
   final _$networkErrorAtom = Atom(name: '_RegistroStore.networkError');
 
   @override
@@ -217,6 +232,7 @@ notes: ${notes},
 absences: ${absences},
 authorizations: ${authorizations},
 materials: ${materials},
+subjects: ${subjects},
 networkError: ${networkError}
     ''';
   }
