@@ -9,6 +9,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
+import 'package:reaxios/notifications.dart';
 import 'package:reaxios/screens/Index.dart';
 import 'package:reaxios/screens/Loading.dart';
 import 'package:reaxios/screens/Login.dart';
@@ -32,17 +33,26 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  RegistroStore registroStore = RegistroStore();
+
+  await initializeNotifications(
+      (payload) => registroStore.notificationPayloadAction(payload));
+
   HttpOverrides.global = MyHttpOverrides();
   await S.Settings.init();
   runApp(RestartWidget(
     child: MultiProvider(
       child: RegistroElettronicoApp(),
       providers: [
-        Provider(create: (_) => RegistroStore()),
+        Provider(create: (_) => registroStore),
         Provider(create: (_) => AppInfoStore()..getPackageInfo(), lazy: false),
       ],
     ),
   ));
+
+  startNotificationsService();
 }
 
 ThemeMode getThemeMode(String tm) {

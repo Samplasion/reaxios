@@ -47,6 +47,8 @@ class Tuple2<E0, E1> extends _BaseTuple {
     }
     return new Tuple2(iterable.first, iterable.last);
   }
+
+  List<dynamic> toList() => [first, second];
 }
 
 class Tuple3<E0, E1, E2> extends _BaseTuple {
@@ -88,6 +90,8 @@ class Tuple3<E0, E1, E2> extends _BaseTuple {
     }
     return new Tuple3(iterable.first, iterable.elementAt(1), iterable.last);
   }
+
+  List<dynamic> toList() => [first, second, third];
 }
 
 class Tuple4<E0, E1, E2, E3> extends _BaseTuple {
@@ -135,4 +139,6 @@ class Tuple4<E0, E1, E2, E3> extends _BaseTuple {
     return new Tuple4(iterable.first, iterable.elementAt(1),
         iterable.elementAt(2), iterable.last);
   }
+
+  List<dynamic> toList() => [first, second, third, fourth];
 }

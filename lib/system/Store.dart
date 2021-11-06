@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
@@ -42,6 +44,8 @@ abstract class _RegistroStore with Store {
   ObservableFuture<List<MaterialTeacherData>>? materials;
   @observable
   ObservableFuture<List<String>>? subjects;
+  @observable
+  StreamController<String?> payloadController = StreamController<String?>();
 
   @observable
   bool networkError = false;
@@ -166,5 +170,10 @@ abstract class _RegistroStore with Store {
   @action
   reset() {
     assignments = grades = topics = reportCards = bulletins = notes = null;
+  }
+
+  @action
+  notificationPayloadAction(String? payload) {
+    payloadController.add(payload);
   }
 }

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Account.dart';
+import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
@@ -11,6 +12,7 @@ import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
+import 'package:reaxios/components/Views/GradeView.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';
 import 'package:reaxios/screens/nav/Authorizations.dart';
@@ -118,17 +120,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
     initPanes(session, login);
 
-    runCallback(0);
+    await runCallback(0);
 
     setState(() {
       loading = false;
       lastStudentUUID = session.student!.studentUUID;
     });
+
+    widget.store.payloadController.stream.listen((String? payload) async {
+      if (payload == null) return;
+      List<String> data = payload.split(":");
+      String action = data.first;
+
+      switch (action) {
+        case "grade":
+          String id = data[1];
+          Grade grade = (await (widget.store.grades ?? Future.value(<Grade>[])))
+              .firstWhere((g) => g.id == id, orElse: () => Grade.empty());
+
+          if (grade.id.isNotEmpty) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GradeView(
+                  grade: grade,
+                  store: widget.store,
+                  session: session,
+                  reload: () => setState(() {}),
+                ),
+              ),
+            );
+          }
+      }
+    });
   }
 
-  void runCallback([int index = 0]) {
+  Future<void> runCallback([int index = 0]) async {
     if (drawerItems[index][3] != null && drawerItems[index][3] is Function)
-      drawerItems[index][3]();
+      await drawerItems[index][3]();
   }
 
   void initPanes(Axios session, Login login) {
@@ -172,10 +201,15 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.home),
           Text('Panoramica'),
           true,
-          () {
+          () async {
             widget.store.fetchAssignments(session);
             widget.store.fetchGrades(session);
             widget.store.fetchTopics(session);
+            await Future.wait(<Future<dynamic>>[
+              widget.store.assignments!,
+              widget.store.grades!,
+              widget.store.topics!,
+            ]);
           }
         ],
         [
