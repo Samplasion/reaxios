@@ -3,6 +3,8 @@ name: Build app
 
 on:
   push:
+    branches:
+      - "releases/**"
     tags:
       - "v*"
 
