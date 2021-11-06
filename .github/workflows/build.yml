@@ -15,15 +15,20 @@ jobs:
         flavor: [release]
     runs-on: macos-11
     steps:
-      - name: Create tag
+      - name: Get the target version from the tag/branch name
         id: create_tag
         run: |
-          tag=builds-$(date +%Y%m%d-%H%M)
+          tag=$(grep -q 'refs/heads/releases/' <<< ${{ github.ref }} && echo ${{ github.ref }} | sed 's_refs/heads/releases/__' || echo ${{ github.ref }} | sed 's_refs/tags/v__')
           echo "::set-output name=tag::$tag"
       - name: Current date
         id: get_date
         run: |
           date=$(date +"%Y-%m-%d @ %H:%M:%S")
+          echo "::set-output name=date::$date"
+      - name: Get the timestamp for the build number
+        id: get_date
+        run: |
+          date=$(date '+%s')
           echo "::set-output name=date::$date"
 
       - uses: actions/checkout@v2
@@ -36,11 +41,11 @@ jobs:
       - run: flutter pub get
       - run: flutter config --enable-macos-desktop
       - name: "Build macOS ${{ matrix.flavor }} app"
-        run: flutter build macos --${{ matrix.flavor }}
+        run: flutter build macos --${{ matrix.flavor }} --build-number ${{ steps.get_timestamp.outputs.timestamp }} --build-name=${{ steps.create_tag.outputs.tag }}
       - name: "Build Android ${{ matrix.flavor }} APK"
-        run: flutter build apk --${{ matrix.flavor }}
+        run: flutter build apk --${{ matrix.flavor }} --build-number ${{ steps.get_timestamp.outputs.timestamp }} --build-name=${{ steps.create_tag.outputs.tag }}
       - name: "Build Android ${{ matrix.flavor }} App Bundle"
-        run: flutter build appbundle --${{ matrix.flavor }}
+        run: flutter build appbundle --${{ matrix.flavor }} --build-number ${{ steps.get_timestamp.outputs.timestamp }} --build-name=${{ steps.create_tag.outputs.tag }}
 
       - name: Get the name of the output artifact folder for the macOS build
         id: folder_name
@@ -64,7 +69,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
-          tag_name: "${{ steps.create_tag.outputs.tag }}"
+          tag_name: "v${{ steps.create_tag.outputs.tag }}"
           name: "Release ${{ steps.create_tag.outputs.tag }}"
           files: |
             Registro-macOS-${{ matrix.flavor }}.zip
