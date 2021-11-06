@@ -26,7 +26,7 @@ jobs:
           date=$(date +"%Y-%m-%d @ %H:%M:%S")
           echo "::set-output name=date::$date"
       - name: Get the timestamp for the build number
-        id: get_date
+        id: get_timestamp
         run: |
           date=$(date '+%s')
           echo "::set-output name=date::$date"
