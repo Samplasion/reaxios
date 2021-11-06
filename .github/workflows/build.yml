@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://github.com/SchemaStore/schemastore/raw/master/src/schemas/json/github-workflow.json
+name: Build app
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        flavor: [release]
+    runs-on: macos-11
+    steps:
+      - name: Create tag
+        id: create_tag
+        # tag=builds-$(date +%Y%m%d-%H%M)
+        run: |
+          # tag=builds-$(git rev-parse --short HEAD)
+          echo "::set-output name=tag::$tag"
+
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter config --enable-macos-desktop
+      - name: "Build macOS ${{ matrix.flavor }} app"
+        run: flutter build macos --${{ matrix.flavor }}
+      - name: "Build Android ${{ matrix.flavor }} APK"
+        run: flutter build apk --${{ matrix.flavor }}
+      - name: "Build Android ${{ matrix.flavor }} App Bundle"
+        run: flutter build appbundle --${{ matrix.flavor }}
+
+      - name: Get the name of the output artifact folder for the macOS build
+        id: folder_name
+        run: |
+          folder=$(awk '{for(j=1;j<=NF;j++){ $j=toupper(substr($j,1,1)) substr($j,2) }}1' <<<"${{ matrix.flavor }}")
+          echo "::set-output name=folder::$folder"
+      - name: Zip macOS app
+        run: ditto -c -k --sequesterRsrc --keepParent ./build/macos/Build/Products/${{ steps.folder_name.outputs.folder }}/Registro.app "Registro-macOS-${{ matrix.flavor }}.zip"
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Release ${{ steps.create_release.outputs.id }}"
+          files: |
+            Registro-macOS-${{ matrix.flavor }}.zip
+            build/app/outputs/bundle/${{ matrix.flavor }}/app-${{ matrix.flavor }}.aab
+            build/app/outputs/flutter-apk/${{ matrix.flavor }}/app-${{ matrix.flavor }}.apk
