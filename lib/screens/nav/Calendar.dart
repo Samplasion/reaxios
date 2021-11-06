@@ -62,8 +62,42 @@ class _CalendarPaneState extends State<CalendarPane> {
 
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  CalendarFormat __calendarFormat = CalendarFormat.month;
   List<Widget>? _events;
+
+  CalendarFormat get _calendarFormat {
+    final orientation = MediaQuery.of(context).orientation;
+
+    if (orientation == Orientation.landscape) {
+      if (__calendarFormat == CalendarFormat.month) {
+        return CalendarFormat.twoWeeks;
+      } else {
+        return __calendarFormat;
+      }
+    } else {
+      if (__calendarFormat == CalendarFormat.week) {
+        return CalendarFormat.twoWeeks;
+      } else {
+        return __calendarFormat;
+      }
+    }
+  }
+
+  Map<CalendarFormat, String> get _calendarFormatMap {
+    final orientation = MediaQuery.of(context).orientation;
+
+    if (orientation == Orientation.landscape) {
+      return {
+        CalendarFormat.twoWeeks: '1 settimana',
+        CalendarFormat.week: '2 settimane',
+      };
+    } else {
+      return {
+        CalendarFormat.month: '2 settimane',
+        CalendarFormat.twoWeeks: 'mese',
+      };
+    }
+  }
 
   Widget buildOk(BuildContext context, List<Topic> topics,
       List<Assignment> assignments, List<Period> periods) {
@@ -93,7 +127,7 @@ class _CalendarPaneState extends State<CalendarPane> {
             calendarFormat: _calendarFormat,
             onFormatChanged: (format) {
               setState(() {
-                _calendarFormat = format;
+                __calendarFormat = format;
               });
             },
             onPageChanged: (focusedDay) {
@@ -112,10 +146,11 @@ class _CalendarPaneState extends State<CalendarPane> {
             ],
             startingDayOfWeek: StartingDayOfWeek.monday,
             // Invert the labels so that the button shows the current state
-            availableCalendarFormats: {
-              CalendarFormat.month: "2 settimane",
-              CalendarFormat.twoWeeks: "mese",
-            },
+            availableCalendarFormats: _calendarFormatMap,
+            // {
+            //   CalendarFormat.month: "2 settimane",
+            //   CalendarFormat.twoWeeks: "mese",
+            // },
             formatAnimationCurve: Curves.easeInOut,
             formatAnimationDuration: Duration(milliseconds: 300),
             pageAnimationCurve: Curves.easeInOut,
