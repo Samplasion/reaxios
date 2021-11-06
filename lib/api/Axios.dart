@@ -83,7 +83,6 @@ class Axios {
   void Function() onError = () {};
   //int _requests = 0;
   DateTime sessionStart = DateTime.now();
-  _LastCall? _lastCall;
 
   List<Student> get students => _students;
   AxiosAccount get account => _account;
@@ -143,6 +142,7 @@ class Axios {
     Map<String, String> headers = Axios.defaultHeaders,
     dynamic body,
     required ModelJSONClosure<T> model,
+    _LastCall? lastCall,
   }) async {
     // _requests++;
     try {
@@ -162,10 +162,14 @@ class Axios {
           jsonDecode(Encrypter.decrypt(text).replaceAll("#CR#", "\\n")));
 
       if (data.errorcode != 0) {
-        if (data.errormessage == "9999|Utente non trovato.") {
-          print("Utente non trovato");
-          _session = null;
-          return _retryLastCall();
+        if (data.errormessage.contains("9999|Utente non trovato")) {
+          print("Got error: Utente non trovato");
+          if (lastCall != null) {
+            _session = null;
+            return _retryLastCall(lastCall);
+          } else {
+            print(" └> Additionally, no last call was provided.");
+          }
         }
         throw (data.errormessage);
       }
@@ -177,16 +181,14 @@ class Axios {
     }
   }
 
-  Future<T> _retryLastCall<T>() async {
-    assert(_lastCall != null, "No last call");
-    if (_lastCall == null) throw "No last call";
+  Future<T> _retryLastCall<T>(_LastCall lastCall) async {
     final res = await _makeAuthenticatedCall<T>(
-      _lastCall!.svc,
-      _lastCall!.model as ModelJSONClosure<T>,
-      _lastCall!.path,
-      _lastCall!.data,
-      _lastCall!.sModule,
-      _lastCall!.method,
+      lastCall.svc,
+      lastCall.model as ModelJSONClosure<T>,
+      lastCall.path,
+      lastCall.data,
+      lastCall.sModule,
+      lastCall.method,
     );
     return res;
   }
@@ -230,7 +232,7 @@ class Axios {
     final _method = method ?? (data == null ? "GET" : "POST");
 
     // Set the last call so that we can retry it in case of session expiration.
-    this._lastCall = _LastCall(
+    final lastCall = _LastCall(
       svc: svc,
       model: model,
       path: path,
@@ -248,6 +250,7 @@ class Axios {
         headers: _method == "POST" ? defaultPOSTHeaders : defaultHeaders,
         body: jsonEncode(
             {"JsonRequest": Encrypter.encryptPost(jsonEncode(json))}),
+        lastCall: lastCall,
       );
     }
     return this._makeCall<T>(
@@ -255,10 +258,11 @@ class Axios {
       model: model,
       method: _method,
       headers: _method == "POST" ? defaultPOSTHeaders : defaultHeaders,
+      lastCall: lastCall,
     );
   }
 
-  static _getURL(String method, String path, {dynamic data}) {
+  static String _getURL(String method, String path, {dynamic data}) {
     const URL = "https://wssd.axioscloud.it/webservice/AxiosCloud_Ws_Rest.svc/";
     switch (method.toLowerCase()) {
       case "post":
