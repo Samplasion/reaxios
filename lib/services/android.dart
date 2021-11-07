@@ -74,10 +74,7 @@ void gradesBackgroundService() async {
   SendPort? uiSendPort = IsolateNameServer.lookupPortByName(isolateName);
   if (uiSendPort == null) {
     print(
-        '[Background] [${DateTime.now()}] [#$isolateId] [gradesBackgroundService] No UI isolate found. '
-        'Shutting down background isolate.');
-    current.kill(priority: Isolate.immediate);
-    return;
+        '[Background] [${DateTime.now()}] [#$isolateId] [gradesBackgroundService] INFO: No UI isolate found.');
   }
 
   print(
@@ -131,10 +128,7 @@ void bulletinBoardBackgroundService() async {
   SendPort? uiSendPort = IsolateNameServer.lookupPortByName(isolateName);
   if (uiSendPort == null) {
     print(
-        '[Background] [${DateTime.now()}] [#$isolateId] [bulletinBoardBackgroundService] No UI isolate found. '
-        'Shutting down background isolate.');
-    current.kill(priority: Isolate.immediate);
-    return;
+        '[Background] [${DateTime.now()}] [#$isolateId] [bulletinBoardBackgroundService] INFO: No UI isolate found.');
   }
 
   print(
@@ -153,7 +147,7 @@ void bulletinBoardBackgroundService() async {
     final AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       'bulletinBoard',
-      'Nuova comunicazione',
+      'Nuove comunicazioni',
       channelDescription: 'Notifiche per le comunicazioni dalla segreteria',
       importance: Importance.defaultImportance,
       priority: Priority.defaultPriority,
@@ -226,6 +220,7 @@ Future<void> startNotificationServices() async {
       tuple.second,
       allowWhileIdle: true,
       rescheduleOnReboot: true,
+      startAt: DateTime.now().add(Duration(seconds: 10)),
     );
   }
 }

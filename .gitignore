@@ -42,8 +42,18 @@ app.*.map.json
 
 # Android Studio will place build artifacts here
 /android/app/debug
-/android/app/outputs/apk/debug
+/android/app/build/outputs/apk/debug
 /android/app/profile
-/android/app/outputs/apk/profile
+/android/app/build/outputs/apk/profile
 /android/app/release
-/android/app/outputs/apk/release
+/android/app/build/outputs/apk/release
+/android/app/build/intermediates
+
+# Logs
+**/logs/
+
+# Temporary files
+**/tmp/
+
+# Reports
+**/reports/

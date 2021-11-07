@@ -332,11 +332,11 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
             a.date.isAfter(now) && a.date.isBefore(now.add(Duration(days: 1))))
         .toList();
 
-    return ListView.builder(
-      shrinkWrap: true,
-      itemBuilder: (context, i) =>
-          AssignmentListItem(assignment: tmrAssignments[i]),
-      itemCount: tmrAssignments.length,
+    return Column(
+      children: [
+        for (final assignment in tmrAssignments)
+          AssignmentListItem(assignment: assignment)
+      ],
     );
   }
 }

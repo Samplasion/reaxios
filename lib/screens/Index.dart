@@ -87,6 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
     };
   }
 
+  StreamSubscription? _subscription;
+
   void initSession() async {
     final prefs = await SharedPreferences.getInstance();
     final school = prefs.getString("school")!;
@@ -127,7 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
       lastStudentUUID = session.student!.studentUUID;
     });
 
-    widget.store.payloadController.stream.listen((String? payload) async {
+    _subscription =
+        widget.store.payloadController.stream.listen((String? payload) async {
       if (payload == null) return;
       List<String> data = payload.split(":");
       String action = data.first;
@@ -153,6 +156,12 @@ class _HomeScreenState extends State<HomeScreen> {
           }
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 
   Future<void> runCallback([int index = 0]) async {
