@@ -33,12 +33,7 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   RegistroStore registroStore = RegistroStore();
-
-  await initializeNotifications(
-      (payload) => registroStore.notificationPayloadAction(payload));
 
   HttpOverrides.global = MyHttpOverrides();
   await S.Settings.init();
@@ -52,7 +47,9 @@ void main() async {
     ),
   ));
 
-  startNotificationServices();
+  initializeNotifications(
+          (payload) => registroStore.notificationPayloadAction(payload))
+      .then((_) => startNotificationServices());
 }
 
 ThemeMode getThemeMode(String tm) {
