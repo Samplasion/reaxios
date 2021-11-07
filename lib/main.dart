@@ -8,8 +8,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
-import 'package:reaxios/background.dart';
+import 'package:reaxios/services/android.dart' as android_service;
 import 'package:reaxios/screens/Index.dart';
 import 'package:reaxios/screens/Loading.dart';
 import 'package:reaxios/screens/Login.dart';
@@ -18,8 +19,6 @@ import 'package:reaxios/screens/Settings.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/utils.dart';
-
-import 'api/utils/ColorSerializer.dart';
 
 const kTabBreakpoint = 680.0;
 
@@ -47,9 +46,10 @@ void main() async {
     ),
   ));
 
-  initializeNotifications(
+  android_service
+      .initializeNotifications(
           (payload) => registroStore.notificationPayloadAction(payload))
-      .then((_) => startNotificationServices());
+      .then((_) => android_service.startNotificationServices());
 }
 
 ThemeMode getThemeMode(String tm) {

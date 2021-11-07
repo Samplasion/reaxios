@@ -615,6 +615,7 @@ drawable btn_radio_off_mtrl
 drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
+drawable ic_bulletin_new
 drawable ic_grade_new
 drawable launch_background
 drawable notification_action_background
