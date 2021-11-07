@@ -32,6 +32,35 @@ jobs:
           echo "::set-output name=timestamp::$date"
 
       - uses: actions/checkout@v2
+
+      - name: "[Android] Get the absolute location of the keystore file"
+        id: get_keystore
+        run: |
+          function abspath() {
+            # generate absolute path from relative path
+            # $1     : relative filename
+            # return : absolute path
+            if [ -d "$1" ]; then
+              # dir
+              (cd "$1"; pwd)
+            elif [ -f "$1" ]; then
+              # file
+              if [[ $1 = /* ]]; then
+                echo "$1"
+              elif [[ $1 == */* ]]; then
+                echo "$(cd "${1%/*}"; pwd)/${1##*/}"
+              else
+                echo "$(pwd)/$1"
+              fi
+            fi
+          }
+
+          echo "::set-output name=keystore::$(abspath $GITHUB_WORKSPACE/private/upload-keystore.jks)"
+      - name: "[Android] Write the key.properties file"
+        id: write_key_properties
+        run: |
+          echo "storePassword=${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}\nkeyPassword=${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}\nkeyAlias=upload\nstoreFile=${{ steps.get_keystore.outputs.keystore }}" > $GITHUB_WORKSPACE/android/key.properties
+
       - uses: actions/setup-java@v1
         with:
           java-version: "12.x"
@@ -55,16 +84,6 @@ jobs:
       - name: Zip macOS app
         run: ditto -c -k --sequesterRsrc --keepParent ./build/macos/Build/Products/${{ steps.folder_name.outputs.folder }}/Registro.app "Registro-macOS-${{ matrix.flavor }}.zip"
 
-      # - uses: "marvinpinto/action-automatic-releases@latest"
-      #   with:
-      #     repo_token: "${{ secrets.GITHUB_TOKEN }}"
-      #     automatic_release_tag: "${{ steps.create_release.outputs.id }}"
-      #     prerelease: true
-      #     title: "Release ${{ steps.create_release.outputs.id }}"
-      #     files: |
-      #       Registro-macOS-${{ matrix.flavor }}.zip
-      #       build/app/outputs/bundle/${{ matrix.flavor }}/app-${{ matrix.flavor }}.aab
-      #       build/app/outputs/flutter-apk/app-${{ matrix.flavor }}.apk
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -77,3 +96,9 @@ jobs:
             build/app/outputs/flutter-apk/app-${{ matrix.flavor }}.apk
           body: |
             Built on ${{ steps.get_date.outputs.date }}
+
+      - name: Cleanup
+        continue-on-error: true
+        run: |
+          rm -rf $GITHUB_WORKSPACE/android/key.properties
+          rm -rf $GITHUB_WORKSPACE/private/upload-keystore.jks
