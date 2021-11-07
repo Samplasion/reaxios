@@ -32,8 +32,8 @@ void gradesBackgroundService() async {
 
   SendPort? uiSendPort = IsolateNameServer.lookupPortByName(isolateName);
   if (uiSendPort == null) {
-    print(
-        '[Background] [${DateTime.now()}] No UI isolate found. Shutting down background isolate.');
+    print('[Background] [${DateTime.now()}] No UI isolate found. '
+        'Shutting down background isolate.');
     current.kill(priority: Isolate.immediate);
     return;
   }
