@@ -48,6 +48,7 @@ app.*.map.json
 /android/app/release
 /android/app/build/outputs/apk/release
 /android/app/build/intermediates
+/android/app/build/generated
 
 # Logs
 **/logs/
@@ -57,3 +58,6 @@ app.*.map.json
 
 # Reports
 **/reports/
+
+# Output artifacts
+/out/
