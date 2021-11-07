@@ -56,7 +56,6 @@ jobs:
           }
 
           echo "::set-output name=keystore::$(abspath $GITHUB_WORKSPACE/private/upload-keystore.jks)"
-
       - name: "[Android] Write the key.properties file"
         id: write_key_properties
         run: |
