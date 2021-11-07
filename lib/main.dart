@@ -9,7 +9,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
-import 'package:reaxios/notifications.dart';
+import 'package:reaxios/background.dart';
 import 'package:reaxios/screens/Index.dart';
 import 'package:reaxios/screens/Loading.dart';
 import 'package:reaxios/screens/Login.dart';
@@ -52,7 +52,7 @@ void main() async {
     ),
   ));
 
-  startNotificationsService();
+  startNotificationServices();
 }
 
 ThemeMode getThemeMode(String tm) {
