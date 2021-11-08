@@ -173,6 +173,8 @@ abstract class _RegistroStore with Store {
   @action
   reset() {
     assignments = grades = topics = reportCards = bulletins = notes = null;
+    networkError = false;
+    testMode = false;
   }
 
   @action

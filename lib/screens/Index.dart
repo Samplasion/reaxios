@@ -527,6 +527,9 @@ class _HomeScreenState extends State<HomeScreen> {
         TextButton(
           child: Text("OK"),
           onPressed: () async {
+            // Refresh store
+            await widget.store.reset();
+
             final prefs = await SharedPreferences.getInstance();
 
             prefs.remove("school");
