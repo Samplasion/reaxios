@@ -57,6 +57,17 @@ class Assignment implements AbstractJson {
   String toString() {
     return 'Assignment{date: $date, publicationDate: $publicationDate, subject: $subject, lessonHour: $lessonHour, id: $id, assignment: $assignment}';
   }
+
+  static test() {
+    return Assignment(
+      date: DateTime.now(),
+      publicationDate: DateTime.now(),
+      subject: "Matematica",
+      lessonHour: 2,
+      id: "4",
+      assignment: "Verifica sistemi",
+    );
+  }
 }
 
 @JsonSerializable()

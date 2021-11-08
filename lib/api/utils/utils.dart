@@ -146,3 +146,11 @@ String titleCase(String str) {
   final tc = (str) => str[0].toUpperCase() + str.substring(1).toLowerCase();
   return str.split(" ").map(tc).join(" ");
 }
+
+extension ListRepeat<T> on List<T> {
+  List<T> repeat(int times) {
+    List<T> source = this;
+    for (int time = 0; time < times; time++) source = source + this;
+    return source;
+  }
+}

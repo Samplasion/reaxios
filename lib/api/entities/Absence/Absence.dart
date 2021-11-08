@@ -5,6 +5,7 @@ import 'package:reaxios/api/interfaces/AbstractJson.dart';
 import 'package:reaxios/api/utils/BooleanSerializer.dart';
 import 'package:reaxios/api/utils/DateSerializer.dart';
 import 'package:reaxios/api/utils/IntSerializer.dart';
+import 'package:reaxios/api/utils/utils.dart';
 
 part 'Absence.g.dart';
 
@@ -126,6 +127,24 @@ class Absence implements AbstractJson {
   @override
   String toString() {
     return "Absence{id: $id, date: $date, kind: $kind, rawKind: $rawKind, rawDateJustified: $rawDateJustified, rawReason: $rawReason, concurs: $concurs, hasTime: $hasTime, lessonHour: $lessonHour, isJustifiable: $isJustifiable, rawKindJustified: $rawKindJustified, period: $period}";
+  }
+
+  static test() {
+    return Absence(
+      rawReason: "Assenza docente",
+      id: "3",
+      date: DateTime.now(),
+      kind: "C",
+      kindJustified: "D",
+      concurs: false,
+      hasTime: false,
+      isJustifiable: true,
+      rawDateJustified: dateToString(DateTime.now(), short: true),
+      lessonHour: 3,
+      rawKind: "C",
+      rawKindJustified: "D",
+      period: "I QUADRIMESTRE",
+    );
   }
 }
 

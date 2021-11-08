@@ -65,8 +65,24 @@ class Student implements AbstractJson {
       gender: Gender.Male,
       justifiable: false,
       schoolUUID: "",
-      securityBits: "",
+      securityBits: "00000000000000000000000000000000",
       studentUUID: "",
+    );
+  }
+
+  static test() {
+    return Student(
+      avatar: "",
+      birthday: new DateTime(2004, 04, 21),
+      id: 1,
+      firstName: "Mario",
+      lastName: "Rossi",
+      parentID: "4A782806-3780-4141-8760-E7D03BED2722",
+      gender: Gender.Male,
+      justifiable: false,
+      schoolUUID: "3FCBC0BD-3A8E-4AE8-BC5F-55CCE13BB329",
+      securityBits: "00000000000000000000000000000000",
+      studentUUID: "58EDD57E-9A02-4364-8FE2-4C5CD26C44BA",
     );
   }
 

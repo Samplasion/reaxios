@@ -48,6 +48,9 @@ abstract class _RegistroStore with Store {
   StreamController<String?> payloadController = StreamController<String?>();
 
   @observable
+  bool testMode = false;
+
+  @observable
   bool networkError = false;
 
   Future<T> Function(Object) _errorHandler<T>(T val) => (_) {

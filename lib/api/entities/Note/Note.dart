@@ -74,6 +74,29 @@ class Note implements AbstractJson {
   String toString() {
     return toJson().toString();
   }
+
+  static test() {
+    final content = "L'alunno interviene spesso durante la lezione in maniera "
+        "inappropriata. Gli è' stato suggerito di non farlo poichè tali "
+        "interventi sono sempre poco chiari, proiettati su aspetti non "
+        "strettamente attinenti all'obiettivo della lezione e soprattutto "
+        "l'alunno si pone verso l'insegnante in maniera inadeguata: non si "
+        "accontenta della risposta che gli viene fornita senza considerare "
+        "che sia il suo comportamento che la natura dei suoi interventi sono "
+        "estremamente fuorvianti per la classe poichè disorietano, "
+        "fanno perdere il filo della lezione con grande perdita di tempo ";
+
+    return Note(
+      date: DateTime.now(),
+      content: content,
+      rawKind: NoteKind.Notice,
+      id: "6",
+      subjectID: "",
+      subject: "Disegno e Storia dell'Arte",
+      teacher: "Ugo Spitaliere",
+      period: "I QUADRIMESTRE",
+    );
+  }
 }
 
 @JsonSerializable()

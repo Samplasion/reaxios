@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/School/School.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
@@ -353,6 +355,17 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Accedi"),
+        actions: [
+          if (kDebugMode)
+            IconButton(
+              icon: Icon(Icons.science),
+              onPressed: () {
+                Provider.of<RegistroStore>(context, listen: false).testMode =
+                    true;
+                _onDone();
+              },
+            ),
+        ],
       ),
       body: Center(
         child: Container(

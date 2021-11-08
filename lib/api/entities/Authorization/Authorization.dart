@@ -138,6 +138,26 @@ class Authorization implements AbstractJson {
   String toString() {
     return 'Authorization{id: $id, rawKind: $rawKind, kind: $kind, startDate: $startDate, endDate: $endDate, rawLessonHour: $rawLessonHour, time: $time, reason: $reason, notes: $notes, concurs: $concurs, justified: $justified, entireClass: $entireClass, insertedBy: $insertedBy, authorizedBy: $authorizedBy, authorizedDate: $authorizedDate, session: $session, period: $period}';
   }
+
+  factory Authorization.test() {
+    return Authorization(
+      id: '33',
+      rawKind: 'D',
+      startDate: DateTime.now(),
+      endDate: DateTime.now(),
+      rawLessonHour: 0,
+      time: DateTime.now(),
+      reason: 'Assenza docente',
+      notes:
+          'La professoressa Maria Bianchi si trova a Firenze in gita di classe',
+      concurs: false,
+      justified: true,
+      entireClass: true,
+      insertedBy: 'Segreteria',
+      authorizedBy: 'Mario Rossi',
+      authorizedDate: DateTime.now(),
+    );
+  }
 }
 
 @JsonSerializable()

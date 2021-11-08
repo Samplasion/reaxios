@@ -102,6 +102,32 @@ class Grade implements AbstractJson {
     );
   }
 
+  factory Grade.test(
+    double grade,
+    String subject,
+    String teacher,
+    String comment, {
+    String kind = "Orale",
+    DateTime? date,
+    bool seen = false,
+  }) {
+    return Grade(
+      id: "83",
+      subjectID: 'AC07A276-4B7F-413D-A122-67337F4360EE',
+      subject: subject,
+      date: date ?? DateTime.now(),
+      kind: kind,
+      prettyGrade: isNaN(grade) ? "" : gradeToString(grade),
+      grade: grade,
+      weight: 1,
+      comment: comment,
+      teacher: teacher,
+      seen: seen,
+      seenBy: "",
+      seenOn: DateTime.now(),
+    )..period = "I QUADRIMESTRE";
+  }
+
   factory Grade.fromJson(Map<String, dynamic> json) => _$GradeFromJson(json);
 
   normalize(Structural structural, String periodID) {

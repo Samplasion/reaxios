@@ -49,6 +49,8 @@ class _GradeLineChartState extends State<GradeLineChart> {
   @override
   Widget build(BuildContext context) {
     late Widget widget;
+    print(grades);
+    print(usefulGrades);
     if (usefulGrades.length < 2) {
       widget = [
         _getHeader(),
@@ -274,7 +276,12 @@ class _GradeLineChartState extends State<GradeLineChart> {
   }
 
   List<Grade> get usefulGrades => grades
-      .where((g) => !isNaN(g.grade) && g.grade != 0)
+      .where((g) {
+        print(g);
+        print(!isNaN(g.grade) && g.grade != 0);
+        print(" ");
+        return !isNaN(g.grade) && g.grade != 0;
+      })
       .toList()
       .reversed
       .toList();

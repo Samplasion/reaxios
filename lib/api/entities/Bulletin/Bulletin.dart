@@ -98,6 +98,31 @@ class Bulletin implements AbstractJson {
   String toString() {
     return toJson().toString();
   }
+
+  static test() {
+    return Bulletin(
+      id: 42,
+      date: DateTime.now(),
+      title: "Circolare n. 10",
+      desc: "Regolamentazione uscite didattiche",
+      kind: BulletinKind.Principal,
+      responseKind: "",
+      options: "",
+      pin: false,
+      editable: false,
+      read: false,
+      reply: "",
+      textReply: "",
+      attachments: [
+        BulletinAttachment(
+          kind: BulletinAttachmentKind.File,
+          url: "https://google.com",
+          desc: "Allegata è la circolare numero 10.",
+          sourceName: "Circolare_10_uscite.docx",
+        )
+      ],
+    );
+  }
 }
 
 @JsonSerializable()

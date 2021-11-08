@@ -58,8 +58,9 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
 
   Widget _buildBody(BuildContext context) {
     final periodGrades = grades
-        .where(
-            (element) => period == null ? true : element.period == period!.desc)
+        .where((element) => period == null || period!.desc.isEmpty
+            ? true
+            : element.period == period!.desc)
         .toList();
     final items = [
       _buildTeacher(context),

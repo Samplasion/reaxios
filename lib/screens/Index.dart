@@ -2,12 +2,16 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
+import 'package:reaxios/api/TestAxios.dart';
 import 'package:reaxios/api/entities/Account.dart';
+import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
+import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
@@ -90,34 +94,39 @@ class _HomeScreenState extends State<HomeScreen> {
   StreamSubscription? _subscription;
 
   void initSession() async {
-    final prefs = await SharedPreferences.getInstance();
-    final school = prefs.getString("school")!;
-    final user = prefs.getString("user")!;
-    final pass = prefs.getString("pass")!;
+    final store = Provider.of<RegistroStore>(context, listen: false);
 
-    try {
-      await Dio().get("https://1.1.1.1");
-    } catch (e) {
-      // print(e is! Error && (!e.toString().contains("XMLHttpRequest error")));
-      if (e is! Error && (!e.toString().contains("XMLHttpRequest error"))) {
-        // print("[NOI] No Internet.");
-        Navigator.pushReplacementNamed(context, "nointernet");
-        return;
+    if (!store.testMode) {
+      final prefs = await SharedPreferences.getInstance();
+      final school = prefs.getString("school")!;
+      final user = prefs.getString("user")!;
+      final pass = prefs.getString("pass")!;
+
+      try {
+        await Dio().get("https://1.1.1.1");
+      } catch (e) {
+        // print(e is! Error && (!e.toString().contains("XMLHttpRequest error")));
+        if (e is! Error && (!e.toString().contains("XMLHttpRequest error"))) {
+          // print("[NOI] No Internet.");
+          Navigator.pushReplacementNamed(context, "nointernet");
+          return;
+        }
       }
+
+      // print("$school, $user, $pass");
+      session = Axios(AxiosAccount(school, user, Encrypter.decrypt(pass)));
+      login = await session.login().then((login) {
+        return login;
+      }).catchError((_, __) {
+        prefs.remove("school");
+        prefs.remove("user");
+        prefs.remove("pass");
+        Navigator.pushReplacementNamed(context, "login");
+      });
+    } else {
+      session = TestAxios();
+      login = await session.login();
     }
-
-    // print("$school, $user, $pass");
-
-    session =
-        new Axios(new AxiosAccount(school, user, Encrypter.decrypt(pass)));
-    login = await session.login().then((login) {
-      return login;
-    }).catchError((_, __) {
-      prefs.remove("school");
-      prefs.remove("user");
-      prefs.remove("pass");
-      Navigator.pushReplacementNamed(context, "login");
-    });
     await session.getStudents(true);
 
     initPanes(session, login);
@@ -215,9 +224,9 @@ class _HomeScreenState extends State<HomeScreen> {
             widget.store.fetchGrades(session);
             widget.store.fetchTopics(session);
             await Future.wait(<Future<dynamic>>[
-              widget.store.assignments!,
-              widget.store.grades!,
-              widget.store.topics!,
+              widget.store.assignments ?? Future.value(<Assignment>[]),
+              widget.store.grades ?? Future.value(<Grade>[]),
+              widget.store.topics ?? Future.value(<Topic>[]),
             ]);
           }
         ],
