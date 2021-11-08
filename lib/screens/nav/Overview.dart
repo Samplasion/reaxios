@@ -395,7 +395,9 @@ class UserCard extends StatelessWidget {
     return <Widget>[
       FutureBuilder<List<Grade>>(
         builder: (_, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) return Container();
+          if (snapshot.hasError || !snapshot.hasData) {
+            return _buildUserStatsItem(context, "...", "Media");
+          }
           final relevantGrades = period == null
               ? snapshot.data!
               : snapshot.data!.where((g) => g.period == period!.desc).toList();
@@ -406,7 +408,9 @@ class UserCard extends StatelessWidget {
       ),
       FutureBuilder<List<Grade>>(
         builder: (_, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) return Container();
+          if (snapshot.hasError || !snapshot.hasData) {
+            return _buildUserStatsItem(context, "...", "Voti");
+          }
           return _buildUserStatsItem(
               context, snapshot.data!.length.toString(), 'Voti');
         },
@@ -414,7 +418,9 @@ class UserCard extends StatelessWidget {
       ),
       FutureBuilder<List<Assignment>>(
         builder: (_, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) return Container();
+          if (snapshot.hasError || !snapshot.hasData) {
+            return _buildUserStatsItem(context, "...", "Compiti");
+          }
           return _buildUserStatsItem(
               context, snapshot.data!.length.toString(), 'Compiti');
         },
@@ -422,7 +428,9 @@ class UserCard extends StatelessWidget {
       ),
       FutureBuilder<List<Topic>>(
         builder: (_, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) return Container();
+          if (snapshot.hasError || !snapshot.hasData) {
+            return _buildUserStatsItem(context, "...", "Argomenti");
+          }
           return _buildUserStatsItem(
               context, snapshot.data!.length.toString(), 'Argomenti');
         },
