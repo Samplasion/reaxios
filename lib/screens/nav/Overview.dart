@@ -239,6 +239,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                     minLines: 1,
                     maxLines: 3,
                     // overflow: TextOverflow.ellipsis,
+                    scrollPhysics: NeverScrollableScrollPhysics(),
                   ).padding(bottom: 8),
                   Text(
                     dateToString(e.date),
