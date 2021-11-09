@@ -68,10 +68,14 @@ class _GradeLineChartState extends State<GradeLineChart> {
                   ? color.lighten(darkCoefficient)
                   : color.darken(lightCoefficient);
 
-      final minY = max(0,
-          (usefulGrades.map((g) => g.grade).toList().min - 2).ceilToDouble());
-      final maxY = min(10,
-          (usefulGrades.map((g) => g.grade).toList().max + 2).floorToDouble());
+      final minY = max(
+          0,
+          ((usefulGrades.map((g) => g.grade).toList().min ?? 0) - 2)
+              .ceilToDouble());
+      final maxY = min(
+          10,
+          ((usefulGrades.map((g) => g.grade).toList().max ?? 0) + 2)
+              .floorToDouble());
 
       widget = <Widget>[
         _getHeader(),

@@ -40,8 +40,16 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
     double minY = 0;
 
     if (widget.dynamic) {
-      minY = min(3, max(0, (averagesSortedByValue.min - 2).ceilToDouble()));
-      maxY = min(10, (averagesSortedByValue.max + 1).floorToDouble());
+      minY = ifNull(
+        averagesSortedByValue.min,
+        min(3, max(0, ((averagesSortedByValue.min ?? 0) - 2).ceilToDouble())),
+        minY,
+      );
+      maxY = ifNull(
+        averagesSortedByValue.max,
+        min(10, ((averagesSortedByValue.max ?? 0) + 1).floorToDouble()),
+        maxY,
+      );
       height = (maxY - minY) * 32;
     }
 

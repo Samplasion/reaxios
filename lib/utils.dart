@@ -25,14 +25,9 @@ extension StringUtils on String {
 final _min = min;
 final _max = max;
 
-extension NumListUtilities on List<num> {
-  num get min => this.reduce((a, b) => _min(a, b));
-  num get max => this.reduce((a, b) => _max(a, b));
-}
-
-extension DoubleListUtilities on List<double> {
-  num get min => this.reduce((a, b) => _min(a, b));
-  num get max => this.reduce((a, b) => _max(a, b));
+extension NumListUtilities<T extends num> on List<T> {
+  T? get min => (this.isEmpty ? null : this.reduce((a, b) => _min(a, b)));
+  T? get max => (this.isEmpty ? null : this.reduce((a, b) => _max(a, b)));
 }
 
 class Utils {
@@ -267,3 +262,6 @@ extension DateUtils on DateTime {
         this.day == other.day;
   }
 }
+
+T nullOrElse<T>(T value, T orElse) => value ?? orElse;
+T ifNull<T>(T? value, T nonNull, T orElse) => value == null ? orElse : nonNull;
