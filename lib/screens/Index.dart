@@ -29,6 +29,7 @@ import 'package:reaxios/screens/nav/Overview.dart';
 import 'package:reaxios/screens/nav/Stats.dart';
 import 'package:reaxios/screens/nav/Topics.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -504,7 +505,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 : null,
             drawer: _getDrawer(),
-            body: loading ? LoadingUI() : panes[selectedPane],
+            body: loading
+                ? LoadingUI()
+                : Builder(builder: (context) {
+                    return Actions(
+                      actions: {
+                        MenuIntent:
+                            CallbackAction<MenuIntent>(onInvoke: (intent) {
+                          Scaffold.of(context).openDrawer();
+                        })
+                      },
+                      child: panes[selectedPane],
+                    );
+                  }),
           ),
         ),
       ),

@@ -46,9 +46,7 @@ app.*.map.json
 /android/app/profile
 /android/app/build/outputs/apk/profile
 /android/app/release
-/android/app/build/outputs/apk/release
-/android/app/build/intermediates
-/android/app/build/generated
+/android/app/build/
 
 # Logs
 **/logs/
