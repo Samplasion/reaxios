@@ -27,7 +27,8 @@ class AuthorizationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${authorization.kind}"),
+        title: Text(context.locale.authorizations
+            .getByKey("type${authorization.rawKind}")),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -65,9 +66,9 @@ class AuthorizationView extends StatelessWidget {
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Theme.of(context).primaryColor.contrastText,
           ),
-          title: "Giustificata da",
+          title: context.locale.authorizations.justifiedBy,
           subtitle: Text(authorization.authorizedBy),
-          details: Text(dateToString(authorization.authorizedDate)),
+          details: Text(context.dateToString(authorization.authorizedDate)),
         ),
     ];
     if (moreInfo.isEmpty)
@@ -91,19 +92,20 @@ class AuthorizationView extends StatelessWidget {
                 Navigator.pop(context);
 
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Giustificata.")),
+                  SnackBar(
+                      content: Text(
+                          context.locale.authorizations.justifiedSnackbar)),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content:
-                        Text("Si è verificato un errore. Riprova più tardi."),
+                    content: Text(context.locale.authorizations.errorSnackbar),
                   ),
                 );
               }
             });
           },
-          child: Text("Giustifica"),
+          child: Text(context.locale.authorizations.justifyButtonLabel),
         ),
     ];
 

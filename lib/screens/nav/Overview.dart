@@ -18,6 +18,7 @@ import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Charts/GradeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -140,8 +141,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .where((t) => t.date.isSameDay(pastTopics.last.date))
         .toList()
       ..sort((a, b) => a.lessonHour.compareTo(b.lessonHour));
-    final List<Grade> latestGrades =
-        grades.reversed.where((element) => element.weight > 0).take(3).toList();
+    final List<Grade> latestGrades = grades.reversed.take(3).toList();
 
     final accent = Theme.of(context).accentColor;
     final captionColor = Theme.of(context).textTheme.caption!.color;
@@ -212,7 +212,8 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                   if (e.lessonHour.isNotEmpty)
                     Chip(
                       label: Text(
-                        "${e.lessonHour}\u00aa ora",
+                        formatString(context.locale.main.lessonHour,
+                            [e.lessonHour.toString()]),
                         style: TextStyle(color: accent.contrastText),
                       ),
                       backgroundColor: accent.lighten(0.1),
@@ -242,7 +243,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                     scrollPhysics: NeverScrollableScrollPhysics(),
                   ).padding(bottom: 8),
                   Text(
-                    dateToString(e.date),
+                    context.dateToString(e.date),
                     style: Theme.of(context).textTheme.caption!.copyWith(
                           color: accent.contrastText.withOpacity(0.75),
                         ),
@@ -279,7 +280,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 
       if (gradeCards.isNotEmpty) ...[
         Text(
-          "Ultimi voti",
+          context.locale.overview.latestGrades,
           style: Theme.of(context).textTheme.headline6,
         ).padding(horizontal: 16, top: 8),
         ...gradeCards,
@@ -287,7 +288,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 
       if (topicCards.isNotEmpty) ...[
         Text(
-          "Ultime lezioni",
+          context.locale.overview.latestLessons,
           style: Theme.of(context).textTheme.headline6,
         ).padding(horizontal: 16, top: 8),
         Scrollbar(
@@ -305,7 +306,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 
       if (assmts.isNotEmpty) ...[
         Text(
-          "Compiti per domani",
+          context.locale.overview.homeworkForTomorrow,
           style: Theme.of(context).textTheme.headline6,
         ).padding(horizontal: 16, top: 8),
         _getAssignmentTimeline(assignments),
@@ -380,7 +381,7 @@ class UserCard extends StatelessWidget {
           overflow: TextOverflow.fade,
         ).padding(bottom: 5),
         Text(
-          "${dateToString(student.birthday)} - ${describeEnum(student.gender)[0]}",
+          "${context.dateToString(student.birthday)} - ${context.locale.main.getByKey("gender${describeEnum(student.gender)[0]}")}",
           style: TextStyle(
             color: fg.withOpacity(smallTextOpacity),
             fontSize: 12,
@@ -397,43 +398,49 @@ class UserCard extends StatelessWidget {
       FutureBuilder<List<Grade>>(
         builder: (_, snapshot) {
           if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(context, "...", "Media");
+            return _buildUserStatsItem(
+                context, "...", context.locale.overview.average);
           }
           final relevantGrades = period == null
               ? snapshot.data!
               : snapshot.data!.where((g) => g.period == period!.desc).toList();
           return _buildUserStatsItem(
-              context, gradeAverage(relevantGrades).toString(), 'Media');
+              context,
+              gradeAverage(relevantGrades).toString(),
+              context.locale.overview.average);
         },
         future: store.grades,
       ),
       FutureBuilder<List<Grade>>(
         builder: (_, snapshot) {
           if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(context, "...", "Voti");
+            return _buildUserStatsItem(
+                context, "...", context.locale.overview.grades);
           }
-          return _buildUserStatsItem(
-              context, snapshot.data!.length.toString(), 'Voti');
+          return _buildUserStatsItem(context, snapshot.data!.length.toString(),
+              context.locale.overview.grades);
         },
         future: store.grades,
       ),
       FutureBuilder<List<Assignment>>(
         builder: (_, snapshot) {
           if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(context, "...", "Compiti");
+            return _buildUserStatsItem(
+                context, "...", context.locale.overview.assignments);
           }
-          return _buildUserStatsItem(
-              context, snapshot.data!.length.toString(), 'Compiti');
+          return _buildUserStatsItem(context, snapshot.data!.length.toString(),
+              context.locale.overview.assignments);
         },
         future: store.assignments,
       ),
       FutureBuilder<List<Topic>>(
         builder: (_, snapshot) {
           if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(context, "...", "Argomenti");
+            return _buildUserStatsItem(
+                context, "...", context.locale.overview.topics);
           }
-          return _buildUserStatsItem(
-              context, snapshot.data!.length.toString(), 'Argomenti');
+          return _buildUserStatsItem(context, snapshot.data!.length.toString(),
+              context.locale.overview.topics);
         },
         future: store.topics,
       ),

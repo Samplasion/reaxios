@@ -29,8 +29,8 @@ class MaterialTeacherView extends StatelessWidget {
     if (teacher.folders.isEmpty) {
       return Center(
         child: EmptyUI(
-          text: 'Nessun materiale',
-          subtitle: 'Non ci sono materiali per questo docente',
+          text: context.locale.teachingMaterials.teacherNoDataTitle,
+          subtitle: context.locale.teachingMaterials.teacherNoDataText,
           icon: Icons.folder,
         ),
       );
@@ -54,7 +54,7 @@ class MaterialTeacherView extends StatelessWidget {
           title: teacher.folders[index].description,
           subtitle: Text(
             text.isEmpty
-                ? "Il docente non ha inserito alcuna descrizione per questa cartella."
+                ? context.locale.teachingMaterials.noDescription
                 : text,
             style:
                 text.isNotEmpty ? null : TextStyle(fontStyle: FontStyle.italic),

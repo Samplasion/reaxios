@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
-import 'package:reaxios/system/AppInfoStore.dart';
+
+import '../../system/AppInfoStore.dart';
+import '../../utils.dart';
 
 class RegistroAboutListItem extends StatelessWidget {
   const RegistroAboutListItem({Key? key}) : super(key: key);
@@ -28,21 +30,16 @@ class RegistroAboutListItem extends StatelessWidget {
         RichText(
           text: TextSpan(
             children: <TextSpan>[
-              TextSpan(
-                  style: textStyle,
-                  text:
-                      "Un semplice frontend per il Registro Elettronico Axios."),
+              TextSpan(style: textStyle, text: context.locale.about.synopsis),
               TextSpan(text: "\n\n"),
               TextSpan(
                   style: textStyle,
-                  text: "Un ringraziamento speciale per i codici "
-                      "di decifratura e di accesso, nonché per un "
-                      "aiuto sostanziale nella comprensione del sistema, "
-                      "va a "),
+                  text: context.locale.about.longDescription.split("###")[0]),
               TextSpan(
                   style: textStyle.copyWith(fontWeight: FontWeight.bold),
                   text: "Simoman3"),
-              TextSpan(text: "."),
+              TextSpan(
+                  text: context.locale.about.longDescription.split("###")[1]),
             ],
           ),
         ),

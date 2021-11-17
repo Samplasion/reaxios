@@ -8,6 +8,7 @@ import 'package:reaxios/components/Utilities/GradeAvatar.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/GradeView.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/utils.dart';
 import "package:styled_widget/styled_widget.dart";
 
 class GradeListItem extends StatelessWidget {
@@ -42,7 +43,7 @@ class GradeListItem extends StatelessWidget {
       leading: leading,
       title: grade.subject,
       subtitle: Text("${grade.teacher}$desc"),
-      details: Text("${dateToString(grade.date)} – ${grade.kind}"),
+      details: Text("${context.dateToString(grade.date)} – ${grade.kind}"),
       radius: radius,
       elevation: elevation,
       onClick: onClick

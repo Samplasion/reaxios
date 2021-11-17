@@ -17,6 +17,7 @@ import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Views/GradeSubjectView.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -57,8 +58,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
   Widget build(BuildContext context) {
     if (widget.session.student?.securityBits[SecurityBits.hideGrades] == "1") {
       return EmptyUI(
-        text: "Non hai il permesso di visualizzare i voti. "
-            "Contatta la scuola per saperne di più.",
+        text: context.locale.main.noPermission,
         icon: Icons.lock,
       ).padding(horizontal: 16);
     }
@@ -76,7 +76,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
           if (snapshot.hasError)
             return Scaffold(
               appBar: AppBar(
-                title: Text("Voti"),
+                title: Text(context.locale.drawer.grades),
               ),
               body: Text(
                 "${snapshot.error}\n${snapshot is Error ? snapshot.stackTrace : ""}",
@@ -91,7 +91,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
 
           return Scaffold(
             appBar: AppBar(
-              title: Text("Voti"),
+              title: Text(context.locale.drawer.grades),
             ),
             body: LoadingUI(),
           );
@@ -110,10 +110,10 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
       Period? currentPeriod, List<String> subjects) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Voti"),
+        title: Text(context.locale.drawer.grades),
         leading: Builder(builder: (context) {
           return IconButton(
-            tooltip: "Apri il menu di navigazione",
+            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             onPressed: widget.openMainDrawer,
             icon: Icon(Icons.menu),
           );
@@ -149,7 +149,10 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                NiceHeader(title: "Media", subtitle: period).padding(bottom: 8),
+                NiceHeader(
+                  title: context.locale.charts.average,
+                  subtitle: period,
+                ).padding(bottom: 8),
                 GradeAvatar(
                   grade: Grade.fakeFromDouble(gradeAverage(periodGrades)),
                 )
@@ -181,8 +184,10 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    NiceHeader(title: "Media", subtitle: "Tutto l'anno")
-                        .padding(bottom: 8),
+                    NiceHeader(
+                      title: context.locale.charts.average,
+                      subtitle: context.locale.charts.scopeAllYear,
+                    ).padding(bottom: 8),
                     GradeAvatar(
                       grade: Grade.fakeFromDouble(gradeAverage(grades)),
                     ),
@@ -249,16 +254,19 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
               style: Theme.of(context).textTheme.caption,
               children: [
                 if (!isNaN(average)) ...[
-                  TextSpan(text: "Media: "),
-                  GradeText(grade: average),
+                  TextSpan(text: context.locale.grades.mainPageAverage),
+                  GradeText(context, grade: average),
                 ] else
-                  TextSpan(text: "Ancora nessun voto."),
+                  TextSpan(text: context.locale.grades.noGrades),
               ],
             ),
           ),
           details: isNaN(average)
               ? null
-              : Text("Ultimo voto: ${dateToString(subjectGrades.first.date)}"),
+              : Text(
+                  context.locale.grades.latestGrade
+                      .format([context.dateToString(subjectGrades.first.date)]),
+                ),
           onClick: isNaN(average)
               ? null
               : () {

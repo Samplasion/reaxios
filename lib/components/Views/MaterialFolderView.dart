@@ -9,6 +9,7 @@ import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,8 +46,7 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
             if (index >= _materials.length)
               return EmptyUI(
                 icon: Icons.folder,
-                text:
-                    'Il docente non ha caricato alcun materiale in questa cartella.',
+                text: context.locale.teachingMaterials.emptyFolder,
               );
             return _buildCard(_materials[index], index);
           },
@@ -70,21 +70,21 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
     final title = material.description;
     final subtitle = material.text.isEmpty
         ? Text(
-            "Il docente non ha inserito alcuna descrizione per questo materiale.",
+            context.locale.teachingMaterials.noMaterialDescription,
             style: TextStyle(fontStyle: FontStyle.italic),
           )
         : Text(material.text);
     final name = material.isLink
-        ? Uri.tryParse(material.url)?.host.replaceFirst("www.", "") ??
-            "Nessun host"
+        ? Uri.tryParse(material.url)?.host.replaceFirst("://www.", "://") ??
+            context.locale.teachingMaterials.noHost
         : material.fileName;
 
     return CardListItem(
       leading: icon,
       title: title,
       subtitle: subtitle,
-      details:
-          Text("$name – ${dateToString(material.date, includeTime: true)}"),
+      details: Text(
+          "$name – ${context.dateToString(material.date, includeTime: true)}"),
       onClick: () => _onClick(material),
     ).padding(
       horizontal: 16,
@@ -98,27 +98,28 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
       if (await canLaunch(material.url)) {
         launch(material.url);
       } else {
-        context.showSnackbar("Impossibile aprire il link.");
+        context.showSnackbar(context.locale.main.failedLinkOpen);
       }
     } else {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Scarica file"),
-          content: Text("Vuoi scaricare il file ${material.fileName}?"),
+          title: Text(context.locale.teachingMaterials.downloadAlertTitle),
+          content: Text(context.locale.teachingMaterials.downloadAlertBody
+              .format([material.fileName])),
           actions: <Widget>[
             TextButton(
-              child: Text("Annulla"),
+              child: Text(context.materialLocale.cancelButtonLabel),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: Text("Scarica"),
+              child: Text(context.locale.main.downloadButtonLabel),
               onPressed: () async {
                 Navigator.of(context).pop();
                 if (await canLaunch(material.fileUrl)) {
                   launch(material.fileUrl);
                 } else {
-                  context.showSnackbar("Impossibile scaricare il file.");
+                  context.showSnackbar(context.locale.main.failedFileDownload);
                 }
               },
             ),

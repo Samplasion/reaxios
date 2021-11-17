@@ -47,9 +47,11 @@ class Authorization implements AbstractJson {
   @BooleanSerializer()
   bool concurs;
 
-  @JsonKey(name: "giustificato")
-  @BooleanSerializer()
-  bool justified;
+  // @JsonKey(name: "giustificato")
+  // @BooleanSerializer()
+  // bool justified;
+
+  bool get justified => authorizedDate.isAfter(DateTime(2000));
 
   @JsonKey(name: "classe")
   @BooleanSerializer()
@@ -81,7 +83,7 @@ class Authorization implements AbstractJson {
     required this.reason,
     required this.notes,
     required this.concurs,
-    required this.justified,
+    // required this.justified,
     required this.entireClass,
     required this.insertedBy,
     required this.authorizedBy,
@@ -99,7 +101,7 @@ class Authorization implements AbstractJson {
       reason: '',
       notes: '',
       concurs: false,
-      justified: false,
+      // justified: false,
       entireClass: false,
       insertedBy: '',
       authorizedBy: '',
@@ -151,7 +153,7 @@ class Authorization implements AbstractJson {
       notes:
           'La professoressa Maria Bianchi si trova a Firenze in gita di classe',
       concurs: false,
-      justified: true,
+      // justified: true,
       entireClass: true,
       insertedBy: 'Segreteria',
       authorizedBy: 'Mario Rossi',

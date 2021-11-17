@@ -37,11 +37,11 @@ class AssignmentListItem extends StatelessWidget {
                 if (await canLaunch(link.url)) {
                   await launch(link.url);
                 } else {
-                  context.showSnackbar('Impossibile aprire il link.');
+                  context.showSnackbar(context.locale.main.failedLinkOpen);
                 }
               },
             ),
-      details: Text(dateToString(assignment.date)),
+      details: Text(context.dateToString(assignment.date)),
       // isThreeLine: true,
       onClick: onClick,
     ).padding(horizontal: 16);

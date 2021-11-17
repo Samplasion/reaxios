@@ -1,10 +1,15 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/enums/BulletinAttachmentKind.dart';
 import 'package:reaxios/components/ListItems/BulletinListItem.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
+import 'package:reaxios/format.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:reaxios/main.dart';
 import 'package:reaxios/system/Store.dart';
@@ -29,7 +34,12 @@ class BulletinView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Comunicazione: ${bulletin.humanReadableKind}"),
+        title: Text(
+          context.locale.bulletins.title.format([
+            context.locale.bulletins
+                .getByKey("type${describeEnum(bulletin.kind)}"),
+          ]),
+        ),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -69,13 +79,20 @@ class BulletinView extends StatelessWidget {
               Navigator.pop(context);
 
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Comunicazione segnata come letta.")),
+                SnackBar(
+                    content: Text(context.locale.bulletins.markedSuccessfully)),
+              );
+            }).catchError((_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(context.locale.bulletins.markedError),
+                ),
               );
             });
           },
-          child: Text("Segna come letta"),
+          child: Text(context.locale.bulletins.markAsRead),
         ),
-      if (bulletin.read) Text("Comunicazione già letta.")
+      if (bulletin.read) Text(context.locale.bulletins.alreadyRead),
     ];
   }
 
@@ -96,26 +113,36 @@ class BulletinView extends StatelessWidget {
                   foregroundColor: bg.contrastText,
                 ),
               ),
-              title: e.sourceName ?? e.desc ?? "",
+              title: () {
+                String? title = e.sourceName;
+                if (title == null || title.trim().isEmpty) title = e.desc;
+                if (title == null || title.trim().isEmpty)
+                  title = Uri.tryParse(e.url)?.host;
+                if (title == null || title.trim().isEmpty) title = "";
+                return title;
+              }(),
               subtitle: Text(e.kind == BulletinAttachmentKind.File
-                  ? "Scarica file"
-                  : "Apri pagina"),
+                  ? context.locale.bulletins.download
+                  : context.locale.bulletins.openLink),
               onClick: () async {
+                print(jsonEncode(e.toJson()));
                 if (await canLaunch(e.url)) {
                   if (e.kind == BulletinAttachmentKind.File) {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text("Scarica file"),
-                        content:
-                            Text("Vuoi scaricare il file ${e.sourceName}?"),
+                        title: Text(context.locale.bulletins.download),
+                        content: Text(context.locale.bulletins.downloadBody
+                            .format([e.sourceName])),
                         actions: [
                           TextButton(
-                            child: Text("Annulla"),
+                            child:
+                                Text(context.materialLocale.cancelButtonLabel),
                             onPressed: () => Navigator.pop(context),
                           ),
                           TextButton(
-                            child: Text("Scarica"),
+                            child:
+                                Text(context.locale.main.downloadButtonLabel),
                             onPressed: () {
                               Navigator.pop(context);
                               launch(e.url);
@@ -129,9 +156,10 @@ class BulletinView extends StatelessWidget {
                   }
                 } else {
                   if (e.kind == BulletinAttachmentKind.File) {
-                    context.showSnackbar("Impossibile scaricare il file.");
+                    context
+                        .showSnackbar(context.locale.main.failedFileDownload);
                   } else {
-                    context.showSnackbar("Impossibile aprire la pagina.");
+                    context.showSnackbar(context.locale.main.failedLinkOpen);
                   }
                 }
               },

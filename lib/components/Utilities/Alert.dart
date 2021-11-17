@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class Alert extends StatelessWidget {
@@ -11,7 +12,7 @@ class Alert extends StatelessWidget {
   }) : super(key: key);
 
   final String title;
-  final RichText? text;
+  final Widget? text;
   final MaterialColor color;
   final bool selectable;
 
@@ -49,22 +50,40 @@ class Alert extends StatelessWidget {
                         color: color[dark ? 300 : 700],
                       ),
                     ),
-                    if (text != null)
-                      selectable
-                          ? SelectableText.rich(
-                              TextSpan(
-                                children: [text!.text],
-                                style:
-                                    TextStyle(color: color[dark ? 200 : 900]),
-                              ),
-                            )
-                          : RichText(
-                              text: TextSpan(
-                                children: [text!.text],
-                                style:
-                                    TextStyle(color: color[dark ? 200 : 900]),
-                              ),
-                            )
+                    if (text != null) ...[
+                      if (text is RichText)
+                        selectable
+                            ? SelectableText.rich(
+                                TextSpan(
+                                  children: [(text as RichText).text],
+                                  style:
+                                      TextStyle(color: color[dark ? 200 : 900]),
+                                ),
+                              )
+                            : RichText(
+                                text: TextSpan(
+                                  children: [(text as RichText).text],
+                                  style:
+                                      TextStyle(color: color[dark ? 200 : 900]),
+                                ),
+                              )
+                      else if (text is Markdown)
+                        Markdown(
+                          data: (text as Markdown).data,
+                          styleSheet: MarkdownStyleSheet(
+                            p: TextStyle(color: color[dark ? 200 : 900]),
+                          ),
+                        )
+                      else if (text is MarkdownBody)
+                        MarkdownBody(
+                          data: (text as MarkdownBody).data,
+                          styleSheet: MarkdownStyleSheet(
+                            p: TextStyle(color: color[dark ? 200 : 900]),
+                          ),
+                        )
+                      else
+                        text!,
+                    ],
                   ],
                 ),
               ),

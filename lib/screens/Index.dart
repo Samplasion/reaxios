@@ -17,6 +17,7 @@ import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/Views/GradeView.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';
 import 'package:reaxios/screens/nav/Authorizations.dart';
@@ -218,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
       drawerItems = [
         [
           Icon(Icons.home),
-          Text('Panoramica'),
+          Text(context.locale.drawer.overview),
           true,
           () async {
             widget.store.fetchAssignments(session);
@@ -233,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.calendar_today),
-          Text('Agenda'),
+          Text(context.locale.drawer.calendar),
           true,
           () {
             widget.store.fetchAssignments(session);
@@ -243,13 +244,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.book),
-          Text('Compiti'),
+          Text(context.locale.drawer.assignments),
           true,
           () => widget.store.fetchAssignments(session)
         ],
         [
           Icon(Icons.star),
-          Text('Voti'),
+          Text(context.locale.drawer.grades),
           false,
           () {
             widget.store.fetchGrades(session);
@@ -259,49 +260,49 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.topic),
-          Text('Argomenti'),
+          Text(context.locale.drawer.topics),
           true,
           () => widget.store.fetchTopics(session)
         ],
         [
           Icon(Icons.mail),
-          Text('Segreteria'),
+          Text(context.locale.drawer.secretary),
           true,
           () => widget.store.fetchBulletins(session)
         ],
         [
           Icon(Icons.contact_mail),
-          Text('Comunicazioni docente'),
+          Text(context.locale.drawer.teacherNotes),
           true,
           () => widget.store.fetchNotes(session, true)
         ],
         [
           Icon(Icons.perm_contact_cal),
-          Text('Note disciplinari'),
+          Text(context.locale.drawer.notices),
           true,
           () => widget.store.fetchNotes(session, true)
         ],
         [
           Icon(Icons.no_accounts),
-          Text('Assenze'),
+          Text(context.locale.drawer.absences),
           true,
           () => widget.store.fetchAbsences(session, true)
         ],
         [
           Icon(Icons.edit),
-          Text('Autorizzazioni'),
+          Text(context.locale.drawer.authorizations),
           true,
           () => widget.store.fetchAuthorizations(session)
         ],
         [
           Icon(Icons.badge),
-          Text('Materiale didattico'),
+          Text(context.locale.drawer.teachingMaterials),
           true,
           () => widget.store.fetchMaterials(session)
         ],
         [
           Icon(Icons.star_outline),
-          Text('Statistiche'),
+          Text(context.locale.drawer.stats),
           true,
           () {
             widget.store.fetchAbsences(session);
@@ -312,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.gradient),
-          Text('Pagelle'),
+          Text(context.locale.drawer.reportCards),
           true,
           () {
             widget.store.fetchReportCards(session);
@@ -453,7 +454,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ...buildDrawerItems(),
                         Divider(),
                         ListTile(
-                          title: Text("Impostazioni"),
+                          title: Text(context.locale.drawer.settings),
                           leading: Icon(Icons.settings),
                           onTap: () {
                             /* if (width <= kTabBreakpoint) */ Navigator.pop(
@@ -463,7 +464,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         RegistroAboutListItem(),
                         ListTile(
-                          title: Text("Esci"),
+                          title: Text(context.locale.drawer.logOut),
                           leading: Icon(Icons.exit_to_app),
                           onTap: () {
                             showExitDialog(context);
@@ -497,7 +498,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: drawerItems[selectedPane][1],
                     leading: Builder(builder: (context) {
                       return IconButton(
-                        tooltip: "Apri il menu di navigazione",
+                        tooltip: MaterialLocalizations.of(context)
+                            .openAppDrawerTooltip,
                         onPressed: () => Scaffold.of(context).openDrawer(),
                         icon: Icon(Icons.menu),
                       );
@@ -527,18 +529,18 @@ class _HomeScreenState extends State<HomeScreen> {
   showExitDialog(BuildContext context) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Esci da ${login.schoolTitle} ${login.schoolName}"),
-      content: Text(
-          "Se esci, dovrai inserire nuovamente l'ID utente e la password."),
+      title: Text(formatString(context.locale.main.logoutTitle,
+          [login.schoolTitle, login.schoolName])),
+      content: Text(context.locale.main.logoutBody),
       actions: [
         TextButton(
-          child: Text("Annulla"),
+          child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
           onPressed: () async {
             Navigator.pop(context);
           },
         ),
         TextButton(
-          child: Text("OK"),
+          child: Text(MaterialLocalizations.of(context).okButtonLabel),
           onPressed: () async {
             // Refresh store
             await widget.store.reset();

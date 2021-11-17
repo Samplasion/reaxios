@@ -11,6 +11,7 @@ import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/ListItems/NoteListItem.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import "package:styled_widget/styled_widget.dart";
 
@@ -28,6 +29,7 @@ class AuthorizationsPane extends StatefulWidget {
 
 class _AuthorizationsPaneState extends State<AuthorizationsPane> {
   final ScrollController controller = ScrollController();
+  Key key = UniqueKey();
 
   Map<String, List<Authorization>> splitAuthorizations(
       List<Authorization> authorizations) {
@@ -49,8 +51,7 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
     if (widget.session.student?.securityBits[SecurityBits.hideAuthorizations] ==
         "1") {
       return EmptyUI(
-        text: "Non hai il permesso di visualizzare le autorizzazioni. "
-            "Contatta la scuola per saperne di più.",
+        text: context.locale.main.noPermission,
         icon: Icons.lock,
       ).padding(horizontal: 16);
     }
@@ -71,6 +72,10 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
     );
   }
 
+  void rebuild() => setState(() {
+        key = UniqueKey();
+      });
+
   Widget buildOk(BuildContext context, List<Authorization> authorizations) {
     // authorizations = authorizations.where((n) => n.kind == NoteKind.Authorization).toList();
     final map = splitAuthorizations(authorizations);
@@ -79,49 +84,54 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
     if (authorizations.isEmpty) {
       return EmptyUI(
         icon: Icons.no_accounts_outlined,
-        text: "Non hai assenze.",
+        text: context.locale.authorizations.empty,
       );
     }
 
-    return Container(
-      child: ListView.separated(
-        shrinkWrap: true,
-        // physics: NeverScrollableScrollPhysics(),
-        controller: controller,
-        separatorBuilder: (_a, _b) => Divider(),
-        itemBuilder: (context, i) {
-          return StickyHeader(
-            header: Container(
-              height: 50.0,
-              color: Theme.of(context).canvasColor,
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                entries[i].key,
-                style: Theme.of(context).textTheme.caption,
+    return KeyedSubtree(
+      key: key,
+      child: Container(
+        child: ListView.separated(
+          shrinkWrap: true,
+          // physics: NeverScrollableScrollPhysics(),
+          controller: controller,
+          separatorBuilder: (_a, _b) => Divider(),
+          itemBuilder: (context, i) {
+            return StickyHeader(
+              header: Container(
+                height: 50.0,
+                color: Theme.of(context).canvasColor,
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  entries[i].key,
+                  style: Theme.of(context).textTheme.caption,
+                ),
               ),
-            ),
-            content: Padding(
-              padding: i == entries.length - 1
-                  ? EdgeInsets.only(bottom: 16)
-                  : EdgeInsets.zero,
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, i1) {
-                  final e = entries[i].value[i1];
-                  return Hero(
-                    child: AuthorizationListItem(
-                        authorization: e, session: widget.session),
-                    tag: e.toString(),
-                  );
-                },
-                itemCount: entries[i].value.length,
-                shrinkWrap: true,
-              ).paddingDirectional(horizontal: 16),
-            ),
-          );
-        },
-        itemCount: entries.length,
+              content: Padding(
+                padding: i == entries.length - 1
+                    ? EdgeInsets.only(bottom: 16)
+                    : EdgeInsets.zero,
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, i1) {
+                    final e = entries[i].value[i1];
+                    return Hero(
+                      child: AuthorizationListItem(
+                          authorization: e,
+                          session: widget.session,
+                          rebuild: rebuild),
+                      tag: e.toString(),
+                    );
+                  },
+                  itemCount: entries[i].value.length,
+                  shrinkWrap: true,
+                ).paddingDirectional(horizontal: 16),
+              ),
+            );
+          },
+          itemCount: entries.length,
+        ),
       ),
     );
   }

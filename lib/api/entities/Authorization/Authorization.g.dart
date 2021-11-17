@@ -17,8 +17,6 @@ Authorization _$AuthorizationFromJson(Map<String, dynamic> json) {
     reason: json['motivo'] as String,
     notes: json['note'] as String,
     concurs: const BooleanSerializer().fromJson(json['calcolo'] as String),
-    justified:
-        const BooleanSerializer().fromJson(json['giustificato'] as String),
     entireClass: const BooleanSerializer().fromJson(json['classe'] as String),
     insertedBy: json['utenteInserimento'] as String,
     authorizedBy: json['utenteAutorizzazione'] as String,
@@ -38,7 +36,6 @@ Map<String, dynamic> _$AuthorizationToJson(Authorization instance) =>
       'motivo': instance.reason,
       'note': instance.notes,
       'calcolo': const BooleanSerializer().toJson(instance.concurs),
-      'giustificato': const BooleanSerializer().toJson(instance.justified),
       'classe': const BooleanSerializer().toJson(instance.entireClass),
       'utenteInserimento': instance.insertedBy,
       'utenteAutorizzazione': instance.authorizedBy,

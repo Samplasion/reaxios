@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:reaxios/api/Axios.dart';
@@ -36,6 +37,10 @@ class BulletinListItem extends StatelessWidget {
     BulletinKind.Other: Colors.blue[400]!,
   };
 
+  String getSender(BuildContext context, BulletinKind apiSender) {
+    return context.locale.bulletins.getByKey("type${describeEnum(apiSender)}");
+  }
+
   @override
   Widget build(BuildContext context) {
     final bg = colors[bulletin.kind]!; // Theme.of(context).accentColor;
@@ -73,7 +78,8 @@ class BulletinListItem extends StatelessWidget {
 
     final tile = CardListItem(
       leading: leading,
-      title: bulletin.humanReadableKind,
+      title: getSender(context, bulletin.kind),
+      // title: bulletin.humanReadableKind,
       subtitle: bulletin.desc.trim().isEmpty
           ? Container()
           : Linkify(
@@ -84,11 +90,11 @@ class BulletinListItem extends StatelessWidget {
                 if (await canLaunch(link.url)) {
                   await launch(link.url);
                 } else {
-                  context.showSnackbar('Impossibile aprire il link.');
+                  context.showSnackbar(context.locale.main.failedLinkOpen);
                 }
               },
             ),
-      details: Text(dateToString(bulletin.date)),
+      details: Text(context.dateToString(bulletin.date)),
       onClick: !onClick
           ? null
           : () {

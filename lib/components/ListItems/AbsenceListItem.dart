@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/Views/AbsenceView.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
+import 'package:reaxios/format.dart';
+import 'package:reaxios/utils.dart';
 import "package:styled_widget/styled_widget.dart";
 
 class AbsenceListItem extends StatelessWidget {
@@ -41,25 +44,27 @@ class AbsenceListItem extends StatelessWidget {
             ({Widget? child}) => Container(child: child).width(50).height(50));
 
     final justifiedText = absence.isJustified
-        ? "\nGiustificata il " + dateToString(absence.dateJustified)
-        : "";
+        ? context.locale.absences.justifiedSubtitle.format([
+            context.dateToString(absence.dateJustified),
+            absence.kindJustified,
+          ])
+        : null;
+
+    final showSubtitle = absence.kindJustified.isNotEmpty ||
+        justifiedText != null && justifiedText.isNotEmpty;
 
     final tile = CardListItem(
       leading: leading,
-      title: absence.kind,
-      subtitle: RichText(
-        text: TextSpan(
-          style: TextStyle(color: Theme.of(context).textTheme.caption?.color),
-          children: [
-            TextSpan(
-              text: absence.kindJustified,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextSpan(text: justifiedText),
-          ],
-        ),
-      ),
-      details: Text(dateToString(absence.date)),
+      title: context.locale.absences.getByKey("type${absence.kind}"),
+      subtitle: showSubtitle
+          ? MarkdownBody(
+              data: justifiedText!,
+              styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Theme.of(context).textTheme.caption!.color),
+              ),
+            )
+          : Container(),
+      details: Text(context.dateToString(absence.date)),
       onClick: !onClick
           ? null
           : () {

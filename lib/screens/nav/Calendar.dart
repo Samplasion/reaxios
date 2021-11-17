@@ -83,18 +83,20 @@ class _CalendarPaneState extends State<CalendarPane> {
     }
   }
 
+  // Returns the string matching the current state,
+  // rather than the future state.
   Map<CalendarFormat, String> get _calendarFormatMap {
     final orientation = MediaQuery.of(context).orientation;
 
     if (orientation == Orientation.landscape) {
       return {
-        CalendarFormat.twoWeeks: '1 settimana',
-        CalendarFormat.week: '2 settimane',
+        CalendarFormat.twoWeeks: context.locale.calendar.formatWeek,
+        CalendarFormat.week: context.locale.calendar.formatTwoWeeks,
       };
     } else {
       return {
-        CalendarFormat.month: '2 settimane',
-        CalendarFormat.twoWeeks: 'mese',
+        CalendarFormat.month: context.locale.calendar.formatTwoWeeks,
+        CalendarFormat.twoWeeks: context.locale.calendar.formatMonth,
       };
     }
   }
@@ -139,7 +141,7 @@ class _CalendarPaneState extends State<CalendarPane> {
               periods,
               date,
             ),
-            locale: "it_IT",
+            locale: context.currentLocale.toLanguageTag(),
             weekendDays: [
               if (emptyDays.contains(6)) DateTime.saturday,
               DateTime.sunday
@@ -147,10 +149,6 @@ class _CalendarPaneState extends State<CalendarPane> {
             startingDayOfWeek: StartingDayOfWeek.monday,
             // Invert the labels so that the button shows the current state
             availableCalendarFormats: _calendarFormatMap,
-            // {
-            //   CalendarFormat.month: "2 settimane",
-            //   CalendarFormat.twoWeeks: "mese",
-            // },
             formatAnimationCurve: Curves.easeInOut,
             formatAnimationDuration: Duration(milliseconds: 300),
             pageAnimationCurve: Curves.easeInOut,
@@ -169,7 +167,8 @@ class _CalendarPaneState extends State<CalendarPane> {
                             backgroundColor: accent,
                           ).padding(right: 2, bottom: 2))
                       .toList()
-                      .toRow(mainAxisAlignment: MainAxisAlignment.center);
+                      .toRow(mainAxisAlignment: MainAxisAlignment.center)
+                      .padding(left: 2);
                   // return Container(
                   //   child: Container(
                   //     decoration: BoxDecoration(
@@ -195,7 +194,8 @@ class _CalendarPaneState extends State<CalendarPane> {
               dowBuilder: (context, dayOfWeek) {
                 return Container(
                   child: Text(
-                    DateFormat.E("it_IT").format(dayOfWeek),
+                    DateFormat.E(context.currentLocale.toLanguageTag())
+                        .format(dayOfWeek),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -302,7 +302,7 @@ class _CalendarPaneState extends State<CalendarPane> {
     if (todaysAssignments.isNotEmpty) {
       events.add(
         Text(
-          "Compiti",
+          context.locale.calendar.homework,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -317,7 +317,7 @@ class _CalendarPaneState extends State<CalendarPane> {
     if (todaysTopics.isNotEmpty) {
       events.add(
         Text(
-          "Argomenti",
+          context.locale.calendar.topics,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -332,7 +332,7 @@ class _CalendarPaneState extends State<CalendarPane> {
     if (events.isEmpty) {
       events.add(
         EmptyUI(
-          text: "Nessun evento",
+          text: context.locale.calendar.noEvents,
           icon: Icons.event_note,
         ),
       );

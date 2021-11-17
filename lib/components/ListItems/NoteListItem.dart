@@ -51,11 +51,11 @@ class NoteListItem extends StatelessWidget {
           if (await canLaunch(link.url)) {
             await launch(link.url);
           } else {
-            context.showSnackbar('Impossibile aprire il link.');
+            context.showSnackbar(context.locale.main.failedLinkOpen);
           }
         },
       ),
-      details: Text(dateToString(note.date)),
+      details: Text(context.dateToString(note.date)),
     );
 
     return tile;

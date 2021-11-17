@@ -1,7 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
+import 'package:provider/provider.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
+import 'package:reaxios/enums/GradeDisplay.dart';
+import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,37 +20,65 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return S.SettingsScreen(
-      title: "Impostazioni",
+      title: context.locale.settings.title,
       children: [
         S.SettingsGroup(
-          title: 'Colori',
-          subtitle: "I cambiamenti verranno applicati al riavvio dell'app.",
+          title: context.locale.settings.groupsColorsTitle,
+          subtitle: context.locale.settings.changesRestart,
           children: <Widget>[
             S.ColorPickerSettingsTile(
               settingKey: 'accent-color',
-              title: 'Colore primario',
+              title: context.locale.settings.colorPrimary,
               defaultValue: Theme.of(context).accentColor,
             ),
             S.ColorPickerSettingsTile(
               settingKey: 'primary-color',
-              title: 'Colore secondario',
+              title: context.locale.settings.colorSecondary,
               defaultValue: Theme.of(context).primaryColor,
             ),
             S.RadioModalSettingsTile(
               settingKey: 'theme-mode',
-              title: "Tema",
+              title: context.locale.settings.colorTheme,
               selected: 'dynamic',
               values: {
-                "light": "Tema chiaro",
-                "dark": "Tema scuro",
-                "dynamic": "Automatico",
+                "light": context.locale.settings.colorThemeLight,
+                "dark": context.locale.settings.colorThemeDark,
+                "dynamic": context.locale.settings.colorThemeDynamic,
               },
               onChange: (_) => Navigator.pop(context),
             ),
-            Divider(height: Theme.of(context).dividerTheme.thickness),
+          ],
+        ),
+        S.SettingsGroup(
+          title: context.locale.settings.groupsBehaviorTitle,
+          children: <Widget>[
+            S.RadioModalSettingsTile(
+              settingKey: 'grade-display',
+              title: context.locale.settings.gradeDisplayLabel,
+              selected: GradeDisplay.decimal.serialized,
+              values: {
+                GradeDisplay.decimal.serialized:
+                    context.locale.settings.gradeDisplayDecimal,
+                GradeDisplay.letter.serialized:
+                    context.locale.settings.gradeDisplayLetter,
+                GradeDisplay.percentage.serialized:
+                    context.locale.settings.gradeDisplayPercentage,
+              },
+              onChange: (String value) {
+                final store =
+                    Provider.of<RegistroStore>(context, listen: false);
+                store.gradeDisplay = deserializeGradeDisplay(value);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+        S.SettingsGroup(
+          title: context.locale.settings.groupsAdvancedTitle,
+          children: <Widget>[
             S.SimpleSettingsTile(
-              title: "Riavvia app",
-              subtitle: "Applica immediatamente le impostazioni.",
+              title: context.locale.settings.restartAppTitle,
+              subtitle: context.locale.settings.restartAppSubtitle,
               onTap: () async {
                 RestartWidget.restartApp(context);
               },

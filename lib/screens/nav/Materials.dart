@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Views/MaterialTeacherView.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/utils.dart';
@@ -40,9 +42,15 @@ class _MaterialsPaneState extends State<MaterialsPane> {
   }
 
   String getCount(int count) {
-    if (count == 0) return "Nessuna cartella";
-    if (count == 1) return "Una cartella";
-    return "$count cartelle";
+    return Intl.plural(
+      count,
+      zero: context.locale.teachingMaterials.foldersZero.format([count]),
+      one: context.locale.teachingMaterials.foldersOne.format([count]),
+      two: context.locale.teachingMaterials.foldersTwo.format([count]),
+      few: context.locale.teachingMaterials.foldersFew.format([count]),
+      many: context.locale.teachingMaterials.foldersMany.format([count]),
+      other: context.locale.teachingMaterials.foldersOther.format([count]),
+    );
   }
 
   @override
@@ -56,7 +64,7 @@ class _MaterialsPaneState extends State<MaterialsPane> {
           ? SingleChildScrollView(
               child: EmptyUI(
               icon: Icons.error_outline,
-              text: "Non ci sono dati.",
+              text: context.locale.teachingMaterials.noData,
             )).center()
           : ListView.builder(
               itemCount: _materials.length,

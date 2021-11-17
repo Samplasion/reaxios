@@ -6,6 +6,7 @@ import 'package:reaxios/components/ListItems/AbsenceListItem.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:reaxios/main.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/utils.dart';
 
 class AbsenceView extends StatelessWidget {
   const AbsenceView({
@@ -23,7 +24,7 @@ class AbsenceView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${absence.kind}"),
+        title: Text(context.locale.absences.getByKey("type${absence.kind}")),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -63,22 +64,22 @@ class AbsenceView extends StatelessWidget {
                 Navigator.pop(context);
 
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Giustificata.")),
+                  SnackBar(content: Text(context.locale.absences.justifiedSnackbar)),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content:
-                        Text("Si è verificato un errore. Riprova più tardi."),
+                        Text(context.locale.absences.errorSnackbar),
                   ),
                 );
               }
             });
           },
-          child: Text("Giustifica"),
+          child: Text(context.locale.absences.justifyButtonLabel),
         ),
       if (absence.isJustifiable && absence.isJustified)
-        Text("Già giustificata.")
+        Text(context.locale.absences.alreadyJustified)
     ];
   }
 }

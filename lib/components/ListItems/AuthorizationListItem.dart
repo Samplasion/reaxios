@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/api/utils/utils.dart';
@@ -7,20 +8,24 @@ import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/AuthorizationView.dart';
 // import 'package:reaxios/components/AuthorizationView.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
+import 'package:reaxios/format.dart';
+import 'package:reaxios/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import "package:styled_widget/styled_widget.dart";
 
 class AuthorizationListItem extends StatelessWidget {
-  AuthorizationListItem(
-      {Key? key,
-      required this.authorization,
-      required this.session,
-      this.onClick = true})
-      : super(key: key);
+  AuthorizationListItem({
+    Key? key,
+    required this.authorization,
+    required this.session,
+    this.onClick = true,
+    this.rebuild,
+  }) : super(key: key);
 
   final Authorization authorization;
   final bool onClick;
   final Axios session;
+  final void Function()? rebuild;
 
   final Map<String, Color> colors = {
     "A": Colors.red[500]!,
@@ -44,45 +49,31 @@ class AuthorizationListItem extends StatelessWidget {
       rightOffset: 5,
     );
 
-    // final leading = [
-    //   Container(child: av),
-    //   if (!authorization.justified)
-    //     Container(
-    //       width: 10,
-    //       height: 10,
-    //       child: CircleAvatar(
-    //         backgroundColor: Colors.red,
-    //       ),
-    //     ).positioned(top: 0, right: 7)
-    // ].toStack();
-
-    final justifiedText = authorization.justified
-        ? "\nGiustificata il ${dateToString(authorization.authorizedDate)}."
+    final justifiedText = authorization.justified &&
+            authorization.authorizedDate.millisecondsSinceEpoch >
+                DateTime(2000).millisecondsSinceEpoch
+        ? "\n" +
+            context.locale.authorizations.justifiedSubtitle
+                .format([context.dateToString(authorization.authorizedDate)])
         : "";
 
     final concursText = authorization.concurs
-        ? "\nConcorre al calcolo."
-        : "\nNon concorre al calcolo.";
+        ? "\n" + context.locale.authorizations.calculated
+        : "\n" + context.locale.authorizations.notCalculated;
 
     final tile = CardListItem(
       leading: leading,
-      title: authorization.kind,
-      subtitle: RichText(
-        text: TextSpan(
-          style: TextStyle(color: Theme.of(context).textTheme.caption?.color),
-          children: [
-            TextSpan(
-              text: authorization.insertedBy,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextSpan(text: concursText),
-            TextSpan(text: justifiedText),
-          ],
+      title: context.locale.authorizations
+          .getByKey("type${authorization.rawKind}"),
+      subtitle: MarkdownBody(
+        data: "**${authorization.insertedBy}**\n$concursText  $justifiedText",
+        styleSheet: MarkdownStyleSheet(
+          p: TextStyle(color: Theme.of(context).textTheme.caption!.color),
         ),
       ),
-      details: Text("${dateToString(authorization.startDate)}" +
-          (authorization.endDate != authorization.startDate
-              ? " - ${dateToString(authorization.endDate)}"
+      details: Text("${context.dateToString(authorization.startDate)}" +
+          (!authorization.endDate.isSameDay(authorization.startDate)
+              ? " - ${context.dateToString(authorization.endDate)}"
               : "")),
       onClick: !onClick
           ? null
@@ -91,6 +82,7 @@ class AuthorizationListItem extends StatelessWidget {
                 return AuthorizationView(
                   authorization: authorization,
                   axios: session,
+                  reload: rebuild,
                 );
               }));
             },

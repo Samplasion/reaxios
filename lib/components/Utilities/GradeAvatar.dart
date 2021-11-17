@@ -27,7 +27,7 @@ class GradeAvatar extends StatelessWidget {
     final bg = getColor();
     final fg = bg.contrastText;
 
-    final text = grade.prettyGrade.trim();
+    final text = grade.getPrettyGrade(context).trim();
     final child = text.isEmpty
         ? (showIconIfNaN ? Icon(Icons.message) : Container())
         : Text(text);

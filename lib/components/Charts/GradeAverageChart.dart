@@ -95,7 +95,7 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
               int rodIndex,
             ) {
               return BarTooltipItem(
-                '${grades[groupIndex].name}: ${grades[groupIndex].avg}',
+                '${grades[groupIndex].name}: ${context.gradeToString(grades[groupIndex].avg, showAsNumber: true, round: false)}',
                 TextStyle(
                   color: tooltipColor(rod.colors[1], 0.2, -0.1),
                   fontWeight: FontWeight.bold,
@@ -195,7 +195,7 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
             .padding(right: 10),
         <Widget>[
           Text(
-            "Medie",
+            context.locale.charts.averages,
             style: TextStyle(
               // color: fg,
               fontSize: 18,
@@ -203,7 +203,9 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
             ),
           ).padding(bottom: 5),
           Text(
-            widget.period == null ? "Tutto l'anno" : widget.period!.desc,
+            widget.period == null
+                ? context.locale.charts.scopeAllYear
+                : widget.period!.desc,
             style: TextStyle(
               color: Theme.of(context).cardTheme.color?.withOpacity(0.6),
               fontSize: 12,
@@ -221,7 +223,7 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
             if (grades.isEmpty)
               return EmptyUI(
                 icon: Icons.error_outline,
-                text: "Non ci sono dati per questo periodo",
+                text: context.locale.main.noDataForPeriod,
               ).padding(top: 24, horizontal: 8);
 
             // print("Chart rebuilt");

@@ -7,6 +7,7 @@ import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/ListItems/TopicListItem.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -46,7 +47,7 @@ class _TopicsPaneState extends State<TopicsPane> {
 
   Map<String, List<Topic>> splitTopics(List<Topic> topics) {
     return topics.fold(new Map(), (map, assmt) {
-      final date = dateToString(assmt.date);
+      final date = context.dateToString(assmt.date);
       if (!map.containsKey(date))
         map[date] = [assmt];
       else
@@ -60,8 +61,7 @@ class _TopicsPaneState extends State<TopicsPane> {
   Widget build(BuildContext context) {
     if (widget.session.student?.securityBits[SecurityBits.hideTopics] == "1") {
       return EmptyUI(
-        text: "Non hai il permesso di visualizzare gli argomenti. "
-            "Contatta la scuola per saperne di più.",
+        text: context.locale.main.noPermission,
         icon: Icons.lock,
       ).padding(horizontal: 16);
     }
@@ -86,7 +86,7 @@ class _TopicsPaneState extends State<TopicsPane> {
     if (topics.isEmpty) {
       return EmptyUI(
         icon: Icons.calendar_today_outlined,
-        text: "Non hai ancora avuto lezioni.",
+        text: context.locale.topics.empty,
       );
     }
 

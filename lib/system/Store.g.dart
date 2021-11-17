@@ -189,6 +189,52 @@ mixin _$RegistroStore on _RegistroStore, Store {
     });
   }
 
+  final _$payloadControllerAtom =
+      Atom(name: '_RegistroStore.payloadController');
+
+  @override
+  StreamController<String?> get payloadController {
+    _$payloadControllerAtom.reportRead();
+    return super.payloadController;
+  }
+
+  @override
+  set payloadController(StreamController<String?> value) {
+    _$payloadControllerAtom.reportWrite(value, super.payloadController, () {
+      super.payloadController = value;
+    });
+  }
+
+  final _$gradeDisplayAtom = Atom(name: '_RegistroStore.gradeDisplay');
+
+  @override
+  GradeDisplay get gradeDisplay {
+    _$gradeDisplayAtom.reportRead();
+    return super.gradeDisplay;
+  }
+
+  @override
+  set gradeDisplay(GradeDisplay value) {
+    _$gradeDisplayAtom.reportWrite(value, super.gradeDisplay, () {
+      super.gradeDisplay = value;
+    });
+  }
+
+  final _$testModeAtom = Atom(name: '_RegistroStore.testMode');
+
+  @override
+  bool get testMode {
+    _$testModeAtom.reportRead();
+    return super.testMode;
+  }
+
+  @override
+  set testMode(bool value) {
+    _$testModeAtom.reportWrite(value, super.testMode, () {
+      super.testMode = value;
+    });
+  }
+
   final _$networkErrorAtom = Atom(name: '_RegistroStore.networkError');
 
   @override
@@ -219,6 +265,17 @@ mixin _$RegistroStore on _RegistroStore, Store {
   }
 
   @override
+  dynamic notificationPayloadAction(String? payload) {
+    final _$actionInfo = _$_RegistroStoreActionController.startAction(
+        name: '_RegistroStore.notificationPayloadAction');
+    try {
+      return super.notificationPayloadAction(payload);
+    } finally {
+      _$_RegistroStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 school: ${school},
@@ -233,6 +290,9 @@ absences: ${absences},
 authorizations: ${authorizations},
 materials: ${materials},
 subjects: ${subjects},
+payloadController: ${payloadController},
+gradeDisplay: ${gradeDisplay},
+testMode: ${testMode},
 networkError: ${networkError}
     ''';
   }

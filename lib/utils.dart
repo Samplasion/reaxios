@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:reaxios/api/utils/utils.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:reaxios/api/entities/Grade/Grade.dart';
+import 'package:reaxios/api/utils/utils.dart' as axios_utils;
+import 'package:reaxios/generated/locale_base.dart';
 
 // Matches before a capital letter that is not also at beginning of string.
 import 'dart:math';
+
+import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
+
+import 'enums/GradeDisplay.dart';
+import 'system/Store.dart';
 
 extension StringUtils on String {
   repeat(int times) {
@@ -216,7 +225,7 @@ class Utils {
 }
 
 extension ColorUtils on Color {
-  Color get contrastText => getContrastText(this);
+  Color get contrastText => axios_utils.getContrastText(this);
 
   Color darken([double amount = .1]) {
     amount = amount.clamp(0.0, 1.0);
@@ -240,9 +249,78 @@ extension ColorUtils on Color {
   }
 }
 
-extension Snackbar on BuildContext {
+extension PrettyGrade on Grade {
+  String getPrettyGrade(BuildContext context) {
+    if (this.grade == 0 || axios_utils.isNaN(this.grade))
+      return "${this.prettyGrade}";
+    return context.gradeToString(this.grade);
+  }
+}
+
+extension ContextUtils on BuildContext {
+  LocaleBase get locale => AxiosLocalizationDelegate.of(this)!;
+  MaterialLocalizations get materialLocale => MaterialLocalizations.of(this);
+  Locale get currentLocale => Localizations.localeOf(this);
+
   void showSnackbar(String message) {
     ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  String gradeToString(
+    dynamic grade, {
+    bool round = true,
+    bool showAsNumber = false,
+  }) {
+    final store = Provider.of<RegistroStore>(this, listen: false);
+    switch (store.gradeDisplay) {
+      case GradeDisplay.letter:
+        // FIXME: this sucks big time
+        // Edit: It sucks less, but still...
+        if (!showAsNumber) return axios_utils.gradeToLetter(grade);
+
+        // Boi this is ugly af
+        continue decimal;
+      decimal:
+      case GradeDisplay.decimal:
+        if (round) {
+          return axios_utils.gradeToString(grade);
+        } else if (grade is num) {
+          return axios_utils.formatNumber(grade);
+        } else
+          return "$grade";
+      case GradeDisplay.percentage:
+        return "${(grade * 10).floor()}%";
+      default:
+        return "N/A";
+    }
+  }
+
+  String dateToString(
+    DateTime date, {
+    bool short = false,
+    includeTime = false,
+    includeSeconds = false,
+    includeMonth = false, // noop
+    includeYear = false, // noop
+  }) {
+    String res;
+    if (short) {
+      res = DateFormat.yMd(this.currentLocale.toLanguageTag()).format(date);
+    } else {
+      res = DateFormat.yMMMMd(this.currentLocale.toLanguageTag()).format(date);
+    }
+
+    if (includeTime) {
+      String time;
+      if (includeSeconds) {
+        time = DateFormat.Hms(this.currentLocale.toLanguageTag()).format(date);
+      } else {
+        time = DateFormat.Hm(this.currentLocale.toLanguageTag()).format(date);
+      }
+      res += " " + time;
+    }
+
+    return res;
   }
 }
 

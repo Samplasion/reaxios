@@ -14,6 +14,7 @@ import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/School/School.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
+import 'package:reaxios/enums/GradeDisplay.dart';
 
 part 'Store.g.dart';
 
@@ -46,6 +47,8 @@ abstract class _RegistroStore with Store {
   ObservableFuture<List<String>>? subjects;
   @observable
   StreamController<String?> payloadController = StreamController<String?>();
+  @observable
+  GradeDisplay gradeDisplay = GradeDisplay.decimal;
 
   @observable
   bool testMode = false;

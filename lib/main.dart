@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/utils/ColorSerializer.dart';
@@ -17,10 +18,13 @@ import 'package:reaxios/screens/Loading.dart';
 import 'package:reaxios/screens/Login.dart';
 import 'package:reaxios/screens/NoInternet.dart';
 import 'package:reaxios/screens/Settings.dart';
+import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
+
+import 'enums/GradeDisplay.dart';
 
 const kTabBreakpoint = 680.0;
 
@@ -73,7 +77,12 @@ class RegistroElettronicoApp extends StatefulWidget {
 }
 
 class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
-  // RegistroStore store = RegistroStore();
+  final shortcuts = <LogicalKeySet, Intent>{
+    LogicalKeySet(LogicalKeyboardKey.select): ActivateIntent(),
+    LogicalKeySet(LogicalKeyboardKey.contextMenu): MenuIntent(),
+    LogicalKeySet(LogicalKeyboardKey.keyM): MenuIntent(),
+    LogicalKeySet(LogicalKeyboardKey.tvContentsMenu): MenuIntent(),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +90,9 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
     final themeMode = S.Settings.getValue("theme-mode", "dynamic");
 
     var store = Provider.of<RegistroStore>(context);
+
+    store.gradeDisplay = deserializeGradeDisplay(
+        S.Settings.getValue("grade-display", "decimal"));
 
     final primary = cs.fromJson(
       S.Settings.getValue("primary-color", cs.toJson(Colors.orange[400])),
@@ -90,60 +102,62 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
     );
 
     return Shortcuts(
-      shortcuts: <LogicalKeySet, Intent>{
-        LogicalKeySet(LogicalKeyboardKey.select): ActivateIntent(),
-        LogicalKeySet(LogicalKeyboardKey.contextMenu,
-            LogicalKeyboardKey.tvContentsMenu): MenuIntent(),
-      },
-      child: RefreshConfiguration(
-        headerBuilder: () => ClassicHeader(
-          idleText: 'Trascina per ricaricare',
-          completeText: 'Caricamento completato',
-          releaseText: 'Rilascia per ricaricare',
-          refreshingText: 'Caricamento in corso...',
-          failedText: 'Caricamento fallito',
-        ),
-        child: MaterialApp(
-          title: 'Registro Axios',
-          theme: ThemeData(
-            primaryColor: primary,
-            accentColor: accent,
-            colorScheme: ColorScheme.light(
-              primary: primary,
-              onPrimary: primary.contrastText,
-              secondary: accent,
-              onSecondary: accent.contrastText,
-            ),
+      shortcuts: shortcuts,
+      child: MaterialApp(
+        title: 'Registro Axios',
+        theme: ThemeData(
+          primaryColor: primary,
+          accentColor: accent,
+          colorScheme: ColorScheme.light(
+            primary: primary,
+            onPrimary: primary.contrastText,
+            secondary: accent,
+            onSecondary: accent.contrastText,
           ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            primaryColor: primary,
-            accentColor: accent,
-            colorScheme: ColorScheme.dark(
-              primary: primary,
-              onPrimary: primary.contrastText,
-              secondary: accent,
-              onSecondary: accent.contrastText,
-            ),
-          ),
-          themeMode: getThemeMode(themeMode),
-          // home: MyHomePage(title: 'Flutter Demo Home Page'),
-          initialRoute: "loading",
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: [
-            GlobalCupertinoLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: [const Locale('it')],
-          routes: {
-            "/": (_) => HomeScreen(store: store),
-            "login": (_) => LoginScreen(store: store),
-            "loading": (_) => LoadingScreen(),
-            "settings": (_) => SettingsScreen(),
-            "nointernet": (_) => NoInternetScreen(),
-          },
         ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: primary,
+          accentColor: accent,
+          colorScheme: ColorScheme.dark(
+            primary: primary,
+            onPrimary: primary.contrastText,
+            secondary: accent,
+            onSecondary: accent.contrastText,
+          ),
+        ),
+        themeMode: getThemeMode(themeMode),
+        // home: MyHomePage(title: 'Flutter Demo Home Page'),
+        initialRoute: "loading",
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: [
+          AxiosLocalizationDelegate(),
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en'),
+          const Locale('it'),
+        ],
+        routes: {
+          "/": (_) => Builder(
+                builder: (context) => RefreshConfiguration(
+                  headerBuilder: () => ClassicHeader(
+                    idleText: context.locale.main.idleText,
+                    completeText: context.locale.main.completeText,
+                    releaseText: context.locale.main.releaseText,
+                    refreshingText: context.locale.main.refreshingText,
+                    failedText: context.locale.main.failedText,
+                  ),
+                  child: HomeScreen(store: store),
+                ),
+              ),
+          "login": (_) => LoginScreen(store: store),
+          "loading": (_) => LoadingScreen(),
+          "settings": (_) => SettingsScreen(),
+          "nointernet": (_) => NoInternetScreen(),
+        },
       ),
     );
   }

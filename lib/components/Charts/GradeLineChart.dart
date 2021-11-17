@@ -41,23 +41,24 @@ class _GradeLineChartState extends State<GradeLineChart> {
 
   Widget _getHeader() {
     return NiceHeader(
-        leading: Icon(Icons.auto_graph),
-        title: "Andamento",
-        subtitle: widget.period == null ? "Tutto l'anno" : widget.period!.desc);
+      leading: Icon(Icons.auto_graph),
+      title: context.locale.charts.trend,
+      subtitle: widget.period == null
+          ? context.locale.charts.scopeAllYear
+          : widget.period!.desc,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     late Widget widget;
-    print(grades);
-    print(usefulGrades);
     if (usefulGrades.length < 2) {
       widget = [
         _getHeader(),
         EmptyUI(
           icon: Icons.error_outline,
-          text: "Non ci sono dati",
-          subtitle: "Per poter vedere il grafico, devi avere almeno due voti",
+          text: context.locale.charts.noData,
+          subtitle: context.locale.charts.fewGradesText,
         )
       ].toColumn();
     } else {
@@ -88,10 +89,8 @@ class _GradeLineChartState extends State<GradeLineChart> {
                         .withAlpha((0.65 * 255).round()),
                 getTooltipItems: (List<LineBarSpot> touchedSpots) {
                   return touchedSpots.map((LineBarSpot touchedSpot) {
-                    final descriptor =
-                        touchedSpot.barIndex == 0 ? "Media: " : "";
                     return LineTooltipItem(
-                      "${gradeToString(touchedSpot.y)}",
+                      "${context.gradeToString(touchedSpot.y)}",
                       TextStyle(
                         color: tooltipColor(
                             getGradeColor(touchedSpot.y), 0.2, 0.1),
@@ -115,27 +114,27 @@ class _GradeLineChartState extends State<GradeLineChart> {
                   final date = usefulGrades[value.toInt()].date;
 
                   if (value == 0) {
-                    return dateToString(date, short: true);
+                    return context.dateToString(date, short: true);
                   } else {
                     final previous = usefulGrades[value.toInt() - 1].date;
                     if (date.year == previous.year) {
                       if (date.month == previous.month &&
                           value.toInt() != usefulGrades.length - 1) {
-                        return dateToString(
+                        return context.dateToString(
                           date,
                           short: true,
                           includeMonth: false,
                           includeYear: false,
                         );
                       } else {
-                        return dateToString(
+                        return context.dateToString(
                           date,
                           short: true,
                           includeYear: false,
                         );
                       }
                     } else {
-                      return dateToString(date, short: true);
+                      return context.dateToString(date, short: true);
                     }
                   }
                 },
@@ -281,9 +280,6 @@ class _GradeLineChartState extends State<GradeLineChart> {
 
   List<Grade> get usefulGrades => grades
       .where((g) {
-        print(g);
-        print(!isNaN(g.grade) && g.grade != 0);
-        print(" ");
         return !isNaN(g.grade) && g.grade != 0;
       })
       .toList()

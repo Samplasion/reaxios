@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
@@ -11,6 +12,7 @@ import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/ListItems/NoteListItem.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import "package:styled_widget/styled_widget.dart";
 
@@ -48,8 +50,7 @@ class _AbsencesPaneState extends State<AbsencesPane> {
     if (widget.session.student?.securityBits[SecurityBits.hideAbsences] ==
         "1") {
       return EmptyUI(
-        text: "Non hai il permesso di visualizzare le assenze. "
-            "Contatta la scuola per saperne di più.",
+        text: context.locale.absences.noPermission,
         icon: Icons.lock,
       ).padding(horizontal: 16);
     }
@@ -78,7 +79,7 @@ class _AbsencesPaneState extends State<AbsencesPane> {
     if (absences.isEmpty) {
       return EmptyUI(
         icon: Icons.no_accounts_outlined,
-        text: "Non hai assenze.",
+        text: context.locale.absences.empty,
       );
     }
 
@@ -88,24 +89,10 @@ class _AbsencesPaneState extends State<AbsencesPane> {
         child: Column(
           children: [
             Alert(
-              title: "Avviso",
+              title: context.locale.absences.sectionAlertTitle,
               color: Colors.orange,
-              text: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "Se devi giustificare un’assenza, un’uscita "
-                          "anticipata o un ritardo e non li trovi in questa "
-                          "lista, prova a controllare se sono presenti nella ",
-                    ),
-                    TextSpan(
-                      text: "sezione Autorizzazioni",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(text: "."),
-                  ],
-                ),
-              ),
+              text:
+                  MarkdownBody(data: context.locale.absences.sectionAlertBody),
             ).padding(horizontal: 16, top: 16),
             ListView.separated(
               shrinkWrap: true,

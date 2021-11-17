@@ -122,9 +122,9 @@ class _StatsPaneState extends State<StatsPane> {
             backgroundColor: primary,
             foregroundColor: primary.contrastText,
           ),
-          title: "Media generale",
+          title: context.locale.stats.overallAverage,
           subtitle: RichText(
-            text: GradeText(grade: gradeAverage(currentGrades)),
+            text: GradeText(context, grade: gradeAverage(currentGrades)),
           ),
         ).padding(horizontal: 16),
       if (currentGrades.length >= 2) ...[
@@ -135,14 +135,14 @@ class _StatsPaneState extends State<StatsPane> {
             backgroundColor: primary,
             foregroundColor: primary.contrastText,
           ),
-          title: "Materia migliore",
+          title: context.locale.stats.bestSubject,
           subtitle: Text(gradesByGrade.last.subject),
           details: RichText(
             text: TextSpan(
               style: Theme.of(context).textTheme.caption,
               children: [
-                TextSpan(text: "Media: "),
-                GradeText(grade: best),
+                TextSpan(text: context.locale.stats.average),
+                GradeText(context, grade: best),
               ],
             ),
           ),
@@ -154,14 +154,14 @@ class _StatsPaneState extends State<StatsPane> {
             backgroundColor: accent,
             foregroundColor: accent.contrastText,
           ),
-          title: "Materia peggiore",
+          title: context.locale.stats.worstSubject,
           subtitle: Text(gradesByGrade.first.subject),
           details: RichText(
             text: TextSpan(
               style: Theme.of(context).textTheme.caption,
               children: [
-                TextSpan(text: "Media: "),
-                GradeText(grade: worst),
+                TextSpan(text: context.locale.stats.average),
+                GradeText(context, grade: worst),
               ],
             ),
           ),
@@ -173,7 +173,7 @@ class _StatsPaneState extends State<StatsPane> {
           backgroundColor: getGradeColor(10),
           foregroundColor: getGradeColor(10).contrastText,
         ),
-        title: "Materie sufficienti",
+        title: context.locale.stats.passedSubjects,
         subtitle: Text(
           over6.length.toString(),
         ),
@@ -184,7 +184,7 @@ class _StatsPaneState extends State<StatsPane> {
           backgroundColor: getGradeColor(5),
           foregroundColor: getGradeColor(5).contrastText,
         ),
-        title: "Materie insufficienti",
+        title: context.locale.stats.failedSubjects,
         subtitle: Text(
           under6.length.toString(),
         ),
@@ -192,9 +192,10 @@ class _StatsPaneState extends State<StatsPane> {
       if (currentGrades.isNotEmpty)
         BigCard(
           leading: NiceHeader(
-            title: "Media nel tempo",
-            subtitle:
-                currentPeriod == null ? "Tutto l'anno" : currentPeriod.desc,
+            title: context.locale.stats.trendHistory,
+            subtitle: currentPeriod == null
+                ? context.locale.charts.scopeAllYear
+                : currentPeriod.desc,
             leading: Icon(Icons.auto_graph).iconSize(40).padding(right: 16),
           ),
           body: Column(

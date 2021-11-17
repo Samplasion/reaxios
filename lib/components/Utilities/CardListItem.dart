@@ -2,22 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:styled_widget/styled_widget.dart';
 
-@immutable
-class _Empty extends StatelessWidget {
-  const _Empty({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
 class CardListItem extends StatefulWidget {
   CardListItem({
     required this.leading,
     required this.title,
     required this.subtitle,
-    this.details = const _Empty(),
+    this.details,
     this.onClick,
     this.radius = 15,
     this.elevation = 8,
@@ -111,7 +101,6 @@ class _CardListItemState extends State<CardListItem> {
         subtitle: <Widget>[
           description.padding(
               bottom: widget.details == null ||
-                      widget.details is _Empty ||
                       (description is Container && description.child == null)
                   ? 0
                   : 8),

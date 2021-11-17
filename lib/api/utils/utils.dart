@@ -63,7 +63,7 @@ String pad(n, [int digits = 2]) {
 }
 
 String gradeToString(dynamic grade) {
-  if (grade is String && grade.trim() == "") return "";
+  if (grade is String && grade.trim().isEmpty) return "";
 
   double dblGrade = 0;
   if (isNaN(double.tryParse('$grade'.replaceAll(",", ".")) ?? double.nan))
@@ -86,13 +86,56 @@ String gradeToString(dynamic grade) {
     return '${dblGrade.floor().toInt() + 1}-';
   else
     return '${dblGrade.floor().toInt() + 1}';
+}
 
-  // switch (grade % 1) {
-  //     default: return `${grade}`;
-  //     case .25: return `${~~grade}+`;
-  //     case .75: return `${~~grade + 1}-`;
-  //     case .5: return `${~~grade}½`;
-  // }
+/// Source: https://pages.collegeboard.org/how-to-convert-gpa-4.0-scale
+String gradeToLetter(dynamic grade) {
+  if (grade is String && grade.trim() == "") return '';
+
+  double dblGrade = 0;
+  if (isNaN(double.tryParse('$grade'.replaceAll(",", ".")) ?? double.nan))
+    return '$grade';
+  else
+    dblGrade = double.parse('$grade'.replaceAll(",", "."));
+
+  if (dblGrade == 0) return '$grade';
+
+  // Round to account for floating point errors
+  // (e.g. 66.9999999 (D) instead of 67 (D+))
+  final percent = (dblGrade * 10).round();
+
+  debugPrint(percent.toString());
+
+  if (percent >= 97)
+    return 'A+';
+  else if (percent >= 93)
+    return 'A';
+  else if (percent >= 90)
+    return 'A-';
+  else if (percent >= 87)
+    return 'B+';
+  else if (percent >= 83)
+    return 'B';
+  else if (percent >= 80)
+    return 'B-';
+  else if (percent >= 77)
+    return 'C+';
+  else if (percent >= 73)
+    return 'C';
+  else if (percent >= 70)
+    return 'C-';
+  else if (percent >= 67)
+    return 'D+';
+  else if (percent >= 65)
+    return 'D';
+  else if (percent >= 60)
+    return 'D-';
+  else if (percent >= 50)
+    return 'E';
+  else if (percent >= 1)
+    return 'F';
+  else
+    return 'N/A';
 }
 
 bool isNaN(double d) {

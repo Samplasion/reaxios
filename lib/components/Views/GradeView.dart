@@ -6,13 +6,14 @@ import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
+import 'package:reaxios/format.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:reaxios/main.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
-class GradeView extends StatelessWidget {
+class GradeView extends StatefulWidget {
   const GradeView({
     Key? key,
     required this.grade,
@@ -27,18 +28,44 @@ class GradeView extends StatelessWidget {
   final void Function()? reload;
 
   @override
+  _GradeViewState createState() => _GradeViewState();
+}
+
+class _GradeViewState extends State<GradeView> {
+  Grade get grade => widget.grade;
+  get session => widget.session;
+  get store => widget.store;
+  get reload => widget.reload;
+
+  Key key = UniqueKey();
+
+  bool get gradeIsValid => grade.grade != 0 && grade.weight != 0;
+
+  @override
   Widget build(BuildContext context) {
-    pad(n) => n < 10 ? "0$n" : n;
-    final gradeIsValid = grade.grade != 0 && grade.weight != 0;
     final title = gradeIsValid
-        ? "${grade.prettyGrade} in ${grade.subject}"
-        : "Commento in ${grade.subject}";
+        ? context.locale.grades.gradeInSubject.format([
+            grade.getPrettyGrade(context),
+            grade.subject,
+          ])
+        : context.locale.grades.commentInSubject.format([grade.subject]);
     // print(grade.toJson());
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
       ),
-      body: SingleChildScrollView(
+      body: _buildBody(context),
+    );
+  }
+
+  void refresh() => setState(() {
+        key = UniqueKey();
+      });
+
+  Widget _buildBody(BuildContext context) {
+    return KeyedSubtree(
+      key: key,
+      child: SingleChildScrollView(
         child: Center(
           child: Container(
             padding: EdgeInsets.all(16),
@@ -64,9 +91,14 @@ class GradeView extends StatelessWidget {
                       ),
                       showBadge: false,
                     ),
-                    title: "Valore",
-                    subtitle: Text.rich(GradeText(grade: grade.grade)),
-                    details: Text("Peso: ${(grade.weight * 100).toInt()}%"),
+                    title: context.locale.grades.value,
+                    subtitle: Text.rich(GradeText(
+                      context,
+                      grade: grade.grade,
+                      showNumericValue: true,
+                    )),
+                    details: Text(context.locale.grades.weight
+                        .format([(grade.weight * 100).toInt()])),
                   ),
                 Divider(),
                 if (grade.seen)
@@ -78,9 +110,9 @@ class GradeView extends StatelessWidget {
                       ),
                       showBadge: false,
                     ),
-                    title: "Visto",
+                    title: context.locale.grades.seen,
                     subtitle: Text(grade.seenBy ?? ""),
-                    details: Text(dateToString(
+                    details: Text(context.dateToString(
                       grade.seenOn,
                       includeTime: true,
                       includeSeconds: true,
@@ -89,12 +121,6 @@ class GradeView extends StatelessWidget {
                 if (!grade.seen)
                   ElevatedButton(
                     onPressed: () {
-                      // session.markGradeAsRead(grade).then((_) {
-                      //   store.fetchGrades(session);
-                      //   setState(() {
-                      //     seen = true;
-                      //   });
-                      // });
                       session.markGradeAsRead(grade).then((_) {
                         store.fetchGrades(session, true);
                         if (reload != null) reload!();
@@ -103,12 +129,15 @@ class GradeView extends StatelessWidget {
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text("Voto contrassegnato come visto."),
+                            content: Text(context.locale.grades.seenSnackbar),
                           ),
                         );
+                      }).onError(() {
+                        context
+                            .showSnackbar(context.locale.grades.errorSnackbar);
                       });
                     },
-                    child: Text("Segna come visto"),
+                    child: Text(context.locale.grades.markAsSeen),
                   ),
               ],
             ),

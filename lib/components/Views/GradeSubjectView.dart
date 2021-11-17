@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
@@ -13,6 +16,9 @@ import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
+import 'package:reaxios/format.dart';
+import 'package:reaxios/structs/GradeAlertBoundaries.dart';
+import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -80,8 +86,16 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
 
   Widget _buildTeacher(BuildContext context) {
     final primary = Theme.of(context).primaryColor;
-    final title = teachers.length > 1 ? 'Docenti' : "Docente";
-    final icon = teachers.length > 1 ? Icons.people : Icons.person;
+    final title = Intl.plural(
+      teachers.length,
+      zero: context.locale.plurals.teachersZero,
+      one: context.locale.plurals.teachersOne,
+      two: context.locale.plurals.teachersTwo,
+      few: context.locale.plurals.teachersFew,
+      many: context.locale.plurals.teachersMany,
+      other: context.locale.plurals.teachersOther,
+    );
+    final icon = teachers.length != 1 ? Icons.people : Icons.person;
     return CardListItem(
       leading: CircleAvatar(
         child: Icon(icon),
@@ -107,7 +121,17 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
             foregroundColor: primary.contrastText,
           ),
           title: entry.key,
-          subtitle: Text("$gradeNumber vot${gradeNumber == 1 ? "o" : "i"}"),
+          subtitle: Text(
+            Intl.plural(
+              gradeNumber,
+              zero: context.locale.plurals.gradesZero,
+              one: context.locale.plurals.gradesOne,
+              two: context.locale.plurals.gradesTwo,
+              few: context.locale.plurals.gradesFew,
+              many: context.locale.plurals.gradesMany,
+              other: context.locale.plurals.gradesOther,
+            ).format([gradeNumber]),
+          ),
         ).padding(horizontal: 16);
       }).toList(),
     );
@@ -118,7 +142,7 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
 
     return BigCard(
       leading: NiceHeader(
-        title: "Obiettivo",
+        title: context.locale.grades.objective,
         subtitle: period!.desc,
         leading: Icon(Icons.assessment),
       ),
@@ -135,136 +159,76 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
             .toDouble();
     final shade = Theme.of(context).brightness == Brightness.dark ? 400 : 700;
 
-    if (periodAvg < 5) {
+    final store = Provider.of<RegistroStore>(context, listen: false);
+    final GradeAlertBoundaries bounds =
+        GradeAlertBoundaries.get(store.gradeDisplay);
+
+    if (periodAvg < bounds.underFailure) {
       return Alert(
-        title: "Media inferiore a 5",
+        title: context.locale.objectives.lt5Title.format([
+          context.gradeToString(periodAvg.floor(), round: false),
+        ]),
         color: Colors.red,
-        text: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: "Hai una media inferiore a 5. Devi prendere almeno un ",
-              ),
-              GradeText(
-                grade: to(6).toDouble(),
-                shade: shade,
-              ),
-              TextSpan(
-                text: " o due ",
-              ),
-              GradeText(
-                grade: to(6, 2).toDouble(),
-                shade: shade,
-              ),
-              TextSpan(
-                text: " per ottenere la sufficienza!",
-              ),
-            ],
-          ),
+        text: MarkdownBody(
+          data: context.locale.objectives.lt5Text.format([
+            context.gradeToString(periodAvg.floor(), round: false),
+            context.gradeToString(to(bounds.borderline).toDouble(),
+                round: false),
+            context.gradeToString(to(bounds.borderline, 2).toDouble(),
+                round: false),
+          ]),
         ),
       );
-    } else if (periodAvg < 6) {
+    } else if (periodAvg < bounds.borderline) {
       return Alert(
-        title: "Media quasi sufficiente",
+        title: context.locale.objectives.lt6Title.format([
+          context.gradeToString(periodAvg.floor(), round: false),
+        ]),
         color: Colors.orange,
-        text: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text:
-                    "Hai una media quasi sufficiente. Devi prendere almeno un ",
-              ),
-              GradeText(
-                grade: to(6).toDouble(),
-                shade: shade,
-              ),
-              if (grades.length > 4)
-                TextSpan(
-                  text: " o due ",
-                ),
-              if (grades.length > 4)
-                GradeText(
-                  grade: to(6, 2).toDouble(),
-                  shade: shade,
-                ),
-              TextSpan(
-                text: " per ottenere la sufficienza. Tieni duro!",
-              ),
-            ],
-          ),
+        text: MarkdownBody(
+          data: context.locale.objectives.lt6Text.format([
+            context.gradeToString(to(bounds.borderline).toDouble(),
+                round: false),
+            context.gradeToString(to(bounds.borderline, 2).toDouble(),
+                round: false),
+          ]),
         ),
       );
-    } else if (periodAvg < 7) {
+    } else if (periodAvg < bounds.successBoundary) {
       return Alert(
-        title: "Media superiore a ${periodAvg.floor()}",
+        title: context.locale.objectives.lt7Title.format([
+          context.gradeToString(bounds.borderline, round: false),
+        ]),
         color: Colors.green,
-        text: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text:
-                    "Hai una media superiore a ${periodAvg.floor()}. Prendi un ",
-              ),
-              GradeText(
-                grade: to(7).toDouble(),
-                shade: shade,
-              ),
-              TextSpan(
-                text: " per assicurarti il ",
-              ),
-              GradeText(
-                grade: 7,
-                shade: shade,
-              ),
-              TextSpan(
-                text: "!",
-              ),
-            ],
-          ),
+        text: MarkdownBody(
+          data: context.locale.objectives.lt7Text.format([
+            context.gradeToString(to(bounds.successBoundary).toDouble(),
+                round: false),
+            context.gradeToString(bounds.successBoundary, round: false),
+          ]),
         ),
       );
-    } else if (periodAvg < 8) {
+    } else if (periodAvg < bounds.overSuccess) {
       return Alert(
-        title: "Media superiore a ${periodAvg.floor()}",
+        title: context.locale.objectives.lt8Title.format([
+          context.gradeToString(bounds.successBoundary, round: false),
+        ]),
         color: Colors.green,
-        text: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text:
-                    "Hai una media superiore a ${periodAvg.floor()}. Prendi un ",
-              ),
-              GradeText(
-                grade: to(8).toDouble(),
-                shade: shade,
-              ),
-              TextSpan(
-                text: " per assicurarti l'",
-              ),
-              GradeText(
-                grade: 8,
-                shade: shade,
-              ),
-              TextSpan(
-                text: "!",
-              ),
-            ],
-          ),
+        text: MarkdownBody(
+          data: context.locale.objectives.lt8Text.format([
+            context.gradeToString(to(bounds.overSuccess).toDouble(),
+                round: false),
+            context.gradeToString(bounds.overSuccess, round: false),
+          ]),
         ),
       );
     } else {
       return Alert(
-        title: "Vai alla grande!",
+        title: context.locale.objectives.otherTitle.format([
+          context.gradeToString(periodAvg.floor(), round: false),
+        ]),
         color: Colors.green,
-        text: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: "Vai alla grande! 🎉",
-              ),
-            ],
-          ),
-        ),
+        text: MarkdownBody(data: context.locale.objectives.otherText),
       );
     }
   }

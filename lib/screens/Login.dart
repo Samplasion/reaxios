@@ -6,10 +6,12 @@ import 'package:reaxios/api/entities/School/School.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/SchoolListItem.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import '../../main.dart';
+import '../format.dart';
 
 final useScreens = (RegistroStore store, onPrev, onNext, onDone) => [
       _LoginScreenPage1(
@@ -80,7 +82,7 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
                     padding: EdgeInsets.only(bottom: 8),
                   ),
                   Text(
-                    "Seleziona scuola",
+                    context.locale.login.selectSchool,
                     style: Theme.of(context).textTheme.headline5,
                     textAlign: TextAlign.center,
                   ),
@@ -104,8 +106,10 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
                               child: TextField(
                                 controller: _query,
                                 decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: "Nome scuola"),
+                                  border: OutlineInputBorder(),
+                                  labelText:
+                                      context.locale.login.searchBarPlaceholder,
+                                ),
                               ),
                             ),
                             IconButton(
@@ -168,7 +172,7 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
                         widget.onNext();
                       }
                     : null,
-                child: Text("Avanti"),
+                child: Text(context.locale.login.next),
               ),
             ),
           ],
@@ -231,7 +235,10 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                     padding: EdgeInsets.only(bottom: 8),
                   ),
                   Text(
-                    "Accedi a ${widget.store.school?.title} ${widget.store.school?.name}",
+                    formatString(context.locale.login.loginPhaseTwoTitle, [
+                      widget.store.school?.title ?? "",
+                      widget.store.school?.name ?? ""
+                    ]),
                     style: Theme.of(context).textTheme.headline5,
                     textAlign: TextAlign.center,
                   ),
@@ -257,7 +264,7 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                             }),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              labelText: 'Codice utente',
+                              labelText: context.locale.login.userIDPlaceholder,
                             ),
                           ),
                         ),
@@ -270,7 +277,8 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                             }),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              labelText: 'Password',
+                              labelText:
+                                  context.locale.login.passwordPlaceholder,
                             ),
                           ),
                         ),
@@ -289,7 +297,7 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                     onPressed: () {
                       widget.onPrev();
                     },
-                    child: Text("Indietro"),
+                    child: Text(context.locale.login.back),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 8),
@@ -303,7 +311,7 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                               widget.onDone();
                             }
                           : null,
-                      child: Text("Accedi"),
+                      child: Text(context.locale.login.loginButtonText),
                     ),
                   ),
                 ],
@@ -354,7 +362,7 @@ class _LoginScreenState extends State<LoginScreen> {
     screens = useScreens(widget.store, _onPrev, _onNext, _onDone);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Accedi"),
+        title: Text(context.locale.login.title),
         actions: [
           if (kDebugMode)
             IconButton(

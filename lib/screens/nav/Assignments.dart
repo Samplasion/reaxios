@@ -8,6 +8,7 @@ import 'package:reaxios/components/ListItems/AssignmentListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -30,7 +31,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
 
   Map<String, List<Assignment>> splitAssignments(List<Assignment> assignments) {
     return assignments.fold(new Map(), (map, assmt) {
-      final date = dateToString(assmt.date);
+      final date = context.dateToString(assmt.date);
       if (!map.containsKey(date))
         map[date] = [assmt];
       else
@@ -45,8 +46,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
     if (widget.session.student?.securityBits[SecurityBits.hideAssignments] ==
         "1") {
       return EmptyUI(
-        text: "Non hai il permesso di visualizzare i compiti. "
-            "Contatta la scuola per saperne di più.",
+        text: context.locale.main.noPermission,
         icon: Icons.lock,
       ).padding(horizontal: 16);
     }
@@ -71,7 +71,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
     if (assignments.isEmpty) {
       return EmptyUI(
         icon: Icons.book_outlined,
-        text: "Non hai compiti (in assoluto)!",
+        text: context.locale.assignments.empty,
       );
     }
 

@@ -3,6 +3,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import "package:styled_widget/styled_widget.dart";
@@ -22,8 +23,9 @@ class TopicListItem extends StatelessWidget {
         : Colors.grey[700]!;
 
     // \u00aa = ª
-    final hr =
-        topic.lessonHour.isEmpty ? "" : "${topic.lessonHour}\u00aa ora - ";
+    final hr = topic.lessonHour.isEmpty
+        ? ""
+        : context.locale.main.lessonHour.format([topic.lessonHour]) + " - ";
 
     return CardListItem(
       leading: CircleAvatar(
@@ -40,11 +42,11 @@ class TopicListItem extends StatelessWidget {
           if (await canLaunch(link.url)) {
             await launch(link.url);
           } else {
-            context.showSnackbar('Impossibile aprire il link.');
+            context.showSnackbar(context.locale.main.failedLinkOpen);
           }
         },
       ),
-      details: Text(dateToString(topic.date)),
+      details: Text(context.dateToString(topic.date)),
       // isThreeLine: true,
       onClick: onClick,
     ).padding(horizontal: 16);

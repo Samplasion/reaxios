@@ -6,6 +6,7 @@ import 'package:reaxios/api/interfaces/Couple.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Views/ReportCard.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/utils.dart';
 
 class ReportCardsPane extends StatefulWidget {
   ReportCardsPane({
@@ -127,7 +128,7 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
                 },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: "Periodo",
+                  labelText: context.locale.reportCard.period,
                 ),
                 items: periods
                     .toSet()

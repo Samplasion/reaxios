@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/Utilities/Alert.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
+import 'package:reaxios/format.dart';
+import 'package:reaxios/utils.dart';
+import 'package:styled_widget/styled_widget.dart';
 import '../Utilities/BoldText.dart';
 
 // ignore: must_be_immutable
@@ -36,19 +40,11 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
       return Column(
         children: [
           Alert(
-            title: "Pagella non disponibile",
-            text: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "La pagella sarà visibile a partire dal: ",
-                  ),
-                  TextSpan(
-                    text: dateToString(reportCard.dateRead),
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+            title: context.locale.reportCard.notAvailableTitle,
+            text: MarkdownBody(
+              data: context.locale.reportCard.notAvailableBody.mapFormat({
+                "day": context.dateToString(reportCard.dateRead),
+              }),
             ),
           )
         ],
@@ -58,55 +54,47 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Alert(
-          title: "Riepilogo",
-          text: RichText(
-            text: TextSpan(children: [
-              TextSpan(text: "Media: "),
-              GradeText(
-                grade: simpleAverage(reportCard.subjects
-                    .map((e) => e.gradeAverage)
-                    .where((e) => e > 0)
-                    .toList()),
-              ),
-              TextSpan(text: "\nAssenze: "),
-              BoldText(
-                text: reportCard.subjects
+          title: context.locale.reportCard.overview,
+          text: [
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(text: context.locale.reportCard.average),
+                GradeText(
+                  context,
+                  grade: simpleAverage(reportCard.subjects
+                      .map((e) => e.gradeAverage)
+                      .where((e) => e > 0)
+                      .toList()),
+                ),
+              ]),
+            ),
+            MarkdownBody(data: () {
+              String res = "";
+              res += "${context.locale.reportCard.absences}\n";
+              res += "${context.locale.reportCard.failedSubjects}\n";
+              if (reportCard.result.trim().isNotEmpty)
+                res += "${context.locale.reportCard.outcome}\n";
+              return res.mapFormat({
+                "absences": reportCard.subjects
                     .fold<int>(
                       0,
                       (previousValue, ReportCardSubject? element) =>
                           previousValue + (element?.absences ?? 0).toInt(),
                     )
                     .toString(),
-              ),
-              TextSpan(text: "\nCarenze: "),
-              BoldText(
-                text: carenze.toString(),
-                color: getColorIfNonZero(carenze),
-              ),
-              if (reportCard.result.trim() != "") TextSpan(text: "\nEsito: "),
-              if (reportCard.result.trim() != "")
-                BoldText(
-                  text: reportCard.result,
-                ),
-            ]),
-          ),
+                "failedSubjects": carenze.toString(),
+                "outcome": reportCard.result,
+              });
+            }()),
+          ].toColumn(),
         ),
         Alert(
-          title: "Giudizio",
+          title: context.locale.reportCard.judgment,
           text: RichText(
-            text: TextSpan(children: [
-              TextSpan(text: reportCard.rating),
-            ]),
+            text: TextSpan(text: reportCard.rating),
           ),
           selectable: true,
         ),
-        // Card(
-        //   child: ExpansionTile(
-        //     title: Text("hello"),
-        //     subtitle: Text("h,m"),
-        //     children: [Text("why hello")],
-        //   ),
-        // ),
         ExpansionPanelList(
           expansionCallback: (index, open) {
             setState(() {
@@ -123,10 +111,11 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                   trailing: RichText(
                     text: TextSpan(
                       children: [
-                        TextSpan(text: "Voto: "),
+                        TextSpan(text: context.locale.reportCard.grade),
                         e.details[0].grade == 0
                             ? TextSpan(text: "-")
-                            : GradeText(grade: e.details[0].grade.toDouble())
+                            : GradeText(context,
+                                grade: e.details[0].grade.toDouble())
                       ],
                       style: Theme.of(context).textTheme.caption,
                     ),
@@ -145,18 +134,22 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                           ...(reportCard.canViewAbsences
                               ? [
                                   DataRow(
-                                      "Assenze", e.absences.toInt().toString()),
+                                    context.locale.reportCard.subjAbsences,
+                                    e.absences.toInt().toString(),
+                                  ),
                                   Divider(),
                                 ]
                               : []),
                           ...(e.details.length > 0
                               ? [
-                                  DataRow("Tipo", e.details[0].label),
+                                  DataRow(context.locale.reportCard.subjKind,
+                                      e.details[0].label),
                                   if (e.details[0].grade > 0)
                                     DataRow(
-                                      "Voto",
+                                      context.locale.reportCard.subjGrade,
                                       RichText(
                                         text: GradeText(
+                                          context,
                                           grade: e.details[0].grade.toDouble(),
                                           label: e.details[0].textGrade,
                                         ),
