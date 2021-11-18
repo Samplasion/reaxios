@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobx/mobx.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
@@ -26,6 +28,8 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
   bool loading = true;
   List<Period> periods = [];
   String selectedPeriod = '';
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: true);
 
   @override
   void initState() {
@@ -36,79 +40,60 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
     // initREData();
   }
 
-  // initREData() async {
-  //   await widget.session.login();
-  //   Future.wait(<Future<dynamic>>[
-  //     // widget.session.login().then((_) {
-  //     widget.session.getReportCards(),
-  //     /* .then((a) => setState(() => {
-  //           reportCards = a;
-  //         })), */
-  //     widget.session
-  //         .getStructural(), /* .then((s) => setState(() {
-  //           periods = s.periods[0].periods;
-  //           selectedPeriod = periods[0].desc;
-  //         })),
-  //     }), */
-  //   ]).then((_) => setState(() => loading = false));
-  // }
+  _onRefresh() async {
+    try {
+      await widget.store.fetchPeriods(widget.session);
+      await widget.store.fetchReportCards(widget.session);
+      _refreshController.refreshCompleted();
+    } catch (e) {
+      _refreshController.refreshFailed();
+    }
+    setState(() {});
+  }
+
+  _onLoad() async {
+    try {
+      await widget.store.fetchPeriods(widget.session);
+      await widget.store.fetchReportCards(widget.session);
+      _refreshController.loadComplete();
+    } catch (e) {
+      _refreshController.loadFailed();
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    final initialData = [
-      <ReportCard>[
-        ReportCard(
-          studentUUID: "",
-          periodUUID: "",
-          periodCode: "",
-          period: "",
-          result: "",
-          rating: "",
-          url: "",
-          read: false,
-          visible: false,
-          subjects: [],
-          dateRead: DateTime.now().add(Duration(days: 365)),
-          canViewAbsences: false,
-        ),
-      ],
-      <Period>[
-        Period(
-          id: "",
-          desc: "",
-          startDate: DateTime.now(),
-          endDate: DateTime.now(),
-        )
-      ]
-    ];
-    return FutureBuilder<List>(
-      future: Future.wait([
-        // Future.value([0, 1]),
-        widget.store.reportCards ?? Future.value(initialData[0]),
-        widget.store.periods ?? Future.value(initialData[1]),
-      ]),
-      initialData: initialData,
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.hasError) {
-          print(snapshot.error!);
-          if (snapshot.error! is Error)
-            print((snapshot.error! as Error).stackTrace);
-          return Text("${snapshot.error}");
-        }
-        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-          if (selectedPeriod.isEmpty)
-            selectedPeriod = (snapshot.requireData[1] as List<Period>)[0].desc;
-          return buildOk(context, snapshot.requireData[0] as List<ReportCard>,
-              snapshot.requireData[1] as List<Period>);
-        }
+    return _buildBody(context);
+  }
 
-        return LoadingUI();
-      },
+  Widget _buildBody(BuildContext context) {
+    return SmartRefresher(
+      onRefresh: _onRefresh,
+      onLoading: _onLoad,
+      controller: _refreshController,
+      enablePullDown: true,
+      enablePullUp: false,
+      child: () {
+        if (widget.store.reportCards == null || widget.store.periods == null)
+          return LoadingUI();
+        if (widget.store.reportCards!.status == FutureStatus.pending ||
+            widget.store.periods!.status == FutureStatus.pending)
+          return LoadingUI();
+        if (widget.store.reportCards!.status == FutureStatus.rejected ||
+            widget.store.periods!.status == FutureStatus.rejected)
+          return Text("${widget.store.reportCards!.error}");
+        return buildOk(context, widget.store.reportCards!.value!,
+            widget.store.periods!.value!);
+      }(),
     );
   }
 
-  Widget buildOk(BuildContext context, List<ReportCard> reportCards,
-      List<Period> periods) {
+  Widget buildOk(
+    BuildContext context,
+    List<ReportCard> reportCards,
+    List<Period> periods,
+  ) {
     return Container(
       child: SingleChildScrollView(
         child: Padding(
@@ -118,7 +103,8 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               DropdownButtonFormField<String>(
-                value: selectedPeriod,
+                value:
+                    selectedPeriod.isEmpty ? periods.first.id : selectedPeriod,
                 // icon: const Icon(Icons.arrow_downward),
                 onChanged: (String? newValue) {
                   if (newValue == null) return;
@@ -132,16 +118,19 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
                 ),
                 items: periods
                     .toSet()
-                    .map<DropdownMenuItem<String>>((Period value) {
-                  return DropdownMenuItem<String>(
-                    value: value.desc,
-                    child: Text(value.desc),
-                  );
-                }).toList(),
+                    .map<DropdownMenuItem<String>?>((Period value) {
+                      if (value.id.isEmpty) return null;
+                      return DropdownMenuItem<String>(
+                        value: value.id,
+                        child: Text(value.desc),
+                      );
+                    })
+                    .where((DropdownMenuItem<String>? item) => item != null)
+                    .toList() as List<DropdownMenuItem<String>>,
               ),
               ReportCardComponent(
                 reportCard: reportCards.firstWhere(
-                  (element) => element.period == selectedPeriod,
+                  (element) => element.periodUUID == selectedPeriod,
                   orElse: () => ReportCard.empty(),
                 ),
               )
