@@ -338,14 +338,6 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         delegate: SliverChildListDelegate(items),
       ),
     ]);
-
-    return ListView.builder(
-      itemCount: items.length,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (context, position) {
-        return items[position];
-      },
-    );
   }
 
   Widget _getAssignmentTimeline(List<Assignment> assignments) {
@@ -399,7 +391,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                 onPressed: openMenu,
                 tooltip: context.materialLocale.openAppDrawerTooltip,
               ),
-              elevation: map(percent, 0, 1, 8, 0).toDouble(),
+              elevation: map(percent, 0, 1, 4, 0).toDouble(),
               title: Opacity(
                 opacity: hideTitleWhenExpanded ? 1.0 - percent : 1.0,
                 child: Text(context.locale.drawer.overview),
