@@ -140,23 +140,21 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                                   Divider(),
                                 ]
                               : []),
-                          ...(e.details.length > 0
-                              ? [
-                                  DataRow(context.locale.reportCard.subjKind,
-                                      e.details[0].label),
-                                  if (e.details[0].grade > 0)
-                                    DataRow(
-                                      context.locale.reportCard.subjGrade,
-                                      RichText(
-                                        text: GradeText(
-                                          context,
-                                          grade: e.details[0].grade.toDouble(),
-                                          label: e.details[0].textGrade,
-                                        ),
-                                      ),
-                                    ),
-                                ]
-                              : [])
+                          if (e.details.length > 0) ...[
+                            DataRow(context.locale.reportCard.subjKind,
+                                e.details[0].label),
+                            if (e.details[0].grade > 0)
+                              DataRow(
+                                context.locale.reportCard.subjGrade,
+                                RichText(
+                                  text: GradeText(
+                                    context,
+                                    grade: e.details[0].grade.toDouble(),
+                                    label: e.details[0].textGrade,
+                                  ),
+                                ),
+                              ),
+                          ]
                         ],
                       ),
                     ),
