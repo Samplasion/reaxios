@@ -183,11 +183,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void initPanes(Axios session, Login login) {
     setState(() {
       panes = [
-        OverviewPane(
-          session: session,
-          login: login,
-          student: session.student ?? Student.empty(),
-          store: widget.store,
+        Builder(
+          builder: (context) => OverviewPane(
+            session: session,
+            login: login,
+            student: session.student ?? Student.empty(),
+            store: widget.store,
+            openMainDrawer: () => Scaffold.of(context).openDrawer(),
+          ),
         ),
         CalendarPane(session: session),
         AssignmentsPane(session: session, store: widget.store),
@@ -220,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
         [
           Icon(Icons.home),
           Text(context.locale.drawer.overview),
-          true,
+          false,
           () async {
             widget.store.fetchAssignments(session);
             widget.store.fetchGrades(session);

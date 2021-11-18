@@ -343,3 +343,7 @@ extension DateUtils on DateTime {
 
 T nullOrElse<T>(T value, T orElse) => value ?? orElse;
 T ifNull<T>(T? value, T nonNull, T orElse) => value == null ? orElse : nonNull;
+
+num map(num value, num min, num max, num min2, num max2) {
+  return min2 + (max2 - min2) * ((value - min) / (max - min));
+}

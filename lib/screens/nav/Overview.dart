@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
@@ -30,12 +31,14 @@ class OverviewPane extends StatefulWidget {
     required this.login,
     required this.student,
     required this.store,
+    required this.openMainDrawer,
   }) : super(key: key);
 
   final Axios session;
   final Login login;
   final Student student;
   final RegistroStore store;
+  final Function() openMainDrawer;
 
   @override
   _OverviewPaneState createState() => _OverviewPaneState();
@@ -87,6 +90,13 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     ];
 
     return Scaffold(
+      appBar: loading
+          ? AppBar(
+              title: Text(
+                context.locale.drawer.overview,
+              ),
+            )
+          : null,
       body: loading
           ? LoadingUI()
           : FutureBuilder<List<List<dynamic>>>(
@@ -272,12 +282,6 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .toList();
 
     final items = [
-      UserCard(
-        student: student,
-        period: period,
-        store: widget.store,
-      ),
-
       if (gradeCards.isNotEmpty) ...[
         Text(
           context.locale.overview.latestGrades,
@@ -318,6 +322,23 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
           .padding(all: 16),
     ];
 
+    return CustomScrollView(slivers: [
+      SliverPersistentHeader(
+        pinned: true,
+        floating: false,
+        delegate: CustomSliverDelegate(
+          hideTitleWhenExpanded: false,
+          openMenu: widget.openMainDrawer,
+          expandedHeight: 185,
+          period: period,
+          student: student,
+        ),
+      ),
+      SliverList(
+        delegate: SliverChildListDelegate(items),
+      ),
+    ]);
+
     return ListView.builder(
       itemCount: items.length,
       scrollDirection: Axis.vertical,
@@ -340,6 +361,82 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
           AssignmentListItem(assignment: assignment)
       ],
     );
+  }
+}
+
+class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
+  final double expandedHeight;
+  final bool hideTitleWhenExpanded;
+  final void Function() openMenu;
+  final Student student;
+  final Period? period;
+
+  CustomSliverDelegate({
+    required this.expandedHeight,
+    required this.openMenu,
+    required this.student,
+    required this.period,
+    this.hideTitleWhenExpanded = true,
+  });
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final RegistroStore store = context.watch<RegistroStore>();
+    final appBarSize = expandedHeight - shrinkOffset;
+    final cardTopPosition = (expandedHeight / 2 - shrinkOffset) / 4; // / 10;
+    final proportion = 2 - (expandedHeight / appBarSize);
+    final percent = proportion < 0 || proportion > 1 ? 0.0 : proportion;
+    return SizedBox(
+      height: expandedHeight + expandedHeight / 2,
+      child: Stack(
+        children: [
+          SizedBox(
+            height: (appBarSize < kToolbarHeight ? kToolbarHeight : appBarSize),
+            child: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: openMenu,
+                tooltip: context.materialLocale.openAppDrawerTooltip,
+              ),
+              elevation: map(percent, 0, 1, 8, 0).toDouble(),
+              title: Opacity(
+                opacity: hideTitleWhenExpanded ? 1.0 - percent : 1.0,
+                child: Text(context.locale.drawer.overview),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 0.0,
+            right: 0.0,
+            top: max(cardTopPosition, 0),
+            bottom: 0.0,
+            child: Opacity(
+              opacity: percent,
+              child: Transform.scale(
+                scale: map(percent, 0, 1, 1.12, 1).toDouble(),
+                child: UserCard(
+                  student: student,
+                  period: period,
+                  store: store,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => expandedHeight + expandedHeight / 2;
+
+  @override
+  double get minExtent => kToolbarHeight;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }
 
