@@ -330,6 +330,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
           hideTitleWhenExpanded: false,
           openMenu: widget.openMainDrawer,
           expandedHeight: 185,
+          collapsedHeight: MediaQuery.of(context).padding.top + kToolbarHeight,
           period: period,
           student: student,
         ),
@@ -357,6 +358,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 }
 
 class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
+  final double collapsedHeight;
   final double expandedHeight;
   final bool hideTitleWhenExpanded;
   final void Function() openMenu;
@@ -364,6 +366,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   final Period? period;
 
   CustomSliverDelegate({
+    required this.collapsedHeight,
     required this.expandedHeight,
     required this.openMenu,
     required this.student,
@@ -375,8 +378,11 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     final RegistroStore store = context.watch<RegistroStore>();
+
+    print(shrinkOffset);
+
     final appBarSize = expandedHeight - shrinkOffset;
-    final cardTopPosition = (expandedHeight / 2 - shrinkOffset) / 4; // / 10;
+    final cardTopPosition = (expandedHeight / 2 - shrinkOffset) / 2; // / 10;
     final proportion = 2 - (expandedHeight / appBarSize);
     final percent = proportion < 0 || proportion > 1 ? 0.0 : proportion;
     return SizedBox(
@@ -384,7 +390,10 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
       child: Stack(
         children: [
           SizedBox(
-            height: (appBarSize < kToolbarHeight ? kToolbarHeight : appBarSize),
+            height:
+                appBarSize < MediaQuery.of(context).padding.top + kToolbarHeight
+                    ? MediaQuery.of(context).padding.top + kToolbarHeight
+                    : appBarSize,
             child: AppBar(
               leading: IconButton(
                 icon: Icon(Icons.menu),
@@ -424,7 +433,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => expandedHeight + expandedHeight / 2;
 
   @override
-  double get minExtent => kToolbarHeight;
+  double get minExtent => collapsedHeight;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
