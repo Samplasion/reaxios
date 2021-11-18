@@ -48,7 +48,12 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
     } catch (e) {
       _refreshController.refreshFailed();
     }
-    setState(() {});
+    setState(() {
+      if (selectedPeriod.isEmpty &&
+          widget.store.periods != null &&
+          widget.store.periods!.status == FutureStatus.fulfilled)
+        selectedPeriod = widget.store.periods!.value!.first.id;
+    });
   }
 
   _onLoad() async {
@@ -59,7 +64,12 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
     } catch (e) {
       _refreshController.loadFailed();
     }
-    setState(() {});
+    setState(() {
+      if (selectedPeriod.isEmpty &&
+          widget.store.periods != null &&
+          widget.store.periods!.status == FutureStatus.fulfilled)
+        selectedPeriod = widget.store.periods!.value!.first.id;
+    });
   }
 
   @override
@@ -77,14 +87,14 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
       child: () {
         if (widget.store.reportCards == null || widget.store.periods == null)
           return LoadingUI();
-        if (widget.store.reportCards!.status == FutureStatus.pending ||
-            widget.store.periods!.status == FutureStatus.pending)
-          return LoadingUI();
+        if (widget.store.reportCards!.status == FutureStatus.fulfilled ||
+            widget.store.periods!.status == FutureStatus.fulfilled)
+          return buildOk(context, widget.store.reportCards!.value!,
+              widget.store.periods!.value!);
         if (widget.store.reportCards!.status == FutureStatus.rejected ||
             widget.store.periods!.status == FutureStatus.rejected)
           return Text("${widget.store.reportCards!.error}");
-        return buildOk(context, widget.store.reportCards!.value!,
-            widget.store.periods!.value!);
+        return LoadingUI();
       }(),
     );
   }
@@ -128,12 +138,13 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
                     .where((DropdownMenuItem<String>? item) => item != null)
                     .toList() as List<DropdownMenuItem<String>>,
               ),
-              ReportCardComponent(
-                reportCard: reportCards.firstWhere(
-                  (element) => element.periodUUID == selectedPeriod,
-                  orElse: () => ReportCard.empty(),
-                ),
-              )
+              if (selectedPeriod.isNotEmpty)
+                ReportCardComponent(
+                  reportCard: reportCards.firstWhere(
+                    (element) => element.periodUUID == selectedPeriod,
+                    orElse: () => ReportCard.empty(),
+                  ),
+                )
             ],
           ),
         ),
