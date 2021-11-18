@@ -511,7 +511,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 : null,
             drawer: _getDrawer(),
             body: loading
-                ? LoadingUI()
+                ? LoadingUI(colorful: true, showHints: true)
                 : Builder(builder: (context) {
                     return Actions(
                       actions: {

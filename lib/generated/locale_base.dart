@@ -105,6 +105,7 @@ class Localemain {
   String get downloadButtonLabel => _data["downloadButtonLabel"]!;
   String get noDataForPeriod => _data["noDataForPeriod"]!;
   String get noPermission => _data["noPermission"]!;
+  String get didYouKnow => _data["didYouKnow"]!;
 }
 
 class Localelogin {
