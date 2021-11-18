@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/utils.dart';
@@ -28,11 +29,10 @@ class TopicListItem extends StatelessWidget {
         : context.locale.main.lessonHour.format([topic.lessonHour]) + " - ";
 
     return CardListItem(
-      leading: CircleAvatar(
+      leading: GradientCircleAvatar(
         child: Icon(
             Utils.getBestIconForSubject(topic.subject, Icons.calendar_today)),
-        backgroundColor: bg,
-        foregroundColor: bg.contrastText,
+        color: bg,
       ),
       title: (topic.subject),
       subtitle: SelectableLinkify(

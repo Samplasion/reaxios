@@ -5,6 +5,8 @@ import 'package:reaxios/api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/ListItems/AuthorizationListItem.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:reaxios/main.dart';
@@ -26,7 +28,7 @@ class AuthorizationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar(
         title: Text(context.locale.authorizations
             .getByKey("type${authorization.rawKind}")),
       ),
@@ -61,10 +63,9 @@ class AuthorizationView extends StatelessWidget {
     final moreInfo = [
       if (authorization.justified)
         CardListItem(
-          leading: CircleAvatar(
+          leading: GradientCircleAvatar(
             child: Icon(Icons.person),
-            backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Theme.of(context).primaryColor.contrastText,
+            color: Theme.of(context).primaryColor,
           ),
           title: context.locale.authorizations.justifiedBy,
           subtitle: Text(authorization.authorizedBy),

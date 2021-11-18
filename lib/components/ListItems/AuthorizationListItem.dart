@@ -4,6 +4,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/AuthorizationView.dart';
 // import 'package:reaxios/components/AuthorizationView.dart';
@@ -40,10 +41,9 @@ class AuthorizationListItem extends StatelessWidget {
     final bg = colors[authorization.rawKind] ??
         colors["Other"]!; // sTheme.of(context).accentColor;
     final leading = NotificationBadge(
-      child: CircleAvatar(
+      child: GradientCircleAvatar(
         child: Icon(Icons.edit),
-        backgroundColor: bg,
-        foregroundColor: getContrastText(bg),
+        color: bg,
       ),
       showBadge: !authorization.justified,
       rightOffset: 5,

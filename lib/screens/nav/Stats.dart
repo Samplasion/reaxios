@@ -9,6 +9,7 @@ import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
@@ -117,10 +118,9 @@ class _StatsPaneState extends State<StatsPane> {
     final items = <Widget>[
       if (currentGrades.isNotEmpty)
         CardListItem(
-          leading: CircleAvatar(
+          leading: GradientCircleAvatar(
             child: Icon(Icons.grade),
-            backgroundColor: primary,
-            foregroundColor: primary.contrastText,
+            color: primary,
           ),
           title: context.locale.stats.overallAverage,
           subtitle: RichText(
@@ -129,11 +129,10 @@ class _StatsPaneState extends State<StatsPane> {
         ).padding(horizontal: 16),
       if (currentGrades.length >= 2) ...[
         CardListItem(
-          leading: CircleAvatar(
+          leading: GradientCircleAvatar(
             child: Icon(Utils.getBestIconForSubject(
                 gradesByGrade.last.subject, Icons.book)),
-            backgroundColor: primary,
-            foregroundColor: primary.contrastText,
+            color: primary,
           ),
           title: context.locale.stats.bestSubject,
           subtitle: Text(gradesByGrade.last.subject),
@@ -148,11 +147,10 @@ class _StatsPaneState extends State<StatsPane> {
           ),
         ).padding(horizontal: 16),
         CardListItem(
-          leading: CircleAvatar(
+          leading: GradientCircleAvatar(
             child: Icon(Utils.getBestIconForSubject(
                 gradesByGrade.first.subject, Icons.book)),
-            backgroundColor: accent,
-            foregroundColor: accent.contrastText,
+            color: accent,
           ),
           title: context.locale.stats.worstSubject,
           subtitle: Text(gradesByGrade.first.subject),
@@ -168,10 +166,9 @@ class _StatsPaneState extends State<StatsPane> {
         ).padding(horizontal: 16),
       ],
       CardListItem(
-        leading: CircleAvatar(
+        leading: GradientCircleAvatar(
           child: Icon(Icons.star),
-          backgroundColor: getGradeColor(10),
-          foregroundColor: getGradeColor(10).contrastText,
+          color: getGradeColor(10),
         ),
         title: context.locale.stats.passedSubjects,
         subtitle: Text(
@@ -179,10 +176,9 @@ class _StatsPaneState extends State<StatsPane> {
         ),
       ).padding(horizontal: 16),
       CardListItem(
-        leading: CircleAvatar(
+        leading: GradientCircleAvatar(
           child: Icon(Icons.star_half),
-          backgroundColor: getGradeColor(5),
-          foregroundColor: getGradeColor(5).contrastText,
+          color: getGradeColor(5),
         ),
         title: context.locale.stats.failedSubjects,
         subtitle: Text(

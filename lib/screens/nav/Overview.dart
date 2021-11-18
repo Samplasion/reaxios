@@ -16,6 +16,7 @@ import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/ListItems/AssignmentListItem.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Charts/GradeAverageChart.dart';
@@ -138,10 +139,11 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       initREData();
     }
 
-    final filterTmr = (a) {
+    final filterTmr = (Assignment a) {
       final now = DateTime.now();
-      return a.date.millisecondsSinceEpoch > now.millisecondsSinceEpoch &&
-          a.date.millisecondsSinceEpoch < now.millisecondsSinceEpoch + 86400000;
+      return a.date.isAfter(now) &&
+              a.date.isBefore(now.add(Duration(days: 1))) ||
+          a.date.isSameDay(now);
     };
 
     final List<Assignment> tmrAssignments =
@@ -155,50 +157,6 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     final List<Grade> latestGrades = grades.reversed.take(3).toList();
 
     final accent = Theme.of(context).accentColor;
-    final captionColor = Theme.of(context).textTheme.caption!.color;
-
-    final assmts = tmrAssignments
-        .map(
-          (e) => ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: max(350, MediaQuery.of(context).size.width * 0.65),
-            ),
-            child: BigCard(
-              leading: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: accent,
-                    foregroundColor: accent.contrastText,
-                    child: Icon(Icons.book),
-                  ),
-                  if (e.lessonHour > 0) Chip(label: Text("${e.lessonHour}h")),
-                ],
-              ),
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    e.subject,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ).padding(bottom: 8),
-                  Text(
-                    e.assignment,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: captionColor,
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ).padding(left: 16),
-        )
-        .toList();
 
     final topicCards = latestTopics
         .map(
@@ -208,14 +166,15 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
             ),
             child: BigCard(
               color: accent,
+              gradient: true,
               // radius: 4,
               // elevation: 2,
               leading: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    backgroundColor: accent.contrastText,
+                  GradientCircleAvatar(
+                    color: accent.contrastText,
                     foregroundColor: accent,
                     child: Icon(Utils.getBestIconForSubject(
                         e.subject, Icons.calendar_today)),
@@ -309,12 +268,12 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         ),
       ],
 
-      if (assmts.isNotEmpty) ...[
+      if (tmrAssignments.isNotEmpty) ...[
         Text(
           context.locale.overview.homeworkForTomorrow,
           style: Theme.of(context).textTheme.headline6,
         ).padding(horizontal: 16, top: 8),
-        _getAssignmentTimeline(assignments),
+        _getAssignmentTimeline(tmrAssignments),
       ],
 
       // Man, this chart lags
@@ -563,7 +522,14 @@ class UserCard extends StatelessWidget {
     return <Widget>[_buildUserRow(context), _buildUserStats(context)]
         .toColumn(mainAxisAlignment: MainAxisAlignment.spaceAround)
         .padding(horizontal: 20, vertical: 10)
-        .decorated(color: bg, borderRadius: BorderRadius.circular(20))
+        .decorated(
+          gradient: LinearGradient(
+            colors: getGradient(bg),
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+          borderRadius: BorderRadius.circular(20),
+        )
         .elevation(
           5,
           shadowColor: bg,

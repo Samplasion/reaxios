@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,11 +21,10 @@ class AssignmentListItem extends StatelessWidget {
         ? Theme.of(context).accentColor
         : Colors.grey[700]!;
     return CardListItem(
-      leading: CircleAvatar(
+      leading: GradientCircleAvatar(
         child:
             Icon(Utils.getBestIconForSubject(assignment.subject, Icons.book)),
-        backgroundColor: bg,
-        foregroundColor: getContrastText(bg),
+        color: bg,
       ),
       title: (assignment.subject),
       subtitle: assignment.assignment.trim().isEmpty

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
@@ -51,7 +53,7 @@ class _GradeViewState extends State<GradeView> {
         : context.locale.grades.commentInSubject.format([grade.subject]);
     // print(grade.toJson());
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar(
         title: Text(title),
       ),
       body: _buildBody(context),
@@ -84,9 +86,8 @@ class _GradeViewState extends State<GradeView> {
                 if (gradeIsValid)
                   CardListItem(
                     leading: NotificationBadge(
-                      child: CircleAvatar(
-                        backgroundColor: Colors.indigo,
-                        foregroundColor: Colors.indigo.contrastText,
+                      child: GradientCircleAvatar(
+                        color: Colors.indigo,
                         child: Icon(Icons.linear_scale),
                       ),
                       showBadge: false,
@@ -104,8 +105,8 @@ class _GradeViewState extends State<GradeView> {
                 if (grade.seen)
                   CardListItem(
                     leading: NotificationBadge(
-                      child: CircleAvatar(
-                        backgroundColor: Colors.orange,
+                      child: GradientCircleAvatar(
+                        color: Colors.orange,
                         child: Text(grade.seenBy?[0] ?? ""),
                       ),
                       showBadge: false,

@@ -7,6 +7,8 @@ import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/enums/BulletinAttachmentKind.dart';
 import 'package:reaxios/components/ListItems/BulletinListItem.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/format.dart';
@@ -33,7 +35,7 @@ class BulletinView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar(
         title: Text(
           context.locale.bulletins.title.format([
             context.locale.bulletins
@@ -105,12 +107,11 @@ class BulletinView extends StatelessWidget {
             (e) => CardListItem(
               leading: NotificationBadge(
                 showBadge: false,
-                child: CircleAvatar(
+                child: GradientCircleAvatar(
                   child: Icon(e.kind == BulletinAttachmentKind.File
                       ? Icons.file_present_rounded
                       : Icons.web),
-                  backgroundColor: bg,
-                  foregroundColor: bg.contrastText,
+                  color: bg,
                 ),
               ),
               title: () {

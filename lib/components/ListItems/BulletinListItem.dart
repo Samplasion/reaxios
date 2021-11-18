@@ -5,6 +5,7 @@ import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/enums/BulletinKind.dart';
 import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Views/BulletinView.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
@@ -45,24 +46,22 @@ class BulletinListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final bg = colors[bulletin.kind]!; // Theme.of(context).accentColor;
     final downloadBg = Theme.of(context).primaryColor;
-    final av = CircleAvatar(
+    final av = GradientCircleAvatar(
       child: Icon(Icons.mail),
-      backgroundColor: bg,
-      foregroundColor: bg.contrastText,
+      color: bg,
     );
     final downloadIcon = [
-      CircleAvatar(
+      GradientCircleAvatar(
         child: Container(),
-        backgroundColor: Theme.of(context).cardColor,
+        color: Theme.of(context).cardColor,
         radius: 12,
       ),
-      CircleAvatar(
+      GradientCircleAvatar(
         child: Icon(
           Icons.download,
           size: 13,
         ),
-        backgroundColor: downloadBg,
-        foregroundColor: downloadBg.contrastText,
+        color: downloadBg,
         radius: 9,
       )
     ].toStack(alignment: Alignment.center);

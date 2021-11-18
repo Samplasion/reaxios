@@ -15,6 +15,7 @@ import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/Views/GradeView.dart';
@@ -414,13 +415,12 @@ class _HomeScreenState extends State<HomeScreen> {
               style: Theme.of(context).textTheme.caption,
             ),
             arrowColor: Theme.of(context).textTheme.bodyText1!.color!,
-            currentAccountPicture: CircleAvatar(
+            currentAccountPicture: GradientCircleAvatar(
               child: Text(
                 "${login.firstName} ${login.lastName}".trim()[0],
                 style: TextStyle(fontSize: 28),
               ),
-              backgroundColor: Theme.of(context).accentColor,
-              foregroundColor: Theme.of(context).accentColor.contrastText,
+              color: Theme.of(context).colorScheme.primary,
             ),
             onDetailsPressed: () {
               setState(() {
@@ -429,13 +429,11 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             otherAccountsPictures: session.students
                 .map(
-                  (s) => CircleAvatar(
-                    child: Text(
-                      "${s.firstName} ${s.lastName}".trim()[0],
-                    ),
-                    backgroundColor: Theme.of(context).accentColor,
-                    foregroundColor: Theme.of(context).accentColor.contrastText,
-                  ),
+                  (s) => GradientCircleAvatar(
+                      child: Text(
+                        "${s.firstName} ${s.lastName}".trim()[0],
+                      ),
+                      color: Theme.of(context).colorScheme.secondary),
                 )
                 .toList(),
           ),

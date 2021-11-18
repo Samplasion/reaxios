@@ -9,6 +9,7 @@ import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
@@ -244,10 +245,9 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
       final color = getGradeColor(average);
       children.add(
         CardListItem(
-          leading: CircleAvatar(
+          leading: GradientCircleAvatar(
             child: Icon(Utils.getBestIconForSubject(subject, Icons.grade)),
-            backgroundColor: color,
-            foregroundColor: color.contrastText,
+            color: color,
           ),
           title: subject,
           subtitle: RichText(

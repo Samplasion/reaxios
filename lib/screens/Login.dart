@@ -6,6 +6,7 @@ import 'package:reaxios/api/entities/School/School.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/SchoolListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,12 +73,8 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
               child: Column(
                 children: [
                   Padding(
-                    child: CircleAvatar(
-                      backgroundColor: Theme.of(context).accentColor,
-                      foregroundColor:
-                          Theme.of(context).accentColor.computeLuminance() > 0.5
-                              ? Colors.black
-                              : Colors.white,
+                    child: GradientCircleAvatar(
+                      color: Theme.of(context).colorScheme.secondary,
                       child: Icon(Icons.school),
                     ),
                     padding: EdgeInsets.only(bottom: 8),
@@ -225,12 +222,8 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
               child: Column(
                 children: [
                   Padding(
-                    child: CircleAvatar(
-                      backgroundColor: Theme.of(context).accentColor,
-                      foregroundColor:
-                          Theme.of(context).accentColor.computeLuminance() > 0.5
-                              ? Colors.black
-                              : Colors.white,
+                    child: GradientCircleAvatar(
+                      color: Theme.of(context).colorScheme.secondary,
                       child: Icon(Icons.lock),
                     ),
                     padding: EdgeInsets.only(bottom: 8),

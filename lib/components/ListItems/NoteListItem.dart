@@ -4,6 +4,7 @@ import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 // import 'package:reaxios/components/NoteView.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/system/Store.dart';
@@ -35,10 +36,9 @@ class NoteListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bg = colors[note.kind]!;
-    final leading = CircleAvatar(
+    final leading = GradientCircleAvatar(
       child: Icon(icons[note.kind]!),
-      backgroundColor: bg,
-      foregroundColor: bg.contrastText,
+      color: bg,
     );
 
     final tile = CardListItem(

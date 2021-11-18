@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Views/MaterialTeacherView.dart';
@@ -70,12 +71,8 @@ class _MaterialsPaneState extends State<MaterialsPane> {
               itemCount: _materials.length,
               itemBuilder: (context, index) {
                 return CardListItem(
-                  leading: CircleAvatar(
-                    backgroundColor:
-                        Utils.getColorFromString(_materials[index].name),
-                    foregroundColor:
-                        Utils.getColorFromString(_materials[index].name)
-                            .contrastText,
+                  leading: GradientCircleAvatar(
+                    color: Utils.getColorFromString(_materials[index].name),
                     child: Text(
                       _materials[index].name.substring(0, 1),
                     ),

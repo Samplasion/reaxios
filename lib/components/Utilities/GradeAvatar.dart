@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/utils.dart';
 
 class GradeAvatar extends StatelessWidget {
@@ -25,18 +26,16 @@ class GradeAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bg = getColor();
-    final fg = bg.contrastText;
 
     final text = grade.getPrettyGrade(context).trim();
     final child = text.isEmpty
         ? (showIconIfNaN ? Icon(Icons.message) : Container())
         : Text(text);
 
-    return CircleAvatar(
+    return GradientCircleAvatar(
       radius: radius,
-      backgroundColor: bg,
-      foregroundColor: fg,
       child: child,
+      color: bg,
     );
   }
 }

@@ -347,3 +347,10 @@ T ifNull<T>(T? value, T nonNull, T orElse) => value == null ? orElse : nonNull;
 num map(num value, num min, num max, num min2, num max2) {
   return min2 + (max2 - min2) * ((value - min) / (max - min));
 }
+
+List<Color> getGradient(Color color, {double strength = 1}) {
+  return [
+    color.darken(0.1 * strength),
+    color.lighten(0.06 * strength),
+  ];
+}

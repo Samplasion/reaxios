@@ -9,6 +9,8 @@ import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/average.dart';
 import 'package:reaxios/components/Charts/GradeLineChart.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/Alert.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
@@ -55,7 +57,7 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar(
         title: Text(subject),
       ),
       body: _buildBody(context),
@@ -97,10 +99,9 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
     );
     final icon = teachers.length != 1 ? Icons.people : Icons.person;
     return CardListItem(
-      leading: CircleAvatar(
+      leading: GradientCircleAvatar(
         child: Icon(icon),
-        backgroundColor: primary,
-        foregroundColor: primary.contrastText,
+        color: primary,
       ),
       title: title,
       subtitle: Text(teachers.join(", ")),
@@ -115,10 +116,9 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
             .where((element) => element.kind == entry.key && element.weight > 0)
             .length;
         return CardListItem(
-          leading: CircleAvatar(
+          leading: GradientCircleAvatar(
             child: GradeAvatar(grade: Grade.fakeFromDouble(entry.value)),
-            backgroundColor: primary,
-            foregroundColor: primary.contrastText,
+            color: primary,
           ),
           title: entry.key,
           subtitle: Text(

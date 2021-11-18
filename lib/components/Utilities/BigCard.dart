@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:styled_widget/styled_widget.dart';
 
+import '../../utils.dart';
+
 class BigCard extends StatefulWidget {
   final Widget leading;
   final Widget body;
@@ -8,6 +10,7 @@ class BigCard extends StatefulWidget {
   final double elevation;
   final double radius;
   final Function()? onTap;
+  final bool gradient;
 
   BigCard({
     required this.leading,
@@ -16,6 +19,7 @@ class BigCard extends StatefulWidget {
     this.elevation = 8.0,
     this.radius = 15.0,
     this.onTap,
+    this.gradient = false,
   });
 
   @override
@@ -51,8 +55,20 @@ class _BigCardState extends State<BigCard> {
           );
     }
 
+    if (widget.gradient) {
+      item = item.backgroundGradient(
+          LinearGradient(
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: getGradient(widget.color ?? theme.cardColor, strength: 0.9),
+          ),
+          animate: true);
+    } else {
+      item =
+          item.backgroundColor(widget.color ?? theme.cardColor, animate: true);
+    }
+
     return item
-        .backgroundColor(widget.color ?? theme.cardColor, animate: true)
         .clipRRect(all: widget.radius) // clip ripple
         .borderRadius(all: widget.radius, animate: true)
         .elevation(

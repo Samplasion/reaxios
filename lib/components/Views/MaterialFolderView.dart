@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
 import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
@@ -32,7 +34,7 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar(
         title: Text(widget.folder.description),
       ),
       body: SmartRefresher(
@@ -59,9 +61,8 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
   Widget _buildCard(MaterialData material, int index) {
     final accent = Theme.of(context).accentColor;
     final icon = NotificationBadge(
-      child: CircleAvatar(
-        foregroundColor: accent.contrastText,
-        backgroundColor: accent,
+      child: GradientCircleAvatar(
+        color: accent,
         child: Icon(material.isLink ? Icons.link : Icons.file_present_rounded),
       ),
       showBadge: false,
