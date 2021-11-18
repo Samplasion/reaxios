@@ -31,6 +31,7 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
         actions: actions,
         elevation: elevation,
         automaticallyImplyLeading: automaticallyImplyLeading,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         flexibleSpace: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.vertical(
@@ -40,8 +41,8 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: <Color>[
-                Theme.of(context).colorScheme.primary.darken(0.15),
-                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.primary.darken(0.1),
+                Theme.of(context).colorScheme.primary.lighten(0.06),
               ],
             ),
           ),
