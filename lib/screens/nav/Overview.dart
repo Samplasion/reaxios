@@ -322,6 +322,8 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
           .padding(all: 16),
     ];
 
+    final toolbarHeight = AppBar().toolbarHeight ?? kToolbarHeight;
+
     return CustomScrollView(slivers: [
       SliverPersistentHeader(
         pinned: true,
@@ -330,7 +332,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
           hideTitleWhenExpanded: false,
           openMenu: widget.openMainDrawer,
           expandedHeight: 185,
-          collapsedHeight: MediaQuery.of(context).padding.top + kToolbarHeight,
+          collapsedHeight: MediaQuery.of(context).padding.top + toolbarHeight,
           period: period,
           student: student,
         ),
@@ -376,10 +378,11 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     final RegistroStore store = context.watch<RegistroStore>();
-
-    print(shrinkOffset);
 
     final appBarSize = expandedHeight - shrinkOffset;
     final cardTopPosition = (expandedHeight / 2 - shrinkOffset) / 2; // / 10;
@@ -390,10 +393,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
       child: Stack(
         children: [
           SizedBox(
-            height:
-                appBarSize < MediaQuery.of(context).padding.top + kToolbarHeight
-                    ? MediaQuery.of(context).padding.top + kToolbarHeight
-                    : appBarSize,
+            height: appBarSize < collapsedHeight ? collapsedHeight : appBarSize,
             child: AppBar(
               leading: IconButton(
                 icon: Icon(Icons.menu),
@@ -407,23 +407,24 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
               ),
             ),
           ),
-          Positioned(
-            left: 0.0,
-            right: 0.0,
-            top: max(cardTopPosition, 0),
-            bottom: 0.0,
-            child: Opacity(
-              opacity: percent,
-              child: Transform.scale(
-                scale: map(percent, 0, 1, 1.12, 1).toDouble(),
-                child: UserCard(
-                  student: student,
-                  period: period,
-                  store: store,
+          if (percent > 0)
+            Positioned(
+              left: 0.0,
+              right: 0.0,
+              top: max(cardTopPosition, 0),
+              bottom: 0.0,
+              child: Opacity(
+                opacity: percent,
+                child: Transform.scale(
+                  scale: map(percent, 0, 1, 1.12, 1).toDouble(),
+                  child: UserCard(
+                    student: student,
+                    period: period,
+                    store: store,
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

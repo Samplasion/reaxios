@@ -101,6 +101,14 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
       S.Settings.getValue("accent-color", cs.toJson(Colors.purple[400])),
     );
 
+    AppBarTheme appBarTheme = AppBarTheme(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(15),
+        ),
+      ),
+    );
+
     return Shortcuts(
       shortcuts: shortcuts,
       child: MaterialApp(
@@ -114,6 +122,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             secondary: accent,
             onSecondary: accent.contrastText,
           ),
+          appBarTheme: appBarTheme,
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
@@ -125,6 +134,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             secondary: accent,
             onSecondary: accent.contrastText,
           ),
+          appBarTheme: appBarTheme,
         ),
         themeMode: getThemeMode(themeMode),
         // home: MyHomePage(title: 'Flutter Demo Home Page'),
