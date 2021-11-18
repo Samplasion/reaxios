@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 
 class NoInternetScreen extends StatefulWidget {
@@ -48,7 +49,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        appBar: AppBar(
+        appBar: GradientAppBar(
           automaticallyImplyLeading: false,
           title: Text("Registro"),
         ),

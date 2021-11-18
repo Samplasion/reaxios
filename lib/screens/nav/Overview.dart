@@ -15,6 +15,7 @@ import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/ListItems/AssignmentListItem.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Charts/GradeAverageChart.dart';
@@ -91,7 +92,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 
     return Scaffold(
       appBar: loading
-          ? AppBar(
+          ? GradientAppBar(
               title: Text(
                 context.locale.drawer.overview,
               ),
@@ -394,7 +395,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
         children: [
           SizedBox(
             height: appBarSize < collapsedHeight ? collapsedHeight : appBarSize,
-            child: AppBar(
+            child: GradientAppBar(
               leading: IconButton(
                 icon: Icon(Icons.menu),
                 onPressed: openMenu,

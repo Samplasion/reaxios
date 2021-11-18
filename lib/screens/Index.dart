@@ -14,6 +14,7 @@ import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/Views/GradeView.dart';
@@ -497,7 +498,7 @@ class _HomeScreenState extends State<HomeScreen> {
           master: _getDrawer(),
           detail: Scaffold(
             appBar: drawerItems[selectedPane][2]
-                ? AppBar(
+                ? GradientAppBar(
                     title: drawerItems[selectedPane][1],
                     leading: Builder(builder: (context) {
                       return IconButton(

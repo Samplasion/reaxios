@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:provider/provider.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:reaxios/system/Store.dart';
@@ -19,92 +20,100 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return S.SettingsScreen(
-      title: context.locale.settings.title,
-      children: [
+    final children = [
+      S.SettingsGroup(
+        title: context.locale.settings.groupsColorsTitle,
+        subtitle: context.locale.settings.changesRestart,
+        children: <Widget>[
+          S.ColorPickerSettingsTile(
+            settingKey: 'accent-color',
+            title: context.locale.settings.colorPrimary,
+            defaultValue: Theme.of(context).accentColor,
+          ),
+          S.ColorPickerSettingsTile(
+            settingKey: 'primary-color',
+            title: context.locale.settings.colorSecondary,
+            defaultValue: Theme.of(context).primaryColor,
+          ),
+          S.RadioModalSettingsTile(
+            settingKey: 'theme-mode',
+            title: context.locale.settings.colorTheme,
+            selected: 'dynamic',
+            values: {
+              "light": context.locale.settings.colorThemeLight,
+              "dark": context.locale.settings.colorThemeDark,
+              "dynamic": context.locale.settings.colorThemeDynamic,
+            },
+            onChange: (_) => Navigator.pop(context),
+          ),
+        ],
+      ),
+      S.SettingsGroup(
+        title: context.locale.settings.groupsBehaviorTitle,
+        children: <Widget>[
+          S.RadioModalSettingsTile(
+            settingKey: 'grade-display',
+            title: context.locale.settings.gradeDisplayLabel,
+            selected: GradeDisplay.decimal.serialized,
+            values: {
+              GradeDisplay.decimal.serialized:
+                  context.locale.settings.gradeDisplayDecimal,
+              GradeDisplay.letter.serialized:
+                  context.locale.settings.gradeDisplayLetter,
+              GradeDisplay.percentage.serialized:
+                  context.locale.settings.gradeDisplayPercentage,
+            },
+            onChange: (String value) {
+              final store = Provider.of<RegistroStore>(context, listen: false);
+              store.gradeDisplay = deserializeGradeDisplay(value);
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+      S.SettingsGroup(
+        title: context.locale.settings.groupsAdvancedTitle,
+        children: <Widget>[
+          S.SimpleSettingsTile(
+            title: context.locale.settings.restartAppTitle,
+            subtitle: context.locale.settings.restartAppSubtitle,
+            onTap: () async {
+              RestartWidget.restartApp(context);
+            },
+          )
+        ],
+      ),
+      if (kDebugMode)
         S.SettingsGroup(
-          title: context.locale.settings.groupsColorsTitle,
-          subtitle: context.locale.settings.changesRestart,
-          children: <Widget>[
-            S.ColorPickerSettingsTile(
-              settingKey: 'accent-color',
-              title: context.locale.settings.colorPrimary,
-              defaultValue: Theme.of(context).accentColor,
-            ),
-            S.ColorPickerSettingsTile(
-              settingKey: 'primary-color',
-              title: context.locale.settings.colorSecondary,
-              defaultValue: Theme.of(context).primaryColor,
-            ),
-            S.RadioModalSettingsTile(
-              settingKey: 'theme-mode',
-              title: context.locale.settings.colorTheme,
-              selected: 'dynamic',
-              values: {
-                "light": context.locale.settings.colorThemeLight,
-                "dark": context.locale.settings.colorThemeDark,
-                "dynamic": context.locale.settings.colorThemeDynamic,
-              },
-              onChange: (_) => Navigator.pop(context),
-            ),
-          ],
-        ),
-        S.SettingsGroup(
-          title: context.locale.settings.groupsBehaviorTitle,
-          children: <Widget>[
-            S.RadioModalSettingsTile(
-              settingKey: 'grade-display',
-              title: context.locale.settings.gradeDisplayLabel,
-              selected: GradeDisplay.decimal.serialized,
-              values: {
-                GradeDisplay.decimal.serialized:
-                    context.locale.settings.gradeDisplayDecimal,
-                GradeDisplay.letter.serialized:
-                    context.locale.settings.gradeDisplayLetter,
-                GradeDisplay.percentage.serialized:
-                    context.locale.settings.gradeDisplayPercentage,
-              },
-              onChange: (String value) {
-                final store =
-                    Provider.of<RegistroStore>(context, listen: false);
-                store.gradeDisplay = deserializeGradeDisplay(value);
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-        S.SettingsGroup(
-          title: context.locale.settings.groupsAdvancedTitle,
-          children: <Widget>[
+          title: "[DEBUG] Danger zone",
+          subtitle: "[DEBUG] Non usare questi tasti a meno che tu "
+              "non sappia cosa stai facendo",
+          children: [
             S.SimpleSettingsTile(
-              title: context.locale.settings.restartAppTitle,
-              subtitle: context.locale.settings.restartAppSubtitle,
+              title: "[DEBUG] Cancella tutte le impostazioni",
+              subtitle: "Non potrai più recuperare i dati una volta toccato "
+                  "questo pulsante.",
               onTap: () async {
-                RestartWidget.restartApp(context);
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                Navigator.popUntil(context, (route) => route.isFirst);
+                Navigator.pushReplacementNamed(context, "loading");
               },
             )
           ],
         ),
-        if (kDebugMode)
-          S.SettingsGroup(
-            title: "[DEBUG] Danger zone",
-            subtitle: "[DEBUG] Non usare questi tasti a meno che tu "
-                "non sappia cosa stai facendo",
-            children: [
-              S.SimpleSettingsTile(
-                title: "[DEBUG] Cancella tutte le impostazioni",
-                subtitle: "Non potrai più recuperare i dati una volta toccato "
-                    "questo pulsante.",
-                onTap: () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.clear();
-                  Navigator.popUntil(context, (route) => route.isFirst);
-                  Navigator.pushReplacementNamed(context, "loading");
-                },
-              )
-            ],
-          ),
-      ],
+    ];
+    return Scaffold(
+      appBar: GradientAppBar(
+        title: Text(context.locale.settings.title),
+      ),
+      body: ListView.builder(
+        // shrinkWrap: true,
+        itemCount: children.length,
+        itemBuilder: (BuildContext context, int index) {
+          return children[index];
+        },
+      ),
     );
   }
 

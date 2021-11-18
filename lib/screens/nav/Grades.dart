@@ -8,6 +8,7 @@ import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
@@ -75,7 +76,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasError)
             return Scaffold(
-              appBar: AppBar(
+              appBar: GradientAppBar(
                 title: Text(context.locale.drawer.grades),
               ),
               body: Text(
@@ -90,7 +91,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
           }
 
           return Scaffold(
-            appBar: AppBar(
+            appBar: GradientAppBar(
               title: Text(context.locale.drawer.grades),
             ),
             body: LoadingUI(),
@@ -109,7 +110,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
   Widget buildOk(BuildContext context, List<Grade> grades,
       Period? currentPeriod, List<String> subjects) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar(
         title: Text(context.locale.drawer.grades),
         leading: Builder(builder: (context) {
           return IconButton(
