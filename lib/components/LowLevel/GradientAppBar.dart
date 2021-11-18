@@ -9,6 +9,7 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget? leading;
   List<Widget>? actions;
   bool automaticallyImplyLeading;
+  double radius;
 
   GradientAppBar({
     Key? key,
@@ -17,6 +18,7 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.elevation = 4.0,
     this.actions,
     this.automaticallyImplyLeading = true,
+    this.radius = 15,
   }) : super();
 
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -32,10 +34,15 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
         elevation: elevation,
         automaticallyImplyLeading: automaticallyImplyLeading,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(radius),
+          ),
+        ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(15),
+              bottom: Radius.circular(radius),
             ),
             gradient: LinearGradient(
               begin: Alignment.topCenter,
