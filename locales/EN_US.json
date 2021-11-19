@@ -204,7 +204,9 @@
     "gradeDisplayLabel": "Grade display",
     "groupsAdvancedTitle": "Advanced",
     "restartAppTitle": "Restart app",
-    "restartAppSubtitle": "Apply changed settings and restart the application"
+    "restartAppSubtitle": "Apply changed settings and restart the application",
+    "chooseColor": "Choose a color",
+    "chooseOption": "Choose an option"
   },
   "reportCard": {
     "notAvailableTitle": "Your report card isn't ready yet",

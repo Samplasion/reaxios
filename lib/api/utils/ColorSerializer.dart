@@ -24,5 +24,6 @@ class ColorSerializer implements JsonConverter<Color, String> {
         "#",
       )
       .replaceAll(")", "")
-      .replaceAll("0x", "#");
+      .replaceAll("0x", "#")
+      .replaceAll("##", "#");
 }

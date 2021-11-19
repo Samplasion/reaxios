@@ -204,7 +204,9 @@
     "gradeDisplayLabel": "Stile voti",
     "groupsAdvancedTitle": "Avanzate",
     "restartAppTitle": "Riavvia app",
-    "restartAppSubtitle": "Applica i cambiamenti e riavvia l'app"
+    "restartAppSubtitle": "Applica i cambiamenti e riavvia l'app",
+    "chooseColor": "Scegli un colore",
+    "chooseOption": "Scegli un'opzione"
   },
   "reportCard": {
     "notAvailableTitle": "Pagella non disponibile",

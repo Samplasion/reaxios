@@ -204,7 +204,9 @@
     "gradeDisplayLabel": "",
     "groupsAdvancedTitle": "",
     "restartAppTitle": "",
-    "restartAppSubtitle": ""
+    "restartAppSubtitle": "",
+    "chooseColor": "",
+    "chooseOption": ""
   },
   "reportCard": {
     "notAvailableTitle": "",
