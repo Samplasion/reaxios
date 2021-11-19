@@ -43,12 +43,6 @@ Map<String, dynamic> _$AuthorizationToJson(Authorization instance) =>
           const DateSerializer().toJson(instance.authorizedDate),
     };
 
-Request _$RequestFromJson(Map<String, dynamic> json) {
-  return Request();
-}
-
-Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{};
-
 APIAuthorizations _$APIAuthorizationsFromJson(Map<String, dynamic> json) {
   return APIAuthorizations(
     idAlunno: json['idAlunno'] as String,
