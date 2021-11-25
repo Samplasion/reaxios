@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 
@@ -17,7 +18,7 @@ class RegistroAboutListItem extends StatelessWidget {
 
     return AboutListTile(
       icon: Icon(Icons.info),
-      applicationName: app.appName,
+      applicationName: kIsWeb ? "Registro" : app.appName,
       applicationIcon: Image(
         width: 48,
         height: 48,
@@ -39,6 +40,7 @@ class RegistroAboutListItem extends StatelessWidget {
                   style: textStyle.copyWith(fontWeight: FontWeight.bold),
                   text: "Simoman3"),
               TextSpan(
+                  style: textStyle,
                   text: context.locale.about.longDescription.split("###")[1]),
             ],
           ),

@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
@@ -23,6 +25,13 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
 
   FutureOr<dynamic> Function() _checkConnection(int delay) {
     return () async {
+      // If we're connected through Web, then it's basically
+      // guaranteed that we're online
+      if (kIsWeb)
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          RestartWidget.restartApp(context);
+        });
+
       if (!mounted) return;
 
       print("[NOI] Checking...");

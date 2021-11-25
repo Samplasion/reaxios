@@ -162,7 +162,8 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .map(
           (e) => ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: max(350, MediaQuery.of(context).size.width * 0.65),
+              maxWidth:
+                  (MediaQuery.of(context).size.width * 0.65).clamp(350, 500),
             ),
             child: BigCard(
               color: accent,

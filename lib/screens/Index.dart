@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
@@ -77,6 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   FutureOr<dynamic> Function() _checkConnection(int delay) {
     return () async {
+      if (kIsWeb) return;
+
       if (!mounted) return;
 
       // print("[NOI] Checking...");
