@@ -61,6 +61,12 @@ class AuthorizationListItem extends StatelessWidget {
         ? "\n" + context.locale.authorizations.calculated
         : "\n" + context.locale.authorizations.notCalculated;
 
+    final lessonHour = authorization.lessonHour == null
+        ? ""
+        : " — " +
+            context.locale.main.lessonHour
+                .format([authorization.lessonHour.toString()]);
+
     final tile = CardListItem(
       leading: leading,
       title: context.locale.authorizations
@@ -71,10 +77,11 @@ class AuthorizationListItem extends StatelessWidget {
           p: TextStyle(color: Theme.of(context).textTheme.caption!.color),
         ),
       ),
-      details: Text("${context.dateToString(authorization.startDate)}" +
-          (!authorization.endDate.isSameDay(authorization.startDate)
-              ? " - ${context.dateToString(authorization.endDate)}"
-              : "")),
+      details: Text(
+          "${context.dateToString(authorization.startDate)}$lessonHour" +
+              (!authorization.endDate.isSameDay(authorization.startDate)
+                  ? " - ${context.dateToString(authorization.endDate)}"
+                  : "")),
       onClick: !onClick
           ? null
           : () {
