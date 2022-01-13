@@ -206,7 +206,8 @@
     "restartAppTitle": "Riavvia app",
     "restartAppSubtitle": "Applica i cambiamenti e riavvia l'app",
     "chooseColor": "Scegli un colore",
-    "chooseOption": "Scegli un'opzione"
+    "chooseOption": "Scegli un'opzione",
+    "gradeDisplayPrecise": "Preciso"
   },
   "reportCard": {
     "notAvailableTitle": "Pagella non disponibile",

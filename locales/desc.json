@@ -206,7 +206,8 @@
     "restartAppTitle": "",
     "restartAppSubtitle": "",
     "chooseColor": "",
-    "chooseOption": ""
+    "chooseOption": "",
+    "gradeDisplayPrecise": ""
   },
   "reportCard": {
     "notAvailableTitle": "",

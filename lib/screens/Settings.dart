@@ -58,6 +58,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               context.locale.settings.gradeDisplayLetter,
           GradeDisplay.percentage.serialized:
               context.locale.settings.gradeDisplayPercentage,
+          GradeDisplay.precise.serialized:
+              context.locale.settings.gradeDisplayPrecise,
         },
         onChange: (dynamic value) {
           print("Value changed: $value");

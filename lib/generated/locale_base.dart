@@ -417,6 +417,7 @@ class Localesettings {
   String get restartAppSubtitle => _data["restartAppSubtitle"]!;
   String get chooseColor => _data["chooseColor"]!;
   String get chooseOption => _data["chooseOption"]!;
+  String get gradeDisplayPrecise => _data["gradeDisplayPrecise"]!;
 }
 
 class LocalereportCard {

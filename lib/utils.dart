@@ -296,6 +296,8 @@ extension ContextUtils on BuildContext {
           return "$grade";
       case GradeDisplay.percentage:
         return "${(grade * 10).floor()}%";
+      case GradeDisplay.precise:
+        return axios_utils.formatNumber(grade);
       default:
         return "N/A";
     }

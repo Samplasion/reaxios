@@ -1,4 +1,4 @@
-enum GradeDisplay { letter, decimal, percentage }
+enum GradeDisplay { letter, decimal, percentage, precise }
 
 extension Serialization on GradeDisplay {
   String get serialized {
@@ -9,6 +9,8 @@ extension Serialization on GradeDisplay {
         return 'decimal';
       case GradeDisplay.percentage:
         return 'percentage';
+      case GradeDisplay.precise:
+        return 'precise';
     }
   }
 }
@@ -21,6 +23,8 @@ GradeDisplay deserializeGradeDisplay(String serialized) {
       return GradeDisplay.decimal;
     case 'percentage':
       return GradeDisplay.percentage;
+    case 'precise':
+      return GradeDisplay.precise;
   }
   return GradeDisplay.decimal;
 }
