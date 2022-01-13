@@ -51,9 +51,9 @@ class BulletinListItem extends StatelessWidget {
       color: bg,
     );
     final downloadIcon = [
-      GradientCircleAvatar(
+      CircleAvatar(
         child: Container(),
-        color: Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).cardColor,
         radius: 12,
       ),
       GradientCircleAvatar(
