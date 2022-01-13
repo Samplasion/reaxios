@@ -94,7 +94,13 @@ class Utils {
         }
       }
     } else {
-      var coefficient = (length / words.length).round();
+      if (input
+          .toLowerCase()
+          .split(" ")
+          .every((element) => ignoreList.contains(element))) {
+        return generateAbbreviation(length, input, ignoreList: []);
+      }
+      var coefficient = (length / max(words.length, 1)).round();
       for (var word in words) {
         for (var i = 0; i < coefficient && out.length < length; i++) {
           out += word[i];
