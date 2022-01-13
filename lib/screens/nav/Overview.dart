@@ -154,7 +154,10 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .where((t) => t.date.isSameDay(pastTopics.last.date))
         .toList()
       ..sort((a, b) => a.lessonHour.compareTo(b.lessonHour));
-    final List<Grade> latestGrades = grades.reversed.take(3).toList();
+    final List<Grade> latestGrades = Set<Grade>.from(
+            grades.reversed.take(3).toList()
+              ..addAll(grades.where((g) => !g.seen)))
+        .toList();
 
     final accent = Theme.of(context).accentColor;
 
