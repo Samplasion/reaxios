@@ -308,8 +308,8 @@ extension ContextUtils on BuildContext {
     bool short = false,
     includeTime = false,
     includeSeconds = false,
-    includeMonth = false, // noop
-    includeYear = false, // noop
+    @deprecated includeMonth = false, // noop
+    @deprecated includeYear = false, // noop
   }) {
     String res;
     if (short) {
