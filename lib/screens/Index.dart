@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
     };
   }
 
-  StreamSubscription? _subscription;
+  // StreamSubscription? _subscription;
 
   void initSession() async {
     final store = Provider.of<RegistroStore>(context, listen: false);
@@ -145,38 +145,38 @@ class _HomeScreenState extends State<HomeScreen> {
       lastStudentUUID = session.student!.studentUUID;
     });
 
-    _subscription =
-        widget.store.payloadController.stream.listen((String? payload) async {
-      if (payload == null) return;
-      List<String> data = payload.split(":");
-      String action = data.first;
+    // _subscription =
+    //     widget.store.payloadController.stream.listen((String? payload) async {
+    //   if (payload == null) return;
+    //   List<String> data = payload.split(":");
+    //   String action = data.first;
 
-      switch (action) {
-        case "grade":
-          String id = data[1];
-          Grade grade = (await (widget.store.grades ?? Future.value(<Grade>[])))
-              .firstWhere((g) => g.id == id, orElse: () => Grade.empty());
+    //   switch (action) {
+    //     case "grade":
+    //       String id = data[1];
+    //       Grade grade = (await (widget.store.grades ?? Future.value(<Grade>[])))
+    //           .firstWhere((g) => g.id == id, orElse: () => Grade.empty());
 
-          if (grade.id.isNotEmpty) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => GradeView(
-                  grade: grade,
-                  store: widget.store,
-                  session: session,
-                  reload: () => setState(() {}),
-                ),
-              ),
-            );
-          }
-      }
-    });
+    //       if (grade.id.isNotEmpty) {
+    //         Navigator.push(
+    //           context,
+    //           MaterialPageRoute(
+    //             builder: (context) => GradeView(
+    //               grade: grade,
+    //               store: widget.store,
+    //               session: session,
+    //               reload: () => setState(() {}),
+    //             ),
+    //           ),
+    //         );
+    //       }
+    //   }
+    // });
   }
 
   @override
   void dispose() {
-    _subscription?.cancel();
+    // _subscription?.cancel();
     super.dispose();
   }
 
