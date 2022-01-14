@@ -139,15 +139,17 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       initREData();
     }
 
-    final filterTmr = (Assignment a) {
-      final now = DateTime.now();
-      return a.date.isAfter(now) &&
-              a.date.isBefore(now.add(Duration(days: 1))) ||
-          a.date.isSameDay(now);
-    };
+    // final filterTmr = (Assignment a) {
+    //   final now = DateTime.now();
+    //   return a.date.isAfter(now) &&
+    //           a.date.isBefore(now.add(Duration(days: 1))) ||a.date.isSameDay(now);
+    // };
 
-    final List<Assignment> tmrAssignments =
-        assignments.where(filterTmr).toList();
+    final now = DateTime.now();
+    final List<Assignment> tmrAssignments = assignments
+        .where((a) =>
+            a.date.isAfter(now) && a.date.isBefore(now.add(Duration(days: 1))))
+        .toList();
     final List<Topic> pastTopics =
         topics.where((t) => t.date.isBefore(DateTime.now())).toList();
     final List<Topic> latestTopics = pastTopics
@@ -307,13 +309,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     ]);
   }
 
-  Widget _getAssignmentTimeline(List<Assignment> assignments) {
-    final now = DateTime.now();
-    final List<Assignment> tmrAssignments = assignments
-        .where((a) =>
-            a.date.isAfter(now) && a.date.isBefore(now.add(Duration(days: 1))))
-        .toList();
-
+  Widget _getAssignmentTimeline(List<Assignment> tmrAssignments) {
     return Column(
       children: [
         for (final assignment in tmrAssignments)
