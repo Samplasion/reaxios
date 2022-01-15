@@ -35,9 +35,9 @@ class GradeView extends StatefulWidget {
 
 class _GradeViewState extends State<GradeView> {
   Grade get grade => widget.grade;
-  get session => widget.session;
-  get store => widget.store;
-  get reload => widget.reload;
+  Axios get session => widget.session;
+  RegistroStore get store => widget.store;
+  void Function()? get reload => widget.reload;
 
   Key key = UniqueKey();
 
@@ -133,7 +133,7 @@ class _GradeViewState extends State<GradeView> {
                             content: Text(context.locale.grades.seenSnackbar),
                           ),
                         );
-                      }).onError(() {
+                      }).onError((_, __) {
                         context
                             .showSnackbar(context.locale.grades.errorSnackbar);
                       });

@@ -8,6 +8,7 @@ abstract class _BaseTuple {
   operator [](int i);
   int get hashCode;
 
+  // ignore: unused_element
   factory _BaseTuple.fromIterable(Iterable iterable) {
     throw "Unimplemented";
   }

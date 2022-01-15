@@ -43,7 +43,8 @@
     "notices": "Note disciplinari",
     "reportCards": "Pagelle",
     "settings": "Impostazioni",
-    "logOut": "Esci"
+    "logOut": "Esci",
+    "calculator": "Calcolatrice"
   },
   "about": {
     "aboutApp": "Informazioni su Registro",
@@ -232,5 +233,24 @@
   },
   "topics": {
     "empty": "Non hai ancora avuto lezioni."
+  },
+  "calculator": {
+    "gradeCalculatorBottomStart": "Prendi",
+    "gradeCalculatorBottomMiddle1": "",
+    "gradeCalculatorBottomMiddle2": "per raggiundere una media di",
+    "gradeCalculatorBottomEnd": "",
+    "addGrade": "Aggiungi voto",
+    "addFromSubject": "Aggiungi da materia",
+    "addFromScratch": "Aggiungi nuovo",
+    "infoTitle": "Nessun voto",
+    "infoMessage": "Aggiungi dei voti col pulsante in fondo",
+    "addTooltip": "Aggiungi voto",
+    "unknownSubject": "Materia sconosciuta",
+    "unknownPeriod": "Periodo sconosciuto",
+    "selectAtLeast2": "Aggiungi almeno due voti per continuare",
+    "noGrades": "Non ci sono voti per questa materia",
+    "gradeOutOfRange": "Il voto deve essere un numero compreso tra 1 e 10 inclusi.",
+    "editGrade": "Modifica voto",
+    "average": "Media: "
   }
 }

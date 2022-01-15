@@ -43,7 +43,8 @@
     "notices": "Disciplinary notices",
     "reportCards": "Report cards",
     "settings": "Settings",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "calculator": "Calculator"
   },
   "about": {
     "aboutApp": "About Registro",
@@ -232,5 +233,24 @@
   },
   "topics": {
     "empty": "It looks like you haven't had lessons yet."
+  },
+  "calculator": {
+    "gradeCalculatorBottomStart": "Get",
+    "gradeCalculatorBottomMiddle1": "time(s)",
+    "gradeCalculatorBottomMiddle2": "to reach an average of",
+    "gradeCalculatorBottomEnd": "",
+    "addGrade": "Add grade",
+    "addFromSubject": "Add from subject",
+    "addFromScratch": "Add new",
+    "infoTitle": "No grades",
+    "infoMessage": "Add some grades using the button below",
+    "addTooltip": "Add grade",
+    "unknownSubject": "Unknown subject",
+    "unknownPeriod": "Unknown period",
+    "selectAtLeast2": "Add at least two grades to continue",
+    "noGrades": "There are no grades for this subject",
+    "gradeOutOfRange": "The grade must be a number between 1 and 10, inclusive.",
+    "editGrade": "Edit grade",
+    "average": "Average: "
   }
 }

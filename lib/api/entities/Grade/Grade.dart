@@ -150,6 +150,38 @@ class Grade implements AbstractJson {
   }
 
   Map<String, dynamic> toJson() => _$GradeToJson(this);
+
+  Grade copyWith({
+    String? id,
+    String? subjectID,
+    String? subject,
+    DateTime? date,
+    String? kind,
+    String? prettyGrade,
+    double? grade,
+    double? weight,
+    String? comment,
+    String? teacher,
+    bool? seen,
+    String? seenBy,
+    DateTime? seenOn,
+  }) {
+    return Grade(
+      id: id ?? this.id,
+      subjectID: subjectID ?? this.subjectID,
+      subject: subject ?? this.subject,
+      date: date ?? this.date,
+      kind: kind ?? this.kind,
+      prettyGrade: prettyGrade ?? this.prettyGrade,
+      grade: grade ?? this.grade,
+      weight: weight ?? this.weight,
+      comment: comment ?? this.comment,
+      teacher: teacher ?? this.teacher,
+      seen: seen ?? this.seen,
+      seenBy: seenBy ?? this.seenBy,
+      seenOn: seenOn ?? this.seenOn,
+    );
+  }
 }
 
 @JsonSerializable()

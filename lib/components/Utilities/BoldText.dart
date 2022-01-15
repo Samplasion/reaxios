@@ -9,4 +9,16 @@ class BoldText extends TextSpan {
             fontWeight: FontWeight.bold,
           ),
         );
+
+  Text asText({
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+  }) =>
+      Text.rich(
+        this,
+        textAlign: textAlign,
+        maxLines: maxLines,
+        overflow: overflow,
+      );
 }

@@ -57,6 +57,8 @@ class LocaleBase {
   LocaledisciplinaryNotices get disciplinaryNotices => _disciplinaryNotices;
   late Localetopics _topics;
   Localetopics get topics => _topics;
+  late Localecalculator _calculator;
+  Localecalculator get calculator => _calculator;
 
   void initAll() {
     _main = Localemain(Map<String, String>.from(_data['main']));
@@ -79,6 +81,7 @@ class LocaleBase {
     _assignments = Localeassignments(Map<String, String>.from(_data['assignments']));
     _disciplinaryNotices = LocaledisciplinaryNotices(Map<String, String>.from(_data['disciplinaryNotices']));
     _topics = Localetopics(Map<String, String>.from(_data['topics']));
+    _calculator = Localecalculator(Map<String, String>.from(_data['calculator']));
   }
 }
 
@@ -150,6 +153,7 @@ class Localedrawer {
   String get reportCards => _data["reportCards"]!;
   String get settings => _data["settings"]!;
   String get logOut => _data["logOut"]!;
+  String get calculator => _data["calculator"]!;
 }
 
 class Localeabout {
@@ -474,5 +478,32 @@ class Localetopics {
   }
 
   String get empty => _data["empty"]!;
+}
+
+class Localecalculator {
+  late final Map<String, String> _data;
+  Localecalculator(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get gradeCalculatorBottomStart => _data["gradeCalculatorBottomStart"]!;
+  String get gradeCalculatorBottomMiddle1 => _data["gradeCalculatorBottomMiddle1"]!;
+  String get gradeCalculatorBottomMiddle2 => _data["gradeCalculatorBottomMiddle2"]!;
+  String get gradeCalculatorBottomEnd => _data["gradeCalculatorBottomEnd"]!;
+  String get addGrade => _data["addGrade"]!;
+  String get addFromSubject => _data["addFromSubject"]!;
+  String get addFromScratch => _data["addFromScratch"]!;
+  String get infoTitle => _data["infoTitle"]!;
+  String get infoMessage => _data["infoMessage"]!;
+  String get addTooltip => _data["addTooltip"]!;
+  String get unknownSubject => _data["unknownSubject"]!;
+  String get unknownPeriod => _data["unknownPeriod"]!;
+  String get selectAtLeast2 => _data["selectAtLeast2"]!;
+  String get noGrades => _data["noGrades"]!;
+  String get gradeOutOfRange => _data["gradeOutOfRange"]!;
+  String get editGrade => _data["editGrade"]!;
+  String get average => _data["average"]!;
 }
 

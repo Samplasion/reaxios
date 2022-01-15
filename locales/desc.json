@@ -43,7 +43,8 @@
     "notices": "",
     "reportCards": "",
     "settings": "",
-    "logOut": ""
+    "logOut": "",
+    "calculator": ""
   },
   "about": {
     "aboutApp": "\"About Registro\"",
@@ -232,5 +233,24 @@
   },
   "topics": {
     "empty": ""
+  },
+  "calculator": {
+    "gradeCalculatorBottomStart": "",
+    "gradeCalculatorBottomMiddle1": "",
+    "gradeCalculatorBottomMiddle2": "",
+    "gradeCalculatorBottomEnd": "",
+    "addGrade": "",
+    "addFromSubject": "",
+    "addFromScratch": "",
+    "infoTitle": "",
+    "infoMessage": "",
+    "addTooltip": "",
+    "unknownSubject": "",
+    "unknownPeriod": "",
+    "selectAtLeast2": "",
+    "noGrades": "",
+    "gradeOutOfRange": "",
+    "editGrade": "",
+    "average": "Add a space after \":\""
   }
 }

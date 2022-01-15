@@ -40,6 +40,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import '../../main.dart';
 import 'nav/BulletinBoard.dart';
+import 'nav/Calculator.dart';
 import 'nav/ReportCards.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -214,6 +215,20 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
+        Builder(
+          builder: (_) => FutureBuilder<Period?>(
+            future: widget.store.getCurrentPeriod(session),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) return Text("${snapshot.error}");
+              // if (!snapshot.hasData) return LoadingUI();
+              return CalculatorPane(
+                session: session,
+                openMainDrawer: () => Scaffold.of(context).openDrawer(),
+                period: snapshot.data,
+              );
+            },
+          ),
+        ),
         TopicsPane(session: session, store: widget.store),
         BulletinsPane(session: session, store: widget.store),
         NotesPane(session: session),
@@ -259,6 +274,16 @@ class _HomeScreenState extends State<HomeScreen> {
         [
           Icon(Icons.star),
           Text(context.locale.drawer.grades),
+          false,
+          () {
+            widget.store.fetchGrades(session);
+            widget.store.fetchPeriods(session);
+            widget.store.fetchSubjects(session);
+          }
+        ],
+        [
+          Icon(Icons.calculate),
+          Text(context.locale.drawer.calculator),
           false,
           () {
             widget.store.fetchGrades(session);
