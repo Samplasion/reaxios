@@ -299,7 +299,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         delegate: CustomSliverDelegate(
           hideTitleWhenExpanded: false,
           openMenu: widget.openMainDrawer,
-          expandedHeight: 185,
+          expandedHeight: MediaQuery.of(context).padding.top + 185,
           collapsedHeight: MediaQuery.of(context).padding.top + toolbarHeight,
           period: period,
           student: student,
@@ -348,8 +348,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     final RegistroStore store = context.watch<RegistroStore>();
-
-    final appBarSize = expandedHeight - shrinkOffset;
+    final appBarSize = (expandedHeight - shrinkOffset);
     final cardTopPosition = (expandedHeight / 2 - shrinkOffset) / 2; // / 10;
     final proportion = 2 - (expandedHeight / appBarSize);
     final percent = proportion < 0 || proportion > 1 ? 0.0 : proportion;
@@ -380,13 +379,16 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
               bottom: 0.0,
               child: Opacity(
                 opacity: percent,
-                child: Transform.scale(
-                  scale: map(percent, 0, 1, 1.12, 1).toDouble(),
-                  child: UserCard(
-                    student: student,
-                    period: period,
-                    store: store,
-                    switchToTab: switchToTab,
+                child: Transform.rotate(
+                  angle: (1 - percent) * 0.07,
+                  child: Transform.scale(
+                    scale: map(percent, 0, 1, 0.88, 1).toDouble(),
+                    child: UserCard(
+                      student: student,
+                      period: period,
+                      store: store,
+                      switchToTab: switchToTab,
+                    ),
                   ),
                 ),
               ),
