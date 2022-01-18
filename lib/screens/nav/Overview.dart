@@ -34,6 +34,7 @@ class OverviewPane extends StatefulWidget {
     required this.student,
     required this.store,
     required this.openMainDrawer,
+    required this.switchToTab,
   }) : super(key: key);
 
   final Axios session;
@@ -41,6 +42,7 @@ class OverviewPane extends StatefulWidget {
   final Student student;
   final RegistroStore store;
   final Function() openMainDrawer;
+  final void Function(int index) switchToTab;
 
   @override
   _OverviewPaneState createState() => _OverviewPaneState();
@@ -301,6 +303,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
           collapsedHeight: MediaQuery.of(context).padding.top + toolbarHeight,
           period: period,
           student: student,
+          switchToTab: widget.switchToTab,
         ),
       ),
       SliverList(
@@ -326,6 +329,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   final void Function() openMenu;
   final Student student;
   final Period? period;
+  final void Function(int index) switchToTab;
 
   CustomSliverDelegate({
     required this.collapsedHeight,
@@ -333,6 +337,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     required this.openMenu,
     required this.student,
     required this.period,
+    required this.switchToTab,
     this.hideTitleWhenExpanded = true,
   });
 
@@ -381,6 +386,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                     student: student,
                     period: period,
                     store: store,
+                    switchToTab: switchToTab,
                   ),
                 ),
               ),
@@ -403,15 +409,17 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class UserCard extends StatelessWidget {
-  UserCard({
+  const UserCard({
     required this.student,
     this.period,
     required this.store,
+    required this.switchToTab,
   });
 
   final Student student;
   final Period? period;
   final RegistroStore store;
+  final void Function(int index) switchToTab;
 
   bg(BuildContext context) => Theme.of(context).accentColor;
   get smallTextOpacity => 0.76;
@@ -422,10 +430,6 @@ class UserCard extends StatelessWidget {
       Icon(Icons.account_circle)
           .iconSize(50)
           .iconColor(fg)
-          // .decorated(
-          //   color: bg(context),
-          //   borderRadius: BorderRadius.circular(30),
-          // )
           .constrained(height: 50, width: 50)
           .padding(right: 10),
       <Widget>[
@@ -466,7 +470,8 @@ class UserCard extends StatelessWidget {
           return _buildUserStatsItem(
               context,
               gradeAverage(relevantGrades).toString(),
-              context.locale.overview.average);
+              context.locale.overview.average,
+              3);
         },
         future: store.grades,
       ),
@@ -477,7 +482,7 @@ class UserCard extends StatelessWidget {
                 context, "...", context.locale.overview.grades);
           }
           return _buildUserStatsItem(context, snapshot.data!.length.toString(),
-              context.locale.overview.grades);
+              context.locale.overview.grades, 3);
         },
         future: store.grades,
       ),
@@ -488,7 +493,7 @@ class UserCard extends StatelessWidget {
                 context, "...", context.locale.overview.assignments);
           }
           return _buildUserStatsItem(context, snapshot.data!.length.toString(),
-              context.locale.overview.assignments);
+              context.locale.overview.assignments, 2);
         },
         future: store.assignments,
       ),
@@ -499,7 +504,7 @@ class UserCard extends StatelessWidget {
                 context, "...", context.locale.overview.topics);
           }
           return _buildUserStatsItem(context, snapshot.data!.length.toString(),
-              context.locale.overview.topics);
+              context.locale.overview.topics, 5);
         },
         future: store.topics,
       ),
@@ -508,12 +513,15 @@ class UserCard extends StatelessWidget {
         .padding(vertical: 10);
   }
 
-  Widget _buildUserStatsItem(BuildContext context, String value, String text) {
+  Widget _buildUserStatsItem(BuildContext context, String value, String text,
+      [int? index]) {
     final fg = getContrastText(bg(context));
     return <Widget>[
       Text(value).fontSize(20).textColor(fg).padding(bottom: 5),
       Text(text).textColor(fg.withOpacity(smallTextOpacity)).fontSize(12),
-    ].toColumn();
+    ]
+        .toColumn()
+        .gestures(onTap: index == null ? null : () => switchToTab(index));
   }
 
   @override

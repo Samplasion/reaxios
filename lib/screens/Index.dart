@@ -196,6 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
             student: session.student ?? Student.empty(),
             store: widget.store,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
+            switchToTab: _switchToTab,
           ),
         ),
         CalendarPane(session: session),
@@ -371,10 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selected: index == selectedPane,
         onTap: () {
           /* if (width <= kTabBreakpoint) */ Navigator.pop(context);
-          runCallback(index);
-          setState(() {
-            selectedPane = index;
-          });
+          _switchToTab(index);
         },
       ));
     }
@@ -469,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: SingleChildScrollView(
               controller: drawerController,
               child: ListTileTheme(
-                selectedColor: Theme.of(context).accentColor,
+                selectedColor: Theme.of(context).colorScheme.secondary,
                 child: AnimatedCrossFade(
                   duration: Duration(milliseconds: 125),
                   crossFadeState: showUserDetails
@@ -596,5 +594,12 @@ class _HomeScreenState extends State<HomeScreen> {
         return alert;
       },
     );
+  }
+
+  void _switchToTab(int index) {
+    runCallback(index);
+    setState(() {
+      selectedPane = index;
+    });
   }
 }
