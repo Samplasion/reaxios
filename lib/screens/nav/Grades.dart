@@ -84,7 +84,9 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
                 "${snapshot.error}\n${snapshot is Error ? snapshot.stackTrace : ""}",
               ),
             );
-          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          if (snapshot.hasData &&
+              snapshot.data!.isNotEmpty &&
+              snapshot.connectionState == ConnectionState.done) {
             final grades = snapshot.data![0] as List<Grade>? ?? [];
             final subjects = snapshot.data![1] as List<String>? ?? [];
             final period = snapshot.data![2] as Period?;
