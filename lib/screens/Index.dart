@@ -536,7 +536,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: KeyedSubtree(
               key: ValueKey(selectedPane),
               child: Scaffold(
-                extendBodyBehindAppBar: true,
                 appBar: drawerItems[selectedPane][2]
                     ? GradientAppBar(
                         title: drawerItems[selectedPane][1],
