@@ -113,6 +113,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
   Widget buildOk(BuildContext context, List<Grade> grades,
       Period? currentPeriod, List<String> subjects) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: GradientAppBar(
         title: Text(context.locale.drawer.grades),
         leading: Builder(builder: (context) {
@@ -123,14 +124,19 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
           );
         }),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(context, grades, currentPeriod),
-            MaxWidthContainer(
-              child: _buildSubjects(context, subjects, grades, currentPeriod),
-            ).center().padding(bottom: 8),
-          ],
+      body: SafeArea(
+        bottom: false,
+        left: false,
+        right: false,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildHeader(context, grades, currentPeriod),
+              MaxWidthContainer(
+                child: _buildSubjects(context, subjects, grades, currentPeriod),
+              ).center().padding(bottom: 8),
+            ],
+          ),
         ),
       ),
     );
