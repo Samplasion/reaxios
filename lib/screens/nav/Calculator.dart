@@ -477,7 +477,7 @@ class _SubjectSelectorBottomSheetState
   @override
   void initState() {
     super.initState();
-    _selectedSubject = widget.subjects.first;
+    _selectedSubject = (widget.subjects..sort((a, b) => a.compareTo(b))).first;
   }
 
   @override
@@ -516,45 +516,40 @@ class _SubjectSelectorBottomSheetState
               }
             },
           ),
-          if (subjectGrades.isNotEmpty) ...[
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: subjectGrades.length,
-              itemBuilder: (context, index) {
-                final grade = subjectGrades.elementAt(index);
-                return CheckboxListTile(
-                  secondary: GradeAvatar(
-                    grade: grade,
-                  ),
-                  title: Text(grade.teacher),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (grade.period.isNotEmpty) Text(grade.period),
-                      const SizedBox(height: 4),
-                      Text(
-                        context.dateToString(grade.date),
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                    ],
-                  ),
-                  isThreeLine: true,
-                  value: _grades.contains(grade),
-                  onChanged: (isChecked) {
-                    setState(() {
-                      if (isChecked == true) {
-                        _grades.add(grade);
-                      } else {
-                        _grades.remove(grade);
-                      }
-                    });
-                  },
-                  activeColor: Theme.of(context).colorScheme.primary,
-                  checkColor: Theme.of(context).colorScheme.onPrimary,
-                );
-              },
-            )
-          ] else ...[
+          if (subjectGrades.isNotEmpty)
+            ...subjectGrades.map((grade) {
+              return CheckboxListTile(
+                secondary: GradeAvatar(
+                  grade: grade,
+                ),
+                title: Text(grade.teacher),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (grade.period.isNotEmpty) Text(grade.period),
+                    const SizedBox(height: 4),
+                    Text(
+                      context.dateToString(grade.date),
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ],
+                ),
+                isThreeLine: true,
+                value: _grades.contains(grade),
+                onChanged: (isChecked) {
+                  setState(() {
+                    if (isChecked == true) {
+                      _grades.add(grade);
+                    } else {
+                      _grades.remove(grade);
+                    }
+                  });
+                },
+                activeColor: Theme.of(context).colorScheme.primary,
+                checkColor: Theme.of(context).colorScheme.onPrimary,
+              );
+            })
+          else ...[
             Text(
               context.locale.calculator.noGrades,
               textAlign: TextAlign.center,
