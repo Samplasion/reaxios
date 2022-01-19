@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animations/animations.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -520,34 +521,50 @@ class _HomeScreenState extends State<HomeScreen> {
         child: MaybeMasterDetail(
           key: mdKey,
           master: _getDrawer(),
-          detail: Scaffold(
-            appBar: drawerItems[selectedPane][2]
-                ? GradientAppBar(
-                    title: drawerItems[selectedPane][1],
-                    leading: Builder(builder: (context) {
-                      return IconButton(
-                        tooltip: MaterialLocalizations.of(context)
-                            .openAppDrawerTooltip,
-                        onPressed: () => Scaffold.of(context).openDrawer(),
-                        icon: Icon(Icons.menu),
-                      );
-                    }),
-                  )
-                : null,
-            drawer: _getDrawer(),
-            body: loading
-                ? LoadingUI(colorful: true, showHints: true)
-                : Builder(builder: (context) {
-                    return Actions(
-                      actions: {
-                        MenuIntent:
-                            CallbackAction<MenuIntent>(onInvoke: (intent) {
-                          Scaffold.of(context).openDrawer();
-                        })
-                      },
-                      child: panes[selectedPane],
-                    );
-                  }),
+          detail: PageTransitionSwitcher(
+            transitionBuilder: (
+              Widget child,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return FadeThroughTransition(
+                child: child,
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+              );
+            },
+            child: KeyedSubtree(
+              key: ValueKey(selectedPane),
+              child: Scaffold(
+                appBar: drawerItems[selectedPane][2]
+                    ? GradientAppBar(
+                        title: drawerItems[selectedPane][1],
+                        leading: Builder(builder: (context) {
+                          return IconButton(
+                            tooltip: MaterialLocalizations.of(context)
+                                .openAppDrawerTooltip,
+                            onPressed: () => Scaffold.of(context).openDrawer(),
+                            icon: Icon(Icons.menu),
+                          );
+                        }),
+                      )
+                    : null,
+                drawer: _getDrawer(),
+                body: loading
+                    ? LoadingUI(colorful: true, showHints: true)
+                    : Builder(builder: (context) {
+                        return Actions(
+                          actions: {
+                            MenuIntent:
+                                CallbackAction<MenuIntent>(onInvoke: (intent) {
+                              Scaffold.of(context).openDrawer();
+                            })
+                          },
+                          child: panes[selectedPane],
+                        );
+                      }),
+              ),
+            ),
           ),
         ),
       ),
