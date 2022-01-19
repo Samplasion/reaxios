@@ -87,8 +87,10 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
       child: () {
         if (widget.store.reportCards == null || widget.store.periods == null)
           return LoadingUI();
-        if (widget.store.reportCards!.status == FutureStatus.fulfilled ||
-            widget.store.periods!.status == FutureStatus.fulfilled)
+        if (widget.store.reportCards!.value != null &&
+            widget.store.periods!.value != null &&
+            (widget.store.reportCards!.status == FutureStatus.fulfilled ||
+                widget.store.periods!.status == FutureStatus.fulfilled))
           return buildOk(context, widget.store.reportCards!.value!,
               widget.store.periods!.value!);
         if (widget.store.reportCards!.status == FutureStatus.rejected ||
