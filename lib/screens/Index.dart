@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         CalendarPane(session: session),
         Builder(
-          builder: (_) => AssignmentsPane(
+          builder: (context) => AssignmentsPane(
             session: session,
             store: widget.store,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
@@ -238,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Builder(
-          builder: (_) => TopicsPane(
+          builder: (context) => TopicsPane(
             session: session,
             store: widget.store,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
