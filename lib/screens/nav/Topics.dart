@@ -122,6 +122,11 @@ class _TopicsPaneState extends State<TopicsPane> {
         controller: _endDrawerController,
         slivers: [
           SliverToBoxAdapter(
+            child: SizedBox(
+              height: MediaQuery.of(context).padding.top,
+            ),
+          ),
+          SliverToBoxAdapter(
             child: ListTile(
               leading: GradientCircleAvatar(
                 color: topics.any(hasAny)
@@ -179,7 +184,12 @@ class _TopicsPaneState extends State<TopicsPane> {
               },
               childCount: subjects.length - 1,
             ),
-          )
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: MediaQuery.of(context).padding.bottom,
+            ),
+          ),
         ],
       ),
     );

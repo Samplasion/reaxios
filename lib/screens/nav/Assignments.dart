@@ -128,6 +128,11 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
         controller: _endDrawerController,
         slivers: [
           SliverToBoxAdapter(
+            child: SizedBox(
+              height: MediaQuery.of(context).padding.top,
+            ),
+          ),
+          SliverToBoxAdapter(
             child: ListTile(
               leading: GradientCircleAvatar(
                 color: assignments.any(hasAny)
@@ -185,7 +190,12 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
               },
               childCount: subjects.length - 1,
             ),
-          )
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: MediaQuery.of(context).padding.bottom,
+            ),
+          ),
         ],
       ),
     );
