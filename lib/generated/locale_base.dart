@@ -456,6 +456,7 @@ class Localeassignments {
   }
 
   String get empty => _data["empty"]!;
+  String get allSubjects => _data["allSubjects"]!;
 }
 
 class LocaledisciplinaryNotices {
@@ -478,6 +479,7 @@ class Localetopics {
   }
 
   String get empty => _data["empty"]!;
+  String get allSubjects => _data["allSubjects"]!;
 }
 
 class Localecalculator {

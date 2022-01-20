@@ -226,13 +226,15 @@
     "subjGrade": "Grade"
   },
   "assignments": {
-    "empty": "You've got no homework at all!"
+    "empty": "You've got no homework at all!",
+    "allSubjects": "All subjects"
   },
   "disciplinaryNotices": {
     "empty": "You haven't received disciplinary notices."
   },
   "topics": {
-    "empty": "It looks like you haven't had lessons yet."
+    "empty": "It looks like you haven't had lessons yet.",
+    "allSubjects": "All subjects"
   },
   "calculator": {
     "gradeCalculatorBottomStart": "Get",

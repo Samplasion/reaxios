@@ -226,13 +226,15 @@
     "subjGrade": "Voto"
   },
   "assignments": {
-    "empty": "Non hai compiti (in assoluto)!"
+    "empty": "Non hai compiti (in assoluto)!",
+    "allSubjects": "Tutte le materie"
   },
   "disciplinaryNotices": {
     "empty": "Non hai note disciplinari."
   },
   "topics": {
-    "empty": "Non hai ancora avuto lezioni."
+    "empty": "Non hai ancora avuto lezioni.",
+    "allSubjects": "Tutte le materie"
   },
   "calculator": {
     "gradeCalculatorBottomStart": "Prendi",

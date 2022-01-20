@@ -18,9 +18,9 @@ class TopicListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = topic.date.millisecondsSinceEpoch >
-            DateTime.now().millisecondsSinceEpoch
-        ? Theme.of(context).accentColor
+    final bg = topic.date.isAfter(DateTime.now()) ||
+            topic.date.isSameDay(DateTime.now())
+        ? Theme.of(context).colorScheme.secondary
         : Colors.grey[700]!;
 
     // \u00aa = ª

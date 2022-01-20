@@ -17,8 +17,9 @@ class AssignmentListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = assignment.date > DateTime.now()
-        ? Theme.of(context).accentColor
+    final bg = assignment.date.isAfter(DateTime.now()) ||
+            assignment.date.isSameDay(DateTime.now())
+        ? Theme.of(context).colorScheme.secondary
         : Colors.grey[700]!;
     return CardListItem(
       leading: GradientCircleAvatar(

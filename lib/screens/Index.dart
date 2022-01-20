@@ -201,7 +201,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         CalendarPane(session: session),
-        AssignmentsPane(session: session, store: widget.store),
+        Builder(
+          builder: (_) => AssignmentsPane(
+            session: session,
+            store: widget.store,
+            openMainDrawer: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
         Builder(
           builder: (_) => FutureBuilder<Period?>(
             future: widget.store.getCurrentPeriod(session),
@@ -231,7 +237,13 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
-        TopicsPane(session: session, store: widget.store),
+        Builder(
+          builder: (_) => TopicsPane(
+            session: session,
+            store: widget.store,
+            openMainDrawer: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
         BulletinsPane(session: session, store: widget.store),
         NotesPane(session: session),
         NoticesPane(session: session),
@@ -270,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
         [
           Icon(Icons.book),
           Text(context.locale.drawer.assignments),
-          true,
+          false,
           () => widget.store.fetchAssignments(session)
         ],
         [
@@ -296,7 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
         [
           Icon(Icons.topic),
           Text(context.locale.drawer.topics),
-          true,
+          false,
           () => widget.store.fetchTopics(session)
         ],
         [

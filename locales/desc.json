@@ -226,13 +226,15 @@
     "subjGrade": ""
   },
   "assignments": {
-    "empty": ""
+    "empty": "",
+    "allSubjects": ""
   },
   "disciplinaryNotices": {
     "empty": ""
   },
   "topics": {
-    "empty": ""
+    "empty": "",
+    "allSubjects": ""
   },
   "calculator": {
     "gradeCalculatorBottomStart": "",
