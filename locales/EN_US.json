@@ -212,7 +212,7 @@
   },
   "reportCard": {
     "notAvailableTitle": "Your report card isn't ready yet",
-    "notAvailableBody": "It will be ready on **{day}**",
+    "notAvailableBody": "It should release by **{day}**",
     "overview": "Overview",
     "average": "Average: ",
     "absences": "Absences: **{absences}**",
