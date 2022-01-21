@@ -237,10 +237,6 @@
     "allSubjects": ""
   },
   "calculator": {
-    "gradeCalculatorBottomStart": "",
-    "gradeCalculatorBottomMiddle1": "",
-    "gradeCalculatorBottomMiddle2": "",
-    "gradeCalculatorBottomEnd": "",
     "addGrade": "",
     "addFromSubject": "",
     "addFromScratch": "",
@@ -254,6 +250,7 @@
     "gradeOutOfRange": "",
     "editGrade": "",
     "average": "Add a space after \":\"",
-    "addAllGrades": ""
+    "addAllGrades": "",
+    "gradeCalculatorBottom": "{0} = \"how many times to get the grade\" dropdown button\n{1} = grade to get {0} times text\n{2} = target average dropdown"
   }
 }

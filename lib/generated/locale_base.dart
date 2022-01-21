@@ -490,10 +490,6 @@ class Localecalculator {
     return _data[key]!;
   }
 
-  String get gradeCalculatorBottomStart => _data["gradeCalculatorBottomStart"]!;
-  String get gradeCalculatorBottomMiddle1 => _data["gradeCalculatorBottomMiddle1"]!;
-  String get gradeCalculatorBottomMiddle2 => _data["gradeCalculatorBottomMiddle2"]!;
-  String get gradeCalculatorBottomEnd => _data["gradeCalculatorBottomEnd"]!;
   String get addGrade => _data["addGrade"]!;
   String get addFromSubject => _data["addFromSubject"]!;
   String get addFromScratch => _data["addFromScratch"]!;
@@ -508,5 +504,6 @@ class Localecalculator {
   String get editGrade => _data["editGrade"]!;
   String get average => _data["average"]!;
   String get addAllGrades => _data["addAllGrades"]!;
+  String get gradeCalculatorBottom => _data["gradeCalculatorBottom"]!;
 }
 

@@ -237,10 +237,6 @@
     "allSubjects": "All subjects"
   },
   "calculator": {
-    "gradeCalculatorBottomStart": "Get",
-    "gradeCalculatorBottomMiddle1": "time(s)",
-    "gradeCalculatorBottomMiddle2": "to reach an average of",
-    "gradeCalculatorBottomEnd": "",
     "addGrade": "Add grade",
     "addFromSubject": "Add from subject",
     "addFromScratch": "Add new",
@@ -254,6 +250,7 @@
     "gradeOutOfRange": "The grade must be a number between 1 and 10, inclusive.",
     "editGrade": "Edit grade",
     "average": "Average: ",
-    "addAllGrades": "Add all your grades"
+    "addAllGrades": "Add all your grades",
+    "gradeCalculatorBottom": "Get {0} time(s) {1} to reach an average of {2}"
   }
 }

@@ -337,22 +337,78 @@ class _CalculatorPaneState extends State<CalculatorPane>
   Widget _buildBottomBar() {
     final average = _grades.isEmpty ? 0.0 : gradeAverage(_grades).toDouble();
     final viableTargets = _possibleTargets.where((target) => target > average);
-    final startText = context.locale.calculator.gradeCalculatorBottomStart;
-    final middle1Text = context.locale.calculator.gradeCalculatorBottomMiddle1;
-    final middle2Text = context.locale.calculator.gradeCalculatorBottomMiddle2;
-    final endText = context.locale.calculator.gradeCalculatorBottomEnd;
+
+    final widgets = <Widget>[
+      DropdownButton(
+        isDense: true,
+        items: _possibleSteps.map((n) {
+          return DropdownMenuItem(
+            child: Text("$n"),
+            value: n,
+          );
+        }).toList(),
+        onChanged: (n) => setState(() {
+          if (n == null || n is! int) return;
+          _steps = n;
+        }),
+        value: _steps,
+      ),
+      RichText(
+        text: GradeText(
+          context,
+          grade: toReachAverage(
+            _grades.map((g) => [g.grade, g.weight]).toList(),
+            viableTargets.contains(_targetAverage)
+                ? _targetAverage
+                : viableTargets.first,
+            _steps,
+          ).toDouble(),
+        ),
+      ),
+      DropdownButton(
+        isDense: true,
+        items: viableTargets.map((n) {
+          return DropdownMenuItem(
+            child: Text.rich(GradeText(context, grade: n)),
+            value: n,
+          );
+        }).toList(),
+        onChanged: (n) => setState(() {
+          if (n == null || n is! num) return;
+          _targetAverage = n.toDouble();
+        }),
+        value: viableTargets.contains(_targetAverage)
+            ? _targetAverage
+            : viableTargets.first,
+      ),
+    ];
+
+    final bottomText = context.locale.calculator.gradeCalculatorBottom;
+    final withIndices = bottomText.split(RegExp(r'[{}]'));
+    final withIndicesAndWidgets = withIndices.map((text) {
+      final num = int.tryParse(text);
+      if (num != null && num >= 0 && num < widgets.length) {
+        return WidgetSpan(child: widgets[int.parse(text)]);
+      } else {
+        return TextSpan(text: text);
+      }
+    }).toList();
+
     return BottomAppBar(
       shape: CircularNotchedRectangle(),
       color: Theme.of(context).cardColor,
       child: Container(
         height: 1.5 * kToolbarHeight,
-        padding: const EdgeInsets.all(16).copyWith(bottom: 8),
+        padding: const EdgeInsets.only(bottom: 8, top: 16),
         child: Row(
           children: [
             if (_grades.length < 2) ...[
-              Text(
-                context.locale.calculator.selectAtLeast2,
-                style: Theme.of(context).textTheme.caption,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  context.locale.calculator.selectAtLeast2,
+                  style: Theme.of(context).textTheme.caption,
+                ),
               ),
             ] else ...[
               Flexible(
@@ -360,104 +416,34 @@ class _CalculatorPaneState extends State<CalculatorPane>
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: context.locale.calculator.average,
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                            GradeText(context, grade: average),
-                          ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: context.locale.calculator.average,
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                              GradeText(context, grade: average),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                     if (viableTargets.isNotEmpty)
                       Flexible(
-                        child: Row(
-                          children: [
-                            if (startText.isNotEmpty)
-                              Flexible(
-                                child: Text(
-                                  "$startText ",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.caption,
-                                ),
-                              ),
-                            DropdownButton(
-                              isDense: true,
-                              items: _possibleSteps.map((n) {
-                                return DropdownMenuItem(
-                                  child: Text("$n"),
-                                  value: n,
-                                );
-                              }).toList(),
-                              onChanged: (n) => setState(() {
-                                if (n == null || n is! int) return;
-                                _steps = n;
-                              }),
-                              value: _steps,
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  if (middle1Text.isNotEmpty)
-                                    TextSpan(
-                                      text: " $middle1Text ",
-                                      style:
-                                          Theme.of(context).textTheme.caption,
-                                    ),
-                                  GradeText(
-                                    context,
-                                    grade: toReachAverage(
-                                      _grades
-                                          .map((g) => [g.grade, g.weight])
-                                          .toList(),
-                                      viableTargets.contains(_targetAverage)
-                                          ? _targetAverage
-                                          : viableTargets.first,
-                                      _steps,
-                                    ).toDouble(),
-                                  ),
-                                  if (middle2Text.isNotEmpty)
-                                    TextSpan(
-                                      text: " $middle2Text ",
-                                      style:
-                                          Theme.of(context).textTheme.caption,
-                                    ),
-                                ],
-                              ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text.rich(
+                              TextSpan(children: withIndicesAndWidgets),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.caption,
                             ),
-                            DropdownButton(
-                              isDense: true,
-                              items: viableTargets.map((n) {
-                                return DropdownMenuItem(
-                                  child:
-                                      Text.rich(GradeText(context, grade: n)),
-                                  value: n,
-                                );
-                              }).toList(),
-                              onChanged: (n) => setState(() {
-                                if (n == null || n is! num) return;
-                                _targetAverage = n.toDouble();
-                              }),
-                              value: viableTargets.contains(_targetAverage)
-                                  ? _targetAverage
-                                  : viableTargets.first,
-                            ),
-                            if (endText.isNotEmpty)
-                              Flexible(
-                                child: Text(
-                                  endText,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.caption,
-                                ),
-                              ),
-                          ],
+                          ),
                         ),
                       ),
                   ],

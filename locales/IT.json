@@ -237,10 +237,6 @@
     "allSubjects": "Tutte le materie"
   },
   "calculator": {
-    "gradeCalculatorBottomStart": "Prendi",
-    "gradeCalculatorBottomMiddle1": "",
-    "gradeCalculatorBottomMiddle2": "per raggiungere una media di",
-    "gradeCalculatorBottomEnd": "",
     "addGrade": "Aggiungi voto",
     "addFromSubject": "Aggiungi da materia",
     "addFromScratch": "Aggiungi nuovo",
@@ -254,6 +250,7 @@
     "gradeOutOfRange": "Il voto deve essere un numero compreso tra 1 e 10 inclusi.",
     "editGrade": "Modifica voto",
     "average": "Media: ",
-    "addAllGrades": "Aggiungi tutti i tuoi voti"
+    "addAllGrades": "Aggiungi tutti i tuoi voti",
+    "gradeCalculatorBottom": "Prendi {0} {1} per raggiungere la media di {2}"
   }
 }
