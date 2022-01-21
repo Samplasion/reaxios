@@ -18,6 +18,7 @@ import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
+import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/GradeSubjectView.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
@@ -86,7 +87,8 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
             );
           if (snapshot.hasData &&
               snapshot.data!.isNotEmpty &&
-              snapshot.connectionState == ConnectionState.done) {
+              (snapshot.connectionState == ConnectionState.done ||
+                  snapshot.data![0].isNotEmpty)) {
             final grades = snapshot.data![0] as List<Grade>? ?? [];
             final subjects = snapshot.data![1] as List<String>? ?? [];
             final period = snapshot.data![2] as Period?;
@@ -253,9 +255,12 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
       final color = getGradeColor(average);
       children.add(
         CardListItem(
-          leading: GradientCircleAvatar(
-            child: Icon(Utils.getBestIconForSubject(subject, Icons.grade)),
-            color: color,
+          leading: NotificationBadge(
+            child: GradientCircleAvatar(
+              child: Icon(Utils.getBestIconForSubject(subject, Icons.grade)),
+              color: color,
+            ),
+            showBadge: subjectGrades.where((e) => !e.seen).isNotEmpty,
           ),
           title: subject,
           subtitle: RichText(
