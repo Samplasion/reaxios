@@ -21,6 +21,7 @@ import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Charts/GradeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
@@ -250,19 +251,31 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .toList();
 
     final items = [
-      if (gradeCards.isNotEmpty) ...[
-        Text(
-          context.locale.overview.latestGrades,
-          style: Theme.of(context).textTheme.headline6,
-        ).padding(horizontal: 16, top: 8),
-        ...gradeCards,
-      ],
+      if (gradeCards.isNotEmpty)
+        ...[
+          Text(
+            context.locale.overview.latestGrades,
+            style: Theme.of(context).textTheme.headline6,
+          ).padding(horizontal: 16, top: 8),
+          ...gradeCards,
+        ].map((e) => MaxWidthContainer(child: e).center()),
+
+      if (tmrAssignments.isNotEmpty)
+        ...[
+          Text(
+            context.locale.overview.homeworkForTomorrow,
+            style: Theme.of(context).textTheme.headline6,
+          ).padding(horizontal: 16, top: 8),
+          _getAssignmentTimeline(tmrAssignments),
+        ].map((e) => MaxWidthContainer(child: e).center()),
 
       if (topicCards.isNotEmpty) ...[
-        Text(
-          context.locale.overview.latestLessons,
-          style: Theme.of(context).textTheme.headline6,
-        ).padding(horizontal: 16, top: 8),
+        MaxWidthContainer(
+          child: Text(
+            context.locale.overview.latestLessons,
+            style: Theme.of(context).textTheme.headline6,
+          ).padding(horizontal: 16, top: 8),
+        ).center(),
         Scrollbar(
           controller: horizontalController,
           child: SingleChildScrollView(
@@ -276,40 +289,36 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         ),
       ],
 
-      if (tmrAssignments.isNotEmpty) ...[
-        Text(
-          context.locale.overview.homeworkForTomorrow,
-          style: Theme.of(context).textTheme.headline6,
-        ).padding(horizontal: 16, top: 8),
-        _getAssignmentTimeline(tmrAssignments),
-      ],
-
       // Man, this chart lags
-      GradeAverageChart(
-              store: widget.store, session: widget.session, period: period)
-          .padding(all: 16),
+      MaxWidthContainer(
+        child: GradeAverageChart(
+                store: widget.store, session: widget.session, period: period)
+            .padding(all: 16),
+      ).center(),
     ];
 
     final toolbarHeight = AppBar().toolbarHeight ?? kToolbarHeight;
 
-    return CustomScrollView(slivers: [
-      SliverPersistentHeader(
-        pinned: true,
-        floating: false,
-        delegate: CustomSliverDelegate(
-          hideTitleWhenExpanded: false,
-          openMenu: widget.openMainDrawer,
-          expandedHeight: MediaQuery.of(context).padding.top + 185,
-          collapsedHeight: MediaQuery.of(context).padding.top + toolbarHeight,
-          period: period,
-          student: student,
-          switchToTab: widget.switchToTab,
+    return CustomScrollView(
+      slivers: [
+        SliverPersistentHeader(
+          pinned: true,
+          floating: false,
+          delegate: CustomSliverDelegate(
+            hideTitleWhenExpanded: false,
+            openMenu: widget.openMainDrawer,
+            expandedHeight: MediaQuery.of(context).padding.top + 185,
+            collapsedHeight: MediaQuery.of(context).padding.top + toolbarHeight,
+            period: period,
+            student: student,
+            switchToTab: widget.switchToTab,
+          ),
         ),
-      ),
-      SliverList(
-        delegate: SliverChildListDelegate(items),
-      ),
-    ]);
+        SliverList(
+          delegate: SliverChildListDelegate(items),
+        ),
+      ],
+    );
   }
 
   Widget _getAssignmentTimeline(List<Assignment> tmrAssignments) {
@@ -383,12 +392,14 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                   angle: (1 - percent) * 0.07,
                   child: Transform.scale(
                     scale: map(percent, 0, 1, 0.88, 1).toDouble(),
-                    child: UserCard(
-                      student: student,
-                      period: period,
-                      store: store,
-                      switchToTab: switchToTab,
-                    ),
+                    child: MaxWidthContainer(
+                      child: UserCard(
+                        student: student,
+                        period: period,
+                        store: store,
+                        switchToTab: switchToTab,
+                      ),
+                    ).center(),
                   ),
                 ),
               ),
