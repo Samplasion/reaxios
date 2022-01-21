@@ -72,11 +72,13 @@ class _CalculatorPaneState extends State<CalculatorPane>
               "${snapshot.error}\n${snapshot is Error ? snapshot.stackTrace : ""}",
             ),
           );
-        if (!(snapshot.hasData && snapshot.data!.isNotEmpty) ||
-            snapshot.connectionState != ConnectionState.done) {
-          Scaffold(
+        if (!(snapshot.hasData &&
+            snapshot.data!.isNotEmpty &&
+            (snapshot.data[0].isNotEmpty ||
+                snapshot.connectionState == ConnectionState.done))) {
+          return Scaffold(
             appBar: GradientAppBar(
-              title: Text(context.locale.drawer.grades),
+              title: Text(context.locale.drawer.calculator),
             ),
             body: LoadingUI(),
           );
