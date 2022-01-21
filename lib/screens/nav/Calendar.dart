@@ -8,6 +8,7 @@ import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/components/ListItems/AssignmentListItem.dart';
 import 'package:reaxios/components/ListItems/TopicListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/tuple.dart';
 import 'package:reaxios/utils.dart';
@@ -169,8 +170,13 @@ class _CalendarPaneState extends State<CalendarPane> {
               markerBuilder: (context, date, events) {
                 // ignore: deprecated_member_use
                 final accent = Theme.of(context).accentColor;
-                final filtered = events.where(
-                    (e) => e is TopicListItem || e is AssignmentListItem);
+                final filtered = events.where((e) {
+                  if (e is! Center) return false;
+                  if (e.child is! MaxWidthContainer) return false;
+                  final parent = e.child as MaxWidthContainer;
+                  return parent.child is TopicListItem ||
+                      parent.child is AssignmentListItem;
+                });
                 if (filtered.length > 0) {
                   return filtered
                       .take(4)
@@ -340,6 +346,6 @@ class _CalendarPaneState extends State<CalendarPane> {
       SizedBox(height: 16),
       ...events,
       SizedBox(height: 8),
-    ];
+    ].map((e) => MaxWidthContainer(child: e).center()).toList();
   }
 }
