@@ -507,5 +507,6 @@ class Localecalculator {
   String get gradeOutOfRange => _data["gradeOutOfRange"]!;
   String get editGrade => _data["editGrade"]!;
   String get average => _data["average"]!;
+  String get addAllGrades => _data["addAllGrades"]!;
 }
 

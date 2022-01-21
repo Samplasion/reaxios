@@ -253,6 +253,7 @@
     "noGrades": "",
     "gradeOutOfRange": "",
     "editGrade": "",
-    "average": "Add a space after \":\""
+    "average": "Add a space after \":\"",
+    "addAllGrades": ""
   }
 }

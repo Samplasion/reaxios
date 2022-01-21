@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/average.dart';
@@ -99,10 +100,17 @@ class _CalculatorPaneState extends State<CalculatorPane>
           body: _buildBody(),
           bottomNavigationBar: _buildBottomBar(),
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => _showFabDialog(grades, subjects, period),
-            child: Icon(Icons.add),
-            tooltip: context.locale.calculator.addTooltip,
+          floatingActionButton: GestureDetector(
+            onLongPress: () {
+              setState(() {
+                _grades.clear();
+              });
+            },
+            behavior: HitTestBehavior.opaque,
+            child: FloatingActionButton(
+              onPressed: () => _showFabDialog(grades, subjects, period),
+              child: Icon(Icons.add),
+            ),
           ),
         );
       },
@@ -119,6 +127,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
         return AlertBottomSheet(
           enableDrag: true,
           animationController: _animationController,
+          scrollable: true,
           title: Text(context.locale.calculator.addGrade),
           content: SingleChildScrollView(
             child: Column(
@@ -135,6 +144,17 @@ class _CalculatorPaneState extends State<CalculatorPane>
                 ListTile(
                   title: Text(context.locale.calculator.addFromScratch),
                   onTap: _showNewGradeDialog,
+                ),
+                ListTile(
+                  title: Text(context.locale.calculator.addAllGrades),
+                  onTap: () {
+                    Navigator.pop(context);
+                    setState(() {
+                      _grades.addAll(
+                        grades.where((element) => element.weight > 0),
+                      );
+                    });
+                  },
                 ),
               ],
             ),
@@ -587,6 +607,15 @@ class NewGradeDialog extends StatefulWidget {
 class _NewGradeDialogState extends State<NewGradeDialog> {
   final TextEditingController _gradeController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -602,6 +631,7 @@ class _NewGradeDialogState extends State<NewGradeDialog> {
           children: [
             TextFormField(
               controller: _gradeController,
+              focusNode: _focusNode,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: widget.edit

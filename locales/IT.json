@@ -253,6 +253,7 @@
     "noGrades": "Non ci sono voti per questa materia",
     "gradeOutOfRange": "Il voto deve essere un numero compreso tra 1 e 10 inclusi.",
     "editGrade": "Modifica voto",
-    "average": "Media: "
+    "average": "Media: ",
+    "addAllGrades": "Aggiungi tutti i tuoi voti"
   }
 }
