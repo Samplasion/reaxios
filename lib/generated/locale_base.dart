@@ -498,7 +498,7 @@ class Localecalculator {
   String get addTooltip => _data["addTooltip"]!;
   String get unknownSubject => _data["unknownSubject"]!;
   String get unknownPeriod => _data["unknownPeriod"]!;
-  String get selectAtLeast2 => _data["selectAtLeast2"]!;
+  String get selectAtLeast1 => _data["selectAtLeast1"]!;
   String get noGrades => _data["noGrades"]!;
   String get gradeOutOfRange => _data["gradeOutOfRange"]!;
   String get editGrade => _data["editGrade"]!;

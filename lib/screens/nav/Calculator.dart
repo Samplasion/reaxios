@@ -399,14 +399,15 @@ class _CalculatorPaneState extends State<CalculatorPane>
       color: Theme.of(context).cardColor,
       child: Container(
         height: 1.5 * kToolbarHeight,
-        padding: const EdgeInsets.only(bottom: 8, top: 16),
+        padding:
+            EdgeInsets.only(bottom: 8 + (_grades.length >= 2 ? 8 : 0), top: 16),
         child: Row(
           children: [
-            if (_grades.length < 2) ...[
+            if (_grades.length < 1) ...[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  context.locale.calculator.selectAtLeast2,
+                  context.locale.calculator.selectAtLeast1,
                   style: Theme.of(context).textTheme.caption,
                 ),
               ),
@@ -415,33 +416,38 @@ class _CalculatorPaneState extends State<CalculatorPane>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: context.locale.calculator.average,
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                              GradeText(context, grade: average),
-                            ],
+                    if (_grades.length >= 2)
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: context.locale.calculator.average,
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                                GradeText(context, grade: average),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
                     if (viableTargets.isNotEmpty)
-                      Flexible(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text.rich(
-                              TextSpan(children: withIndicesAndWidgets),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.caption,
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Text.rich(
+                                TextSpan(children: withIndicesAndWidgets),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.caption,
+                              ),
                             ),
                           ),
                         ),
