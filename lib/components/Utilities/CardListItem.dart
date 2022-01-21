@@ -78,6 +78,7 @@ class _CardListItemState extends State<CardListItem> {
     final Widget title = Text(
       widget.title,
       style: TextStyle(
+        fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
         fontWeight: FontWeight.bold,
         fontSize: 16,
       ),

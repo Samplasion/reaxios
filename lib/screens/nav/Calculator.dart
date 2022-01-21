@@ -619,7 +619,6 @@ class _NewGradeDialogState extends State<NewGradeDialog> {
             TextFormField(
               controller: _gradeController,
               focusNode: _focusNode,
-              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: widget.edit
                     ? context.locale.calculator.editGrade
@@ -629,6 +628,11 @@ class _NewGradeDialogState extends State<NewGradeDialog> {
               ),
               onChanged: (s) {
                 setState(() {});
+              },
+              onFieldSubmitted: (value) {
+                if (isValid && double.tryParse(value) != null) {
+                  Navigator.pop(context, double.parse(_gradeController.text));
+                }
               },
               validator: (s) {
                 if (s == null || s.isEmpty) {

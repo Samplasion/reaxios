@@ -154,6 +154,18 @@ class _CalendarPaneState extends State<CalendarPane> {
             pageAnimationCurve: Curves.easeInOut,
             pageAnimationDuration: Duration(milliseconds: 300),
             calendarBuilders: CalendarBuilders(
+              headerTitleBuilder: (context, day) {
+                return Text(
+                  DateFormat.yMMMM(context.currentLocale.toLanguageTag())
+                      .format(day),
+                  style: TextStyle(
+                    fontFamily:
+                        Theme.of(context).textTheme.headline6!.fontFamily,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
               markerBuilder: (context, date, events) {
                 // ignore: deprecated_member_use
                 final accent = Theme.of(context).accentColor;
@@ -169,24 +181,6 @@ class _CalendarPaneState extends State<CalendarPane> {
                       .toList()
                       .toRow(mainAxisAlignment: MainAxisAlignment.center)
                       .padding(left: 2);
-                  // return Container(
-                  //   child: Container(
-                  //     decoration: BoxDecoration(
-                  //       color: accent,
-                  //       borderRadius: BorderRadius.circular(2),
-                  //     ),
-                  //     padding: EdgeInsets.all(2),
-                  //     child: Text(
-                  //       length.toString(),
-                  //       style: TextStyle(
-                  //         color: accent.contrastText,
-                  //         fontSize: 10,
-                  //       ),
-                  //     ),
-                  //   ),
-                  //   alignment: Alignment.bottomCenter,
-                  //   padding: EdgeInsets.only(left: 24),
-                  // );
                 } else {
                   return Container();
                 }
@@ -197,6 +191,8 @@ class _CalendarPaneState extends State<CalendarPane> {
                     DateFormat.E(context.currentLocale.toLanguageTag())
                         .format(dayOfWeek),
                     style: TextStyle(
+                      fontFamily:
+                          Theme.of(context).textTheme.headline6!.fontFamily,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: emptyDays.contains(dayOfWeek.weekday) &&
@@ -304,6 +300,7 @@ class _CalendarPaneState extends State<CalendarPane> {
         Text(
           context.locale.calendar.homework,
           style: TextStyle(
+            fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -319,6 +316,7 @@ class _CalendarPaneState extends State<CalendarPane> {
         Text(
           context.locale.calendar.topics,
           style: TextStyle(
+            fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),

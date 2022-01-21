@@ -3,10 +3,12 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -38,6 +40,12 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 void main() async {
+  // FIXME: currently this crashes with a "null check operator used on a null value" exception
+  // LicenseRegistry.addLicense(() async* {
+  //   final license = await rootBundle.loadString('google_fonts/OFL.txt');
+  //   yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  // });
+
   RegistroStore registroStore = RegistroStore();
 
   HttpOverrides.global = MyHttpOverrides();
@@ -109,6 +117,21 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
       ),
     );
 
+    final defaultTextThemeLight = ThemeData.light().textTheme;
+    final defaultTextThemeDark = ThemeData.dark().textTheme;
+
+    TextTheme getTextTheme(TextTheme defaultTheme) => defaultTheme.copyWith(
+          headline6: defaultTheme.headline6.copyWith(
+            fontFamily: GoogleFonts.outfit().fontFamily,
+          ),
+          bodyText2: defaultTheme.bodyText2.copyWith(
+            fontFamily: GoogleFonts.montserrat().fontFamily,
+          ),
+          caption: defaultTheme.caption.copyWith(
+            fontFamily: GoogleFonts.montserrat().fontFamily,
+          ),
+        );
+
     return Shortcuts(
       shortcuts: shortcuts,
       child: MaterialApp(
@@ -123,6 +146,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             onSecondary: accent.contrastText,
           ),
           appBarTheme: appBarTheme,
+          textTheme: getTextTheme(defaultTextThemeLight),
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
@@ -135,6 +159,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             onSecondary: accent.contrastText,
           ),
           appBarTheme: appBarTheme,
+          textTheme: getTextTheme(defaultTextThemeDark),
         ),
         themeMode: getThemeMode(themeMode),
         // home: MyHomePage(title: 'Flutter Demo Home Page'),

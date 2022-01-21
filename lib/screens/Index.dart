@@ -481,6 +481,7 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: drawerController,
               child: ListTileTheme(
                 selectedColor: Theme.of(context).colorScheme.secondary,
+                style: ListTileStyle.drawer,
                 child: AnimatedCrossFade(
                   duration: Duration(milliseconds: 125),
                   crossFadeState: showUserDetails

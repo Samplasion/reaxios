@@ -29,7 +29,7 @@ class NiceHeader extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                // color: fg,
+                fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),

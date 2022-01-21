@@ -30,7 +30,12 @@ class GradeAvatar extends StatelessWidget {
     final text = grade.getPrettyGrade(context).trim();
     final child = text.isEmpty
         ? (showIconIfNaN ? Icon(Icons.message) : Container())
-        : Text(text);
+        : Text(
+            text,
+            style: TextStyle(
+              fontFamily: Theme.of(context).textTheme.bodyText2!.fontFamily,
+            ),
+          );
 
     return GradientCircleAvatar(
       radius: radius,

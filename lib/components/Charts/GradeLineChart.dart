@@ -139,7 +139,10 @@ class _GradeLineChartState extends State<GradeLineChart> {
                   }
                 },
                 getTextStyles: (context, double value) {
-                  return Theme.of(context).textTheme.caption;
+                  return Theme.of(context)
+                      .textTheme
+                      .caption!
+                      .copyWith(fontWeight: FontWeight.w100);
                 },
               ),
               leftTitles: SideTitles(
@@ -204,9 +207,6 @@ class _GradeLineChartState extends State<GradeLineChart> {
                   colors: usefulGrades.map((Grade grade) {
                     return getGradeColor(grade.grade).withOpacity(0.2);
                   }).toList(),
-                  // gradientColorStops: [0.5, 0.0],
-                  // gradientFrom: Offset(0, 0),
-                  // gradientTo: Offset(0, 1),
                   spotsLine: BarAreaSpotsLine(
                     show: true,
                     flLineStyle: FlLine(
@@ -219,45 +219,6 @@ class _GradeLineChartState extends State<GradeLineChart> {
             ],
           ),
         ).height((maxY - minY) * 38),
-        // return [
-        //   new charts.LineChart(
-        //     _generateData(context),
-        //     animate: animate,
-        //     primaryMeasureAxis: charts.NumericAxisSpec(
-        //       tickProviderSpec: charts.BasicNumericTickProviderSpec(
-        //         zeroBound: true,
-        //         dataIsInWholeNumbers: false,
-        //         desiredTickCount: 5,
-        //       ),
-        //       renderSpec: charts.GridlineRendererSpec(
-        //         labelStyle: charts.TextStyleSpec(
-        //           color: Theme.of(context).textTheme.caption!.color!.toChartColor(),
-        //         ),
-        //         lineStyle: charts.LineStyleSpec(
-        //           color: Theme.of(context)
-        //               .dividerColor
-        //               .withOpacity(0.6)
-        //               .toChartColor(),
-        //           thickness: 1,
-        //         ),
-        //       ),
-        //     ),
-        //     domainAxis: charts.NumericAxisSpec(
-        //       tickFormatterSpec: charts.BasicNumericTickFormatterSpec((_) => ""),
-        //       renderSpec: charts.GridlineRendererSpec(
-        //         labelStyle: charts.TextStyleSpec(
-        //           color: Theme.of(context).textTheme.caption!.color!.toChartColor(),
-        //         ),
-        //         lineStyle: charts.LineStyleSpec(
-        //           color: Theme.of(context)
-        //               .dividerColor
-        //               .withOpacity(0.6)
-        //               .toChartColor(),
-        //           thickness: 1,
-        //         ),
-        //       ),
-        //     ),
-        //   ).height(350),
       ].toColumn(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start);
@@ -289,26 +250,4 @@ class _GradeLineChartState extends State<GradeLineChart> {
       .map((e) =>
           gradeAverage(usefulGrades.take(usefulGrades.indexOf(e) + 1).toList()))
       .toList();
-
-  // List<charts.Series<Grade, int>> _generateData(BuildContext context) {
-  //   Color color = Theme.of(context).accentColor;
-
-  //   return [
-  //     charts.Series(
-  //       id: "Grades",
-  //       colorFn: (_, __) => charts.Color(
-  //         r: color.red,
-  //         g: color.green,
-  //         b: color.blue,
-  //         a: color.alpha,
-  //       ),
-  //       domainFn: (Grade grade, _) => usefulGrades.indexOf(grade),
-  //       measureFn: (Grade grade, _) => grade.grade,
-  //       fillColorFn: (Grade grade, _) =>
-  //           getGradeColor(grade.grade).toChartColor(),
-  //       data: usefulGrades,
-  //       labelAccessorFn: (Grade grade, _) => grade.grade.toString(),
-  //     ),
-  //   ];
-  // }
 }

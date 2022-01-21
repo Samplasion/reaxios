@@ -8,6 +8,7 @@ import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
+import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -183,36 +184,13 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
   @override
   Widget build(BuildContext context) {
     return <Widget>[
-      [
-        Icon(Icons.auto_graph)
-            .iconSize(50)
-            // .iconColor(fg)
-            // .decorated(
-            //   color: bg(context),
-            //   borderRadius: BorderRadius.circular(30),
-            // )
-            .constrained(height: 50, width: 50)
-            .padding(right: 10),
-        <Widget>[
-          Text(
-            context.locale.charts.averages,
-            style: TextStyle(
-              // color: fg,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ).padding(bottom: 5),
-          Text(
-            widget.period == null
-                ? context.locale.charts.scopeAllYear
-                : widget.period!.desc,
-            style: TextStyle(
-              color: Theme.of(context).cardTheme.color?.withOpacity(0.6),
-              fontSize: 12,
-            ),
-          ),
-        ].toColumn(crossAxisAlignment: CrossAxisAlignment.start),
-      ].toRow().padding(top: 24, horizontal: 8),
+      NiceHeader(
+        title: context.locale.charts.averages,
+        subtitle: widget.period == null
+            ? context.locale.charts.scopeAllYear
+            : widget.period!.desc,
+        leading: Icon(Icons.av_timer),
+      ).padding(top: 24, horizontal: 8),
       // if (chart == null) Center(child: CircularProgressIndicator()) else chart!,
       FutureBuilder<List<Grade>>(
         future: widget.store.grades,
