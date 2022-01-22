@@ -184,6 +184,11 @@ class _HomeScreenState extends State<HomeScreen> {
       await drawerItems[index][3]();
   }
 
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) super.setState(fn);
+  }
+
   void initPanes(Axios session, Login login) {
     setState(() {
       panes = [
