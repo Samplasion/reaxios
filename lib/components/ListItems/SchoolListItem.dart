@@ -16,7 +16,8 @@ class SchoolListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = selected ? Theme.of(context).accentColor : Colors.grey[700]!;
+    final bg =
+        selected ? Theme.of(context).colorScheme.secondary : Colors.grey[700]!;
     return ListTile(
       leading: CircleAvatar(
         child: Icon(selected ? Icons.check : Icons.school),

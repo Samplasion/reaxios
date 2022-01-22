@@ -4,7 +4,6 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/enums/BulletinKind.dart';
-import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Views/BulletinView.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../system/AppInfoStore.dart';
 import '../../utils.dart';

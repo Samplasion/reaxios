@@ -3,13 +3,11 @@
 
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/utils/ColorSerializer.dart';
@@ -27,8 +25,6 @@ import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
 
 import 'enums/GradeDisplay.dart';
-
-const kTabBreakpoint = 680.0;
 
 class MyHttpOverrides extends HttpOverrides {
   @override

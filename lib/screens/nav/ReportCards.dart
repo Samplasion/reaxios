@@ -4,7 +4,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
-import 'package:reaxios/api/interfaces/Couple.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Views/ReportCard.dart';
 import 'package:reaxios/system/Store.dart';

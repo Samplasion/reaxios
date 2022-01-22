@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/utils/utils.dart';
@@ -123,14 +122,11 @@ class _GradeLineChartState extends State<GradeLineChart> {
                         return context.dateToString(
                           date,
                           short: true,
-                          includeMonth: false,
-                          includeYear: false,
                         );
                       } else {
                         return context.dateToString(
                           date,
                           short: true,
-                          includeYear: false,
                         );
                       }
                     } else {

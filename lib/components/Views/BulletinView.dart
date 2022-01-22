@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/enums/BulletinAttachmentKind.dart';
@@ -12,11 +11,11 @@ import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/format.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:reaxios/main.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../consts.dart';
 
 class BulletinView extends StatelessWidget {
   const BulletinView({
@@ -100,7 +99,7 @@ class BulletinView extends StatelessWidget {
 
   List<Widget> _getAttachmentWidgets(BuildContext context) {
     if (bulletin.attachments.length == 0) return [];
-    final bg = Theme.of(context).accentColor;
+    final bg = Theme.of(context).colorScheme.secondary;
     return [
       ...bulletin.attachments
           .map(

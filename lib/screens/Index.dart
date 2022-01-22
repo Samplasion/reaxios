@@ -19,8 +19,6 @@ import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
-import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
-import 'package:reaxios/components/Views/GradeView.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';
@@ -38,8 +36,7 @@ import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ignore: import_of_legacy_library_into_null_safe
-import '../../main.dart';
+import '../consts.dart';
 import 'nav/BulletinBoard.dart';
 import 'nav/Calculator.dart';
 import 'nav/ReportCards.dart';
@@ -431,16 +428,6 @@ class _HomeScreenState extends State<HomeScreen> {
           UserAccountsDrawerHeader(
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
-              // image: DecorationImage(
-              //   image: NetworkImage(
-              //     "https://www.brookings.edu/wp-content/uploads/2020/05/empty-classroom_elementary-school-middle-school-high-school.jpg",
-              //   ),
-              //   fit: BoxFit.cover,
-              //   colorFilter: ColorFilter.mode(
-              //     Colors.grey,
-              //     BlendMode.multiply,
-              //   ),
-              // ),
               color: Theme.of(context).cardColor,
             ),
             accountName: Text(
@@ -526,57 +513,52 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     initPanes(session, login);
     return Container(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 0),
-        child: MaybeMasterDetail(
-          key: mdKey,
-          master: _getDrawer(),
-          detail: PageTransitionSwitcher(
-            transitionBuilder: (
-              Widget child,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-            ) {
-              return FadeThroughTransition(
-                child: child,
-                animation: animation,
-                secondaryAnimation: secondaryAnimation,
-              );
-            },
-            child: KeyedSubtree(
-              key: ValueKey(selectedPane),
-              child: Scaffold(
-                appBar: drawerItems[selectedPane][2]
-                    ? GradientAppBar(
-                        title: drawerItems[selectedPane][1],
-                        leading: Builder(builder: (context) {
-                          return IconButton(
-                            tooltip: MaterialLocalizations.of(context)
-                                .openAppDrawerTooltip,
-                            onPressed: () => Scaffold.of(context).openDrawer(),
-                            icon: Icon(Icons.menu),
-                          );
-                        }),
-                      )
-                    : null,
-                drawer: _getDrawer(),
-                body: loading
-                    ? LoadingUI(colorful: true, showHints: true)
-                    : Builder(builder: (context) {
-                        return Actions(
-                          actions: {
-                            MenuIntent:
-                                CallbackAction<MenuIntent>(onInvoke: (intent) {
-                              Scaffold.of(context).openDrawer();
-                            })
-                          },
-                          child: panes[selectedPane],
+        child: PageTransitionSwitcher(
+          transitionBuilder: (
+            Widget child,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) {
+            return FadeThroughTransition(
+              child: child,
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+            );
+          },
+          child: KeyedSubtree(
+            key: ValueKey(selectedPane),
+            child: Scaffold(
+              appBar: drawerItems[selectedPane][2]
+                  ? GradientAppBar(
+                      title: drawerItems[selectedPane][1],
+                      leading: Builder(builder: (context) {
+                        return IconButton(
+                          tooltip: MaterialLocalizations.of(context)
+                              .openAppDrawerTooltip,
+                          onPressed: () => Scaffold.of(context).openDrawer(),
+                          icon: Icon(Icons.menu),
                         );
                       }),
-              ),
+                    )
+                  : null,
+              drawer: _getDrawer(),
+              body: loading
+                  ? LoadingUI(colorful: true, showHints: true)
+                  : Builder(builder: (context) {
+                      return Actions(
+                        actions: {
+                          MenuIntent:
+                              CallbackAction<MenuIntent>(onInvoke: (intent) {
+                            Scaffold.of(context).openDrawer();
+                          })
+                        },
+                        child: panes[selectedPane],
+                      );
+                    }),
             ),
           ),
         ),

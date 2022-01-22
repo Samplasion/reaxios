@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:reaxios/main.dart';
+
+import '../../consts.dart';
 
 class MaxWidthContainer extends StatelessWidget {
   final Widget child;

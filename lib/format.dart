@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 String formatString(String base, List<dynamic> replacements) {
   final Map<String, dynamic> replacementMap = {};
   for (int i = 0; i < replacements.length; i++) {

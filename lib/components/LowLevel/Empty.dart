@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class EmptyUI extends StatelessWidget {
-  IconData icon;
-  String text;
-  String? subtitle;
+  final IconData icon;
+  final String text;
+  final String? subtitle;
 
-  EmptyUI({
+  const EmptyUI({
     Key? key,
     required this.icon,
     required this.text,
@@ -15,7 +15,6 @@ class EmptyUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final caption = Theme.of(context).textTheme.caption;
-    final px = MediaQuery.of(context).devicePixelRatio;
     return Container(
       child: Center(
         child: Column(

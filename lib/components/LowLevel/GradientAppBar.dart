@@ -1,17 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:reaxios/utils.dart';
 
 class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
-  Key? key;
-  Widget title;
-  double elevation;
-  Widget? leading;
-  List<Widget>? actions;
-  bool automaticallyImplyLeading;
-  double radius;
+  final Widget title;
+  final double elevation;
+  final Widget? leading;
+  final List<Widget>? actions;
+  final bool automaticallyImplyLeading;
+  final double radius;
 
-  GradientAppBar({
+  const GradientAppBar({
     Key? key,
     required this.title,
     this.leading,
@@ -19,7 +17,7 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.automaticallyImplyLeading = true,
     this.radius = 15,
-  }) : super();
+  }) : super(key: key);
 
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 

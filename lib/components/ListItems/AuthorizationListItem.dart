@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Authorization/Authorization.dart';
-import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/AuthorizationView.dart';
-// import 'package:reaxios/components/AuthorizationView.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/utils.dart';
-import 'package:url_launcher/url_launcher.dart';
-import "package:styled_widget/styled_widget.dart";
 
 class AuthorizationListItem extends StatelessWidget {
   AuthorizationListItem({

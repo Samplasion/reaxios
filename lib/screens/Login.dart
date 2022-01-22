@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/School/School.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
@@ -12,8 +12,7 @@ import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ignore: import_of_legacy_library_into_null_safe
-import '../../main.dart';
+import '../consts.dart';
 import '../format.dart';
 
 final useScreens = (RegistroStore store, onPrev, onNext, onDone) => [

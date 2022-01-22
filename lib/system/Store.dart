@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';

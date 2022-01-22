@@ -38,6 +38,6 @@ class Couple<T1, T2> {
   bool operator ==(Object other) =>
       other is Couple && other.item1 == item1 && other.item2 == item2;
 
-  // @override
-  // int get hashCode => hash2(item1.hashCode, item2.hashCode);
+  @override
+  int get hashCode => item1.hashCode ^ item2.hashCode;
 }

@@ -5,17 +5,21 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:reaxios/components/LowLevel/Gradient.dart';
 import 'package:reaxios/utils.dart';
 
-class LoadingUI extends StatelessWidget {
+class LoadingUI extends StatefulWidget {
   final bool colorful, showHints;
-  late int randomIndex;
 
   LoadingUI({
     this.colorful = false,
     this.showHints = false,
     Key? key,
-  }) : super(key: key) {
-    randomIndex = Random().nextInt(100);
-  }
+  }) : super(key: key);
+
+  @override
+  _LoadingUIState createState() => _LoadingUIState();
+}
+
+class _LoadingUIState extends State<LoadingUI> {
+  int randomIndex = Random().nextInt(100);
 
   List<String> getDidYouKnow(BuildContext context) =>
       context.locale.main.didYouKnow.split("\n");
@@ -24,9 +28,10 @@ class LoadingUI extends StatelessWidget {
   Widget build(BuildContext context) {
     final list = getDidYouKnow(context);
     return Container(
+      padding: EdgeInsets.all(16),
       child: Stack(
         children: [
-          if (colorful)
+          if (widget.colorful)
             Gradient(colors: [
               Theme.of(context).colorScheme.primary,
               Theme.of(context).colorScheme.secondary,
@@ -36,16 +41,16 @@ class LoadingUI extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SpinKitDualRing(
-                color: colorful
+                color: widget.colorful
                     ? Colors.white
                     : Theme.of(context).colorScheme.primary,
               ),
-              if (showHints) ...[
+              if (widget.showHints) ...[
                 SizedBox(height: 10),
                 Text(
                   list[randomIndex % list.length],
                   style: TextStyle(
-                    color: colorful
+                    color: widget.colorful
                         ? Colors.white
                         : Theme.of(context).colorScheme.onBackground,
                   ),

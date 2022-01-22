@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
-import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/utils.dart';

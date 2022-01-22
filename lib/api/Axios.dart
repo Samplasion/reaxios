@@ -444,13 +444,10 @@ class Axios {
   }
 
   Future<List<MaterialTeacherData>> getMaterials() async {
-    final structural = await getStructural();
     final List<APIMaterials> res = await this
         ._makeAuthenticatedCall<dynamic>("GET_MATERIALE_MASTER", (raw) {
       return (raw as List).map((e) => APIMaterials.fromJson(e)).toList();
     });
-    final periods = structural.periods
-        .firstWhere((element) => element.schoolID == student!.schoolUUID);
     return res
         .where((element) => element.idAlunno == student!.studentUUID)
         .map((e) => e.docenti

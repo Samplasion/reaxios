@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/utils.dart';
 
 class GradientCircleAvatar extends StatelessWidget {

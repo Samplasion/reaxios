@@ -72,11 +72,8 @@ class _StatsPaneState extends State<StatsPane> {
 
   Widget _buildStats(
       _Tuple4<List<Grade>, List<Period>, List<Absence>, List<Topic>> data) {
-    final store = Provider.of<RegistroStore>(context);
     final grades = data.item1;
     final periods = data.item2;
-    final absences = data.item3;
-    final topics = data.item4;
 
     final currentPeriod = (periods as List<Period?>).firstWhere(
         (element) => element?.isCurrent() ?? false,

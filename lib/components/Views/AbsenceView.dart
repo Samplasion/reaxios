@@ -4,10 +4,10 @@ import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/components/ListItems/AbsenceListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:reaxios/main.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
+
+import '../../consts.dart';
 
 class AbsenceView extends StatelessWidget {
   const AbsenceView({
@@ -65,13 +65,13 @@ class AbsenceView extends StatelessWidget {
                 Navigator.pop(context);
 
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(context.locale.absences.justifiedSnackbar)),
+                  SnackBar(
+                      content: Text(context.locale.absences.justifiedSnackbar)),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content:
-                        Text(context.locale.absences.errorSnackbar),
+                    content: Text(context.locale.absences.errorSnackbar),
                   ),
                 );
               }

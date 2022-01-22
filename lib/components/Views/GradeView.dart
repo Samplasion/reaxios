@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
@@ -9,11 +8,10 @@ import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/format.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:reaxios/main.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
-import 'package:styled_widget/styled_widget.dart';
+
+import '../../consts.dart';
 
 class GradeView extends StatefulWidget {
   const GradeView({

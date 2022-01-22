@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 class Alert extends StatelessWidget {
   Alert({

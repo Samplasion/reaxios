@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:reaxios/api/utils/ColorSerializer.dart';

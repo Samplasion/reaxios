@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/GradeView.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
-import "package:styled_widget/styled_widget.dart";
 
 class GradeListItem extends StatelessWidget {
   GradeListItem({

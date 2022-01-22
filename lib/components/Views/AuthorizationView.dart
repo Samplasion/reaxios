@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Authorization/Authorization.dart';
-import 'package:reaxios/api/entities/Student/Student.dart';
-import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/ListItems/AuthorizationListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:reaxios/main.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
+
+import '../../consts.dart';
 
 class AuthorizationView extends StatelessWidget {
   const AuthorizationView({
@@ -58,8 +56,6 @@ class AuthorizationView extends StatelessWidget {
   }
 
   List<Widget> _getMoreInfo(BuildContext context) {
-    final store = Provider.of<RegistroStore>(context);
-    final student = axios.student;
     final moreInfo = [
       if (authorization.justified)
         CardListItem(

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-// ignore: import_of_legacy_library_into_null_safe
-import '../../main.dart';
-
+@Deprecated("There is no master/detail view since version 0.2")
 class MaybeMasterDetail extends StatelessWidget {
+  @Deprecated("There is no master/detail view since version 0.2")
   MaybeMasterDetail({
     Key? key,
     this.master,
@@ -18,25 +17,5 @@ class MaybeMasterDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return detail;
-    // final width = MediaQuery.of(context).size.width;
-    // return width > kTabBreakpoint
-    //     ? Scaffold(
-    //         body: Row(
-    //           children: [
-    //             Expanded(
-    //               child: master ?? Container(),
-    //               flex: 30,
-    //             ),
-    //             VerticalDivider(
-    //               indent: 0,
-    //               endIndent: 0,
-    //               width: 1,
-    //               thickness: 1,
-    //             ),
-    //             Expanded(child: detail, flex: 70),
-    //           ],
-    //         ),
-    //       )
-    //     : detail;
   }
 }

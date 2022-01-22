@@ -1,8 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:reaxios/api/enums/BulletinAttachmentKind.dart';
 import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/api/interfaces/AbstractJson.dart';
-import 'package:reaxios/api/utils/BooleanSerializer.dart';
 import 'package:reaxios/api/utils/DateSerializer.dart';
 
 part 'Note.g.dart';

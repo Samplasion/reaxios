@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:dio/src/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';

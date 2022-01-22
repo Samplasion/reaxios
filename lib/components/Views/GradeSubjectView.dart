@@ -16,7 +16,6 @@ import 'package:reaxios/components/Utilities/Alert.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
-import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/structs/GradeAlertBoundaries.dart';
@@ -138,8 +137,6 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
   }
 
   Widget _buildTarget(BuildContext context, List<Grade> grades) {
-    final primary = Theme.of(context).primaryColor;
-
     return BigCard(
       leading: NiceHeader(
         title: context.locale.grades.objective,
@@ -157,7 +154,6 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
         ? 0
         : toReachAverage(grades.map((g) => [g.grade, g.weight]).toList(), n, s)
             .toDouble();
-    final shade = Theme.of(context).brightness == Brightness.dark ? 400 : 700;
 
     final store = Provider.of<RegistroStore>(context, listen: false);
     final GradeAlertBoundaries bounds =

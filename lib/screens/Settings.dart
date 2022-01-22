@@ -27,12 +27,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ColorTile(
         prefKey: 'accent-color',
         title: Text(context.locale.settings.colorPrimary),
-        defaultValue: Theme.of(context).accentColor,
+        defaultValue: Theme.of(context).colorScheme.secondary,
       ),
       ColorTile(
         prefKey: 'primary-color',
         title: Text(context.locale.settings.colorSecondary),
-        defaultValue: Theme.of(context).primaryColor,
+        defaultValue: Theme.of(context).colorScheme.primary,
       ),
       RadioModalTile(
         title: Text(context.locale.settings.colorTheme),

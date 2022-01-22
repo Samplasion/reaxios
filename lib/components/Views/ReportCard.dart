@@ -7,7 +7,6 @@ import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
-import '../Utilities/BoldText.dart';
 
 // ignore: must_be_immutable
 class ReportCardComponent extends StatefulWidget {

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class Gradient extends StatefulWidget {
-  List<Color> colors;
+  final List<Color> colors;
 
-  Gradient({Key? key, required this.colors}) : super(key: key);
+  const Gradient({Key? key, required this.colors}) : super(key: key);
 
   @override
   _GradientState createState() => _GradientState();
