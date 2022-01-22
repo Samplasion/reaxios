@@ -28,7 +28,6 @@ class _LoadingUIState extends State<LoadingUI> {
   Widget build(BuildContext context) {
     final list = getDidYouKnow(context);
     return Container(
-      padding: EdgeInsets.all(16),
       child: Stack(
         children: [
           if (widget.colorful)
@@ -47,12 +46,15 @@ class _LoadingUIState extends State<LoadingUI> {
               ),
               if (widget.showHints) ...[
                 SizedBox(height: 10),
-                Text(
-                  list[randomIndex % list.length],
-                  style: TextStyle(
-                    color: widget.colorful
-                        ? Colors.white
-                        : Theme.of(context).colorScheme.onBackground,
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    list[randomIndex % list.length],
+                    style: TextStyle(
+                      color: widget.colorful
+                          ? Colors.white
+                          : Theme.of(context).colorScheme.onBackground,
+                    ),
                   ),
                 ),
               ],
