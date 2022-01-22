@@ -120,17 +120,51 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
     final defaultTextThemeLight = ThemeData.light().textTheme;
     final defaultTextThemeDark = ThemeData.dark().textTheme;
 
-    TextTheme getTextTheme(TextTheme defaultTheme) => defaultTheme.copyWith(
-          headline6: defaultTheme.headline6.copyWith(
-            fontFamily: GoogleFonts.outfit().fontFamily,
-          ),
-          bodyText2: defaultTheme.bodyText2.copyWith(
-            fontFamily: GoogleFonts.montserrat().fontFamily,
-          ),
-          caption: defaultTheme.caption.copyWith(
-            fontFamily: GoogleFonts.montserrat().fontFamily,
-          ),
-        );
+    TextTheme getTextTheme(TextTheme defaultTheme) {
+      final headerFont = GoogleFonts.outfit();
+      final bodyFont = GoogleFonts.montserrat();
+      return defaultTheme.copyWith(
+        headline1: defaultTheme.headline1.copyWith(
+          fontFamily: headerFont.fontFamily,
+        ),
+        headline2: defaultTheme.headline2.copyWith(
+          fontFamily: headerFont.fontFamily,
+        ),
+        headline3: defaultTheme.headline3.copyWith(
+          fontFamily: headerFont.fontFamily,
+        ),
+        headline4: defaultTheme.headline4.copyWith(
+          fontFamily: headerFont.fontFamily,
+        ),
+        headline5: defaultTheme.headline5.copyWith(
+          fontFamily: headerFont.fontFamily,
+        ),
+        headline6: defaultTheme.headline6.copyWith(
+          fontFamily: headerFont.fontFamily,
+        ),
+        subtitle1: defaultTheme.subtitle1.copyWith(
+          fontFamily: bodyFont.fontFamily,
+        ),
+        subtitle2: defaultTheme.subtitle2.copyWith(
+          fontFamily: bodyFont.fontFamily,
+        ),
+        bodyText1: defaultTheme.bodyText1.copyWith(
+          fontFamily: bodyFont.fontFamily,
+        ),
+        bodyText2: defaultTheme.bodyText2.copyWith(
+          fontFamily: bodyFont.fontFamily,
+        ),
+        button: defaultTheme.button.copyWith(
+          fontFamily: bodyFont.fontFamily,
+        ),
+        caption: defaultTheme.caption.copyWith(
+          fontFamily: bodyFont.fontFamily,
+        ),
+        overline: defaultTheme.overline.copyWith(
+          fontFamily: bodyFont.fontFamily,
+        ),
+      );
+    }
 
     return Shortcuts(
       shortcuts: shortcuts,
