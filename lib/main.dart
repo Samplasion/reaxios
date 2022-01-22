@@ -56,10 +56,12 @@ void main() async {
     ),
   ));
 
-  android_service
-      .initializeNotifications(
-          (payload) => registroStore.notificationPayloadAction(payload))
-      .then((_) => android_service.startNotificationServices());
+  if (Platform.isAndroid) {
+    android_service
+        .initializeNotifications(
+            (payload) => registroStore.notificationPayloadAction(payload))
+        .then((_) => android_service.startNotificationServices());
+  }
 }
 
 ThemeMode getThemeMode(String tm) {
