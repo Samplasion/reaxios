@@ -33,6 +33,8 @@ import 'package:reaxios/screens/nav/Stats.dart';
 import 'package:reaxios/screens/nav/Topics.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/system/intents.dart';
+import 'package:reaxios/timetable/components/views/EventController.dart';
+import 'package:reaxios/timetable/main.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -246,6 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
           ),
         ),
+        TimetablePane(),
         BulletinsPane(session: session, store: widget.store),
         NotesPane(session: session),
         NoticesPane(session: session),
@@ -312,6 +315,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.topics),
           false,
           () => widget.store.fetchTopics(session)
+        ],
+        [
+          Icon(Icons.alarm),
+          Text("context.locale.drawer.timetable"),
+          true,
+          () {},
         ],
         [
           Icon(Icons.mail),

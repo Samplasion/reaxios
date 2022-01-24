@@ -23,6 +23,8 @@ import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
+import 'timetable/structures/Settings.dart' as timetable;
+import 'timetable/structures/Store.dart' as timetable;
 
 import 'enums/GradeDisplay.dart';
 
@@ -36,11 +38,16 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   // FIXME: currently this crashes with a "null check operator used on a null value" exception
   // LicenseRegistry.addLicense(() async* {
   //   final license = await rootBundle.loadString('google_fonts/OFL.txt');
   //   yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   // });
+
+  final timetable.Settings settings = timetable.Settings();
+  await settings.init();
 
   RegistroStore registroStore = RegistroStore();
 
@@ -52,6 +59,8 @@ void main() async {
       providers: [
         Provider(create: (_) => registroStore),
         Provider(create: (_) => AppInfoStore()..getPackageInfo(), lazy: false),
+        ChangeNotifierProvider(create: (_) => timetable.Store()),
+        ChangeNotifierProvider<timetable.Settings>(create: (_) => settings),
       ],
     ),
   ));
