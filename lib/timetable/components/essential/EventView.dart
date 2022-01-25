@@ -43,13 +43,6 @@ class _EventViewState extends State<EventView> {
 
   @override
   Widget build(BuildContext context) {
-    // return AnimatedCrossFade(
-    //   firstChild: getBase(context),
-    //   secondChild: getBase(context),
-    //   crossFadeState:
-    //       expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-    //   duration: Duration(milliseconds: 300),
-    // );
     return getBase(context);
   }
 
@@ -96,7 +89,6 @@ class _EventViewState extends State<EventView> {
             ),
             borderRadius: BorderRadius.circular(radius),
           ),
-          // duration: Duration(milliseconds: 300),
           child: Material(
             type: MaterialType.transparency,
             child: InkWell(
@@ -114,7 +106,6 @@ class _EventViewState extends State<EventView> {
               onLongPress: widget.onLongPress,
               child: Container(
                 padding: EdgeInsets.all(padding),
-                // duration: Duration(milliseconds: 300),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -128,7 +119,6 @@ class _EventViewState extends State<EventView> {
                               : bigText.fontSize),
                     ),
                     Text(
-                      // "${event.start.format(context)} - ${event.end.format(context)}$weekText",
                       context.locale.timetable.eventViewTime.format([
                         event.start.format(context),
                         event.end.format(context),
@@ -203,12 +193,15 @@ class _EventViewState extends State<EventView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Divider(),
-        ...widget.actions.entries.map((entry) => OutlinedButton(
-              child: Text("context.locale.timetable.action${entry.key}"),
-              onPressed: () {
-                entry.value(widget.event);
-              },
-            ))
+        ...widget.actions.entries.map((entry) {
+          return OutlinedButton(
+            child:
+                Text(context.locale.timetable.getByKey("actions${entry.key}")),
+            onPressed: () {
+              entry.value(widget.event);
+            },
+          );
+        })
       ],
     );
   }
