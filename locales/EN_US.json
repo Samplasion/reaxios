@@ -190,8 +190,8 @@
     "otherText": "You're doing great! 🎉"
   },
   "settings": {
-    "general": "General settings",
-    "time": "Time settings"
+    "general": "General",
+    "time": "Time"
   },
   "reportCard": {
     "notAvailableTitle": "Your report card isn't ready yet",
