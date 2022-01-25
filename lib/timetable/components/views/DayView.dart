@@ -51,6 +51,29 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
   Settings getSettings(BuildContext context) =>
       Provider.of<Settings>(context, listen: false);
 
+  @override
+  void initState() {
+    super.initState();
+    getSettings(context).addListener(_handleChange);
+  }
+
+  @override
+  void dispose() {
+    getSettings(context).removeListener(_handleChange);
+    super.dispose();
+  }
+
+  _handleChange() {
+    setState(() {
+      controller = TabController(
+        initialIndex: 0,
+        vsync: this,
+        length: getSettings(context).getEnabledDays().length *
+            getSettings(context).getWeeks(),
+      );
+    });
+  }
+
   List<Event> get events => widget.events;
 
   List<PopupMenuEntry<String>> getPopupItems() {
@@ -75,7 +98,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
     return AnimatedBuilder(
       animation: Provider.of<Settings>(context, listen: false),
       builder: (context, _) => Builder(builder: (context) {
-        final settings = context.watch<Settings>();
+        final settings = Provider.of<Settings>(context);
         return Scaffold(
           appBar: GradientAppBar(
             title: Text(context.locale.timetable.dayView),
