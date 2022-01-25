@@ -115,15 +115,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: GradientAppBar(
         title: Text(context.locale.drawer.settings),
-        actions: [
-          if (getPopupItems().isNotEmpty)
-            PopupMenuButton<String>(
-              onSelected: print,
-              itemBuilder: (BuildContext context) {
-                return getPopupItems();
-              },
-            ),
-        ],
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {
