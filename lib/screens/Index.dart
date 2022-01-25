@@ -40,6 +40,7 @@ import '../consts.dart';
 import 'nav/BulletinBoard.dart';
 import 'nav/Calculator.dart';
 import 'nav/ReportCards.dart';
+import 'nav/Timetable.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key, required this.store}) : super(key: key);
@@ -143,34 +144,6 @@ class _HomeScreenState extends State<HomeScreen> {
       loading = false;
       lastStudentUUID = session.student!.studentUUID;
     });
-
-    // _subscription =
-    //     widget.store.payloadController.stream.listen((String? payload) async {
-    //   if (payload == null) return;
-    //   List<String> data = payload.split(":");
-    //   String action = data.first;
-
-    //   switch (action) {
-    //     case "grade":
-    //       String id = data[1];
-    //       Grade grade = (await (widget.store.grades ?? Future.value(<Grade>[])))
-    //           .firstWhere((g) => g.id == id, orElse: () => Grade.empty());
-
-    //       if (grade.id.isNotEmpty) {
-    //         Navigator.push(
-    //           context,
-    //           MaterialPageRoute(
-    //             builder: (context) => GradeView(
-    //               grade: grade,
-    //               store: widget.store,
-    //               session: session,
-    //               reload: () => setState(() {}),
-    //             ),
-    //           ),
-    //         );
-    //       }
-    //   }
-    // });
   }
 
   @override
@@ -246,6 +219,11 @@ class _HomeScreenState extends State<HomeScreen> {
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
           ),
         ),
+        Builder(
+          builder: (context) => TimetablePane(
+            openMainDrawer: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
         BulletinsPane(session: session, store: widget.store),
         NotesPane(session: session),
         NoticesPane(session: session),
@@ -312,6 +290,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.topics),
           false,
           () => widget.store.fetchTopics(session)
+        ],
+        [
+          Icon(Icons.access_time),
+          Text(context.locale.drawer.timetable),
+          false,
+          () {},
         ],
         [
           Icon(Icons.mail),

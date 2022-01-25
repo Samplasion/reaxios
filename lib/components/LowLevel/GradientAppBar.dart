@@ -3,56 +3,85 @@ import 'package:reaxios/utils.dart';
 
 class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
-  final double elevation;
   final Widget? leading;
+  final double elevation;
+  final List<Color>? colors;
+  final Color? foregroundColor;
   final List<Widget>? actions;
   final bool automaticallyImplyLeading;
   final double radius;
+  final PreferredSizeWidget? bottom;
 
   const GradientAppBar({
     Key? key,
     required this.title,
     this.leading,
     this.elevation = 4.0,
+    this.colors,
+    this.foregroundColor,
     this.actions,
     this.automaticallyImplyLeading = true,
     this.radius = 15,
+    this.bottom,
   }) : super(key: key);
 
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  @override
+  Size get preferredSize {
+    return AppBar(
+      automaticallyImplyLeading: automaticallyImplyLeading,
+      leading: leading,
+      title: title,
+      elevation: elevation,
+      actions: actions,
+      bottom: bottom,
+    ).preferredSize;
+  }
 
   @override
   Widget build(BuildContext context) {
     return KeyedSubtree(
       key: key,
-      child: AppBar(
-        title: title,
-        leading: leading,
-        actions: actions,
-        elevation: elevation,
-        automaticallyImplyLeading: automaticallyImplyLeading,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(radius),
-          ),
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
+      child: SizedBox(
+        height: preferredSize.height,
+        child: AppBar(
+          title: title,
+          leading: leading,
+          actions: actions,
+          elevation: elevation,
+          automaticallyImplyLeading: automaticallyImplyLeading,
+          foregroundColor:
+              foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
+          bottom: _buildBottom(context),
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(radius),
             ),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[
-                Theme.of(context).colorScheme.primary.darken(0.1),
-                Theme.of(context).colorScheme.primary.lighten(0.06),
-              ],
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(radius),
+              ),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: colors ??
+                    <Color>[
+                      Theme.of(context).colorScheme.primary.darken(0.1),
+                      Theme.of(context).colorScheme.primary.lighten(0.06),
+                    ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  PreferredSizeWidget? _buildBottom(BuildContext context) {
+    if (bottom == null) {
+      return null;
+    }
+    return bottom!;
   }
 }

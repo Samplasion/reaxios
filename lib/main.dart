@@ -10,7 +10,6 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/services/android.dart' as android_service;
 import 'package:reaxios/screens/Index.dart';
@@ -23,6 +22,8 @@ import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
+import 'timetable/structures/Settings.dart' as timetable;
+import 'timetable/structures/Store.dart' as timetable;
 
 import 'enums/GradeDisplay.dart';
 
@@ -36,11 +37,16 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   // FIXME: currently this crashes with a "null check operator used on a null value" exception
   // LicenseRegistry.addLicense(() async* {
   //   final license = await rootBundle.loadString('google_fonts/OFL.txt');
   //   yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   // });
+
+  final timetable.Settings settings = timetable.Settings();
+  await settings.init();
 
   RegistroStore registroStore = RegistroStore();
 
@@ -52,6 +58,8 @@ void main() async {
       providers: [
         Provider(create: (_) => registroStore),
         Provider(create: (_) => AppInfoStore()..getPackageInfo(), lazy: false),
+        ChangeNotifierProvider(create: (_) => timetable.Store()),
+        ChangeNotifierProvider<timetable.Settings>(create: (_) => settings),
       ],
     ),
   ));
@@ -92,20 +100,23 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
 
   @override
   Widget build(BuildContext context) {
-    const cs = const ColorSerializer();
-    final themeMode = S.Settings.getValue("theme-mode", "dynamic");
+    final settings = Provider.of<timetable.Settings>(context);
+    final themeMode = settings.getThemeMode();
 
     var store = Provider.of<RegistroStore>(context);
 
     store.gradeDisplay = deserializeGradeDisplay(
         S.Settings.getValue("grade-display", "decimal"));
 
-    final primary = cs.fromJson(
-      S.Settings.getValue("primary-color", cs.toJson(Colors.orange[400])),
-    );
-    final accent = cs.fromJson(
-      S.Settings.getValue("accent-color", cs.toJson(Colors.purple[400])),
-    );
+    // final primary = cs.fromJson(
+    //   S.Settings.getValue("primary-color", cs.toJson(Colors.orange[400])),
+    // );
+    // final accent = cs.fromJson(
+    //   S.Settings.getValue("accent-color", cs.toJson(Colors.purple[400])),
+    // );
+
+    final primary = settings.getPrimaryColor(),
+        accent = settings.getAccentColor();
 
     AppBarTheme appBarTheme = AppBarTheme(
       shape: RoundedRectangleBorder(
@@ -166,65 +177,68 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
 
     return Shortcuts(
       shortcuts: shortcuts,
-      child: MaterialApp(
-        title: 'Registro Axios',
-        theme: ThemeData(
-          primaryColor: primary,
-          accentColor: accent,
-          colorScheme: ColorScheme.light(
-            primary: primary,
-            onPrimary: primary.contrastText,
-            secondary: accent,
-            onSecondary: accent.contrastText,
+      child: AnimatedBuilder(
+        animation: settings,
+        builder: (context, _) => MaterialApp(
+          title: 'Registro Axios',
+          theme: ThemeData(
+            primaryColor: primary,
+            accentColor: accent,
+            colorScheme: ColorScheme.light(
+              primary: primary,
+              onPrimary: primary.contrastText,
+              secondary: accent,
+              onSecondary: accent.contrastText,
+            ),
+            appBarTheme: appBarTheme,
+            textTheme: getTextTheme(defaultTextThemeLight),
           ),
-          appBarTheme: appBarTheme,
-          textTheme: getTextTheme(defaultTextThemeLight),
-        ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          primaryColor: primary,
-          accentColor: accent,
-          colorScheme: ColorScheme.dark(
-            primary: primary,
-            onPrimary: primary.contrastText,
-            secondary: accent,
-            onSecondary: accent.contrastText,
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            primaryColor: primary,
+            accentColor: accent,
+            colorScheme: ColorScheme.dark(
+              primary: primary,
+              onPrimary: primary.contrastText,
+              secondary: accent,
+              onSecondary: accent.contrastText,
+            ),
+            appBarTheme: appBarTheme,
+            textTheme: getTextTheme(defaultTextThemeDark),
           ),
-          appBarTheme: appBarTheme,
-          textTheme: getTextTheme(defaultTextThemeDark),
-        ),
-        themeMode: getThemeMode(themeMode),
-        // home: MyHomePage(title: 'Flutter Demo Home Page'),
-        initialRoute: "loading",
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: [
-          AxiosLocalizationDelegate(),
-          GlobalCupertinoLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('en'),
-          const Locale('it'),
-        ],
-        routes: {
-          "/": (_) => Builder(
-                builder: (context) => RefreshConfiguration(
-                  headerBuilder: () => ClassicHeader(
-                    idleText: context.locale.main.idleText,
-                    completeText: context.locale.main.completeText,
-                    releaseText: context.locale.main.releaseText,
-                    refreshingText: context.locale.main.refreshingText,
-                    failedText: context.locale.main.failedText,
+          themeMode: getThemeMode(themeMode),
+          // home: MyHomePage(title: 'Flutter Demo Home Page'),
+          initialRoute: "loading",
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: [
+            AxiosLocalizationDelegate(),
+            GlobalCupertinoLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en'),
+            const Locale('it'),
+          ],
+          routes: {
+            "/": (_) => Builder(
+                  builder: (context) => RefreshConfiguration(
+                    headerBuilder: () => ClassicHeader(
+                      idleText: context.locale.main.idleText,
+                      completeText: context.locale.main.completeText,
+                      releaseText: context.locale.main.releaseText,
+                      refreshingText: context.locale.main.refreshingText,
+                      failedText: context.locale.main.failedText,
+                    ),
+                    child: HomeScreen(store: store),
                   ),
-                  child: HomeScreen(store: store),
                 ),
-              ),
-          "login": (_) => LoginScreen(store: store),
-          "loading": (_) => LoadingScreen(),
-          "settings": (_) => SettingsScreen(),
-          "nointernet": (_) => NoInternetScreen(),
-        },
+            "login": (_) => LoginScreen(store: store),
+            "loading": (_) => LoadingScreen(),
+            "settings": (_) => SettingsScreen(),
+            "nointernet": (_) => NoInternetScreen(),
+          },
+        ),
       ),
     );
   }
