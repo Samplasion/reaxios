@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:provider/provider.dart';
 import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/timetable/showModalBottomSheetSuper.dart';
@@ -309,189 +308,6 @@ class _RadioModalTileState<T> extends State<RadioModalTile<T>> {
   }
 }
 
-// abstract class BaseSettings extends StatelessWidget {
-//   const BaseSettings({Key? key}) : super(key: key);
-
-//   List<SettingsTile> getTiles(BuildContext context, Settings settings);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer<Settings>(
-//       builder: (context, settings, child) => ListView(
-//         children: getTiles(context, settings),
-//       ),
-//     );
-//   }
-
-//   String getDescription(BuildContext context) {
-//     Settings settings = Provider.of<Settings>(context, listen: false);
-//     return getTiles(context, settings)
-//         .map((e) => (e.title as Text).data)
-//         .join(', ');
-//   }
-// }
-
-// /// A [SettingsTile] that allows the user to select a value among many.
-// ///
-// /// The values are displayed using the labels provided. If no label is provided
-// /// for a value, the value is displayed instead.
-// class RadioModalTile<T> extends SettingsTile {
-//   @override
-//   final Text title;
-//   final Widget? subtitle;
-//   final Map<T, String> values;
-//   final T selectedValue;
-//   final OnChange<T>? onChange;
-
-//   const RadioModalTile({
-//     this.onChange,
-//     this.subtitle,
-//     required this.title,
-//     required this.values,
-//     required this.selectedValue,
-//   });
-
-//   @override
-//   _RadioModalTileState<T> createState() => _RadioModalTileState<T>();
-// }
-
-// class _RadioModalTileState<T> extends State<RadioModalTile<T>> {
-//   late T _value = widget.selectedValue;
-//   final ScrollController _scrollController = ScrollController();
-
-//   @override
-//   void dispose() {
-//     _scrollController.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListTile(
-//       title: widget.title,
-//       subtitle: widget.subtitle ??
-//           // FIXME: This is a hack to set the subtitle as the radio text
-//           Text(
-//             widget.values.entries
-//                 .firstWhere((element) => element.key == widget.selectedValue,
-//                     orElse: () => MapEntry((null as dynamic) as T,
-//                         widget.selectedValue.toString()))
-//                 .value,
-//           ),
-//       trailing: Icon(Icons.arrow_right_rounded),
-//       onTap: () {
-//         T _oldValue = widget.selectedValue;
-//         showModalBottomSheetSuper<bool>(
-//           context: context,
-//           closeOnScroll: true,
-//           scrollController: _scrollController,
-//           onDismissed: (result) {
-//             if (result == null || !result) {
-//               widget.onChange?.call(_oldValue);
-//               setState(() {
-//                 _value = _oldValue;
-//               });
-//             }
-//           },
-//           builder: (context) {
-//             return StatefulBuilder(
-//               builder: (context, _innerSetState) {
-//                 final _outerSetState = setState;
-//                 void _setState(void Function() func) {
-//                   _innerSetState(func);
-//                   _outerSetState(func);
-//                 }
-
-//                 return BottomSheet(
-//                   onClosing: () {},
-//                   builder: (context) => Container(
-//                     clipBehavior: Clip.hardEdge,
-//                     decoration: BoxDecoration(
-//                       borderRadius: BorderRadius.only(
-//                         topLeft: Radius.circular(16),
-//                         topRight: Radius.circular(16),
-//                       ),
-//                     ),
-//                     child: Column(
-//                       children: [
-//                         Container(
-//                           padding: const EdgeInsets.all(16),
-//                           child: Text(
-//                             widget.title.data!,
-//                             style: TextStyle(
-//                               fontSize: 20,
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                           ),
-//                         ),
-//                         Expanded(
-//                           flex: 900,
-//                           child: SingleChildScrollView(
-//                             child: ListBody(
-//                               children: widget.values.entries
-//                                   .map(
-//                                     (entry) => RadioListTile<T>(
-//                                       title: Text(entry.value),
-//                                       value: entry.key,
-//                                       groupValue: _value,
-//                                       activeColor: Theme.of(context)
-//                                           .colorScheme
-//                                           .secondary,
-//                                       onChanged: (value) {
-//                                         _setState(() {
-//                                           if (value != null) {
-//                                             _value = value;
-//                                             widget.onChange?.call(value);
-//                                           }
-//                                         });
-//                                       },
-//                                     ),
-//                                   )
-//                                   .toList(),
-//                             ),
-//                           ),
-//                         ),
-//                         Spacer(),
-//                         Padding(
-//                           padding: const EdgeInsets.all(16),
-//                           child: Row(
-//                             mainAxisAlignment: MainAxisAlignment.end,
-//                             children: [
-//                               TextButton(
-//                                 child: Text("CANCEL"),
-//                                 onPressed: () {
-//                                   // _setState(() {
-//                                   //   widget.selectedValue = _oldValue;
-//                                   // });
-//                                   widget.onChange?.call(_oldValue);
-//                                   Navigator.of(context).pop(false);
-//                                 },
-//                               ),
-//                               TextButton(
-//                                 child: Text("OK"),
-//                                 onPressed: () {
-//                                   if (widget.onChange != null) {
-//                                     widget.onChange!(widget.selectedValue);
-//                                   }
-//                                   Navigator.of(context).pop(true);
-//                                 },
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 );
-//               },
-//             );
-//           },
-//         );
-//       },
-//     );
-//   }
-// }
-
 /// A [ListTile] that is also a [SettingsTile].
 ///
 /// This is used to add a [ListTile] to [BaseSettings.getTiles].
@@ -716,7 +532,6 @@ class _CheckboxModalTileState<T> extends State<CheckboxModalTile<T>> {
 /// The values are displayed using the labels provided. If no label is provided
 /// for a value, the value is displayed instead.
 class TextFormFieldModalTile extends SettingsTile {
-  @override
   final Widget title;
   final String prefKey;
   final Widget? subtitle;

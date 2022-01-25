@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_week_view/flutter_week_view.dart' as wv;
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/timetable/components/essential/DayViewText.dart';
 import 'package:reaxios/timetable/components/essential/GradientAppBar.dart';
 import 'package:reaxios/timetable/components/essential/EventWeekView.dart';
-import 'package:reaxios/timetable/components/views/DayViewBase.dart';
-import 'package:reaxios/timetable/components/views/EventEditor.dart';
 import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';

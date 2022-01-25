@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_week_view/flutter_week_view.dart';
 import 'package:reaxios/timetable/components/essential/EventView.dart';
-import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Weekday.dart';
 import 'package:reaxios/timetable/utils.dart';
@@ -29,15 +28,6 @@ class EventWeekView extends StatefulWidget {
 
 class _EventWeekViewState extends State<EventWeekView>
     with WidgetsBindingObserver {
-  UniqueKey _resizeKey = UniqueKey();
-
-  @override
-  void didChangeMetrics() {
-    setState(() {
-      _resizeKey = UniqueKey();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -84,29 +74,6 @@ class _EventWeekViewState extends State<EventWeekView>
       ),
     );
   }
-}
-
-class _CustomDayView extends DayView {
-  final List<Widget> widgetEvents;
-
-  _CustomDayView({
-    bool? inScrollableWidget,
-    required DateTime date,
-    bool? userZoomable,
-    DayViewStyle? style,
-    DayBarStyle? dayBarStyle,
-    HoursColumnStyle? hoursColumnStyle,
-    List<FlutterWeekViewEvent>? events,
-    this.widgetEvents = const [],
-  }) : super(
-          inScrollableWidget: inScrollableWidget,
-          date: date,
-          userZoomable: userZoomable,
-          style: style,
-          dayBarStyle: dayBarStyle,
-          hoursColumnStyle: hoursColumnStyle,
-          events: events,
-        );
 }
 
 class _WeekViewEventBase extends FlutterWeekViewEvent {

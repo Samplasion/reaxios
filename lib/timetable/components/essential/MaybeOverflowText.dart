@@ -11,7 +11,6 @@ class MaybeOverflowText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, box) {
-      final width = box.maxWidth;
       if (!doesTextFit(fullwidth, 1, box, textStyle: style)) {
         return Text(
           fullwidth,

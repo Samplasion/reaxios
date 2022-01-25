@@ -1,10 +1,6 @@
 // Source: https://github.com/marcglasberg/assorted_layout_widgets/blob/master/lib/src/show_dialog_super.dart
 
 import 'package:flutter/material.dart';
-import 'package:just_bottom_sheet/drag_zone_position.dart';
-import 'package:just_bottom_sheet/just_bottom_sheet.dart';
-import 'package:just_bottom_sheet/just_bottom_sheet_configuration.dart';
-import 'package:just_bottom_sheet/just_bottom_sheet_drag_zone.dart';
 
 /// Displays a Material dialog above the current contents of the app, with
 /// Material entrance and exit animations, modal barrier color, and modal

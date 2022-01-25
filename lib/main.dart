@@ -10,7 +10,6 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/services/android.dart' as android_service;
 import 'package:reaxios/screens/Index.dart';
@@ -101,7 +100,6 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
 
   @override
   Widget build(BuildContext context) {
-    const cs = const ColorSerializer();
     final settings = Provider.of<timetable.Settings>(context);
     final themeMode = settings.getThemeMode();
 
