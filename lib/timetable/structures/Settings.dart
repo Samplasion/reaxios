@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:reaxios/api/utils/ColorSerializer.dart';
+import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -99,6 +101,51 @@ class Settings with ChangeNotifier {
     _prefs.setInt("firstWeekDate", firstDayOfWeek.millisecondsSinceEpoch);
     notifyListeners();
   }
+
+  String getThemeMode() {
+    return _prefs.getString("themeMode") ?? "dynamic";
+  }
+
+  setThemeMode(String themeMode) {
+    _prefs.setString("themeMode", themeMode);
+    notifyListeners();
+  }
+
+  GradeDisplay getGradeDisplay() {
+    return deserializeGradeDisplay(
+        _prefs.getString("grade-display") ?? GradeDisplay.decimal.serialized);
+  }
+
+  void setGradeDisplay(GradeDisplay gradeDisplay) {
+    _prefs.setString("grade-display", gradeDisplay.serialized);
+    notifyListeners();
+  }
+
+  Color getPrimaryColor() {
+    if (_prefs.getString("primary-color") == null) {
+      return Colors.orange[400]!;
+    }
+    return ColorSerializer().fromJson(_prefs.getString("primary-color")!);
+  }
+
+  setPrimaryColor(Color color) {
+    _prefs.setString("primary-color", ColorSerializer().toJson(color));
+    notifyListeners();
+  }
+
+  Color getAccentColor() {
+    if (_prefs.getString("accent-color") == null) {
+      return Colors.purple[400]!;
+    }
+    return ColorSerializer().fromJson(_prefs.getString("accent-color")!);
+  }
+
+  setAccentColor(Color color) {
+    _prefs.setString("accent-color", ColorSerializer().toJson(color));
+    notifyListeners();
+  }
+
+  // --------
 
   Future<String> get directory async {
     // Directory tempDir = await getApplicationDocumentsDirectory();

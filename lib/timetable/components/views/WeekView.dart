@@ -21,11 +21,13 @@ class WeekView extends StatefulWidget {
     Key? key,
     required this.fab,
     required this.actions,
+    required this.openMainDrawer,
   }) : super(key: key);
 
   final List<Event> events;
   final FloatingActionButton? fab;
   final Map<String, Function(Event)> actions;
+  final void Function() openMainDrawer;
 
   @override
   _WeekViewState createState() => _WeekViewState();
@@ -129,6 +131,10 @@ class _WeekViewState extends State<WeekView>
     final defaultAppBar = GradientAppBar(
       title: Text("Week View"),
       bottom: tabBar,
+      leading: IconButton(
+        icon: Icon(Icons.menu),
+        onPressed: widget.openMainDrawer,
+      ),
     );
     return PreferredSize(
       child: Material(

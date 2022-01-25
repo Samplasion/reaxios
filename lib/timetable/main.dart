@@ -6,10 +6,19 @@ import 'structures/Settings.dart';
 import 'structures/Store.dart';
 
 class TimetablePane extends StatelessWidget {
-  const TimetablePane({Key? key}) : super(key: key);
+  final void Function() openMainDrawer;
+
+  const TimetablePane({
+    Key? key,
+    required this.openMainDrawer,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RestartWidget(child: EventController());
+    return RestartWidget(
+      child: EventController(
+        openMainDrawer: openMainDrawer,
+      ),
+    );
   }
 }

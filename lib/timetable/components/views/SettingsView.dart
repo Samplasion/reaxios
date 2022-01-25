@@ -93,19 +93,15 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   _pushFragment(BuildContext context, _Fragment fragment) {
-    final theme = Theme.of(context);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => StatefulBuilder(
-          builder: (context, setState) => Theme(
-            data: theme,
-            child: Scaffold(
-              appBar: GradientAppBar(
-                title: Text(fragment.title),
-              ),
-              body: fragment.body,
+          builder: (context, setState) => Scaffold(
+            appBar: GradientAppBar(
+              title: Text(fragment.title),
             ),
+            body: fragment.body,
           ),
         ),
       ),

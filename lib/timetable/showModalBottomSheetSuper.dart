@@ -136,27 +136,28 @@ Future<T?> showModalBottomSheetSuper<T>({
   double? height,
   void Function(T?)? onDismissed,
 }) async {
-  T? result = await showJustBottomSheet<T>(
+  T? result = await showModalBottomSheet<T>(
     context: context,
-    configuration: JustBottomSheetPageConfiguration(
-      scrollController: scrollController,
-      builder: (context) => OverflowBox(
-        child: builder(context),
-      ),
-      closeOnScroll: closeOnScroll,
-      height: height ?? MediaQuery.of(context).size.height,
-    ),
-    dragZoneConfiguration: JustBottomSheetDragZoneConfiguration(
-      dragZonePosition: DragZonePosition.inside,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: Container(
-          height: 8,
-          width: 50,
-          color: Colors.grey,
-        ),
-      ),
-    ),
+    // configuration: JustBottomSheetPageConfiguration(
+    //   scrollController: scrollController,
+    //   builder: (context) => OverflowBox(
+    //     child: builder(context),
+    //   ),
+    //   closeOnScroll: closeOnScroll,
+    //   height: height ?? MediaQuery.of(context).size.height,
+    // ),
+    // dragZoneConfiguration: JustBottomSheetDragZoneConfiguration(
+    //   dragZonePosition: DragZonePosition.inside,
+    //   child: ClipRRect(
+    //     borderRadius: BorderRadius.circular(4),
+    //     child: Container(
+    //       height: 8,
+    //       width: 50,
+    //       color: Colors.grey,
+    //     ),
+    //   ),
+    // ),
+    builder: builder,
   );
 
   if (onDismissed != null) onDismissed(result);

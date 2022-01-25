@@ -13,6 +13,7 @@ import 'package:reaxios/timetable/structures/Store.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Weekday.dart';
 import 'package:reaxios/timetable/utils.dart';
+import 'package:reaxios/utils.dart';
 
 class EventEditor extends StatefulWidget {
   EventEditor(
@@ -331,7 +332,8 @@ class _EventEditorState extends State<EventEditor> {
                 DropdownButtonFormField<Weekday>(
                   items: Weekday.days[1]!
                       .map((e) => DropdownMenuItem(
-                            child: Text(e.toString()),
+                            child: Text(e.toLongString(
+                                context.currentLocale.languageCode)),
                             value: e,
                           ))
                       .toList(),

@@ -15,7 +15,12 @@ import 'EventEditor.dart';
 enum View { dayView, weekView }
 
 class EventController extends StatefulWidget {
-  EventController({Key? key}) : super(key: key);
+  final void Function() openMainDrawer;
+
+  EventController({
+    Key? key,
+    required this.openMainDrawer,
+  }) : super(key: key);
 
   @override
   _EventControllerState createState() => _EventControllerState();
@@ -26,30 +31,11 @@ class EventController extends StatefulWidget {
 
 class _Page {
   final Widget view;
-  final Color primaryColor;
-  final Color secondaryColor;
   final Widget icon;
   final Widget title;
 
-  BottomNavyBarItem get item => BottomNavyBarItem(
-        icon: icon,
-        title: title,
-        activeColor: primaryColor,
-      );
-
-  ThemeData getTheme(BuildContext context) => ThemeData(
-        colorScheme: Theme.of(context).colorScheme.copyWith(
-              primary: primaryColor,
-              onPrimary: primaryColor.contrastColor,
-              secondary: secondaryColor,
-              onSecondary: secondaryColor.contrastColor,
-            ),
-      );
-
   _Page(
-    this.view,
-    this.primaryColor,
-    this.secondaryColor, {
+    this.view, {
     required this.icon,
     required this.title,
   });
@@ -74,13 +60,11 @@ class _EventControllerState extends State<EventController> {
   }
 
   List<_Page> _getPages(BuildContext context) => [
-        _Page(
-          HomeView(),
-          Colors.green,
-          Colors.redAccent,
-          icon: Icon(Icons.home),
-          title: Text('Home'),
-        ),
+        // _Page(
+        //   HomeView(),
+        //   icon: Icon(Icons.home),
+        //   title: Text('Home'),
+        // ),
         _Page(
           Consumer<Settings>(
             builder: (context, settings, child) => DayView(
@@ -88,10 +72,9 @@ class _EventControllerState extends State<EventController> {
               fab: _getFab(),
               actions: _actions,
               massEdit: _massEdit,
+              openMainDrawer: widget.openMainDrawer,
             ),
           ),
-          Colors.red,
-          Colors.blueAccent,
           title: Text('Day view'),
           icon: Icon(Icons.calendar_view_day),
         ),
@@ -101,20 +84,17 @@ class _EventControllerState extends State<EventController> {
               _events,
               fab: _getFab(),
               actions: _actions,
+              openMainDrawer: widget.openMainDrawer,
             ),
           ),
-          Colors.blue,
-          Colors.orangeAccent,
           title: Text('Week view'),
           icon: Icon(Icons.calendar_view_week),
         ),
-        _Page(
-          SettingsView(),
-          Colors.orange,
-          Colors.green,
-          title: Text('Settings'),
-          icon: Icon(Icons.settings),
-        ),
+        // _Page(
+        //   SettingsView(),
+        //   title: Text('Settings'),
+        //   icon: Icon(Icons.settings),
+        // ),
       ];
 
   @override
@@ -153,12 +133,7 @@ class _EventControllerState extends State<EventController> {
           child: PageView(
             physics: NeverScrollableScrollPhysics(),
             controller: _pageController,
-            children: _getPages(context)
-                .map((e) => Theme(
-                      data: e.getTheme(context),
-                      child: e.view,
-                    ))
-                .toList(),
+            children: _getPages(context).map((e) => e.view).toList(),
           ),
         ),
       ),
@@ -168,7 +143,13 @@ class _EventControllerState extends State<EventController> {
         onItemSelected: (index) {
           goToTab(index);
         },
-        items: _getPages(context).map((e) => e.item).toList(),
+        items: _getPages(context)
+            .map((e) => BottomNavyBarItem(
+                  icon: e.icon,
+                  title: e.title,
+                  activeColor: Theme.of(context).colorScheme.secondary,
+                ))
+            .toList(),
       ),
     );
   }
@@ -177,22 +158,19 @@ class _EventControllerState extends State<EventController> {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => Theme(
-          data: _getPages(context)[_currentIndex].getTheme(context),
-          child: EventMassEditor(
-            events: _events,
-            onSet: (name, transformation) {
-              var removed = _events.where((element) => element.name == name);
-              removed = removed.map((s) => transformation.apply(s));
-              setState(() {
-                _events = [
-                  ..._events.where((element) => element.name != name),
-                  ...removed
-                ];
-              });
-              getSettings(context).setEvents(_events);
-            },
-          ),
+        builder: (_) => EventMassEditor(
+          events: _events,
+          onSet: (name, transformation) {
+            var removed = _events.where((element) => element.name == name);
+            removed = removed.map((s) => transformation.apply(s));
+            setState(() {
+              _events = [
+                ..._events.where((element) => element.name != name),
+                ...removed
+              ];
+            });
+            getSettings(context).setEvents(_events);
+          },
         ),
       ),
     );
@@ -240,12 +218,9 @@ class _EventControllerState extends State<EventController> {
           context,
           MaterialPageRoute(
             builder: (_) => Builder(
-              builder: (context) => Theme(
-                data: _getPages(context)[_currentIndex].getTheme(context),
-                child: EventEditor(
-                  title: "Add Event",
-                  onSubmit: _addEvent,
-                ),
+              builder: (context) => EventEditor(
+                title: "Add Event",
+                onSubmit: _addEvent,
               ),
             ),
           ),

@@ -5,6 +5,7 @@ import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Weekday.dart';
 import 'package:reaxios/timetable/utils.dart';
+import 'package:reaxios/utils.dart';
 
 class EventWeekView extends StatefulWidget {
   const EventWeekView({
@@ -57,7 +58,7 @@ class _EventWeekViewState extends State<EventWeekView>
                   .copyWith(
             dateFormatter: (y, m, d) {
               return Weekday.get(DateTime(y, m, d).weekday, 1)
-                  .toShortString()
+                  .toShortString(context.currentLocale.languageCode)
                   .toUpperCase();
             },
             textStyle: theme.textTheme.caption

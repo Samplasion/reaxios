@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 class Weekday implements Comparable {
   final int value;
@@ -35,13 +34,17 @@ class Weekday implements Comparable {
     throw RangeError.range(wd, 1, 7);
   }
 
-  String toShortString() {
-    return DateFormat.E().format(toDateTime);
+  String toShortString(String locale) {
+    return DateFormat.E(locale).format(toDateTime);
   }
 
-  @override
+  String toLongString(String locale) {
+    return DateFormat.EEEE(locale).format(toDateTime);
+  }
+
   String toString() {
-    return DateFormat.EEEE().format(toDateTime);
+    throw UnimplementedError();
+    // return DateFormat.EEEE().format(toDateTime);
   }
 
   @override

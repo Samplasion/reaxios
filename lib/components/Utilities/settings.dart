@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:provider/provider.dart';
 import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
+import 'package:reaxios/timetable/showModalBottomSheetSuper.dart';
 import 'package:reaxios/utils.dart';
 
 import '../../showDialogSuper.dart';
@@ -11,6 +13,8 @@ typedef OnChange<T> = void Function(T value);
 
 abstract class SettingsTile<T> extends StatefulWidget {
   String get prefKey;
+
+  const SettingsTile();
 
   @protected
   Future<void> saveSetting(T value) {
@@ -293,6 +297,536 @@ class _RadioModalTileState<T> extends State<RadioModalTile<T>> {
                         }
                         Navigator.of(context).pop(true);
                       },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+// abstract class BaseSettings extends StatelessWidget {
+//   const BaseSettings({Key? key}) : super(key: key);
+
+//   List<SettingsTile> getTiles(BuildContext context, Settings settings);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<Settings>(
+//       builder: (context, settings, child) => ListView(
+//         children: getTiles(context, settings),
+//       ),
+//     );
+//   }
+
+//   String getDescription(BuildContext context) {
+//     Settings settings = Provider.of<Settings>(context, listen: false);
+//     return getTiles(context, settings)
+//         .map((e) => (e.title as Text).data)
+//         .join(', ');
+//   }
+// }
+
+// /// A [SettingsTile] that allows the user to select a value among many.
+// ///
+// /// The values are displayed using the labels provided. If no label is provided
+// /// for a value, the value is displayed instead.
+// class RadioModalTile<T> extends SettingsTile {
+//   @override
+//   final Text title;
+//   final Widget? subtitle;
+//   final Map<T, String> values;
+//   final T selectedValue;
+//   final OnChange<T>? onChange;
+
+//   const RadioModalTile({
+//     this.onChange,
+//     this.subtitle,
+//     required this.title,
+//     required this.values,
+//     required this.selectedValue,
+//   });
+
+//   @override
+//   _RadioModalTileState<T> createState() => _RadioModalTileState<T>();
+// }
+
+// class _RadioModalTileState<T> extends State<RadioModalTile<T>> {
+//   late T _value = widget.selectedValue;
+//   final ScrollController _scrollController = ScrollController();
+
+//   @override
+//   void dispose() {
+//     _scrollController.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListTile(
+//       title: widget.title,
+//       subtitle: widget.subtitle ??
+//           // FIXME: This is a hack to set the subtitle as the radio text
+//           Text(
+//             widget.values.entries
+//                 .firstWhere((element) => element.key == widget.selectedValue,
+//                     orElse: () => MapEntry((null as dynamic) as T,
+//                         widget.selectedValue.toString()))
+//                 .value,
+//           ),
+//       trailing: Icon(Icons.arrow_right_rounded),
+//       onTap: () {
+//         T _oldValue = widget.selectedValue;
+//         showModalBottomSheetSuper<bool>(
+//           context: context,
+//           closeOnScroll: true,
+//           scrollController: _scrollController,
+//           onDismissed: (result) {
+//             if (result == null || !result) {
+//               widget.onChange?.call(_oldValue);
+//               setState(() {
+//                 _value = _oldValue;
+//               });
+//             }
+//           },
+//           builder: (context) {
+//             return StatefulBuilder(
+//               builder: (context, _innerSetState) {
+//                 final _outerSetState = setState;
+//                 void _setState(void Function() func) {
+//                   _innerSetState(func);
+//                   _outerSetState(func);
+//                 }
+
+//                 return BottomSheet(
+//                   onClosing: () {},
+//                   builder: (context) => Container(
+//                     clipBehavior: Clip.hardEdge,
+//                     decoration: BoxDecoration(
+//                       borderRadius: BorderRadius.only(
+//                         topLeft: Radius.circular(16),
+//                         topRight: Radius.circular(16),
+//                       ),
+//                     ),
+//                     child: Column(
+//                       children: [
+//                         Container(
+//                           padding: const EdgeInsets.all(16),
+//                           child: Text(
+//                             widget.title.data!,
+//                             style: TextStyle(
+//                               fontSize: 20,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                           ),
+//                         ),
+//                         Expanded(
+//                           flex: 900,
+//                           child: SingleChildScrollView(
+//                             child: ListBody(
+//                               children: widget.values.entries
+//                                   .map(
+//                                     (entry) => RadioListTile<T>(
+//                                       title: Text(entry.value),
+//                                       value: entry.key,
+//                                       groupValue: _value,
+//                                       activeColor: Theme.of(context)
+//                                           .colorScheme
+//                                           .secondary,
+//                                       onChanged: (value) {
+//                                         _setState(() {
+//                                           if (value != null) {
+//                                             _value = value;
+//                                             widget.onChange?.call(value);
+//                                           }
+//                                         });
+//                                       },
+//                                     ),
+//                                   )
+//                                   .toList(),
+//                             ),
+//                           ),
+//                         ),
+//                         Spacer(),
+//                         Padding(
+//                           padding: const EdgeInsets.all(16),
+//                           child: Row(
+//                             mainAxisAlignment: MainAxisAlignment.end,
+//                             children: [
+//                               TextButton(
+//                                 child: Text("CANCEL"),
+//                                 onPressed: () {
+//                                   // _setState(() {
+//                                   //   widget.selectedValue = _oldValue;
+//                                   // });
+//                                   widget.onChange?.call(_oldValue);
+//                                   Navigator.of(context).pop(false);
+//                                 },
+//                               ),
+//                               TextButton(
+//                                 child: Text("OK"),
+//                                 onPressed: () {
+//                                   if (widget.onChange != null) {
+//                                     widget.onChange!(widget.selectedValue);
+//                                   }
+//                                   Navigator.of(context).pop(true);
+//                                 },
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 );
+//               },
+//             );
+//           },
+//         );
+//       },
+//     );
+//   }
+// }
+
+/// A [ListTile] that is also a [SettingsTile].
+///
+/// This is used to add a [ListTile] to [BaseSettings.getTiles].
+/// Each argument is passed to the [ListTile] constructor.
+class ListSettingsTile extends SettingsTile {
+  final String prefKey;
+  final Widget title;
+  final Widget? subtitle;
+  final Widget? leading;
+  final Widget? trailing;
+  final void Function()? onTap;
+
+  const ListSettingsTile({
+    required this.title,
+    required this.prefKey,
+    this.subtitle,
+    this.leading,
+    this.trailing,
+    this.onTap,
+  });
+
+  @override
+  State<ListSettingsTile> createState() => _ListSettingsTileState();
+}
+
+class _ListSettingsTileState extends State<ListSettingsTile> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: widget.title,
+      subtitle: widget.subtitle,
+      leading: widget.leading,
+      trailing: widget.trailing,
+      onTap: widget.onTap,
+    );
+  }
+}
+
+/// A [SettingsTile] that allows the user to select one or more values among many.
+///
+/// The values are displayed using the labels provided. If no label is provided
+/// for a value, the value is displayed instead.
+class CheckboxModalTile<T> extends SettingsTile {
+  final Text title;
+  @override
+  final String prefKey;
+  final Widget? subtitle;
+  final Map<T, String> values;
+  final List<T> selectedValues;
+  final OnChange<List<T>>? onChange;
+  final bool allowNone;
+
+  CheckboxModalTile({
+    this.onChange,
+    this.subtitle,
+    required this.title,
+    required this.prefKey,
+    required this.values,
+    required this.selectedValues,
+    this.allowNone = false,
+  });
+
+  @override
+  _CheckboxModalTileState<T> createState() => _CheckboxModalTileState<T>();
+}
+
+class _CheckboxModalTileState<T> extends State<CheckboxModalTile<T>> {
+  late List<T> _value = widget.selectedValues;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Map<T, bool> get _selectedValues {
+    return widget.values.map((key, value) {
+      return MapEntry(key, _value.contains(key));
+    });
+  }
+
+  List<T> _mapToList(Map<T, bool> value) {
+    return value.entries
+        .where((element) => element.value)
+        .map((element) => element.key)
+        .toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: widget.title,
+      subtitle: widget.subtitle ??
+          Text(
+            _value.map((element) => widget.values[element]).join(", "),
+          ),
+      trailing: Icon(Icons.arrow_right_rounded),
+      onTap: () {
+        List<T> _oldValue = widget.selectedValues;
+        showModalBottomSheetSuper<bool>(
+          context: context,
+          closeOnScroll: true,
+          scrollController: _scrollController,
+          onDismissed: (result) {
+            if (result == null || !result) {
+              widget.onChange?.call(_oldValue);
+              setState(() {
+                _value = _oldValue;
+              });
+            }
+          },
+          builder: (context) {
+            return StatefulBuilder(
+              builder: (context, _innerSetState) {
+                final _outerSetState = setState;
+                void _setState(void Function() func) {
+                  _innerSetState(func);
+                  _outerSetState(func);
+                }
+
+                return BottomSheet(
+                  onClosing: () {},
+                  builder: (context) => Container(
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            widget.title.data!,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 900,
+                          child: SingleChildScrollView(
+                            child: ListBody(
+                              children: widget.values.entries
+                                  .map(
+                                    (entry) => CheckboxListTile(
+                                      title: Text(entry.value),
+                                      value: _selectedValues[entry.key],
+                                      activeColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      onChanged: (value) {
+                                        final shouldSet = (_value.length >= 2 ||
+                                            widget.allowNone);
+                                        if (value != null &&
+                                            (value || shouldSet)) {
+                                          _setState(() {
+                                            final newValue = _mapToList({
+                                              ..._selectedValues,
+                                              entry.key: value,
+                                            });
+                                            _value = newValue;
+                                            widget.onChange?.call(newValue);
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                child: Text("CANCEL"),
+                                onPressed: () {
+                                  // _setState(() {
+                                  //   widget.selectedValues = _oldValue;
+                                  // });
+                                  widget.onChange?.call(_oldValue);
+                                  Navigator.of(context).pop(false);
+                                },
+                              ),
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  print("${widget.onChange.runtimeType}");
+                                  if (widget.onChange != null) {
+                                    print("${widget.onChange!.runtimeType}");
+                                    widget.onChange!(widget.selectedValues);
+                                  }
+                                  Navigator.of(context).pop(true);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+/// A [SettingsTile] that allows the user to select one or more values among many.
+///
+/// The values are displayed using the labels provided. If no label is provided
+/// for a value, the value is displayed instead.
+class TextFormFieldModalTile extends SettingsTile {
+  @override
+  final Widget title;
+  final String prefKey;
+  final Widget? subtitle;
+  final String value;
+  final OnChange<String> onChange;
+  final String? Function(String?)? validator;
+  final InputDecoration? decoration;
+  final TextCapitalization textCapitalization;
+
+  const TextFormFieldModalTile({
+    Key? key,
+    required this.onChange,
+    this.subtitle,
+    this.validator,
+    this.decoration = const InputDecoration(),
+    this.textCapitalization = TextCapitalization.none,
+    required this.title,
+    required this.value,
+    required this.prefKey,
+  }) : super();
+
+  @override
+  _TextFormFieldModalTileState createState() => _TextFormFieldModalTileState();
+}
+
+class _TextFormFieldModalTileState extends State<TextFormFieldModalTile> {
+  late String _value = widget.value;
+  late TextEditingController _controller;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: _value);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: widget.title,
+      subtitle: widget.subtitle ?? Text(_value),
+      trailing: Icon(Icons.arrow_right_rounded),
+      onTap: () {
+        String _oldValue = widget.value;
+        showDialogSuper<bool>(
+          context: context,
+          barrierDismissible: true,
+          onDismissed: (result) {
+            if (result == null || !result) {
+              widget.onChange(_oldValue);
+              setState(() {
+                _value = _oldValue;
+                _controller.text = _value;
+              });
+            }
+          },
+          builder: (context) {
+            return StatefulBuilder(
+              builder: (context, _innerSetState) {
+                final _outerSetState = setState;
+                void _setState(void Function() func) {
+                  _innerSetState(func);
+                  _outerSetState(func);
+                }
+
+                return AlertDialog(
+                  title: widget.title,
+                  content: Form(
+                    key: _formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: TextFormField(
+                      controller: _controller,
+                      validator: widget.validator ?? (_) => null,
+                      decoration: widget.decoration,
+                      textCapitalization: widget.textCapitalization,
+                      autovalidateMode: AutovalidateMode.always,
+                      onChanged: (value) {
+                        _setState(() {
+                          _value = value;
+                          // _controller.text = _value;
+                        });
+                      },
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text("CANCEL"),
+                      onPressed: () {
+                        widget.onChange(_oldValue);
+                        _setState(() {
+                          _value = _oldValue;
+                          _controller.text = _value;
+                        });
+                        Navigator.of(context).pop(false);
+                      },
+                    ),
+                    TextButton(
+                      child: Text("OK"),
+                      onPressed: _formKey.currentState?.validate() ?? false
+                          ? () {
+                              widget.onChange(_value);
+                              Navigator.of(context).pop(true);
+                            }
+                          : null,
                     ),
                   ],
                 );

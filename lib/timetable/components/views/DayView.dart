@@ -9,6 +9,7 @@ import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Weekday.dart';
+import 'package:reaxios/utils.dart';
 
 class DayView extends StatefulWidget {
   DayView(
@@ -17,12 +18,14 @@ class DayView extends StatefulWidget {
     required this.fab,
     required this.actions,
     required this.massEdit,
+    required this.openMainDrawer,
   }) : super(key: key);
 
   final List<Event> events;
   final FloatingActionButton? fab;
   final Map<String, Function(Event)> actions;
   final Function massEdit;
+  final void Function() openMainDrawer;
 
   @override
   _DayViewState createState() => _DayViewState();
@@ -67,75 +70,108 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      final settings = context.watch<Settings>();
-      return Scaffold(
-        appBar: GradientAppBar(
-          title: Text("Day View"),
-          bottom: TabBar(
-            isScrollable: true,
-            controller: controller,
-            indicatorColor: Theme.of(context).colorScheme.onPrimary,
-            tabs: (settings.getEnabledDays() * settings.getWeeks())
-                .entries
-                .entries
-                .map((entry) {
-              final day = Weekday.get(entry.value, 1).toString();
-              String week = "";
-              if (settings.getWeeks() > 1) {
-                week = " [week ${((entry.key + 2) / 7).floor() + 1}]";
-              }
-              return Tab(text: "$day$week");
-            }).toList(),
-          ),
-          actions: [
-            if (Foundation.kDebugMode)
-              IconButton(
-                onPressed: () => RestartWidget.of(context)?.restart(),
-                icon: Icon(Icons.refresh),
-                tooltip: "[DEBUG] Restart app",
-              ),
-            if (getPopupItems().isNotEmpty)
-              PopupMenuButton<String>(
-                onSelected: print,
-                itemBuilder: (BuildContext context) {
-                  return getPopupItems();
-                },
-              ),
-          ],
-        ),
-        body: Center(
-          child: TabBarView(
-            controller: controller,
-            children: (getSettings(context).getEnabledDays() *
-                    getSettings(context).getWeeks())
-                .entries
-                .entries
-                .map((entry) {
-              final wdi = entry.value;
-              final week = ((entry.key + 2) / 7).floor() + 1;
-              var dayEvents = events.where((element) {
-                return element.weekday.value == wdi &&
-                    element.weekday.week == week;
-              }).toList();
+  void initState() {
+    super.initState();
+    final settings = getSettings(context);
+    settings.addListener(_controllerUpdate);
+  }
 
-              if (dayEvents.isEmpty) return emptyDay();
+  @override
+  void dispose() {
+    final settings = getSettings(context);
+    settings.removeListener(_controllerUpdate);
+    super.dispose();
+  }
 
-              return SingleChildScrollView(
-                controller: verticalScrollControllers[wdi],
-                child: DayViewBase(
-                  events: dayEvents,
-                  showDayHeader: false,
-                  actions: widget.actions,
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-        floatingActionButton: widget.fab,
+  void _controllerUpdate() {
+    setState(() {
+      controller = TabController(
+        initialIndex: 0,
+        vsync: this,
+        length: getSettings(context).getEnabledDays().length *
+            getSettings(context).getWeeks(),
       );
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: Provider.of<Settings>(context, listen: false),
+      builder: (context, _) => Builder(builder: (context) {
+        final settings = context.watch<Settings>();
+        return Scaffold(
+          appBar: GradientAppBar(
+            title: Text("Day View"),
+            bottom: TabBar(
+              isScrollable: true,
+              controller: controller,
+              indicatorColor: Theme.of(context).colorScheme.onPrimary,
+              tabs: (settings.getEnabledDays() * settings.getWeeks())
+                  .entries
+                  .entries
+                  .map((entry) {
+                final day = Weekday.get(entry.value, 1)
+                    .toLongString(context.currentLocale.languageCode);
+                String week = "";
+                if (settings.getWeeks() > 1) {
+                  week = " [week ${((entry.key + 2) / 7).floor() + 1}]";
+                }
+                return Tab(text: "$day$week");
+              }).toList(),
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: widget.openMainDrawer,
+            ),
+            actions: [
+              if (Foundation.kDebugMode)
+                IconButton(
+                  onPressed: () => RestartWidget.of(context)?.restart(),
+                  icon: Icon(Icons.refresh),
+                  tooltip: "[DEBUG] Restart app",
+                ),
+              if (getPopupItems().isNotEmpty)
+                PopupMenuButton<String>(
+                  onSelected: print,
+                  itemBuilder: (BuildContext context) {
+                    return getPopupItems();
+                  },
+                ),
+            ],
+          ),
+          body: Center(
+            child: TabBarView(
+              controller: controller,
+              children: (getSettings(context).getEnabledDays() *
+                      getSettings(context).getWeeks())
+                  .entries
+                  .entries
+                  .map((entry) {
+                final wdi = entry.value;
+                final week = ((entry.key + 2) / 7).floor() + 1;
+                var dayEvents = events.where((element) {
+                  return element.weekday.value == wdi &&
+                      element.weekday.week == week;
+                }).toList();
+
+                if (dayEvents.isEmpty) return emptyDay();
+
+                return SingleChildScrollView(
+                  controller: verticalScrollControllers[wdi],
+                  child: DayViewBase(
+                    events: dayEvents,
+                    showDayHeader: false,
+                    actions: widget.actions,
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          floatingActionButton: widget.fab,
+        );
+      }),
+    );
   }
 
   Widget emptyDay() {

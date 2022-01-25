@@ -248,7 +248,13 @@ class _HomeScreenState extends State<HomeScreen> {
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
           ),
         ),
-        TimetablePane(),
+        Builder(
+          builder: (context) => TimetablePane(
+            // session: session,
+            // store: widget.store,
+            openMainDrawer: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
         BulletinsPane(session: session, store: widget.store),
         NotesPane(session: session),
         NoticesPane(session: session),
@@ -319,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
         [
           Icon(Icons.alarm),
           Text("context.locale.drawer.timetable"),
-          true,
+          false,
           () {},
         ],
         [

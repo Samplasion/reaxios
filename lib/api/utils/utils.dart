@@ -182,7 +182,10 @@ Color getContrastText(
   Color darkBg = Colors.white,
   Color lightBg = Colors.black,
 }) {
-  return color.computeLuminance() > 0.5 ? lightBg : darkBg;
+  // return color.computeLuminance() > 0.5 ? lightBg : darkBg;
+  return ThemeData.estimateBrightnessForColor(color) == Brightness.light
+      ? lightBg
+      : darkBg;
 }
 
 String titleCase(String str) {
