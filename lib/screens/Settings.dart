@@ -133,6 +133,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text(fragment.title),
             subtitle: Text(fragment.body.getDescription(context)),
             onTap: () => _pushFragment(context, fragment),
+            isThreeLine: true,
           );
         },
         itemCount: _fragments.length,
