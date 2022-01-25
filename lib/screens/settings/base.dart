@@ -135,19 +135,22 @@ class _RadioModalTileState<T> extends State<RadioModalTile<T>>
     super.dispose();
   }
 
+  String get subtitle {
+    final entries = widget.values.entries;
+    if (entries.any((element) => element.key == widget.selectedValue)) {
+      return entries
+          .firstWhere((element) => element.key == widget.selectedValue)
+          .value;
+    } else {
+      return widget.selectedValue.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: widget.title,
-      subtitle: widget.subtitle ??
-          // FIXME: This is a hack to set the subtitle as the radio text
-          Text(
-            widget.values.entries
-                .firstWhere((element) => element.key == widget.selectedValue,
-                    orElse: () => MapEntry((null as dynamic) as T,
-                        widget.selectedValue.toString()))
-                .value,
-          ),
+      subtitle: widget.subtitle ?? Text(subtitle),
       trailing: Icon(Icons.arrow_right_rounded),
       onTap: () {
         T _oldValue = widget.selectedValue;
