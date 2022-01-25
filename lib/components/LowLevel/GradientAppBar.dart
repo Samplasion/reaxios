@@ -42,7 +42,7 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
     return KeyedSubtree(
       key: key,
       child: SizedBox(
-        height: preferredSize.height,
+        height: preferredSize.height + MediaQuery.of(context).padding.top,
         child: AppBar(
           title: title,
           leading: leading,
