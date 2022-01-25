@@ -26,6 +26,11 @@ class Settings with ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
   }
 
+  @override
+  dispose() {
+    throw UnimplementedError();
+  }
+
   setEvents(List<Event> events) {
     _prefs.setString(
       "events",

@@ -41,33 +41,36 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return KeyedSubtree(
       key: key,
-      child: AppBar(
-        title: title,
-        leading: leading,
-        actions: actions,
-        elevation: elevation,
-        automaticallyImplyLeading: automaticallyImplyLeading,
-        foregroundColor:
-            foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
-        bottom: _buildBottom(context),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(radius),
-          ),
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
+      child: SizedBox(
+        height: preferredSize.height,
+        child: AppBar(
+          title: title,
+          leading: leading,
+          actions: actions,
+          elevation: elevation,
+          automaticallyImplyLeading: automaticallyImplyLeading,
+          foregroundColor:
+              foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
+          bottom: _buildBottom(context),
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(radius),
             ),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: colors ??
-                  <Color>[
-                    Theme.of(context).colorScheme.primary.darken(0.1),
-                    Theme.of(context).colorScheme.primary.lighten(0.06),
-                  ],
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(radius),
+              ),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: colors ??
+                    <Color>[
+                      Theme.of(context).colorScheme.primary.darken(0.1),
+                      Theme.of(context).colorScheme.primary.lighten(0.06),
+                    ],
+              ),
             ),
           ),
         ),

@@ -59,6 +59,12 @@ class LocaleBase {
   Localetopics get topics => _topics;
   late Localecalculator _calculator;
   Localecalculator get calculator => _calculator;
+  late Localetimetable _timetable;
+  Localetimetable get timetable => _timetable;
+  late LocalegeneralSettings _generalSettings;
+  LocalegeneralSettings get generalSettings => _generalSettings;
+  late LocaletimeSettings _timeSettings;
+  LocaletimeSettings get timeSettings => _timeSettings;
 
   void initAll() {
     _main = Localemain(Map<String, String>.from(_data['main']));
@@ -82,6 +88,9 @@ class LocaleBase {
     _disciplinaryNotices = LocaledisciplinaryNotices(Map<String, String>.from(_data['disciplinaryNotices']));
     _topics = Localetopics(Map<String, String>.from(_data['topics']));
     _calculator = Localecalculator(Map<String, String>.from(_data['calculator']));
+    _timetable = Localetimetable(Map<String, String>.from(_data['timetable']));
+    _generalSettings = LocalegeneralSettings(Map<String, String>.from(_data['generalSettings']));
+    _timeSettings = LocaletimeSettings(Map<String, String>.from(_data['timeSettings']));
   }
 }
 
@@ -154,6 +163,7 @@ class Localedrawer {
   String get settings => _data["settings"]!;
   String get logOut => _data["logOut"]!;
   String get calculator => _data["calculator"]!;
+  String get timetable => _data["timetable"]!;
 }
 
 class Localeabout {
@@ -402,26 +412,8 @@ class Localesettings {
     return _data[key]!;
   }
 
-  String get title => _data["title"]!;
-  String get groupsColorsTitle => _data["groupsColorsTitle"]!;
-  String get groupsBehaviorTitle => _data["groupsBehaviorTitle"]!;
-  String get changesRestart => _data["changesRestart"]!;
-  String get gradeDisplayDecimal => _data["gradeDisplayDecimal"]!;
-  String get gradeDisplayLetter => _data["gradeDisplayLetter"]!;
-  String get gradeDisplayPercentage => _data["gradeDisplayPercentage"]!;
-  String get colorPrimary => _data["colorPrimary"]!;
-  String get colorSecondary => _data["colorSecondary"]!;
-  String get colorTheme => _data["colorTheme"]!;
-  String get colorThemeLight => _data["colorThemeLight"]!;
-  String get colorThemeDark => _data["colorThemeDark"]!;
-  String get colorThemeDynamic => _data["colorThemeDynamic"]!;
-  String get gradeDisplayLabel => _data["gradeDisplayLabel"]!;
-  String get groupsAdvancedTitle => _data["groupsAdvancedTitle"]!;
-  String get restartAppTitle => _data["restartAppTitle"]!;
-  String get restartAppSubtitle => _data["restartAppSubtitle"]!;
-  String get chooseColor => _data["chooseColor"]!;
-  String get chooseOption => _data["chooseOption"]!;
-  String get gradeDisplayPrecise => _data["gradeDisplayPrecise"]!;
+  String get general => _data["general"]!;
+  String get time => _data["time"]!;
 }
 
 class LocalereportCard {
@@ -505,5 +497,92 @@ class Localecalculator {
   String get average => _data["average"]!;
   String get addAllGrades => _data["addAllGrades"]!;
   String get gradeCalculatorBottom => _data["gradeCalculatorBottom"]!;
+}
+
+class Localetimetable {
+  late final Map<String, String> _data;
+  Localetimetable(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get emptyDay => _data["emptyDay"]!;
+  String get dayView => _data["dayView"]!;
+  String get weekView => _data["weekView"]!;
+  String get dayViewWeek => _data["dayViewWeek"]!;
+  String get editMultiple => _data["editMultiple"]!;
+  String get weekViewWeek => _data["weekViewWeek"]!;
+  String get actionsEdit => _data["actionsEdit"]!;
+  String get actionsClone => _data["actionsClone"]!;
+  String get actionsDelete => _data["actionsDelete"]!;
+  String get actionsAdd => _data["actionsAdd"]!;
+  String get addEvent => _data["addEvent"]!;
+  String get colorPicker => _data["colorPicker"]!;
+  String get eventViewWeek => _data["eventViewWeek"]!;
+  String get eventViewTime => _data["eventViewTime"]!;
+  String get editName => _data["editName"]!;
+  String get editNameHint => _data["editNameHint"]!;
+  String get editNameError => _data["editNameError"]!;
+  String get editAbbreviation => _data["editAbbreviation"]!;
+  String get editAbbreviationError => _data["editAbbreviationError"]!;
+  String get editTime => _data["editTime"]!;
+  String get editStartLabel => _data["editStartLabel"]!;
+  String get editStartError => _data["editStartError"]!;
+  String get editEndLabel => _data["editEndLabel"]!;
+  String get editEndError => _data["editEndError"]!;
+  String get editWeek => _data["editWeek"]!;
+  String get editWeekLabel => _data["editWeekLabel"]!;
+  String get editColor => _data["editColor"]!;
+  String get editDescription => _data["editDescription"]!;
+  String get editDescriptionHint => _data["editDescriptionHint"]!;
+  String get editWeekday => _data["editWeekday"]!;
+  String get editMultipleSelect => _data["editMultipleSelect"]!;
+}
+
+class LocalegeneralSettings {
+  late final Map<String, String> _data;
+  LocalegeneralSettings(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get title => _data["title"]!;
+  String get groupsColorsTitle => _data["groupsColorsTitle"]!;
+  String get groupsBehaviorTitle => _data["groupsBehaviorTitle"]!;
+  String get changesRestart => _data["changesRestart"]!;
+  String get gradeDisplayDecimal => _data["gradeDisplayDecimal"]!;
+  String get gradeDisplayLetter => _data["gradeDisplayLetter"]!;
+  String get gradeDisplayPercentage => _data["gradeDisplayPercentage"]!;
+  String get colorPrimary => _data["colorPrimary"]!;
+  String get colorSecondary => _data["colorSecondary"]!;
+  String get colorTheme => _data["colorTheme"]!;
+  String get colorThemeLight => _data["colorThemeLight"]!;
+  String get colorThemeDark => _data["colorThemeDark"]!;
+  String get colorThemeDynamic => _data["colorThemeDynamic"]!;
+  String get gradeDisplayLabel => _data["gradeDisplayLabel"]!;
+  String get groupsAdvancedTitle => _data["groupsAdvancedTitle"]!;
+  String get restartAppTitle => _data["restartAppTitle"]!;
+  String get restartAppSubtitle => _data["restartAppSubtitle"]!;
+  String get chooseColor => _data["chooseColor"]!;
+  String get chooseOption => _data["chooseOption"]!;
+  String get gradeDisplayPrecise => _data["gradeDisplayPrecise"]!;
+  String get ignoredWords => _data["ignoredWords"]!;
+}
+
+class LocaletimeSettings {
+  late final Map<String, String> _data;
+  LocaletimeSettings(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get defaultLessonDuration => _data["defaultLessonDuration"]!;
+  String get enabledDays => _data["enabledDays"]!;
+  String get numberOfWeeks => _data["numberOfWeeks"]!;
+  String get resetCurrentWeek => _data["resetCurrentWeek"]!;
+  String get resetCurrentWeekSubtitle => _data["resetCurrentWeekSubtitle"]!;
 }
 

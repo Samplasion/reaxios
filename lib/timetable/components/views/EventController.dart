@@ -2,13 +2,11 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/timetable/components/views/DayView.dart';
-import 'package:reaxios/timetable/components/views/HomeView.dart';
-import 'package:reaxios/timetable/components/views/SettingsView.dart';
 import 'package:reaxios/timetable/components/views/EventMassEditor.dart';
 import 'package:reaxios/timetable/components/views/WeekView.dart';
-import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
+import 'package:reaxios/utils.dart';
 
 import 'EventEditor.dart';
 
@@ -60,14 +58,10 @@ class _EventControllerState extends State<EventController> {
   }
 
   List<_Page> _getPages(BuildContext context) => [
-        // _Page(
-        //   HomeView(),
-        //   icon: Icon(Icons.home),
-        //   title: Text('Home'),
-        // ),
         _Page(
-          Consumer<Settings>(
-            builder: (context, settings, child) => DayView(
+          AnimatedBuilder(
+            animation: getSettings(context),
+            builder: (context, child) => DayView(
               _events,
               fab: _getFab(),
               actions: _actions,
@@ -75,26 +69,22 @@ class _EventControllerState extends State<EventController> {
               openMainDrawer: widget.openMainDrawer,
             ),
           ),
-          title: Text('Day view'),
+          title: Text(context.locale.timetable.dayView),
           icon: Icon(Icons.calendar_view_day),
         ),
         _Page(
-          Consumer<Settings>(
-            builder: (context, settings, child) => WeekView(
+          AnimatedBuilder(
+            animation: getSettings(context),
+            builder: (context, child) => WeekView(
               _events,
               fab: _getFab(),
               actions: _actions,
               openMainDrawer: widget.openMainDrawer,
             ),
           ),
-          title: Text('Week view'),
+          title: Text(context.locale.timetable.weekView),
           icon: Icon(Icons.calendar_view_week),
         ),
-        // _Page(
-        //   SettingsView(),
-        //   title: Text('Settings'),
-        //   icon: Icon(Icons.settings),
-        // ),
       ];
 
   @override
@@ -182,7 +172,7 @@ class _EventControllerState extends State<EventController> {
             context,
             MaterialPageRoute(
               builder: (_) => EventEditor(
-                title: "Clone Event",
+                title: context.locale.timetable.actionsClone,
                 base: event,
                 onSubmit: _addEvent,
               ),
@@ -194,7 +184,7 @@ class _EventControllerState extends State<EventController> {
             context,
             MaterialPageRoute(
               builder: (_) => EventEditor(
-                title: "Edit Event",
+                title: context.locale.timetable.actionsEdit,
                 base: event,
                 onSubmit: (s) {
                   _removeEvent(event);
@@ -211,7 +201,7 @@ class _EventControllerState extends State<EventController> {
 
   FloatingActionButton _getFab() {
     return FloatingActionButton(
-      tooltip: "Add event",
+      tooltip: context.locale.timetable.actionsAdd,
       child: Icon(Icons.add),
       onPressed: () {
         Navigator.push(
@@ -219,7 +209,7 @@ class _EventControllerState extends State<EventController> {
           MaterialPageRoute(
             builder: (_) => Builder(
               builder: (context) => EventEditor(
-                title: "Add Event",
+                title: context.locale.timetable.addEvent,
                 onSubmit: _addEvent,
               ),
             ),

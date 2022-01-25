@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/utils.dart';
+import 'package:reaxios/utils.dart';
 
 import 'MaybeOverflowText.dart';
 
@@ -69,7 +71,10 @@ class _EventViewState extends State<EventView> {
 
     String weekText = "";
     if (settings.getWeeks() > 1) {
-      weekText = " - week ${event.weekday.week}";
+      // weekText = " - week ${event.weekday.week}";
+      weekText = context.locale.timetable.eventViewWeek.format([
+        event.weekday.week,
+      ]);
     }
 
     return AnimatedContainer(
@@ -123,7 +128,12 @@ class _EventViewState extends State<EventView> {
                               : bigText.fontSize),
                     ),
                     Text(
-                      "${event.start.format(context)} - ${event.end.format(context)}$weekText",
+                      // "${event.start.format(context)} - ${event.end.format(context)}$weekText",
+                      context.locale.timetable.eventViewTime.format([
+                        event.start.format(context),
+                        event.end.format(context),
+                        weekText,
+                      ]),
                       style: baseStyle.copyWith(
                           fontSize: widget.compact
                               ? (baseStyle.fontSize ?? 14) * 0.75
@@ -194,7 +204,7 @@ class _EventViewState extends State<EventView> {
       children: [
         Divider(),
         ...widget.actions.entries.map((entry) => OutlinedButton(
-              child: Text(entry.key),
+              child: Text("context.locale.timetable.action${entry.key}"),
               onPressed: () {
                 entry.value(widget.event);
               },

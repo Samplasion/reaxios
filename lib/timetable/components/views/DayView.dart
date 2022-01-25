@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart' as Foundation;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reaxios/components/LowLevel/RestartWidget.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/timetable/components/essential/GradientAppBar.dart';
-import 'package:reaxios/timetable/components/essential/RestartWidget.dart';
 import 'package:reaxios/timetable/components/views/DayViewBase.dart';
-import 'package:reaxios/timetable/components/views/EventEditor.dart';
 import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
@@ -64,34 +64,10 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
               widget.massEdit();
             });
           },
-          child: Text("Edit multiple events"),
+          // child: Text("Edit multiple events"),
+          child: Text(context.locale.timetable.editMultiple),
         ),
     ];
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    final settings = getSettings(context);
-    settings.addListener(_controllerUpdate);
-  }
-
-  @override
-  void dispose() {
-    final settings = getSettings(context);
-    settings.removeListener(_controllerUpdate);
-    super.dispose();
-  }
-
-  void _controllerUpdate() {
-    setState(() {
-      controller = TabController(
-        initialIndex: 0,
-        vsync: this,
-        length: getSettings(context).getEnabledDays().length *
-            getSettings(context).getWeeks(),
-      );
-    });
   }
 
   @override
@@ -102,7 +78,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
         final settings = context.watch<Settings>();
         return Scaffold(
           appBar: GradientAppBar(
-            title: Text("Day View"),
+            title: Text(context.locale.timetable.dayView),
             bottom: TabBar(
               isScrollable: true,
               controller: controller,
@@ -115,7 +91,9 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
                     .toLongString(context.currentLocale.languageCode);
                 String week = "";
                 if (settings.getWeeks() > 1) {
-                  week = " [week ${((entry.key + 2) / 7).floor() + 1}]";
+                  week = context.locale.timetable.dayViewWeek.format([
+                    ((entry.key + 2) / 7).floor() + 1,
+                  ]);
                 }
                 return Tab(text: "$day$week");
               }).toList(),
@@ -127,7 +105,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
             actions: [
               if (Foundation.kDebugMode)
                 IconButton(
-                  onPressed: () => RestartWidget.of(context)?.restart(),
+                  onPressed: () => RestartWidget.restartApp(context),
                   icon: Icon(Icons.refresh),
                   tooltip: "[DEBUG] Restart app",
                 ),
@@ -183,12 +161,12 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
           Padding(
             padding: EdgeInsets.only(bottom: 8),
             child: Icon(
-              Icons.alarm,
+              Icons.access_time,
               size: 64,
               color: Theme.of(context).textTheme.caption!.color,
             ),
           ),
-          Text("There are no events today.",
+          Text(context.locale.timetable.emptyDay,
               style: Theme.of(context).textTheme.caption),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_week_view/flutter_week_view.dart' as wv;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/timetable/components/essential/DayViewText.dart';
 import 'package:reaxios/timetable/components/essential/GradientAppBar.dart';
 import 'package:reaxios/timetable/components/essential/EventWeekView.dart';
@@ -12,6 +13,7 @@ import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Weekday.dart';
 import 'package:reaxios/timetable/utils.dart';
+import 'package:reaxios/utils.dart';
 
 import '../../../tuple.dart';
 
@@ -124,12 +126,14 @@ class _WeekViewState extends State<WeekView>
             controller: tabController,
             indicatorColor: Theme.of(context).colorScheme.onPrimary,
             tabs: 1.to(settings.getWeeks()).map((week) {
-              return Tab(text: "Week $week");
+              return Tab(
+                text: context.locale.timetable.weekViewWeek.format([week]),
+              );
             }).toList(),
           )
         : null;
     final defaultAppBar = GradientAppBar(
-      title: Text("Week View"),
+      title: Text(context.locale.timetable.weekView),
       bottom: tabBar,
       leading: IconButton(
         icon: Icon(Icons.menu),
@@ -145,7 +149,7 @@ class _WeekViewState extends State<WeekView>
             colors: Colors.black.toSlightGradient(),
             foregroundColor: Colors.white,
             leading: IconButton(
-              tooltip: "Done",
+              tooltip: context.materialLocale.okButtonLabel,
               onPressed: () {
                 setState(() {
                   editing = null;
@@ -156,7 +160,7 @@ class _WeekViewState extends State<WeekView>
             ),
             actions: [
               IconButton(
-                tooltip: "Edit",
+                tooltip: context.locale.timetable.actionsEdit,
                 onPressed: () {
                   widget.actions["Edit"]!(editing!);
                   // Quit editing mode after opening the editor

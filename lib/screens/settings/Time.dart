@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/settings/base.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
+import 'package:reaxios/utils.dart';
 
 class TimeSettings extends BaseSettings {
   const TimeSettings({Key? key}) : super(key: key);
@@ -9,7 +11,7 @@ class TimeSettings extends BaseSettings {
   @override
   List<SettingsTile> getTiles(BuildContext context, Settings settings) => [
         RadioModalTile<int>(
-          title: Text("context.locale.timeSettings.defaultLessonDuration"),
+          title: Text(context.locale.timeSettings.defaultLessonDuration),
           values: const {
             60: '1 hour',
             50: '50 minutes',
@@ -26,7 +28,7 @@ class TimeSettings extends BaseSettings {
               settings.setLessonDuration(Duration(minutes: duration)),
         ),
         CheckboxModalTile<int>(
-          title: Text('context.locale.timeSettings.enabledDays'),
+          title: Text(context.locale.timeSettings.enabledDays),
           values: const {
             1: 'Monday',
             2: 'Tuesday',
@@ -40,7 +42,7 @@ class TimeSettings extends BaseSettings {
           onChange: (values) => settings.setEnabledDays(values),
         ),
         RadioModalTile<int>(
-          title: Text('context.locale.timeSettings.numberOfWeeks'),
+          title: Text(context.locale.timeSettings.numberOfWeeks),
           values: const {
             1: '1 week',
             2: '2 weeks',
@@ -51,12 +53,15 @@ class TimeSettings extends BaseSettings {
           onChange: (weeks) => settings.setWeeks(weeks),
         ),
         ListSettingsTile(
-          title: Text("context.locale.timeSettings.resetCurrentWeek"),
+          title: Text(context.locale.timeSettings.resetCurrentWeek),
           subtitle: Text(
-              "Current week: week ${settings.weekForDate(DateTime.now())}"),
+            context.locale.timeSettings.resetCurrentWeekSubtitle.format([
+              settings.weekForDate(DateTime.now()),
+            ]),
+          ),
           onTap: () {
             settings.setFirstWeekDate(DateTime.now());
           },
-        ),
+        )
       ];
 }

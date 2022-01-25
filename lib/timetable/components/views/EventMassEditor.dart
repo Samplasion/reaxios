@@ -5,6 +5,7 @@ import 'package:reaxios/timetable/components/essential/GradientAppBar.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/utils.dart';
+import 'package:reaxios/utils.dart';
 
 class EventMassEditor extends StatefulWidget {
   EventMassEditor({
@@ -42,9 +43,10 @@ class _EventMassEditorState extends State<EventMassEditor> {
 
   @override
   Widget build(BuildContext context) {
+    final items = widget.events.map((s) => s.name).toSet().toList();
     return Scaffold(
       appBar: GradientAppBar(
-        title: Text("Edit multiple events"),
+        title: Text(context.locale.timetable.editMultiple),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -62,7 +64,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    "Select a event",
+                    context.locale.timetable.editMultipleSelect,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -72,12 +74,12 @@ class _EventMassEditorState extends State<EventMassEditor> {
                   ),
                 ),
                 DropdownButtonFormField<String>(
-                  items: widget.events
-                      .map((s) => s.name)
-                      .toSet()
+                  items: items
                       .map((s) => DropdownMenuItem(child: Text(s), value: s))
                       .toList(),
-                  value: selectedEvent,
+                  value: items.contains(selectedEvent)
+                      ? selectedEvent
+                      : items.first,
                   onChanged: (String? value) {
                     if (value == null) return;
                     List<Event> corresponding =
@@ -100,7 +102,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
                     top: 8.0,
                   ),
                   child: Text(
-                    "Name",
+                    context.locale.timetable.editName,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -112,7 +114,8 @@ class _EventMassEditorState extends State<EventMassEditor> {
                 TextFormField(
                   controller: name,
                   decoration: InputDecoration(
-                    hintText: "Event name",
+                    // hintText: "Event name",
+                    hintText: context.locale.timetable.editNameHint,
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (val) {
@@ -126,7 +129,8 @@ class _EventMassEditorState extends State<EventMassEditor> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Enter a valid name.";
+                      // return "Enter a valid name.";
+                      return context.locale.timetable.editNameError;
                     }
 
                     return null;
@@ -139,7 +143,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    "Abbreviation",
+                    context.locale.timetable.editAbbreviation,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -168,8 +172,9 @@ class _EventMassEditorState extends State<EventMassEditor> {
                   validator: (value) {
                     if (value == null ||
                         (value.isNotEmpty && value.length != 3)) {
-                      return "Enter a valid 3-character abbreviation, or leave "
-                          "empty to auto-generate it.";
+                      // return "Enter a valid 3-character abbreviation, or leave "
+                      //     "empty to auto-generate it.";
+                      return context.locale.timetable.editAbbreviationError;
                     }
 
                     return null;
@@ -182,7 +187,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    "Color",
+                    context.locale.timetable.editColor,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,

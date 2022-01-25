@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
+import 'package:reaxios/format.dart';
 import 'package:reaxios/timetable/components/essential/ColorField.dart';
 import 'package:reaxios/timetable/components/essential/GradientAppBar.dart';
 import 'package:reaxios/timetable/components/essential/GradientCircleAvatar.dart';
@@ -111,7 +112,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 8.0,
                   ),
                   child: Text(
-                    "Name",
+                    context.locale.timetable.editName,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -124,7 +125,7 @@ class _EventEditorState extends State<EventEditor> {
                   textFieldConfiguration: TextFieldConfiguration(
                     controller: name,
                     decoration: InputDecoration(
-                      hintText: "Event name",
+                      hintText: context.locale.timetable.editNameHint,
                       border: OutlineInputBorder(),
                     ),
                     onChanged: (val) {
@@ -139,7 +140,7 @@ class _EventEditorState extends State<EventEditor> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Enter a valid name.";
+                      return context.locale.timetable.editNameError;
                     }
 
                     return null;
@@ -180,7 +181,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    "Abbreviation",
+                    context.locale.timetable.editAbbreviation,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -209,8 +210,9 @@ class _EventEditorState extends State<EventEditor> {
                   validator: (value) {
                     if (value == null ||
                         (value.isNotEmpty && value.length != 3)) {
-                      return "Enter a valid 3-character abbreviation, or leave "
-                          "empty to auto-generate it.";
+                      // return "Enter a valid 3-character abbreviation, or leave "
+                      //     "empty to auto-generate it.";
+                      return context.locale.timetable.editAbbreviationError;
                     }
 
                     return null;
@@ -223,7 +225,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    "Time",
+                    context.locale.timetable.editTime,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -245,10 +247,11 @@ class _EventEditorState extends State<EventEditor> {
                         },
                         validator: (dt) {
                           if (end.inMinutes < dt.inMinutes)
-                            return "Select a time sooner than the ending time.";
+                            // return "Select a time sooner than the ending time.";
+                            return context.locale.timetable.editStartError;
                         },
                         decoration: InputDecoration(
-                          labelText: "Start",
+                          labelText: context.locale.timetable.editStartLabel,
                           errorMaxLines: 5,
                         ),
                       ),
@@ -265,10 +268,11 @@ class _EventEditorState extends State<EventEditor> {
                         },
                         validator: (dt) {
                           if (dt.inMinutes < start.inMinutes)
-                            return "Select a time later than the starting time.";
+                            // return "Select a time later than the starting time.";
+                            return context.locale.timetable.editEndError;
                         },
                         decoration: InputDecoration(
-                          labelText: "End",
+                          labelText: context.locale.timetable.editEndLabel,
                           errorMaxLines: 5,
                         ),
                       ),
@@ -282,7 +286,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    "Week",
+                    context.locale.timetable.editWeek,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -294,10 +298,15 @@ class _EventEditorState extends State<EventEditor> {
                 DropdownButtonFormField<int>(
                   items: 1
                       .to(settings.getWeeks())
-                      .map((e) => DropdownMenuItem<int>(
-                            value: e,
-                            child: Text("Week $e"),
-                          ))
+                      .map(
+                        (e) => DropdownMenuItem<int>(
+                          value: e,
+                          // child: Text("Week $e"),
+                          child: Text(
+                            context.locale.timetable.editWeekLabel.format([e]),
+                          ),
+                        ),
+                      )
                       .toList(),
                   value: week,
                   onChanged: (int? value) {
@@ -320,7 +329,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    "Weekday",
+                    context.locale.timetable.editWeekday,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -332,8 +341,10 @@ class _EventEditorState extends State<EventEditor> {
                 DropdownButtonFormField<Weekday>(
                   items: Weekday.days[1]!
                       .map((e) => DropdownMenuItem(
-                            child: Text(e.toLongString(
-                                context.currentLocale.languageCode)),
+                            child: Text(
+                              e.toLongString(
+                                  context.currentLocale.languageCode),
+                            ),
                             value: e,
                           ))
                       .toList(),
@@ -357,7 +368,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    "Color",
+                    context.locale.timetable.editColor,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -382,7 +393,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    "Notes",
+                    context.locale.timetable.editDescription,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -396,7 +407,8 @@ class _EventEditorState extends State<EventEditor> {
                   minLines: 3,
                   maxLines: null,
                   decoration: InputDecoration(
-                    hintText: "Additional notes go here...",
+                    // hintText: "Additional notes go here...",
+                    hintText: context.locale.timetable.editDescriptionHint,
                     border: OutlineInputBorder(),
                   ),
                 ),

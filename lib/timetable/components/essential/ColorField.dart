@@ -1,10 +1,8 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:reaxios/timetable/extensions.dart';
-import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/utils.dart';
-
-import 'MaybeOverflowText.dart';
+import 'package:reaxios/utils.dart';
 
 class ColorField extends StatefulWidget {
   ColorField(
@@ -102,7 +100,10 @@ class _ColorFieldState extends State<ColorField> {
             child: Container(
               padding: EdgeInsets.all(16),
               // duration: Duration(milliseconds: 300),
-              child: Text("Select color", style: baseStyle),
+              child: Text(
+                context.locale.timetable.colorPicker,
+                style: baseStyle,
+              ),
             ),
           ),
         ),

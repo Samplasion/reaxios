@@ -29,7 +29,7 @@ abstract class BaseSettings extends StatelessWidget {
   String getDescription(BuildContext context) {
     Settings settings = Provider.of<Settings>(context, listen: false);
     return getTiles(context, settings)
-        .where((element) => element is! SettingsHeaderTile)
+        .where((element) => element.shouldShowInDescription)
         .map((e) => (e.title as Text).data)
         .join(', ');
   }
@@ -37,6 +37,8 @@ abstract class BaseSettings extends StatelessWidget {
 
 abstract class SettingsTile extends StatefulWidget {
   Widget get title;
+
+  bool get shouldShowInDescription => true;
 
   const SettingsTile({Key? key}) : super(key: key);
 }
@@ -668,6 +670,9 @@ class SettingsHeaderTile extends SettingsTile {
   final Text title;
   final String? subtitle;
 
+  @override
+  bool get shouldShowInDescription => false;
+
   const SettingsHeaderTile({
     Key? key,
     required this.title,
@@ -682,5 +687,42 @@ class _SettingsHeaderTileState extends State<SettingsHeaderTile> {
   @override
   Widget build(BuildContext context) {
     return SettingsHeader(title: widget.title.data!, subtitle: widget.subtitle);
+  }
+}
+
+class SettingsListTile extends SettingsTile {
+  @override
+  final Widget title;
+  final VoidCallback onTap;
+  final Widget? subtitle;
+  final Widget? leading;
+  final Widget? trailing;
+
+  @override
+  bool get shouldShowInDescription => false;
+
+  const SettingsListTile({
+    Key? key,
+    required this.title,
+    required this.onTap,
+    this.subtitle,
+    this.leading,
+    this.trailing,
+  }) : super(key: key);
+
+  @override
+  _SettingsListTileState createState() => _SettingsListTileState();
+}
+
+class _SettingsListTileState extends State<SettingsListTile> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: widget.title,
+      onTap: widget.onTap,
+      subtitle: widget.subtitle,
+      leading: widget.leading,
+      trailing: widget.trailing,
+    );
   }
 }
