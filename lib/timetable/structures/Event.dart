@@ -8,8 +8,6 @@ import '../utils.dart';
 import 'DayTime.dart';
 import 'Weekday.dart';
 
-import 'Settings.dart';
-
 part 'Event.g.dart';
 
 @JsonSerializable(explicitToJson: true)

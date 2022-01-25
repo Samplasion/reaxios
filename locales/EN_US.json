@@ -297,6 +297,6 @@
     "enabledDays": "Enabled days",
     "numberOfWeeks": "Number of weeks",
     "resetCurrentWeek": "Reset current week",
-    "resetCurrentWeekSubtitle": ""
+    "resetCurrentWeekSubtitle": "Current week: week {0}"
   }
 }

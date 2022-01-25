@@ -297,6 +297,6 @@
     "enabledDays": "Giorni abilitati",
     "numberOfWeeks": "Numero di settimane",
     "resetCurrentWeek": "Reimposta settimana corrente",
-    "resetCurrentWeekSubtitle": ""
+    "resetCurrentWeekSubtitle": "Settimana corrente: sett. {0}"
   }
 }
