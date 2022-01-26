@@ -433,7 +433,10 @@ class _HomeScreenState extends State<HomeScreen> {
             currentAccountPicture: GradientCircleAvatar(
               child: Text(
                 "${login.firstName} ${login.lastName}".trim()[0],
-                style: TextStyle(fontSize: 28),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(fontSize: 28),
               ),
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -447,6 +450,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   (s) => GradientCircleAvatar(
                       child: Text(
                         "${s.firstName} ${s.lastName}".trim()[0],
+                        style: Theme.of(context).textTheme.bodyText1!,
                       ),
                       color: Theme.of(context).colorScheme.secondary),
                 )
