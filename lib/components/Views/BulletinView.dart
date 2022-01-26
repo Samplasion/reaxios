@@ -16,8 +16,6 @@ import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../consts.dart';
-
 class BulletinView extends StatelessWidget {
   const BulletinView({
     Key? key,
