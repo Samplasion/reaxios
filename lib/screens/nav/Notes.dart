@@ -6,6 +6,7 @@ import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/ListItems/NoteListItem.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -78,9 +79,13 @@ class _NotesPaneState extends State<NotesPane> {
               color: Theme.of(context).canvasColor,
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               alignment: Alignment.centerLeft,
-              child: Text(
-                entries[i].key,
-                style: Theme.of(context).textTheme.caption,
+              child: Center(
+                child: MaxWidthContainer(
+                  child: Text(
+                    entries[i].key,
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                ),
               ),
             ),
             content: Padding(
@@ -91,7 +96,11 @@ class _NotesPaneState extends State<NotesPane> {
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, i1) {
                   final e = entries[i].value[i1];
-                  return NoteListItem(note: e, session: widget.session);
+                  return Center(
+                    child: MaxWidthContainer(
+                      child: NoteListItem(note: e, session: widget.session),
+                    ),
+                  );
                 },
                 itemCount: entries[i].value.length,
                 shrinkWrap: true,

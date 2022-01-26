@@ -6,6 +6,7 @@ import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/MaterialFolderView.dart';
 import 'package:reaxios/utils.dart';
@@ -42,35 +43,40 @@ class MaterialTeacherView extends StatelessWidget {
       itemCount: teacher.folders.length,
       itemBuilder: (context, index) {
         final text = teacher.folders[index].note;
-        return CardListItem(
-          leading: NotificationBadge(
-            child: GradientCircleAvatar(
-              color: accent,
-              child: Icon(
-                Icons.folder,
-                color: accent.contrastText,
-              ),
-            ),
-            showBadge: false,
-          ),
-          title: teacher.folders[index].description,
-          subtitle: Text(
-            text.isEmpty
-                ? context.locale.teachingMaterials.noDescription
-                : text,
-            style:
-                text.isNotEmpty ? null : TextStyle(fontStyle: FontStyle.italic),
-          ),
-          onClick: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MaterialFolderView(
-                  folder: teacher.folders[index],
+        return Center(
+          child: MaxWidthContainer(
+            child: CardListItem(
+              leading: NotificationBadge(
+                child: GradientCircleAvatar(
+                  color: accent,
+                  child: Icon(
+                    Icons.folder,
+                    color: accent.contrastText,
+                  ),
                 ),
+                showBadge: false,
               ),
-            );
-          },
+              title: teacher.folders[index].description,
+              subtitle: Text(
+                text.isEmpty
+                    ? context.locale.teachingMaterials.noDescription
+                    : text,
+                style: text.isNotEmpty
+                    ? null
+                    : TextStyle(fontStyle: FontStyle.italic),
+              ),
+              onClick: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MaterialFolderView(
+                      folder: teacher.folders[index],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
         ).padding(
           horizontal: 16,
           top: index == 0 ? 8 : 0,

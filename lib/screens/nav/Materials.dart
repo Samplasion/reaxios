@@ -6,6 +6,7 @@ import 'package:reaxios/api/entities/Material/Material.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Views/MaterialTeacherView.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
@@ -70,27 +71,31 @@ class _MaterialsPaneState extends State<MaterialsPane> {
           : ListView.builder(
               itemCount: _materials.length,
               itemBuilder: (context, index) {
-                return CardListItem(
-                  leading: GradientCircleAvatar(
-                    color: Utils.getColorFromString(_materials[index].name),
-                    child: Text(
-                      _materials[index].name.substring(0, 1),
+                return Center(
+                  child: MaxWidthContainer(
+                    child: CardListItem(
+                      leading: GradientCircleAvatar(
+                        color: Utils.getColorFromString(_materials[index].name),
+                        child: Text(
+                          _materials[index].name.substring(0, 1),
+                        ),
+                      ),
+                      title: _materials[index].name,
+                      subtitle: Text(_materials[index].subjects),
+                      details: Text(
+                        getCount(_materials[index].folders.length),
+                      ),
+                      onClick: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MaterialTeacherView(_materials[index]),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  title: _materials[index].name,
-                  subtitle: Text(_materials[index].subjects),
-                  details: Text(
-                    getCount(_materials[index].folders.length),
-                  ),
-                  onClick: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            MaterialTeacherView(_materials[index]),
-                      ),
-                    );
-                  },
                 ).padding(
                   horizontal: 16,
                   top: index == 0 ? 8 : 0,

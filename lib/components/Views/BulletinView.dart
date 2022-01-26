@@ -9,6 +9,7 @@ import 'package:reaxios/components/ListItems/BulletinListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
@@ -44,23 +45,24 @@ class BulletinView extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            constraints: BoxConstraints(maxWidth: kTabBreakpoint),
-            child: Column(
-              children: [
-                Hero(
-                  child: BulletinListItem(
-                    bulletin: bulletin,
-                    onClick: false,
-                    session: axios,
-                    store: store,
+          child: MaxWidthContainer(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  Hero(
+                    child: BulletinListItem(
+                      bulletin: bulletin,
+                      onClick: false,
+                      session: axios,
+                      store: store,
+                    ),
+                    tag: bulletin.toString(),
                   ),
-                  tag: bulletin.toString(),
-                ),
-                ..._getAttachmentWidgets(context),
-                ..._getAccessories(context),
-              ],
+                  ..._getAttachmentWidgets(context),
+                  ..._getAccessories(context),
+                ],
+              ),
             ),
           ),
         ),

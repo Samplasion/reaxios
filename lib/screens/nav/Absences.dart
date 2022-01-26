@@ -8,6 +8,7 @@ import 'package:reaxios/components/ListItems/AbsenceListItem.dart';
 import 'package:reaxios/components/Utilities/Alert.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -85,11 +86,15 @@ class _AbsencesPaneState extends State<AbsencesPane> {
         controller: controller,
         child: Column(
           children: [
-            Alert(
-              title: context.locale.absences.sectionAlertTitle,
-              color: Colors.orange,
-              text:
-                  MarkdownBody(data: context.locale.absences.sectionAlertBody),
+            Center(
+              child: MaxWidthContainer(
+                child: Alert(
+                  title: context.locale.absences.sectionAlertTitle,
+                  color: Colors.orange,
+                  text: MarkdownBody(
+                      data: context.locale.absences.sectionAlertBody),
+                ),
+              ),
             ).padding(horizontal: 16, top: 16),
             ListView.separated(
               shrinkWrap: true,
@@ -102,9 +107,13 @@ class _AbsencesPaneState extends State<AbsencesPane> {
                     color: Theme.of(context).canvasColor,
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      entries[i].key,
-                      style: Theme.of(context).textTheme.caption,
+                    child: Center(
+                      child: MaxWidthContainer(
+                        child: Text(
+                          entries[i].key,
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ),
                     ),
                   ),
                   content: Padding(
@@ -117,9 +126,13 @@ class _AbsencesPaneState extends State<AbsencesPane> {
                         final e = entries[i].value[i1];
                         return Hero(
                           tag: e.toString(),
-                          child: AbsenceListItem(
-                            absence: e,
-                            session: widget.session,
+                          child: Center(
+                            child: MaxWidthContainer(
+                              child: AbsenceListItem(
+                                absence: e,
+                                session: widget.session,
+                              ),
+                            ),
                           ),
                         );
                       },

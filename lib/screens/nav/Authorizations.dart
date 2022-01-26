@@ -6,6 +6,7 @@ import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/components/ListItems/AuthorizationListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -89,7 +90,6 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
       child: Container(
         child: ListView.separated(
           shrinkWrap: true,
-          // physics: NeverScrollableScrollPhysics(),
           controller: controller,
           separatorBuilder: (_a, _b) => Divider(),
           itemBuilder: (context, i) {
@@ -99,9 +99,13 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
                 color: Theme.of(context).canvasColor,
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  entries[i].key,
-                  style: Theme.of(context).textTheme.caption,
+                child: Center(
+                  child: MaxWidthContainer(
+                    child: Text(
+                      entries[i].key,
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ),
                 ),
               ),
               content: Padding(
@@ -112,12 +116,16 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, i1) {
                     final e = entries[i].value[i1];
-                    return Hero(
-                      child: AuthorizationListItem(
-                          authorization: e,
-                          session: widget.session,
-                          rebuild: rebuild),
-                      tag: e.toString(),
+                    return Center(
+                      child: MaxWidthContainer(
+                        child: Hero(
+                          child: AuthorizationListItem(
+                              authorization: e,
+                              session: widget.session,
+                              rebuild: rebuild),
+                          tag: e.toString(),
+                        ),
+                      ),
                     );
                   },
                   itemCount: entries[i].value.length,

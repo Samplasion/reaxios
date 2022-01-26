@@ -5,6 +5,7 @@ import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/components/ListItems/BulletinListItem.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/system/Store.dart';
 import "package:styled_widget/styled_widget.dart";
 
@@ -62,13 +63,17 @@ class _BulletinsPaneState extends ReloadableState<BulletinsPane> {
                 : i == 0
                     ? EdgeInsets.only(top: 8)
                     : EdgeInsets.zero,
-            child: Hero(
-              tag: entries[i].toString(),
-              child: BulletinListItem(
-                bulletin: entries[i],
-                session: widget.session,
-                store: widget.store,
-                reload: rebuild,
+            child: Center(
+              child: MaxWidthContainer(
+                child: Hero(
+                  tag: entries[i].toString(),
+                  child: BulletinListItem(
+                    bulletin: entries[i],
+                    session: widget.session,
+                    store: widget.store,
+                    reload: rebuild,
+                  ),
+                ),
               ),
             ),
           ).paddingDirectional(horizontal: 16);

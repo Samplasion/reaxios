@@ -9,6 +9,7 @@ import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/utils.dart';
@@ -79,13 +80,17 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
             context.locale.teachingMaterials.noHost
         : material.fileName;
 
-    return CardListItem(
-      leading: icon,
-      title: title,
-      subtitle: subtitle,
-      details: Text(
-          "$name – ${context.dateToString(material.date, includeTime: true)}"),
-      onClick: () => _onClick(material),
+    return Center(
+      child: MaxWidthContainer(
+        child: CardListItem(
+          leading: icon,
+          title: title,
+          subtitle: subtitle,
+          details: Text(
+              "$name – ${context.dateToString(material.date, includeTime: true)}"),
+          onClick: () => _onClick(material),
+        ),
+      ),
     ).padding(
       horizontal: 16,
       top: index == 0 ? 8 : 0,

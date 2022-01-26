@@ -7,6 +7,7 @@ import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -221,14 +222,18 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
           controller: _mainController,
           itemBuilder: (context, i) {
             return StickyHeader(
-              header: Container(
-                height: 50.0,
-                color: Theme.of(context).canvasColor,
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  entries[i].key,
-                  style: Theme.of(context).textTheme.caption,
+              header: Center(
+                child: MaxWidthContainer(
+                  child: Container(
+                    height: 50.0,
+                    color: Theme.of(context).canvasColor,
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      entries[i].key,
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ),
                 ),
               ),
               content: Padding(
@@ -239,7 +244,11 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, i1) {
                     final e = entries[i].value[i1];
-                    return AssignmentListItem(assignment: e);
+                    return Center(
+                      child: MaxWidthContainer(
+                        child: AssignmentListItem(assignment: e),
+                      ),
+                    );
                   },
                   itemCount: entries[i].value.length,
                   shrinkWrap: true,
