@@ -63,7 +63,6 @@ dependencies:
   copy_with_extension: ^4.0.0
   share_plus: ^3.0.4
   file_picker: ^4.3.2
-  flex_color_picker: ^2.2.0
   duration: ^3.0.8
   flutter_week_view: ^1.2.1+1
   bottom_navy_bar: ^6.0.0

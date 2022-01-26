@@ -1,8 +1,10 @@
-import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/utils.dart';
 import 'package:reaxios/utils.dart';
+
+import '../../../showDialogSuper.dart';
 
 class ColorField extends StatefulWidget {
   ColorField(
@@ -54,48 +56,55 @@ class _ColorFieldState extends State<ColorField> {
           child: InkWell(
             borderRadius: BorderRadius.circular(4),
             onTap: () async {
-              // Wait for the dialog to return color selection result.
-              final Color newColor = await showColorPickerDialog(
-                // The dialog needs a context, we pass it in.
-                context,
-                // We use the dialogSelectColor, as its starting color.
-                widget.color,
-                title: Text('Color Picker',
-                    style: Theme.of(context).textTheme.headline6),
-                width: 40,
-                height: 40,
-                spacing: 0,
-                runSpacing: 0,
-                borderRadius: 0,
-                wheelDiameter: 165,
-                enableOpacity: true,
-                showColorCode: true,
-                colorCodeHasColor: true,
-                pickersEnabled: <ColorPickerType, bool>{
-                  ColorPickerType.wheel: true,
+              Color _oldColor = newColor;
+              showDialogSuper<bool>(
+                context: context,
+                barrierDismissible: true,
+                onDismissed: (val) {
+                  if (val == null || !val) {
+                    setState(() {
+                      newColor = _oldColor;
+                      widget.onChange(newColor);
+                    });
+                  }
                 },
-                copyPasteBehavior: const ColorPickerCopyPasteBehavior(
-                  copyButton: true,
-                  pasteButton: true,
-                  longPressMenu: true,
-                ),
-                actionButtons: const ColorPickerActionButtons(
-                  okButton: true,
-                  closeButton: true,
-                  dialogActionButtons: false,
-                ),
-                constraints: const BoxConstraints(
-                    minHeight: 480, minWidth: 320, maxWidth: 320),
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text(
+                      context.locale.timetable.colorPicker,
+                    ),
+                    content: SingleChildScrollView(
+                      child: MaterialColorPicker(
+                        selectedColor: newColor,
+                        onColorChange: (color) {
+                          setState(() {
+                            newColor = color;
+                            widget.onChange(color);
+                          });
+                        },
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text(context.materialLocale.cancelButtonLabel),
+                        onPressed: () {
+                          setState(() {
+                            newColor = _oldColor;
+                            widget.onChange(newColor);
+                          });
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                      TextButton(
+                        child: Text(context.materialLocale.okButtonLabel),
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        },
+                      ),
+                    ],
+                  );
+                },
               );
-              // We update the dialogSelectColor, to the returned result
-              // color. If the dialog was dismissed it actually returns
-              // the color we started with. The extra update for that
-              // below does not really matter, but if you want you can
-              // check if they are equal and skip the update below.
-              setState(() {
-                this.newColor = newColor;
-              });
-              widget.onChange(newColor);
             },
             child: Container(
               padding: EdgeInsets.all(16),
