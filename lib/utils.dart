@@ -280,7 +280,6 @@ extension ContextUtils on BuildContext {
     final store = Provider.of<RegistroStore>(this, listen: false);
     switch (store.gradeDisplay) {
       case GradeDisplay.letter:
-        // FIXME: this sucks big time
         // Edit: It sucks less, but still...
         if (!showAsNumber) return axios_utils.gradeToLetter(grade);
 
