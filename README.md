@@ -22,4 +22,4 @@ The built APK and AAB are in the `out/android` directory.
 ### Windows
 
 Install WSL and Flutter, then follow the instructions in the
-[Linux/Mac instructions](#linux-mac).
+[Linux/Mac instructions](#linux-mac) (untested).
