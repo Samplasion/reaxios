@@ -1,16 +1,25 @@
-# reaxios
+# Registro Elettronico Axios
 
-A new Flutter project.
+_(Axios Electronic Registry)_
 
-## Getting Started
+An unofficial client for the Axios Electronic Registry.
 
-This project is a starting point for a Flutter application.
+<a title="Not yet" href="https://play.google.com/store/apps/details?id=org.js.samplasion.reaxios"><img src="assets/readme/google-play-badge.png" style="height: 5rem"></a>
 
-A few resources to get you started if this is your first Flutter project:
+## Building from source
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Linux/Mac
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```sh
+git clone https://github.com/Samplasion/reaxios.git
+cd reaxios
+flutter pub get
+tools/build_android.sh
+```
+
+The built APK and AAB are in the `out/android` directory.
+
+### Windows
+
+Install WSL and Flutter, then follow the instructions in the
+[Linux/Mac instructions](#linux-mac).
