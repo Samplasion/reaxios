@@ -68,7 +68,7 @@
     "sectionAlertTitle": "Alert",
     "justifiedSubtitle": "Authorized on {0} by **{1}**",
     "typeAssenze": "Absence",
-    "typeRitardi": "Late entry",
+    "typeRitardi": "Late entrance",
     "typeUscite": "Early exit",
     "typeOther": "Other",
     "justifiedSnackbar": "Absence authorized.",
@@ -94,7 +94,7 @@
   },
   "authorizations": {
     "typeA": "Absence",
-    "typeR": "Late entry",
+    "typeR": "Late entrance",
     "typeU": "Early exit",
     "typeE": "Entry",
     "typeOther": "Other",
