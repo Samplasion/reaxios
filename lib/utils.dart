@@ -163,24 +163,22 @@ class Utils {
 
   static IconData getBestIconForSubject(String subject, IconData defaultIcon) {
     final sub = subject.toLowerCase();
-    if (sub.contains("scienze della vita")) {
+    if (sub.contains("vita") || sub.contains("natur")) {
       return Icons.nature_people;
-    } else if (sub.contains("scienze dell'uomo")) {
+    } else if (sub.contains("uomo")) {
       return Icons.person;
-    } else if (sub.contains("scienze della comunicazione")) {
+    } else if (sub.contains("comunicazione")) {
       return Icons.chat;
-    } else if (sub.contains("scienze della tecnologia")) {
+    } else if (sub.contains("tecnologia")) {
       return Icons.computer;
-    } else if (sub.contains("scienze della medicina")) {
+    } else if (sub.contains("medicina")) {
       return Icons.local_hospital;
-    } else if (sub.contains("scienze dell'ingegneria")) {
+    } else if (sub.contains("ingegneria")) {
       return Icons.build;
-    } else if (sub.contains("scienze dell'economia")) {
+    } else if (sub.contains("economia")) {
       return Icons.attach_money;
-    } else if (sub.contains("scienze dell'architettura")) {
+    } else if (sub.contains("architettura")) {
       return Icons.home;
-    } else if (sub.contains("scienze naturali")) {
-      return Icons.nature_people;
     } else if (sub.contains("italian")) {
       return Icons.book;
     } else if (sub.contains("lingue") ||
@@ -209,22 +207,18 @@ class Utils {
       return Icons.music_note;
     } else if (sub.contains("fisica")) {
       return Icons.grain;
-    } else if (sub.contains("arte")) {
-      return Icons.computer;
     } else if (sub.contains("inglese")) {
       return Icons.language;
     } else if (sub.contains("storia")) {
-      return Icons.history;
+      return Icons.access_time;
     } else if (sub.contains("geografia")) {
       return Icons.map;
-    } else if (sub.contains("musica")) {
-      return Icons.music_note;
     } else if (sub.contains("religione")) {
       return Icons.health_and_safety;
     } else if (sub.contains("filosofia")) {
       return Icons.school;
     } else if (sub.contains("civica")) {
-      return Icons.holiday_village;
+      return Icons.public;
     } else
       return defaultIcon;
   }
