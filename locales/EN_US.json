@@ -267,7 +267,10 @@
     "editDescription": "Notes",
     "editDescriptionHint": "Additional notes go here...",
     "editWeekday": "Weekday",
-    "editMultipleSelect": "Select an event"
+    "editMultipleSelect": "Select an event",
+    "export": "Export data",
+    "import": "Import data",
+    "importFailed": "An error has occurred while importing the data."
   },
   "generalSettings": {
     "title": "Settings",

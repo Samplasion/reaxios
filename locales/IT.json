@@ -267,7 +267,10 @@
     "editDescription": "Note",
     "editDescriptionHint": "Note addizionali",
     "editWeekday": "Giorno della settimana",
-    "editMultipleSelect": "Evento"
+    "editMultipleSelect": "Evento",
+    "export": "Esporta dati",
+    "import": "Importa dati",
+    "importFailed": "Si è verificato un errore durante l'importazione dei dati."
   },
   "generalSettings": {
     "title": "Impostazioni",

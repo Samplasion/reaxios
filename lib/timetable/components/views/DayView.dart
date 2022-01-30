@@ -76,7 +76,10 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
 
   List<Event> get events => widget.events;
 
-  List<PopupMenuEntry<String>> getPopupItems() {
+  List<PopupMenuEntry<String>> getPopupItems(
+    BuildContext context,
+    Settings settings,
+  ) {
     return [
       if (events.isNotEmpty)
         PopupMenuItem<String>(
@@ -90,6 +93,33 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
           // child: Text("Edit multiple events"),
           child: Text(context.locale.timetable.editMultiple),
         ),
+      PopupMenuDivider(),
+      PopupMenuItem<String>(
+        onTap: () {
+          settings.share(["events"]);
+        },
+        // child: Text("Export"),
+        child: Text(context.locale.timetable.export),
+      ),
+      PopupMenuItem<String>(
+        onTap: () async {
+          try {
+            await settings.load();
+            RestartWidget.restartApp(context);
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  context.locale.timetable.importFailed,
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        child: Text(context.locale.timetable.import),
+      ),
     ];
   }
 
@@ -132,12 +162,14 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
                   icon: Icon(Icons.refresh),
                   tooltip: "[DEBUG] Restart app",
                 ),
-              if (getPopupItems().isNotEmpty)
-                PopupMenuButton<String>(
-                  onSelected: print,
-                  itemBuilder: (BuildContext context) {
-                    return getPopupItems();
-                  },
+              if (getPopupItems(context, settings).isNotEmpty)
+                Builder(
+                  builder: (context) => PopupMenuButton<String>(
+                    onSelected: print,
+                    itemBuilder: (_) {
+                      return getPopupItems(context, settings);
+                    },
+                  ),
                 ),
             ],
           ),

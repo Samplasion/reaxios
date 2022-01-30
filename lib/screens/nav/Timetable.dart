@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/timetable/components/views/EventController.dart';
 
 class TimetablePane extends StatelessWidget {
@@ -11,8 +12,10 @@ class TimetablePane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EventController(
-      openMainDrawer: openMainDrawer,
+    return RestartWidget(
+      child: EventController(
+        openMainDrawer: openMainDrawer,
+      ),
     );
   }
 }

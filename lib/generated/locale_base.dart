@@ -538,6 +538,9 @@ class Localetimetable {
   String get editDescriptionHint => _data["editDescriptionHint"]!;
   String get editWeekday => _data["editWeekday"]!;
   String get editMultipleSelect => _data["editMultipleSelect"]!;
+  String get export => _data["export"]!;
+  String get import => _data["import"]!;
+  String get importFailed => _data["importFailed"]!;
 }
 
 class LocalegeneralSettings {

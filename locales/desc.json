@@ -267,7 +267,10 @@
     "editDescription": "",
     "editDescriptionHint": "",
     "editWeekday": "",
-    "editMultipleSelect": ""
+    "editMultipleSelect": "",
+    "export": "",
+    "import": "",
+    "importFailed": ""
   },
   "generalSettings": {
     "title": "",

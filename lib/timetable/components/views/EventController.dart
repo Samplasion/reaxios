@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/timetable/components/views/DayView.dart';
 import 'package:reaxios/timetable/components/views/EventMassEditor.dart';
 import 'package:reaxios/timetable/components/views/WeekView.dart';

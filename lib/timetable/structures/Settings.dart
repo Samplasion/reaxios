@@ -2,13 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../download.dart' if (dart.library.html) '../download_web.dart';
 import 'Event.dart';
 import '../utils.dart';
 
@@ -157,7 +160,7 @@ class Settings with ChangeNotifier {
 
   Future<String> getRandomFilePath({
     String name = "settings",
-    String extension = "json.txt",
+    String extension = "json",
   }) async {
     if (isPhone()) {
       return "${await directory}/${name}_${getRandomString(20)}.$extension";
@@ -169,13 +172,44 @@ class Settings with ChangeNotifier {
     return Platform.isAndroid || Platform.isIOS;
   }
 
-  Future share() async {
-    final filePath = await getRandomFilePath();
+  Future share([List<String>? keys]) async {
+    final encoded = jsonEncode(
+      Map<String, dynamic>.fromIterable(
+        json.entries
+            .where((element) => keys == null || keys.contains(element.key)),
+        key: (e) => e.key,
+        value: (entry) => entry.value,
+      ),
+    );
 
-    final file = File(filePath);
-    await file.writeAsString(jsonEncode(json), flush: true);
+    if (!kIsWeb) {
+      if (!isPhone()) {
+        String? path = await FilePicker.platform.saveFile(
+          type: FileType.custom,
+          allowedExtensions: ["json"],
+          fileName: "settings.json",
+        );
+        if (path == null) return;
+        final file = File(path);
+        await file.writeAsString(encoded, flush: true);
+      } else {
+        final filePath = await getRandomFilePath();
+        final file = File(filePath);
+        await file.writeAsString(encoded, flush: true);
 
-    await Share.shareFiles([filePath]);
+        await Share.shareFiles([filePath]);
+      }
+    } else {
+      download("settings.json", encoded.codeUnits);
+      // await launch(
+      //   "data:application/octet-stream;base64,${base64Encode(encoded.codeUnits)}",
+      //   headers: {
+      //     "Content-Disposition": "attachment",
+      //     "filename": "settings.json",
+      //     "Content-Type": "application/json",
+      //   },
+      // );
+    }
 
     // await file.delete();
   }
@@ -184,31 +218,48 @@ class Settings with ChangeNotifier {
     FilePickerResult? res = await FilePicker.platform.pickFiles(
       dialogTitle: "Select the Settings file.",
       type: FileType.custom,
-      allowedExtensions: ['json', 'txt'],
+      allowedExtensions: ['json'],
     );
     if (res == null) return;
 
-    File file = File(res.files.first.path!);
-    String jsonString = await file.readAsString();
+    String jsonString;
+    if (kIsWeb) {
+      if (res.files.first.bytes == null) return;
+      jsonString = utf8.decode(res.files.first.bytes!.toList());
+    } else {
+      File file = File(res.files.first.path!);
+      jsonString = await file.readAsString();
+    }
     Map<String, dynamic> parsed = jsonDecode(jsonString);
 
     json = parsed;
   }
 
   Map<String, dynamic> get json => {
-        "events": jsonDecode(_prefs.getString("events")!),
+        "events": jsonDecode(_prefs.getString("events") ?? "[]"),
         "ignoreList": _prefs.getStringList("ignoreList"),
         "lessonDuration": _prefs.getInt("lessonDuration"),
         "enabledDays": getEnabledDays(),
         "weeks": getWeeks(),
         "firstWeekDate": getFirstWeekDate().millisecondsSinceEpoch,
+        "themeMode": getThemeMode(),
+        "grade-display": getGradeDisplay().serialized,
+        "primary-color": getPrimaryColor().value,
+        "accent-color": getAccentColor().value,
       };
 
   set json(Map<String, dynamic> obj) {
     if (obj.containsKey("events") && obj["events"] is List) {
-      setEvents(
-        (obj["events"] as List).map((l) => Event.fromJson(l)).toList(),
-      );
+      final events =
+          (obj["events"] as List).map((l) => Event.fromJson(l)).toList();
+      print(events);
+      if (events.every(((e) => e.isValid))) {
+        setEvents(
+          events,
+        );
+      } else {
+        throw Exception("Invalid events");
+      }
     }
     if (obj.containsKey("ignoreList") && obj["ignoreList"] is String) {
       setIgnoreList(obj["ignoreList"] as String);
@@ -227,6 +278,20 @@ class Settings with ChangeNotifier {
       setFirstWeekDate(DateTime.fromMillisecondsSinceEpoch(
         obj["firstWeekDate"] as int,
       ));
+    }
+    if (obj.containsKey("themeMode") && obj["themeMode"] is String) {
+      setThemeMode(obj["themeMode"] as String);
+    }
+    if (obj.containsKey("grade-display") && obj["grade-display"] is String) {
+      setGradeDisplay(
+        deserializeGradeDisplay(obj["grade-display"] as String),
+      );
+    }
+    if (obj.containsKey("primary-color") && obj["primary-color"] is int) {
+      setPrimaryColor(Color(obj["primary-color"] as int));
+    }
+    if (obj.containsKey("accent-color") && obj["accent-color"] is int) {
+      setAccentColor(Color(obj["accent-color"] as int));
     }
     notifyListeners();
   }
