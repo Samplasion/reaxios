@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:reaxios/api/utils/ColorSerializer.dart';
+import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -145,6 +146,16 @@ class Settings with ChangeNotifier {
     notifyListeners();
   }
 
+  AverageMode getAverageMode() {
+    return deserializeAverageMode(_prefs.getString("averageMode") ??
+        AverageMode.allGradesAverage.serialized);
+  }
+
+  void setAverageMode(AverageMode averageMode) {
+    _prefs.setString("averageMode", averageMode.serialized);
+    notifyListeners();
+  }
+
   // --------
 
   Future<String> get directory async {
@@ -246,6 +257,7 @@ class Settings with ChangeNotifier {
         "grade-display": getGradeDisplay().serialized,
         "primary-color": getPrimaryColor().value,
         "accent-color": getAccentColor().value,
+        "averageMode": getAverageMode().serialized,
       };
 
   set json(Map<String, dynamic> obj) {
@@ -292,6 +304,11 @@ class Settings with ChangeNotifier {
     }
     if (obj.containsKey("accent-color") && obj["accent-color"] is int) {
       setAccentColor(Color(obj["accent-color"] as int));
+    }
+    if (obj.containsKey("averageMode") && obj["averageMode"] is String) {
+      setAverageMode(
+        deserializeAverageMode(obj["averageMode"] as String),
+      );
     }
     notifyListeners();
   }

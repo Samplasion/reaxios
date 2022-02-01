@@ -172,11 +172,17 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
     setState(() {
       loading = true;
     });
-    final schools = await Axios.searchSchools(_query.text);
+    try {
+      final schools = await Axios.searchSchools(_query.text);
+      setState(() {
+        _schools = schools;
+        _selectedIndex = -1;
+      });
+    } catch (e) {
+      print(e);
+    }
     setState(() {
-      _schools = schools;
       loading = false;
-      _selectedIndex = -1;
     });
   }
 }

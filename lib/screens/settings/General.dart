@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
+import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:reaxios/screens/settings/base.dart';
 import 'package:reaxios/system/Store.dart';
@@ -16,7 +17,6 @@ class GeneralSettings extends BaseSettings {
     return [
       SettingsHeaderTile(
         title: Text(context.locale.generalSettings.groupsColorsTitle),
-        subtitle: context.locale.generalSettings.changesRestart,
       ),
       ColorTile(
         title: Text(context.locale.generalSettings.colorPrimary),
@@ -62,6 +62,21 @@ class GeneralSettings extends BaseSettings {
           print("Value changed: $value");
           settings.setGradeDisplay(deserializeGradeDisplay(value));
           store.gradeDisplay = deserializeGradeDisplay(value);
+        },
+      ),
+      RadioModalTile(
+        title: Text(context.locale.generalSettings.averageModeLabel),
+        subtitle: Text(context.locale.generalSettings.averageModeSubtitle),
+        values: {
+          AverageMode.allGradesAverage.serialized:
+              context.locale.generalSettings.averageModeAllGrades,
+          AverageMode.averageOfAverages.serialized:
+              context.locale.generalSettings.averageModeAverageOfAverages,
+        },
+        selectedValue: settings.getAverageMode().serialized,
+        onChange: (dynamic value) {
+          print("Value changed: $value");
+          settings.setAverageMode(deserializeAverageMode(value));
         },
       ),
       TextFormFieldModalTile(

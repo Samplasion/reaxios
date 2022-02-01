@@ -7,7 +7,7 @@ import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
-import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
@@ -16,6 +16,7 @@ import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -61,7 +62,12 @@ class _StatsPaneState extends State<StatsPane> {
       ]).then((elements) => _Tuple4.fromList(elements)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return _buildStats(snapshot.requireData);
+          return AnimatedBuilder(
+            animation: Provider.of<Settings>(context),
+            builder: (BuildContext context, Widget? child) {
+              return _buildStats(snapshot.requireData);
+            },
+          );
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
@@ -72,6 +78,8 @@ class _StatsPaneState extends State<StatsPane> {
 
   Widget _buildStats(
       _Tuple4<List<Grade>, List<Period>, List<Absence>, List<Topic>> data) {
+    final settings = Provider.of<Settings>(context);
+    final averageMode = settings.getAverageMode();
     final grades = data.item1;
     final periods = data.item2;
 
@@ -84,28 +92,40 @@ class _StatsPaneState extends State<StatsPane> {
         .toList();
     final gradesByGrade = currentGrades.toSet().toList()
       ..sort((a, b) => a.grade.compareTo(b.grade));
-    final best = gradeAverage(currentGrades
-        .where((g) => g.subject == gradesByGrade.last.subject)
-        .toList());
-    final worst = gradeAverage(currentGrades
-        .where((g) => g.subject == gradesByGrade.first.subject)
-        .toList());
+    final best = gradeAverage(
+      averageMode,
+      currentGrades
+          .where((g) => g.subject == gradesByGrade.last.subject)
+          .toList(),
+    );
+    final worst = gradeAverage(
+      averageMode,
+      currentGrades
+          .where((g) => g.subject == gradesByGrade.first.subject)
+          .toList(),
+    );
     final over6 = currentGrades
         .map((e) => e.subject)
-        .where((g) =>
-            gradeAverage(currentGrades
-                .where((element) => element.subject == g)
-                .toList()) >=
-            6)
+        .where(
+          (g) =>
+              gradeAverage(
+                averageMode,
+                currentGrades.where((element) => element.subject == g).toList(),
+              ) >=
+              6,
+        )
         .toSet()
         .toList();
     final under6 = currentGrades
         .map((e) => e.subject)
-        .where((g) =>
-            gradeAverage(currentGrades
-                .where((element) => element.subject == g)
-                .toList()) <
-            6)
+        .where(
+          (g) =>
+              gradeAverage(
+                averageMode,
+                currentGrades.where((element) => element.subject == g).toList(),
+              ) <
+              6,
+        )
         .toSet()
         .toList();
 
@@ -121,7 +141,10 @@ class _StatsPaneState extends State<StatsPane> {
           ),
           title: context.locale.stats.overallAverage,
           subtitle: RichText(
-            text: GradeText(context, grade: gradeAverage(currentGrades)),
+            text: GradeText(
+              context,
+              grade: gradeAverage(averageMode, currentGrades),
+            ),
           ),
         ).padding(horizontal: 16),
       if (currentGrades.length >= 2) ...[

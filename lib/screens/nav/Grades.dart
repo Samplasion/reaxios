@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
-import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
@@ -22,6 +23,7 @@ import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/GradeSubjectView.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -92,7 +94,13 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
             final grades = snapshot.data![0] as List<Grade>? ?? [];
             final subjects = snapshot.data![1] as List<String>? ?? [];
             final period = snapshot.data![2] as Period?;
-            return buildOk(context, grades.reversed.toList(), period, subjects);
+            return AnimatedBuilder(
+              animation: Provider.of<Settings>(context),
+              builder: (BuildContext context, Widget? child) {
+                return buildOk(
+                    context, grades.reversed.toList(), period, subjects);
+              },
+            );
           }
 
           return Scaffold(
@@ -147,6 +155,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
   Widget _buildHeader(
       BuildContext context, List<Grade> grades, Period? currentPeriod) {
     final periods = grades.map((g) => g.period).toSet().toList();
+    final averageMode = Provider.of<Settings>(context).getAverageMode();
     final periodCards = [];
     for (final period in periods) {
       final periodGrades = grades.where((g) => g.period == period).toList();
@@ -166,7 +175,9 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
                   subtitle: period,
                 ).padding(bottom: 8),
                 GradeAvatar(
-                  grade: Grade.fakeFromDouble(gradeAverage(periodGrades)),
+                  grade: Grade.fakeFromDouble(
+                    gradeAverage(averageMode, periodGrades),
+                  ),
                 )
               ],
             ),
@@ -201,7 +212,9 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
                       subtitle: context.locale.charts.scopeAllYear,
                     ).padding(bottom: 8),
                     GradeAvatar(
-                      grade: Grade.fakeFromDouble(gradeAverage(grades)),
+                      grade: Grade.fakeFromDouble(
+                        gradeAverage(averageMode, grades),
+                      ),
                     ),
                   ],
                 ),
@@ -224,6 +237,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
     List<Grade> grades,
     Period? currentPeriod,
   ) {
+    final averageMode = Provider.of<Settings>(context).getAverageMode();
     List<Widget> children = [];
     for (String subject in subjects
       ..sort((sa, sb) {
@@ -231,12 +245,12 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
             .where((element) => element.subject == sa)
             .toList()
           ..sort((a, b) => b.date.compareTo(a.date));
-        final average1 = gradeAverage(subjectGrades1);
+        final average1 = gradeAverage(averageMode, subjectGrades1);
         final subjectGrades2 = grades
             .where((element) => element.subject == sb)
             .toList()
           ..sort((a, b) => b.date.compareTo(a.date));
-        final average2 = gradeAverage(subjectGrades2);
+        final average2 = gradeAverage(averageMode, subjectGrades2);
 
         if (isNaN(average1) && !isNaN(average2))
           return 1;
@@ -251,7 +265,7 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
           .where((element) => element.subject == subject)
           .toList()
         ..sort((a, b) => b.date.compareTo(a.date));
-      final average = gradeAverage(subjectGrades);
+      final average = gradeAverage(averageMode, subjectGrades);
       final color = getGradeColor(average);
       children.add(
         CardListItem(

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/average.dart';
+import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/showDialogSuper.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
 
 import '../../api/Axios.dart';
 import '../../api/entities/Grade/Grade.dart';
 import '../../api/entities/Structural/Structural.dart';
-import '../../api/utils/utils.dart';
 import '../../components/LowLevel/Empty.dart';
 import '../../components/LowLevel/GradientAppBar.dart';
 import '../../components/LowLevel/Loading.dart';
@@ -336,7 +337,9 @@ class _CalculatorPaneState extends State<CalculatorPane>
   ];
 
   Widget _buildBottomBar() {
-    final average = _grades.isEmpty ? 0.0 : gradeAverage(_grades).toDouble();
+    final average = _grades.isEmpty
+        ? 0.0
+        : gradeAverage(AverageMode.allGradesAverage, _grades).toDouble();
     final viableTargets = _possibleTargets.where((target) => target > average);
 
     final widgets = <Widget>[

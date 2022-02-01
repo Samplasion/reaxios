@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
-import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/average.dart';
 import 'package:reaxios/components/Charts/GradeLineChart.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
@@ -20,6 +19,7 @@ import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/structs/GradeAlertBoundaries.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -59,7 +59,12 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
       appBar: GradientAppBar(
         title: Text(subject),
       ),
-      body: _buildBody(context),
+      body: AnimatedBuilder(
+        animation: Provider.of<Settings>(context),
+        builder: (BuildContext context, Widget? child) {
+          return _buildBody(context);
+        },
+      ),
     );
   }
 
@@ -148,7 +153,8 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
   }
 
   Widget _buildAlert(BuildContext context, List<Grade> grades) {
-    final periodAvg = gradeAverage(grades);
+    final periodAvg =
+        gradeAverage(Provider.of<Settings>(context).getAverageMode(), grades);
 
     final to = (n, [s = 1]) => widget.period == null
         ? 0
@@ -249,10 +255,14 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
 
     // Get the set of kinds from the grades (each grade has one kind) and add them to the map with their average as the value
     final kindList = grades.map((grade) => grade.kind).toSet();
-    kinds = Map.fromIterable(kindList,
-        key: (kind) => kind,
-        value: (kind) =>
-            gradeAverage(grades.where((grade) => grade.kind == kind).toList()));
+    kinds = Map.fromIterable(
+      kindList,
+      key: (kind) => kind,
+      value: (kind) => gradeAverage(
+        Provider.of<Settings>(context).getAverageMode(),
+        grades.where((grade) => grade.kind == kind).toList(),
+      ),
+    );
 
     return kinds;
   }

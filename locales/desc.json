@@ -293,7 +293,11 @@
     "chooseColor": "",
     "chooseOption": "",
     "gradeDisplayPrecise": "",
-    "ignoredWords": ""
+    "ignoredWords": "",
+    "averageModeLabel": "",
+    "averageModeSubtitle": "",
+    "averageModeAllGrades": "",
+    "averageModeAverageOfAverages": ""
   },
   "timeSettings": {
     "defaultLessonDuration": "",

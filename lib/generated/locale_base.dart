@@ -572,6 +572,10 @@ class LocalegeneralSettings {
   String get chooseOption => _data["chooseOption"]!;
   String get gradeDisplayPrecise => _data["gradeDisplayPrecise"]!;
   String get ignoredWords => _data["ignoredWords"]!;
+  String get averageModeLabel => _data["averageModeLabel"]!;
+  String get averageModeSubtitle => _data["averageModeSubtitle"]!;
+  String get averageModeAllGrades => _data["averageModeAllGrades"]!;
+  String get averageModeAverageOfAverages => _data["averageModeAverageOfAverages"]!;
 }
 
 class LocaletimeSettings {

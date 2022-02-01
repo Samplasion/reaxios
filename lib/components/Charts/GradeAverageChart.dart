@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
-import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -42,8 +44,14 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
   List<_GradeChartEntry> _getEntries(List<Grade> grades) {
     final names = grades.map((g) => g.subject).toSet().toList();
     return names
-        .map<_GradeChartEntry>((name) => _GradeChartEntry(name,
-            gradeAverage(grades.where((g) => g.subject == name).toList())))
+        .map<_GradeChartEntry>(
+          (name) => _GradeChartEntry(
+            name,
+            gradeAverage(
+                Provider.of<Settings>(context, listen: false).getAverageMode(),
+                grades.where((g) => g.subject == name).toList()),
+          ),
+        )
         .toList()
       ..sort((a, b) => a.avg.compareTo(b.avg));
   }
@@ -204,7 +212,18 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
             // print("Chart rebuilt");
 
             // return
-            return _buildChart(grades, gradeAverage(snapshot.data!));
+            return AnimatedBuilder(
+              animation: Provider.of<Settings>(context),
+              builder: (BuildContext context, _) {
+                return _buildChart(
+                  grades,
+                  gradeAverage(
+                    Provider.of<Settings>(context).getAverageMode(),
+                    snapshot.data!,
+                  ),
+                );
+              },
+            );
           }
           if (snapshot.hasError) return Text("${snapshot.error}");
           return Center(child: CircularProgressIndicator());

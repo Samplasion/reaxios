@@ -12,7 +12,7 @@ import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
-import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/ListItems/AssignmentListItem.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
@@ -24,6 +24,7 @@ import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -472,7 +473,7 @@ class UserCard extends StatelessWidget {
   Widget _buildUserStats(BuildContext context) {
     return <Widget>[
       FutureBuilder<List<Grade>>(
-        builder: (_, snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.hasError || !snapshot.hasData) {
             return _buildUserStatsItem(
                 context, "...", context.locale.overview.average);
@@ -480,11 +481,19 @@ class UserCard extends StatelessWidget {
           final relevantGrades = period == null
               ? snapshot.data!
               : snapshot.data!.where((g) => g.period == period!.desc).toList();
-          return _buildUserStatsItem(
-              context,
-              gradeAverage(relevantGrades).toString(),
-              context.locale.overview.average,
-              3);
+          return AnimatedBuilder(
+            animation: Provider.of<Settings>(context),
+            builder: (BuildContext context, Widget? child) {
+              final averageMode =
+                  Provider.of<Settings>(context).getAverageMode();
+              return _buildUserStatsItem(
+                context,
+                gradeAverage(averageMode, relevantGrades).toString(),
+                context.locale.overview.average,
+                3,
+              );
+            },
+          );
         },
         future: store.grades,
       ),

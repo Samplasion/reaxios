@@ -10,6 +10,7 @@ import 'dart:math';
 
 import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
 
+import 'enums/AverageMode.dart';
 import 'enums/GradeDisplay.dart';
 import 'system/Store.dart';
 
@@ -222,6 +223,30 @@ class Utils {
     } else
       return defaultIcon;
   }
+}
+
+double gradeAverage(AverageMode mode, List<Grade> grades) {
+  if (mode == AverageMode.averageOfAverages) {
+    final subjects = grades.map((grade) => grade.subject).toSet();
+    if (subjects.isEmpty) return 0;
+    double sum = 0.0;
+    for (var subject in subjects) {
+      sum += gradeAverage(
+        AverageMode.allGradesAverage,
+        grades.where((grade) => grade.subject == subject).toList(),
+      );
+    }
+    return double.parse((sum / subjects.length).toStringAsFixed(2));
+  }
+
+  double sum = 0, weights = 0;
+
+  grades.where((grade) => grade.weight != 0).forEach((g) {
+    sum += g.grade * g.weight;
+    weights += g.weight;
+  });
+
+  return double.parse((sum / weights).toStringAsFixed(2));
 }
 
 extension ColorUtils on Color {

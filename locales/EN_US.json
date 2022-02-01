@@ -293,7 +293,11 @@
     "chooseColor": "Choose a color",
     "chooseOption": "Choose an option",
     "gradeDisplayPrecise": "Precise",
-    "ignoredWords": "Ignored words"
+    "ignoredWords": "Ignored words",
+    "averageModeLabel": "Average calculation mode",
+    "averageModeSubtitle": "Specifies if the global average should be calculated as the average of all grades or the average of subject averages (like the official app does). The Calculator doesn't distinguish between subjects.",
+    "averageModeAllGrades": "Average of all grades",
+    "averageModeAverageOfAverages": "Average of subject averages"
   },
   "timeSettings": {
     "defaultLessonDuration": "Default lesson duration",

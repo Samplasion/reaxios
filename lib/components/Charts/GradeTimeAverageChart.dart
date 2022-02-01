@@ -4,8 +4,9 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -33,7 +34,8 @@ class GradeTimeAverageChart extends StatefulWidget {
 class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
   @override
   Widget build(BuildContext context) {
-    final averagesSortedByValue = averages..sort((a, b) => b.compareTo(a));
+    final averagesSortedByValue = averages.where((avg) => avg.isFinite).toList()
+      ..sort((a, b) => b.compareTo(a));
 
     double height = 200;
     double maxY = 10;
@@ -135,7 +137,12 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
   List<double> get averages {
     final List<double> averages = [];
     for (var i = 0; i < widget.grades.length; i++) {
-      averages.add(gradeAverage(widget.grades.take(i + 1).toList()));
+      averages.add(
+        gradeAverage(
+          Provider.of<Settings>(context, listen: false).getAverageMode(),
+          widget.grades.take(i + 1).toList(),
+        ),
+      );
     }
     return averages;
   }
@@ -144,8 +151,14 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
     final List<_XY> averages = [];
     for (var i = 0; i < widget.grades.length; i++) {
       averages.add(
-          _XY(i.toDouble(), gradeAverage(widget.grades.take(i + 1).toList())));
+        _XY(
+          i.toDouble(),
+          gradeAverage(
+              Provider.of<Settings>(context, listen: false).getAverageMode(),
+              widget.grades.take(i + 1).toList()),
+        ),
+      );
     }
-    return averages;
+    return averages.where((element) => element.y.isFinite).toList();
   }
 }

@@ -293,7 +293,11 @@
     "chooseColor": "Scegli un colore",
     "chooseOption": "Scegli un'opzione",
     "gradeDisplayPrecise": "Preciso",
-    "ignoredWords": "Parole ignorate"
+    "ignoredWords": "Parole ignorate",
+    "averageModeLabel": "Modalità di calcolo della media",
+    "averageModeSubtitle": "Specifica se la media globale deve essere calcolata come la media di tutti i voti o la media delle medie delle materie (come fa l'app ufficiale). La Calcolatrice non fa distinzioni tra le materie.",
+    "averageModeAllGrades": "Media di tutti i voti",
+    "averageModeAverageOfAverages": "Media delle medie delle materie"
   },
   "timeSettings": {
     "defaultLessonDuration": "Durata delle lezioni",

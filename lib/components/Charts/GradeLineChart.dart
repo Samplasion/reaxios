@@ -3,11 +3,13 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
-import 'package:reaxios/api/utils/utils.dart';
+import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -51,6 +53,7 @@ class _GradeLineChartState extends State<GradeLineChart> {
   @override
   Widget build(BuildContext context) {
     late Widget widget;
+    final averageMode = Provider.of<Settings>(context).getAverageMode();
     if (usefulGrades.length < 2) {
       widget = [
         _getHeader(),
@@ -170,9 +173,12 @@ class _GradeLineChartState extends State<GradeLineChart> {
             extraLinesData: ExtraLinesData(
               horizontalLines: [
                 HorizontalLine(
-                  y: gradeAverage(usefulGrades),
+                  y: gradeAverage(averageMode, usefulGrades),
                   color: tooltipColor(
-                      getGradeColor(gradeAverage(usefulGrades)), 0.1, 0.2),
+                    getGradeColor(gradeAverage(averageMode, usefulGrades)),
+                    0.1,
+                    0.2,
+                  ),
                   // strokeWidth: 2,
                 ),
               ],
@@ -243,7 +249,11 @@ class _GradeLineChartState extends State<GradeLineChart> {
       .reversed
       .toList();
   List<double> get usefulAverage => grades
-      .map((e) =>
-          gradeAverage(usefulGrades.take(usefulGrades.indexOf(e) + 1).toList()))
+      .map(
+        (e) => gradeAverage(
+          Provider.of<Settings>(context, listen: false).getAverageMode(),
+          usefulGrades.take(usefulGrades.indexOf(e) + 1).toList(),
+        ),
+      )
       .toList();
 }
