@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
+import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/entities/School/School.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/SchoolListItem.dart';
@@ -180,6 +181,11 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
       });
     } catch (e) {
       print(e);
+      context.showSnackbar(
+        context.locale.errors.request,
+        style: TextStyle(color: Colors.white),
+        backgroundColor: Colors.red,
+      );
     }
     setState(() {
       loading = false;
@@ -204,7 +210,11 @@ class _LoginScreenPage2 extends StatefulWidget {
 }
 
 class __LoginScreenPage2State extends State<_LoginScreenPage2> {
-  get height => MediaQuery.of(context).size.height;
+  get height =>
+      MediaQuery.of(context).size.height -
+      MediaQuery.of(context).padding.top -
+      MediaQuery.of(context).padding.bottom;
+  bool loading = false;
 
   final FocusNode _passFocus = FocusNode();
 
@@ -315,7 +325,7 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                     Padding(
                       padding: EdgeInsets.only(left: 8),
                       child: ElevatedButton(
-                        onPressed: _inputValid() ? _login : null,
+                        onPressed: _inputValid() && !loading ? _login : null,
                         child: Text(context.locale.login.loginButtonText),
                       ),
                     ),
@@ -329,11 +339,57 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
     );
   }
 
+  Future<bool> _checkIfCredentialsAreValid() async {
+    try {
+      final account = AxiosAccount(
+        widget.store.school!.id,
+        name,
+        pass,
+      );
+      final session = Axios(account);
+      await session.login();
+      return true;
+    } catch (e) {
+      print(e);
+      if (e.toString().toLowerCase().contains("controllare codice utente")) {
+        context.showSnackbar(
+          context.locale.errors.authentication,
+          style: TextStyle(color: Colors.white),
+          backgroundColor: Colors.red,
+        );
+      } else {
+        context.showSnackbar(
+          context.locale.errors.request,
+          style: TextStyle(color: Colors.white),
+          backgroundColor: Colors.red,
+        );
+      }
+      return false;
+    }
+  }
+
   _login() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("user", name);
-    prefs.setString("pass", Encrypter.encrypt(pass));
-    widget.onDone();
+    setState(() {
+      loading = true;
+    });
+    try {
+      if (await _checkIfCredentialsAreValid()) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("user", name);
+        prefs.setString("pass", Encrypter.encrypt(pass));
+        widget.onDone();
+      }
+    } catch (e) {
+      print(e);
+      context.showSnackbar(
+        context.locale.errors.request,
+        style: TextStyle(color: Colors.white),
+        backgroundColor: Colors.red,
+      );
+    }
+    setState(() {
+      loading = false;
+    });
   }
 
   bool _inputValid() {

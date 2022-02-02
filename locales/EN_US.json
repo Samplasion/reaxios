@@ -305,5 +305,9 @@
     "numberOfWeeks": "Number of weeks",
     "resetCurrentWeek": "Reset current week",
     "resetCurrentWeekSubtitle": "Current week: week {0}"
+  },
+  "errors": {
+    "request": "A request to the Axios servers failed unexpectedly.",
+    "authentication": "You have entered an invalid user ID or password."
   }
 }

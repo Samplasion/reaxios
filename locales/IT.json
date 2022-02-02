@@ -305,5 +305,9 @@
     "numberOfWeeks": "Numero di settimane",
     "resetCurrentWeek": "Reimposta settimana corrente",
     "resetCurrentWeekSubtitle": "Settimana corrente: sett. {0}"
+  },
+  "errors": {
+    "request": "La richiesta ai server Axios è fallita inaspettatamente.",
+    "authentication": "Hai inserito un codice utente o una password sbagliata."
   }
 }

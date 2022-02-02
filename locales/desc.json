@@ -305,5 +305,9 @@
     "numberOfWeeks": "",
     "resetCurrentWeek": "",
     "resetCurrentWeekSubtitle": ""
+  },
+  "errors": {
+    "request": "",
+    "authentication": ""
   }
 }

@@ -288,8 +288,17 @@ extension ContextUtils on BuildContext {
   MaterialLocalizations get materialLocale => MaterialLocalizations.of(this);
   Locale get currentLocale => Localizations.localeOf(this);
 
-  void showSnackbar(String message) {
-    ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(message)));
+  void showSnackbar(
+    String message, {
+    TextStyle? style,
+    Color? backgroundColor,
+  }) {
+    ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(
+        content: Text(message, style: style),
+        backgroundColor: backgroundColor,
+      ),
+    );
   }
 
   String gradeToString(
