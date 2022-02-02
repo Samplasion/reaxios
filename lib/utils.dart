@@ -226,6 +226,7 @@ class Utils {
 }
 
 double gradeAverage(AverageMode mode, List<Grade> grades) {
+  if (grades.isEmpty) return 0.0;
   if (mode == AverageMode.averageOfAverages) {
     final subjects = grades.map((grade) => grade.subject).toSet();
     if (subjects.isEmpty) return 0;
