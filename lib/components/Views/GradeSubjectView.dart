@@ -16,6 +16,7 @@ import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
+import 'package:reaxios/components/Views/SubjectSettingsView.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/structs/GradeAlertBoundaries.dart';
 import 'package:reaxios/system/Store.dart';
@@ -58,6 +59,34 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
     return Scaffold(
       appBar: GradientAppBar(
         title: Text(subject),
+        actions: [
+          PopupMenuButton<String>(
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem(
+                child: Text("context.locale.grades.changeObjective"),
+                value: "changeObjective",
+              ),
+            ],
+            onSelected: (String value) async {
+              switch (value) {
+                case "changeObjective":
+                  {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return SubjectSettingsView(
+                          subject: subject,
+                          subjectID: grades[0].subjectID,
+                          year: grades.first.date.year,
+                          settings: Provider.of<Settings>(context),
+                        );
+                      }),
+                    );
+                  }
+              }
+            },
+          ),
+        ],
       ),
       body: AnimatedBuilder(
         animation: Provider.of<Settings>(context),

@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
+import 'package:reaxios/structs/SubjectObjective.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -156,6 +157,17 @@ class Settings with ChangeNotifier {
     notifyListeners();
   }
 
+  Map<String, SubjectObjective> getSubjectObjectives() {
+    final objectives = _prefs.getString("subjectObjectives") ?? "{}";
+    return (jsonDecode(objectives) as Map<String, dynamic>)
+        .map((key, value) => MapEntry(key, SubjectObjective.fromJson(value)));
+  }
+
+  void setSubjectObjectives(Map<String, SubjectObjective> objectives) {
+    _prefs.setString("subjectObjectives", jsonEncode(objectives));
+    notifyListeners();
+  }
+
   // --------
 
   Future<String> get directory async {
@@ -258,6 +270,8 @@ class Settings with ChangeNotifier {
         "primary-color": getPrimaryColor().value,
         "accent-color": getAccentColor().value,
         "averageMode": getAverageMode().serialized,
+        "subjectObjectives": getSubjectObjectives()
+            .map((key, value) => MapEntry(key, value.toJson())),
       };
 
   set json(Map<String, dynamic> obj) {

@@ -1,0 +1,82 @@
+import 'package:flutter/material.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/format.dart';
+import 'package:reaxios/screens/settings/base.dart';
+import 'package:reaxios/structs/SubjectObjective.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
+import 'package:reaxios/utils.dart';
+
+class SubjectSettingsView extends StatelessWidget {
+  final String subject;
+  final String subjectID;
+  final int year;
+  final Settings settings;
+
+  const SubjectSettingsView({
+    required this.subject,
+    required this.settings,
+    required this.subjectID,
+    required this.year,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: GradientAppBar(
+        title: Text("context.locale.grades.settings".format([subject])),
+      ),
+      body: ListView(
+        children: [
+          SettingsHeaderTile(title: Text(context.locale.grades.objective)),
+          TextFormFieldModalTile(
+            title: Text("context.locale.grades.customObjective"),
+            subtitle: Text(getSubtitle(context)),
+            value: value?.objective.toString() ?? "",
+            validator: (String? val) {
+              if (val != null && val.isNotEmpty) {
+                final unlocalized = val.replaceAll(",", ".");
+                final doubled = double.tryParse(unlocalized);
+                if (doubled == null) {
+                  return "context.locale.grades.invalidObjective";
+                }
+                if (doubled <= 0.0 || doubled > 10) {
+                  return "context.locale.grades.invalidObjective";
+                }
+              }
+            },
+            onChange: (String val) {
+              final doubled = double.parse(val.replaceAll(",", "."));
+              final objective = SubjectObjective(
+                subjectID: subjectID,
+                subjectName: subject,
+                year: year,
+                objective: doubled,
+              );
+              settings.setSubjectObjectives({
+                ...settings.getSubjectObjectives(),
+                objective.subjectID: objective,
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  SubjectObjective? get value {
+    print(settings.getSubjectObjectives());
+    return settings.getSubjectObjectives()[subjectID];
+  }
+
+  String getSubtitle(BuildContext context) {
+    if (value == null) {
+      return "context.locale.grades.noObjective";
+    }
+    return context.gradeToString(
+      value!.objective,
+      round: false,
+      showAsNumber: true,
+    );
+  }
+}
