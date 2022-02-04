@@ -46,17 +46,23 @@ class SubjectSettingsView extends StatelessWidget {
               }
             },
             onChange: (String val) {
-              final doubled = double.parse(val.replaceAll(",", "."));
-              final objective = SubjectObjective(
-                subjectID: subjectID,
-                subjectName: subject,
-                year: year,
-                objective: doubled,
-              );
-              settings.setSubjectObjectives({
-                ...settings.getSubjectObjectives(),
-                objective.subjectID: objective,
-              });
+              if (val.isNotEmpty) {
+                final doubled = double.parse(val.replaceAll(",", "."));
+                final objective = SubjectObjective(
+                  subjectID: subjectID,
+                  subjectName: subject,
+                  year: year,
+                  objective: doubled,
+                );
+                settings.setSubjectObjectives({
+                  ...settings.getSubjectObjectives(),
+                  objective.subjectID: objective,
+                });
+              } else {
+                settings.setSubjectObjectives(
+                  settings.getSubjectObjectives()..remove(subjectID),
+                );
+              }
             },
           ),
         ],
