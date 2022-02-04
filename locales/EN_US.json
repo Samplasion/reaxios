@@ -136,7 +136,13 @@
     "seen": "Seen by",
     "markAsSeen": "Mark grade as seen",
     "seenSnackbar": "Grade marked as seen.",
-    "errorSnackbar": "An error occurred. Retry later."
+    "errorSnackbar": "An error occurred. Retry later.",
+    "settings": "Settings",
+    "customObjective": "Custom objective",
+    "settingsTitle": "Settings: {0}",
+    "invalidObjective": "That is not a valid objective. Enter a number 1-10, or leave empty to remove.",
+    "noObjective": "A custom objective hasn't been set.",
+    "customObjectiveHelper": "Leave empty to remove."
   },
   "stats": {
     "overallAverage": "Overall average",
@@ -187,7 +193,11 @@
     "lt8Title": "Your average is greater than {0}",
     "lt8Text": "Get a **{0}** to secure your **{1}**!",
     "otherTitle": "Your average is excellent!",
-    "otherText": "You're doing great! 🎉"
+    "otherText": "You're doing great! 🎉",
+    "customTitle": "Your average is less than your objective: {0}",
+    "customText": "Get **{0}** or two times **{1}** to reach your objective.",
+    "customTitleReached": "You reached your set objective.",
+    "customTextReached": "Maybe try a higher one?"
   },
   "settings": {
     "general": "General",

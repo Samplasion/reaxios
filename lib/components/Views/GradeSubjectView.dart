@@ -63,13 +63,13 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
           PopupMenuButton<String>(
             itemBuilder: (BuildContext context) => [
               PopupMenuItem(
-                child: Text("context.locale.grades.changeObjective"),
-                value: "changeObjective",
+                child: Text(context.locale.grades.settings),
+                value: "settings",
               ),
             ],
             onSelected: (String value) async {
               switch (value) {
-                case "changeObjective":
+                case "settings":
                   {
                     Navigator.push(
                       context,
@@ -107,8 +107,8 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
       _buildTeacher(context),
       _buildKindCards(context),
       GradeLineChart(periodGrades, period: period),
-      if (period != null && periodGrades.isNotEmpty)
-        _buildTarget(context, periodGrades),
+      // if (period != null && periodGrades.isNotEmpty)
+      _buildTarget(context, grades),
       ...grades.map((grade) => _buildGrade(context, grade)),
       SizedBox(height: 8)
     ];
@@ -182,6 +182,9 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
   }
 
   Widget _buildAlert(BuildContext context, List<Grade> grades) {
+    final settings = Provider.of<Settings>(context, listen: false);
+    final thisSubjectObjective =
+        settings.getSubjectObjectives()[grades.first.subjectID];
     final periodAvg =
         gradeAverage(Provider.of<Settings>(context).getAverageMode(), grades);
 
@@ -193,6 +196,37 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
     final store = Provider.of<RegistroStore>(context, listen: false);
     final GradeAlertBoundaries bounds =
         GradeAlertBoundaries.get(store.gradeDisplay);
+
+    if (thisSubjectObjective != null) {
+      if (periodAvg < thisSubjectObjective.objective) {
+        return Alert(
+          title: context.locale.objectives.customTitle.format([
+            context.gradeToString(thisSubjectObjective.objective, round: false),
+          ]),
+          color: Colors.lime,
+          text: MarkdownBody(
+            data: context.locale.objectives.customText.format([
+              context.gradeToString(
+                to(thisSubjectObjective.objective).toDouble(),
+                round: false,
+              ),
+              context.gradeToString(
+                to(thisSubjectObjective.objective, 2).toDouble(),
+                round: false,
+              ),
+            ]),
+          ),
+        );
+      } else {
+        return Alert(
+          title: context.locale.objectives.customTitleReached.format([
+            context.gradeToString(periodAvg.floor(), round: false),
+          ]),
+          color: Colors.green,
+          text: MarkdownBody(data: context.locale.objectives.customTextReached),
+        );
+      }
+    }
 
     if (periodAvg < bounds.underFailure) {
       return Alert(

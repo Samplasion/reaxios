@@ -319,6 +319,12 @@ class Localegrades {
   String get markAsSeen => _data["markAsSeen"]!;
   String get seenSnackbar => _data["seenSnackbar"]!;
   String get errorSnackbar => _data["errorSnackbar"]!;
+  String get settings => _data["settings"]!;
+  String get customObjective => _data["customObjective"]!;
+  String get settingsTitle => _data["settingsTitle"]!;
+  String get invalidObjective => _data["invalidObjective"]!;
+  String get noObjective => _data["noObjective"]!;
+  String get customObjectiveHelper => _data["customObjectiveHelper"]!;
 }
 
 class Localestats {
@@ -402,6 +408,10 @@ class Localeobjectives {
   String get lt8Text => _data["lt8Text"]!;
   String get otherTitle => _data["otherTitle"]!;
   String get otherText => _data["otherText"]!;
+  String get customTitle => _data["customTitle"]!;
+  String get customText => _data["customText"]!;
+  String get customTitleReached => _data["customTitleReached"]!;
+  String get customTextReached => _data["customTextReached"]!;
 }
 
 class Localesettings {

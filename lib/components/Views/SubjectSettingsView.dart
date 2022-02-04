@@ -24,24 +24,30 @@ class SubjectSettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GradientAppBar(
-        title: Text("context.locale.grades.settings".format([subject])),
+        title: Text(context.locale.grades.settingsTitle.format([subject])),
       ),
       body: ListView(
         children: [
           SettingsHeaderTile(title: Text(context.locale.grades.objective)),
           TextFormFieldModalTile(
-            title: Text("context.locale.grades.customObjective"),
+            title: Text(context.locale.grades.customObjective),
             subtitle: Text(getSubtitle(context)),
             value: value?.objective.toString() ?? "",
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              errorMaxLines: 10,
+              helperText: context.locale.grades.customObjectiveHelper,
+              helperMaxLines: 10,
+            ),
             validator: (String? val) {
               if (val != null && val.isNotEmpty) {
                 final unlocalized = val.replaceAll(",", ".");
                 final doubled = double.tryParse(unlocalized);
                 if (doubled == null) {
-                  return "context.locale.grades.invalidObjective";
+                  return context.locale.grades.invalidObjective;
                 }
                 if (doubled <= 0.0 || doubled > 10) {
-                  return "context.locale.grades.invalidObjective";
+                  return context.locale.grades.invalidObjective;
                 }
               }
             },
@@ -77,7 +83,7 @@ class SubjectSettingsView extends StatelessWidget {
 
   String getSubtitle(BuildContext context) {
     if (value == null) {
-      return "context.locale.grades.noObjective";
+      return context.locale.grades.noObjective;
     }
     return context.gradeToString(
       value!.objective,

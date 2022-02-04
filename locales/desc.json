@@ -136,7 +136,13 @@
     "seen": "",
     "markAsSeen": "",
     "seenSnackbar": "",
-    "errorSnackbar": ""
+    "errorSnackbar": "",
+    "settings": "",
+    "customObjective": "",
+    "settingsTitle": "",
+    "invalidObjective": "",
+    "noObjective": "",
+    "customObjectiveHelper": ""
   },
   "stats": {
     "overallAverage": "",
@@ -187,7 +193,11 @@
     "lt8Title": "",
     "lt8Text": "",
     "otherTitle": "",
-    "otherText": ""
+    "otherText": "",
+    "customTitle": "",
+    "customText": "",
+    "customTitleReached": "",
+    "customTextReached": ""
   },
   "settings": {
     "general": "",
