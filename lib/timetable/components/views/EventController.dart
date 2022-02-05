@@ -117,6 +117,8 @@ class _EventControllerState extends State<EventController> {
     getSettings(context).setEvents(_events);
   }
 
+  bool get isSmall => MediaQuery.of(context).size.width < kTabBreakpoint;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,6 +127,7 @@ class _EventControllerState extends State<EventController> {
           duration: Duration(milliseconds: 5500),
           child: PageView(
             physics: NeverScrollableScrollPhysics(),
+            scrollDirection: isSmall ? Axis.horizontal : Axis.vertical,
             controller: _pageController,
             children: _getPages(context)
                 .map(
@@ -140,7 +143,7 @@ class _EventControllerState extends State<EventController> {
 
   Widget? get bottomNavigationBar {
     final screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth >= kTabBreakpoint) return null;
+    if (!isSmall) return null;
     return BottomNavigationBar(
       currentIndex: _currentIndex,
       onTap: (index) {
@@ -160,7 +163,7 @@ class _EventControllerState extends State<EventController> {
 
   Widget get navigationRail {
     final screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth < kTabBreakpoint) return Container();
+    if (isSmall) return Container();
     return GestureDetector(
       child: NavigationRail(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
