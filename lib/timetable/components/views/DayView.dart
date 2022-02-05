@@ -54,12 +54,20 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    getSettings(context).addListener(_handleChange);
+    try {
+      getSettings(context).addListener(_handleChange);
+    } catch (e) {
+      // shut up I don't care
+    }
   }
 
   @override
   void dispose() {
-    getSettings(context).removeListener(_handleChange);
+    try {
+      getSettings(context).removeListener(_handleChange);
+    } catch (e) {
+      // shut up I don't care
+    }
     super.dispose();
   }
 

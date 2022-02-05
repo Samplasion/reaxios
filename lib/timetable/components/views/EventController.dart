@@ -1,4 +1,3 @@
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
@@ -31,7 +30,7 @@ class EventController extends StatefulWidget {
 class _Page {
   final Widget view;
   final Widget icon;
-  final Widget title;
+  final String title;
 
   _Page(
     this.view, {
@@ -70,7 +69,7 @@ class _EventControllerState extends State<EventController> {
               openMainDrawer: widget.openMainDrawer,
             ),
           ),
-          title: Text(context.locale.timetable.dayView),
+          title: context.locale.timetable.dayView,
           icon: Icon(Icons.calendar_view_day),
         ),
         _Page(
@@ -83,7 +82,7 @@ class _EventControllerState extends State<EventController> {
               openMainDrawer: widget.openMainDrawer,
             ),
           ),
-          title: Text(context.locale.timetable.weekView),
+          title: context.locale.timetable.weekView,
           icon: Icon(Icons.calendar_view_week),
         ),
       ];
@@ -128,17 +127,16 @@ class _EventControllerState extends State<EventController> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavyBar(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        selectedIndex: _currentIndex,
-        onItemSelected: (index) {
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
           goToTab(index);
         },
         items: _getPages(context)
-            .map((e) => BottomNavyBarItem(
+            .map((e) => BottomNavigationBarItem(
                   icon: e.icon,
-                  title: e.title,
-                  activeColor: Theme.of(context).colorScheme.secondary,
+                  label: e.title,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
                 ))
             .toList(),
       ),
