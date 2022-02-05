@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart' as Foundation;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reaxios/components/LowLevel/ConditionalChild.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
+import 'package:reaxios/consts.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/timetable/components/essential/GradientAppBar.dart';
 import 'package:reaxios/timetable/components/views/DayViewBase.dart';
@@ -186,9 +188,12 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
           body: Row(
             children: [
               widget.rail,
-              VerticalDivider(
-                thickness: 1,
-                width: 1,
+              ConditionalChild(
+                child: VerticalDivider(
+                  thickness: 1,
+                  width: 1,
+                ),
+                show: MediaQuery.of(context).size.width >= kTabBreakpoint,
               ),
               Expanded(
                 child: Center(

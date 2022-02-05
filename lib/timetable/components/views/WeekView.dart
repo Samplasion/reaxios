@@ -11,6 +11,8 @@ import 'package:reaxios/timetable/structures/Weekday.dart';
 import 'package:reaxios/timetable/utils.dart';
 import 'package:reaxios/utils.dart';
 
+import '../../../components/LowLevel/ConditionalChild.dart';
+import '../../../consts.dart';
 import '../../../tuple.dart';
 
 class WeekView extends StatefulWidget {
@@ -65,9 +67,12 @@ class _WeekViewState extends State<WeekView>
       body: Row(
         children: [
           widget.rail,
-          VerticalDivider(
-            thickness: 1,
-            width: 1,
+          ConditionalChild(
+            child: VerticalDivider(
+              thickness: 1,
+              width: 1,
+            ),
+            show: MediaQuery.of(context).size.width >= kTabBreakpoint,
           ),
           Expanded(
             child: TabBarView(
