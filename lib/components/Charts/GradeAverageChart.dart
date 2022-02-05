@@ -154,6 +154,7 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
         }).toList(),
         gridData: FlGridData(
           show: true,
+          drawVerticalLine: false,
           drawHorizontalLine: true,
           horizontalInterval: 1 / rawPrecisionValue,
           getDrawingHorizontalLine: (value) {
