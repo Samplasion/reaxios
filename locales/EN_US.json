@@ -329,5 +329,9 @@
     "objectivesSubtitleFew": "{0} objectives",
     "objectivesSubtitleMany": "{0} objectives",
     "objectivesSubtitleOther": "{0} objectives"
+  },
+  "errors": {
+    "request": "A request to the Axios servers failed unexpectedly.",
+    "authentication": "You have entered an invalid user ID or password."
   }
 }

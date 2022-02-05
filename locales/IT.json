@@ -329,5 +329,9 @@
     "objectivesSubtitleFew": "{0} obiettivi",
     "objectivesSubtitleMany": "{0} obiettivi",
     "objectivesSubtitleOther": "{0} obiettivi"
+  },
+  "errors": {
+    "request": "La richiesta ai server Axios è fallita inaspettatamente.",
+    "authentication": "Hai inserito un codice utente o una password sbagliata."
   }
 }

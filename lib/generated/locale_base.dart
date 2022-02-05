@@ -67,6 +67,8 @@ class LocaleBase {
   LocaletimeSettings get timeSettings => _timeSettings;
   late LocaledataSettings _dataSettings;
   LocaledataSettings get dataSettings => _dataSettings;
+  late Localeerrors _errors;
+  Localeerrors get errors => _errors;
 
   void initAll() {
     _main = Localemain(Map<String, String>.from(_data['main']));
@@ -94,6 +96,7 @@ class LocaleBase {
     _generalSettings = LocalegeneralSettings(Map<String, String>.from(_data['generalSettings']));
     _timeSettings = LocaletimeSettings(Map<String, String>.from(_data['timeSettings']));
     _dataSettings = LocaledataSettings(Map<String, String>.from(_data['dataSettings']));
+    _errors = Localeerrors(Map<String, String>.from(_data['errors']));
   }
 }
 
@@ -614,6 +617,18 @@ class LocaletimeSettings {
 class LocaledataSettings {
   late final Map<String, String> _data;
   LocaledataSettings(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get request => _data["request"]!;
+  String get authentication => _data["authentication"]!;
+}
+
+class Localeerrors {
+  late final Map<String, String> _data;
+  Localeerrors(this._data);
 
   String getByKey(String key) {
     return _data[key]!;

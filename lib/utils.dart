@@ -226,6 +226,7 @@ class Utils {
 }
 
 double gradeAverage(AverageMode mode, List<Grade> grades) {
+  if (grades.isEmpty) return 0.0;
   if (mode == AverageMode.averageOfAverages) {
     final subjects = grades.map((grade) => grade.subject).toSet();
     if (subjects.isEmpty) return 0;
@@ -287,8 +288,17 @@ extension ContextUtils on BuildContext {
   MaterialLocalizations get materialLocale => MaterialLocalizations.of(this);
   Locale get currentLocale => Localizations.localeOf(this);
 
-  void showSnackbar(String message) {
-    ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(message)));
+  void showSnackbar(
+    String message, {
+    TextStyle? style,
+    Color? backgroundColor,
+  }) {
+    ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(
+        content: Text(message, style: style),
+        backgroundColor: backgroundColor,
+      ),
+    );
   }
 
   String gradeToString(

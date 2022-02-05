@@ -22,6 +22,7 @@ import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Charts/GradeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
+import 'package:reaxios/consts.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -133,7 +134,9 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
   Widget _buildBody(
       List<Assignment> assignments, List<Topic> topics, List<Grade> grades) {
     final student = widget.student;
-    // final theme = Theme.of(context);
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenBorders = (screenWidth - kTabBreakpoint) / 2;
 
     if (student.studentUUID != lastUUID) {
       setState(() {
@@ -142,12 +145,6 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       });
       initREData();
     }
-
-    // final filterTmr = (Assignment a) {
-    //   final now = DateTime.now();
-    //   return a.date.isAfter(now) &&
-    //           a.date.isBefore(now.add(Duration(days: 1))) ||a.date.isSameDay(now);
-    // };
 
     final now = DateTime.now();
     final List<Assignment> tmrAssignments = assignments
@@ -167,73 +164,79 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 
     final accent = Theme.of(context).accentColor;
 
-    final topicCards = latestTopics
-        .map(
-          (e) => ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth:
-                  (MediaQuery.of(context).size.width * 0.65).clamp(350, 500),
+    final topicCards = [
+      if (screenBorders > 0)
+        SizedBox(
+          width: screenBorders,
+        ),
+      for (Topic e in latestTopics) ...[
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth:
+                (MediaQuery.of(context).size.width * 0.65).clamp(350, 500),
+          ),
+          child: BigCard(
+            color: accent,
+            gradient: true,
+            leading: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GradientCircleAvatar(
+                  color: accent.contrastText,
+                  foregroundColor: accent,
+                  child: Icon(Utils.getBestIconForSubject(
+                      e.subject, Icons.calendar_today)),
+                ),
+                if (e.lessonHour.isNotEmpty)
+                  Chip(
+                    label: Text(
+                      formatString(context.locale.main.lessonHour,
+                          [e.lessonHour.toString()]),
+                      style: TextStyle(color: accent.contrastText),
+                    ),
+                    backgroundColor: accent.lighten(0.1),
+                    visualDensity: VisualDensity.compact,
+                  ),
+              ],
             ),
-            child: BigCard(
-              color: accent,
-              gradient: true,
-              // radius: 4,
-              // elevation: 2,
-              leading: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GradientCircleAvatar(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  e.subject,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                     color: accent.contrastText,
-                    foregroundColor: accent,
-                    child: Icon(Utils.getBestIconForSubject(
-                        e.subject, Icons.calendar_today)),
                   ),
-                  if (e.lessonHour.isNotEmpty)
-                    Chip(
-                      label: Text(
-                        formatString(context.locale.main.lessonHour,
-                            [e.lessonHour.toString()]),
-                        style: TextStyle(color: accent.contrastText),
+                ).padding(bottom: 8),
+                SelectableText(
+                  e.topic,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: accent.contrastText.withOpacity(0.75),
+                  ),
+                  minLines: 1,
+                  maxLines: 3,
+                  // overflow: TextOverflow.ellipsis,
+                  scrollPhysics: NeverScrollableScrollPhysics(),
+                ).padding(bottom: 8),
+                Text(
+                  context.dateToString(e.date),
+                  style: Theme.of(context).textTheme.caption!.copyWith(
+                        color: accent.contrastText.withOpacity(0.75),
                       ),
-                      backgroundColor: accent.lighten(0.1),
-                      visualDensity: VisualDensity.compact,
-                    ),
-                ],
-              ),
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    e.subject,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: accent.contrastText,
-                    ),
-                  ).padding(bottom: 8),
-                  SelectableText(
-                    e.topic,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: accent.contrastText.withOpacity(0.75),
-                    ),
-                    minLines: 1,
-                    maxLines: 3,
-                    // overflow: TextOverflow.ellipsis,
-                    scrollPhysics: NeverScrollableScrollPhysics(),
-                  ).padding(bottom: 8),
-                  Text(
-                    context.dateToString(e.date),
-                    style: Theme.of(context).textTheme.caption!.copyWith(
-                          color: accent.contrastText.withOpacity(0.75),
-                        ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ).padding(left: 16),
-        )
-        .toList();
+          ),
+        ).padding(left: 16),
+      ],
+      if (screenBorders > 0)
+        SizedBox(
+          width: screenBorders,
+        ),
+    ];
 
     final gradeCards = latestGrades
         .map(
