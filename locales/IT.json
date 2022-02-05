@@ -197,11 +197,16 @@
     "customTitle": "La tua media è minore del tuo obiettivo: {0}",
     "customText": "Prendi **{0}** o due **{1}** per raggiungere il tuo obiettivo.",
     "customTitleReached": "Hai raggiunto il tuo obiettivo impostato.",
-    "customTextReached": "Forse puoi provare con uno più alto?"
+    "customTextReached": "Forse puoi provare con uno più alto?",
+    "managerTitle": "Gestione obiettivi",
+    "managerHeading": "Obiettivi",
+    "managerSubheading": "Scorri un obiettivo verso destra per eliminarlo",
+    "managerItemDescription": "{year} - Obiettivo: {objective}"
   },
   "settings": {
     "general": "Generali",
-    "time": "Orari"
+    "time": "Orari",
+    "data": "Gestione dati"
   },
   "reportCard": {
     "notAvailableTitle": "Pagella non disponibile",
@@ -315,5 +320,14 @@
     "numberOfWeeks": "Numero di settimane",
     "resetCurrentWeek": "Reimposta settimana corrente",
     "resetCurrentWeekSubtitle": "Settimana corrente: sett. {0}"
+  },
+  "dataSettings": {
+    "objectivesTitle": "Obiettivi",
+    "objectivesSubtitleZero": "Nessun obiettivo",
+    "objectivesSubtitleOne": "1 obiettivo",
+    "objectivesSubtitleTwo": "{0} obiettivi",
+    "objectivesSubtitleFew": "{0} obiettivi",
+    "objectivesSubtitleMany": "{0} obiettivi",
+    "objectivesSubtitleOther": "{0} obiettivi"
   }
 }

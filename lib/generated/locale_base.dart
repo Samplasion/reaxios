@@ -65,6 +65,8 @@ class LocaleBase {
   LocalegeneralSettings get generalSettings => _generalSettings;
   late LocaletimeSettings _timeSettings;
   LocaletimeSettings get timeSettings => _timeSettings;
+  late LocaledataSettings _dataSettings;
+  LocaledataSettings get dataSettings => _dataSettings;
 
   void initAll() {
     _main = Localemain(Map<String, String>.from(_data['main']));
@@ -91,6 +93,7 @@ class LocaleBase {
     _timetable = Localetimetable(Map<String, String>.from(_data['timetable']));
     _generalSettings = LocalegeneralSettings(Map<String, String>.from(_data['generalSettings']));
     _timeSettings = LocaletimeSettings(Map<String, String>.from(_data['timeSettings']));
+    _dataSettings = LocaledataSettings(Map<String, String>.from(_data['dataSettings']));
   }
 }
 
@@ -412,6 +415,10 @@ class Localeobjectives {
   String get customText => _data["customText"]!;
   String get customTitleReached => _data["customTitleReached"]!;
   String get customTextReached => _data["customTextReached"]!;
+  String get managerTitle => _data["managerTitle"]!;
+  String get managerHeading => _data["managerHeading"]!;
+  String get managerSubheading => _data["managerSubheading"]!;
+  String get managerItemDescription => _data["managerItemDescription"]!;
 }
 
 class Localesettings {
@@ -424,6 +431,7 @@ class Localesettings {
 
   String get general => _data["general"]!;
   String get time => _data["time"]!;
+  String get data => _data["data"]!;
 }
 
 class LocalereportCard {
@@ -601,5 +609,22 @@ class LocaletimeSettings {
   String get numberOfWeeks => _data["numberOfWeeks"]!;
   String get resetCurrentWeek => _data["resetCurrentWeek"]!;
   String get resetCurrentWeekSubtitle => _data["resetCurrentWeekSubtitle"]!;
+}
+
+class LocaledataSettings {
+  late final Map<String, String> _data;
+  LocaledataSettings(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get objectivesTitle => _data["objectivesTitle"]!;
+  String get objectivesSubtitleZero => _data["objectivesSubtitleZero"]!;
+  String get objectivesSubtitleOne => _data["objectivesSubtitleOne"]!;
+  String get objectivesSubtitleTwo => _data["objectivesSubtitleTwo"]!;
+  String get objectivesSubtitleFew => _data["objectivesSubtitleFew"]!;
+  String get objectivesSubtitleMany => _data["objectivesSubtitleMany"]!;
+  String get objectivesSubtitleOther => _data["objectivesSubtitleOther"]!;
 }
 

@@ -197,11 +197,16 @@
     "customTitle": "",
     "customText": "",
     "customTitleReached": "",
-    "customTextReached": ""
+    "customTextReached": "",
+    "managerTitle": "",
+    "managerHeading": "",
+    "managerSubheading": "",
+    "managerItemDescription": ""
   },
   "settings": {
     "general": "",
-    "time": ""
+    "time": "",
+    "data": ""
   },
   "reportCard": {
     "notAvailableTitle": "",
@@ -315,5 +320,14 @@
     "numberOfWeeks": "",
     "resetCurrentWeek": "",
     "resetCurrentWeekSubtitle": ""
+  },
+  "dataSettings": {
+    "objectivesTitle": "",
+    "objectivesSubtitleZero": "",
+    "objectivesSubtitleOne": "",
+    "objectivesSubtitleTwo": "",
+    "objectivesSubtitleFew": "",
+    "objectivesSubtitleMany": "",
+    "objectivesSubtitleOther": ""
   }
 }

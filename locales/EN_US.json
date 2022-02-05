@@ -197,11 +197,16 @@
     "customTitle": "Your average is less than your objective: {0}",
     "customText": "Get **{0}** or two times **{1}** to reach your objective.",
     "customTitleReached": "You reached your set objective.",
-    "customTextReached": "Maybe try a higher one?"
+    "customTextReached": "Maybe try a higher one?",
+    "managerTitle": "Objective manager",
+    "managerHeading": "Objectives",
+    "managerSubheading": "Swipe left on an objective to delete it",
+    "managerItemDescription": "{year} - Objective: {objective}"
   },
   "settings": {
     "general": "General",
-    "time": "Time"
+    "time": "Time",
+    "data": "Data management"
   },
   "reportCard": {
     "notAvailableTitle": "Your report card isn't ready yet",
@@ -315,5 +320,14 @@
     "numberOfWeeks": "Number of weeks",
     "resetCurrentWeek": "Reset current week",
     "resetCurrentWeekSubtitle": "Current week: week {0}"
+  },
+  "dataSettings": {
+    "objectivesTitle": "Objectives",
+    "objectivesSubtitleZero": "No objectives",
+    "objectivesSubtitleOne": "1 objective",
+    "objectivesSubtitleTwo": "{0} objectives",
+    "objectivesSubtitleFew": "{0} objectives",
+    "objectivesSubtitleMany": "{0} objectives",
+    "objectivesSubtitleOther": "{0} objectives"
   }
 }
