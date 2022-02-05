@@ -622,8 +622,13 @@ class LocaledataSettings {
     return _data[key]!;
   }
 
-  String get request => _data["request"]!;
-  String get authentication => _data["authentication"]!;
+  String get objectivesTitle => _data["objectivesTitle"]!;
+  String get objectivesSubtitleZero => _data["objectivesSubtitleZero"]!;
+  String get objectivesSubtitleOne => _data["objectivesSubtitleOne"]!;
+  String get objectivesSubtitleTwo => _data["objectivesSubtitleTwo"]!;
+  String get objectivesSubtitleFew => _data["objectivesSubtitleFew"]!;
+  String get objectivesSubtitleMany => _data["objectivesSubtitleMany"]!;
+  String get objectivesSubtitleOther => _data["objectivesSubtitleOther"]!;
 }
 
 class Localeerrors {
@@ -634,12 +639,7 @@ class Localeerrors {
     return _data[key]!;
   }
 
-  String get objectivesTitle => _data["objectivesTitle"]!;
-  String get objectivesSubtitleZero => _data["objectivesSubtitleZero"]!;
-  String get objectivesSubtitleOne => _data["objectivesSubtitleOne"]!;
-  String get objectivesSubtitleTwo => _data["objectivesSubtitleTwo"]!;
-  String get objectivesSubtitleFew => _data["objectivesSubtitleFew"]!;
-  String get objectivesSubtitleMany => _data["objectivesSubtitleMany"]!;
-  String get objectivesSubtitleOther => _data["objectivesSubtitleOther"]!;
+  String get request => _data["request"]!;
+  String get authentication => _data["authentication"]!;
 }
 
