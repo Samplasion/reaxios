@@ -21,7 +21,28 @@ import '../utils.dart';
 
 // class Settings = _Settings with _$Settings;
 
-class Settings with ChangeNotifier {
+class _UndisposableChangeNotifier with ChangeNotifier {
+  bool _disposed = false;
+
+  @override
+  void notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  void undispose() {
+    _disposed = false;
+  }
+}
+
+class Settings extends _UndisposableChangeNotifier {
   late SharedPreferences _prefs;
 
   init() async {

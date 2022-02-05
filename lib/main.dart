@@ -22,6 +22,7 @@ import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
+import 'change_notifier_provider.dart';
 import 'timetable/structures/Settings.dart' as timetable;
 import 'timetable/structures/Store.dart' as timetable;
 
@@ -59,7 +60,9 @@ void main() async {
         Provider(create: (_) => registroStore),
         Provider(create: (_) => AppInfoStore()..getPackageInfo(), lazy: false),
         ChangeNotifierProvider(create: (_) => timetable.Store()),
-        ChangeNotifierProvider<timetable.Settings>(create: (_) => settings),
+        UndisposingChangeNotifierProvider<timetable.Settings>(
+          create: (_) => settings,
+        ),
       ],
     ),
   ));
