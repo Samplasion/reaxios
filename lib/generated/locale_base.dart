@@ -65,6 +65,8 @@ class LocaleBase {
   LocalegeneralSettings get generalSettings => _generalSettings;
   late LocaletimeSettings _timeSettings;
   LocaletimeSettings get timeSettings => _timeSettings;
+  late LocaledataSettings _dataSettings;
+  LocaledataSettings get dataSettings => _dataSettings;
   late Localeerrors _errors;
   Localeerrors get errors => _errors;
 
@@ -93,6 +95,7 @@ class LocaleBase {
     _timetable = Localetimetable(Map<String, String>.from(_data['timetable']));
     _generalSettings = LocalegeneralSettings(Map<String, String>.from(_data['generalSettings']));
     _timeSettings = LocaletimeSettings(Map<String, String>.from(_data['timeSettings']));
+    _dataSettings = LocaledataSettings(Map<String, String>.from(_data['dataSettings']));
     _errors = Localeerrors(Map<String, String>.from(_data['errors']));
   }
 }
@@ -322,6 +325,12 @@ class Localegrades {
   String get markAsSeen => _data["markAsSeen"]!;
   String get seenSnackbar => _data["seenSnackbar"]!;
   String get errorSnackbar => _data["errorSnackbar"]!;
+  String get settings => _data["settings"]!;
+  String get customObjective => _data["customObjective"]!;
+  String get settingsTitle => _data["settingsTitle"]!;
+  String get invalidObjective => _data["invalidObjective"]!;
+  String get noObjective => _data["noObjective"]!;
+  String get customObjectiveHelper => _data["customObjectiveHelper"]!;
 }
 
 class Localestats {
@@ -405,6 +414,14 @@ class Localeobjectives {
   String get lt8Text => _data["lt8Text"]!;
   String get otherTitle => _data["otherTitle"]!;
   String get otherText => _data["otherText"]!;
+  String get customTitle => _data["customTitle"]!;
+  String get customText => _data["customText"]!;
+  String get customTitleReached => _data["customTitleReached"]!;
+  String get customTextReached => _data["customTextReached"]!;
+  String get managerTitle => _data["managerTitle"]!;
+  String get managerHeading => _data["managerHeading"]!;
+  String get managerSubheading => _data["managerSubheading"]!;
+  String get managerItemDescription => _data["managerItemDescription"]!;
 }
 
 class Localesettings {
@@ -417,6 +434,7 @@ class Localesettings {
 
   String get general => _data["general"]!;
   String get time => _data["time"]!;
+  String get data => _data["data"]!;
 }
 
 class LocalereportCard {
@@ -596,6 +614,18 @@ class LocaletimeSettings {
   String get resetCurrentWeekSubtitle => _data["resetCurrentWeekSubtitle"]!;
 }
 
+class LocaledataSettings {
+  late final Map<String, String> _data;
+  LocaledataSettings(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get request => _data["request"]!;
+  String get authentication => _data["authentication"]!;
+}
+
 class Localeerrors {
   late final Map<String, String> _data;
   Localeerrors(this._data);
@@ -604,7 +634,12 @@ class Localeerrors {
     return _data[key]!;
   }
 
-  String get request => _data["request"]!;
-  String get authentication => _data["authentication"]!;
+  String get objectivesTitle => _data["objectivesTitle"]!;
+  String get objectivesSubtitleZero => _data["objectivesSubtitleZero"]!;
+  String get objectivesSubtitleOne => _data["objectivesSubtitleOne"]!;
+  String get objectivesSubtitleTwo => _data["objectivesSubtitleTwo"]!;
+  String get objectivesSubtitleFew => _data["objectivesSubtitleFew"]!;
+  String get objectivesSubtitleMany => _data["objectivesSubtitleMany"]!;
+  String get objectivesSubtitleOther => _data["objectivesSubtitleOther"]!;
 }
 

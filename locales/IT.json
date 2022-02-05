@@ -136,7 +136,13 @@
     "seen": "Visto da",
     "markAsSeen": "Segna come visto",
     "seenSnackbar": "Voto segnato come visto.",
-    "errorSnackbar": "Si è verificato un errore. Riprova più tardi."
+    "errorSnackbar": "Si è verificato un errore. Riprova più tardi.",
+    "settings": "Impostazioni",
+    "customObjective": "Obiettivo personalizzato",
+    "settingsTitle": "Impostazioni: {0}",
+    "invalidObjective": "Non è un obiettivo valido. Inserisci un numero tra 1 e 10, o lascia vuoto per rimuovere l'obiettivo.",
+    "noObjective": "Non è stato impostato un obiettivo personalizzato.",
+    "customObjectiveHelper": "Lascia vuoto per rimuovere l'obiettivo personalizzato."
   },
   "stats": {
     "overallAverage": "Media generale",
@@ -187,11 +193,20 @@
     "lt8Title": "Media superiore di {0}",
     "lt8Text": "Prendi un **{0}** per assicurarti l'**{1}**!",
     "otherTitle": "Hai una media eccellente!",
-    "otherText": "Vai alla grande! 🎉"
+    "otherText": "Vai alla grande! 🎉",
+    "customTitle": "La tua media è minore del tuo obiettivo: {0}",
+    "customText": "Prendi **{0}** o due **{1}** per raggiungere il tuo obiettivo.",
+    "customTitleReached": "Hai raggiunto il tuo obiettivo impostato.",
+    "customTextReached": "Forse puoi provare con uno più alto?",
+    "managerTitle": "Gestione obiettivi",
+    "managerHeading": "Obiettivi",
+    "managerSubheading": "Scorri un obiettivo verso destra per eliminarlo",
+    "managerItemDescription": "{year} - Obiettivo: {objective}"
   },
   "settings": {
     "general": "Generali",
-    "time": "Orari"
+    "time": "Orari",
+    "data": "Gestione dati"
   },
   "reportCard": {
     "notAvailableTitle": "Pagella non disponibile",
@@ -305,6 +320,15 @@
     "numberOfWeeks": "Numero di settimane",
     "resetCurrentWeek": "Reimposta settimana corrente",
     "resetCurrentWeekSubtitle": "Settimana corrente: sett. {0}"
+  },
+  "dataSettings": {
+    "objectivesTitle": "Obiettivi",
+    "objectivesSubtitleZero": "Nessun obiettivo",
+    "objectivesSubtitleOne": "1 obiettivo",
+    "objectivesSubtitleTwo": "{0} obiettivi",
+    "objectivesSubtitleFew": "{0} obiettivi",
+    "objectivesSubtitleMany": "{0} obiettivi",
+    "objectivesSubtitleOther": "{0} obiettivi"
   },
   "errors": {
     "request": "La richiesta ai server Axios è fallita inaspettatamente.",

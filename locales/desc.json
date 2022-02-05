@@ -136,7 +136,13 @@
     "seen": "",
     "markAsSeen": "",
     "seenSnackbar": "",
-    "errorSnackbar": ""
+    "errorSnackbar": "",
+    "settings": "",
+    "customObjective": "",
+    "settingsTitle": "",
+    "invalidObjective": "",
+    "noObjective": "",
+    "customObjectiveHelper": ""
   },
   "stats": {
     "overallAverage": "",
@@ -187,11 +193,20 @@
     "lt8Title": "",
     "lt8Text": "",
     "otherTitle": "",
-    "otherText": ""
+    "otherText": "",
+    "customTitle": "",
+    "customText": "",
+    "customTitleReached": "",
+    "customTextReached": "",
+    "managerTitle": "",
+    "managerHeading": "",
+    "managerSubheading": "",
+    "managerItemDescription": ""
   },
   "settings": {
     "general": "",
-    "time": ""
+    "time": "",
+    "data": ""
   },
   "reportCard": {
     "notAvailableTitle": "",
@@ -305,6 +320,15 @@
     "numberOfWeeks": "",
     "resetCurrentWeek": "",
     "resetCurrentWeekSubtitle": ""
+  },
+  "dataSettings": {
+    "objectivesTitle": "",
+    "objectivesSubtitleZero": "",
+    "objectivesSubtitleOne": "",
+    "objectivesSubtitleTwo": "",
+    "objectivesSubtitleFew": "",
+    "objectivesSubtitleMany": "",
+    "objectivesSubtitleOther": ""
   },
   "errors": {
     "request": "",

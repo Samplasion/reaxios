@@ -702,7 +702,7 @@ class SettingsListTile extends SettingsTile {
   final Widget? trailing;
 
   @override
-  bool get shouldShowInDescription => false;
+  final bool shouldShowInDescription;
 
   const SettingsListTile({
     Key? key,
@@ -711,6 +711,7 @@ class SettingsListTile extends SettingsTile {
     this.subtitle,
     this.leading,
     this.trailing,
+    this.shouldShowInDescription = false,
   }) : super(key: key);
 
   @override
@@ -726,6 +727,50 @@ class _SettingsListTileState extends State<SettingsListTile> {
       subtitle: widget.subtitle,
       leading: widget.leading,
       trailing: widget.trailing,
+    );
+  }
+}
+
+class SubscreenListTile extends SettingsTile {
+  @override
+  final Widget title;
+  final Widget Function(BuildContext) builder;
+  final Widget? subtitle;
+  final Widget? leading;
+  final Widget? trailing;
+
+  @override
+  final bool shouldShowInDescription;
+
+  const SubscreenListTile({
+    Key? key,
+    required this.title,
+    required this.builder,
+    this.subtitle,
+    this.leading,
+    this.trailing,
+    this.shouldShowInDescription = true,
+  }) : super(key: key);
+
+  @override
+  _SubscreenListTileState createState() => _SubscreenListTileState();
+}
+
+class _SubscreenListTileState extends State<SubscreenListTile> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: widget.title,
+      subtitle: widget.subtitle,
+      leading: widget.leading,
+      trailing: widget.trailing,
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: widget.builder,
+          ),
+        );
+      },
     );
   }
 }

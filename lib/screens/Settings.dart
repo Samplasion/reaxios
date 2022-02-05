@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
+import 'package:reaxios/screens/settings/Data.dart';
 import 'package:reaxios/screens/settings/Time.dart';
 import 'package:reaxios/screens/settings/base.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -36,6 +37,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           context.locale.settings.time,
           TimeSettings(),
           Icon(Icons.access_time),
+        ),
+        _Fragment(
+          context.locale.settings.data,
+          DataSettings(),
+          Icon(Icons.data_usage),
         ),
       ];
 
