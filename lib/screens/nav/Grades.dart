@@ -45,7 +45,6 @@ class GradesPane extends StatefulWidget {
   _GradesPaneState createState() => _GradesPaneState();
 }
 
-// TODO(#7): Allow setting a period objective; show its card above the grades
 class _GradesPaneState extends ReloadableState<GradesPane> {
   String selectedSubject = "";
 
