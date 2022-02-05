@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
+import 'package:reaxios/consts.dart';
 import 'package:reaxios/timetable/components/views/DayView.dart';
 import 'package:reaxios/timetable/components/views/EventMassEditor.dart';
 import 'package:reaxios/timetable/components/views/WeekView.dart';
@@ -67,6 +68,7 @@ class _EventControllerState extends State<EventController> {
               actions: _actions,
               massEdit: _massEdit,
               openMainDrawer: widget.openMainDrawer,
+              rail: navigationRail,
             ),
           ),
           title: context.locale.timetable.dayView,
@@ -80,6 +82,7 @@ class _EventControllerState extends State<EventController> {
               fab: _getFab(),
               actions: _actions,
               openMainDrawer: widget.openMainDrawer,
+              rail: navigationRail,
             ),
           ),
           title: context.locale.timetable.weekView,
@@ -123,23 +126,70 @@ class _EventControllerState extends State<EventController> {
           child: PageView(
             physics: NeverScrollableScrollPhysics(),
             controller: _pageController,
-            children: _getPages(context).map((e) => e.view).toList(),
+            children: _getPages(context)
+                .map(
+                  (e) => e.view,
+                )
+                .toList(),
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
+      bottomNavigationBar: bottomNavigationBar,
+    );
+  }
+
+  Widget? get bottomNavigationBar {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth >= kTabBreakpoint) return null;
+    return BottomNavigationBar(
+      currentIndex: _currentIndex,
+      onTap: (index) {
+        goToTab(index);
+      },
+      items: _getPages(context)
+          .map((e) => BottomNavigationBarItem(
+                icon: e.icon,
+                label: e.title,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+              ))
+          .toList(),
+    );
+  }
+
+  bool _railExtended = false;
+
+  Widget get navigationRail {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < kTabBreakpoint) return Container();
+    return GestureDetector(
+      child: NavigationRail(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        selectedLabelTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+        unselectedLabelTextStyle:
+            Theme.of(context).textTheme.bodyText1!.copyWith(
+                  color: Theme.of(context).disabledColor,
+                ),
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (index) {
           goToTab(index);
         },
-        items: _getPages(context)
-            .map((e) => BottomNavigationBarItem(
+        extended: _railExtended,
+        destinations: _getPages(context)
+            .map((e) => NavigationRailDestination(
                   icon: e.icon,
-                  label: e.title,
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  label: Text(e.title),
                 ))
             .toList(),
+        labelType: _railExtended ? null : NavigationRailLabelType.selected,
       ),
+      onHorizontalDragEnd: (details) {
+        if (details.primaryVelocity == null) return;
+        setState(() {
+          _railExtended = details.primaryVelocity! < 0;
+        });
+      },
     );
   }
 

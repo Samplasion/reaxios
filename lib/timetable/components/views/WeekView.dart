@@ -20,12 +20,14 @@ class WeekView extends StatefulWidget {
     required this.fab,
     required this.actions,
     required this.openMainDrawer,
+    required this.rail,
   }) : super(key: key);
 
   final List<Event> events;
   final FloatingActionButton? fab;
   final Map<String, Function(Event)> actions;
   final void Function() openMainDrawer;
+  final Widget rail;
 
   @override
   _WeekViewState createState() => _WeekViewState();
@@ -60,56 +62,67 @@ class _WeekViewState extends State<WeekView>
 
     return Scaffold(
       appBar: getAppBar(),
-      body: TabBarView(
-        controller: tabController,
-        children: 1.to(settings.getWeeks()).map((week) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: days.map((wdi) {
-                var dayEvents = events
-                    .where((element) =>
-                        element.weekday.value == wdi &&
-                        element.weekday.week == week)
-                    .toList();
+      body: Row(
+        children: [
+          widget.rail,
+          VerticalDivider(
+            thickness: 1,
+            width: 1,
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: tabController,
+              children: 1.to(settings.getWeeks()).map((week) {
+                return SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: days.map((wdi) {
+                      var dayEvents = events
+                          .where((element) =>
+                              element.weekday.value == wdi &&
+                              element.weekday.week == week)
+                          .toList();
 
-                // These values are good enough for compensating for the hour
-                // column.
-                // When resizing, the texts are collapsed with a margin
-                // of 1 frame.
-                const Map<int, Tuple2<int, int>> flex = {
-                  0: Tuple2(1, 1),
-                  1: Tuple2(1, 1),
-                  2: Tuple2(96, 79),
-                  3: Tuple2(96, 79),
-                  4: Tuple2(96, 79),
-                  5: Tuple2(96, 79),
-                  6: Tuple2(96, 79),
-                  7: Tuple2(3, 2),
-                };
+                      // These values are good enough for compensating for the hour
+                      // column.
+                      // When resizing, the texts are collapsed with a margin
+                      // of 1 frame.
+                      const Map<int, Tuple2<int, int>> flex = {
+                        0: Tuple2(1, 1),
+                        1: Tuple2(1, 1),
+                        2: Tuple2(96, 79),
+                        3: Tuple2(96, 79),
+                        4: Tuple2(96, 79),
+                        5: Tuple2(96, 79),
+                        6: Tuple2(96, 79),
+                        7: Tuple2(3, 2),
+                      };
 
-                return Flexible(
-                  flex: days[0] == wdi
-                      ? flex[days.length]!.first
-                      : flex[days.length]!.second,
-                  child: EventWeekView(
-                    day: base.add(Duration(days: (wdi - 1))),
-                    showHours: days[0] == wdi,
-                    events: dayEvents,
-                    onEnterEditingMode: (sub) {
-                      setState(() {
-                        editing = sub;
-                        editingMode = true;
-                      });
-                    },
-                    selectedEvent: editing,
+                      return Flexible(
+                        flex: days[0] == wdi
+                            ? flex[days.length]!.first
+                            : flex[days.length]!.second,
+                        child: EventWeekView(
+                          day: base.add(Duration(days: (wdi - 1))),
+                          showHours: days[0] == wdi,
+                          events: dayEvents,
+                          onEnterEditingMode: (sub) {
+                            setState(() {
+                              editing = sub;
+                              editingMode = true;
+                            });
+                          },
+                          selectedEvent: editing,
+                        ),
+                      );
+                    }).toList(),
                   ),
                 );
               }).toList(),
             ),
-          );
-        }).toList(),
+          ),
+        ],
       ),
       floatingActionButton: widget.fab,
     );

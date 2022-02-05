@@ -19,6 +19,7 @@ class DayView extends StatefulWidget {
     required this.actions,
     required this.massEdit,
     required this.openMainDrawer,
+    required this.rail,
   }) : super(key: key);
 
   final List<Event> events;
@@ -26,6 +27,7 @@ class DayView extends StatefulWidget {
   final Map<String, Function(Event)> actions;
   final Function massEdit;
   final void Function() openMainDrawer;
+  final Widget rail;
 
   @override
   _DayViewState createState() => _DayViewState();
@@ -181,33 +183,44 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
                 ),
             ],
           ),
-          body: Center(
-            child: TabBarView(
-              controller: controller,
-              children: (getSettings(context).getEnabledDays() *
-                      getSettings(context).getWeeks())
-                  .entries
-                  .entries
-                  .map((entry) {
-                final wdi = entry.value;
-                final week = ((entry.key + 2) / 7).floor() + 1;
-                var dayEvents = events.where((element) {
-                  return element.weekday.value == wdi &&
-                      element.weekday.week == week;
-                }).toList();
+          body: Row(
+            children: [
+              widget.rail,
+              VerticalDivider(
+                thickness: 1,
+                width: 1,
+              ),
+              Expanded(
+                child: Center(
+                  child: TabBarView(
+                    controller: controller,
+                    children: (getSettings(context).getEnabledDays() *
+                            getSettings(context).getWeeks())
+                        .entries
+                        .entries
+                        .map((entry) {
+                      final wdi = entry.value;
+                      final week = ((entry.key + 2) / 7).floor() + 1;
+                      var dayEvents = events.where((element) {
+                        return element.weekday.value == wdi &&
+                            element.weekday.week == week;
+                      }).toList();
 
-                if (dayEvents.isEmpty) return emptyDay();
+                      if (dayEvents.isEmpty) return emptyDay();
 
-                return SingleChildScrollView(
-                  controller: verticalScrollControllers[wdi],
-                  child: DayViewBase(
-                    events: dayEvents,
-                    showDayHeader: false,
-                    actions: widget.actions,
+                      return SingleChildScrollView(
+                        controller: verticalScrollControllers[wdi],
+                        child: DayViewBase(
+                          events: dayEvents,
+                          showDayHeader: false,
+                          actions: widget.actions,
+                        ),
+                      );
+                    }).toList(),
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+              ),
+            ],
           ),
           floatingActionButton: widget.fab,
         );
