@@ -331,6 +331,8 @@ class Localegrades {
   String get invalidObjective => _data["invalidObjective"]!;
   String get noObjective => _data["noObjective"]!;
   String get customObjectiveHelper => _data["customObjectiveHelper"]!;
+  String get subjects => _data["subjects"]!;
+  String get grades => _data["grades"]!;
 }
 
 class Localestats {

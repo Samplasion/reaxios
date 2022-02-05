@@ -142,7 +142,9 @@
     "settingsTitle": "Settings: {0}",
     "invalidObjective": "That is not a valid objective. Enter a number 1-10, or leave empty to remove.",
     "noObjective": "A custom objective hasn't been set.",
-    "customObjectiveHelper": "Leave empty to remove."
+    "customObjectiveHelper": "Leave empty to remove.",
+    "subjects": "Subjects",
+    "grades": "Grades"
   },
   "stats": {
     "overallAverage": "Overall average",

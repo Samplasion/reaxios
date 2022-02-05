@@ -142,7 +142,9 @@
     "settingsTitle": "",
     "invalidObjective": "",
     "noObjective": "",
-    "customObjectiveHelper": ""
+    "customObjectiveHelper": "",
+    "subjects": "",
+    "grades": ""
   },
   "stats": {
     "overallAverage": "",

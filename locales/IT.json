@@ -142,7 +142,9 @@
     "settingsTitle": "Impostazioni: {0}",
     "invalidObjective": "Non è un obiettivo valido. Inserisci un numero tra 1 e 10, o lascia vuoto per rimuovere l'obiettivo.",
     "noObjective": "Non è stato impostato un obiettivo personalizzato.",
-    "customObjectiveHelper": "Lascia vuoto per rimuovere l'obiettivo personalizzato."
+    "customObjectiveHelper": "Lascia vuoto per rimuovere l'obiettivo personalizzato.",
+    "subjects": "Materie",
+    "grades": "Voti"
   },
   "stats": {
     "overallAverage": "Media generale",

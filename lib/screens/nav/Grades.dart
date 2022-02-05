@@ -8,6 +8,7 @@ import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
+import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
@@ -45,7 +46,15 @@ class GradesPane extends StatefulWidget {
   _GradesPaneState createState() => _GradesPaneState();
 }
 
-class _GradesPaneState extends ReloadableState<GradesPane> {
+class _Page {
+  final String title;
+  final Widget content;
+
+  _Page(this.title, this.content);
+}
+
+class _GradesPaneState extends ReloadableState<GradesPane>
+    with SingleTickerProviderStateMixin {
   String selectedSubject = "";
 
   ScrollController controller = ScrollController();
@@ -119,8 +128,51 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
     setState(() {});
   }
 
+  List<_Page> getPages(
+    BuildContext context,
+    List<Grade> grades,
+    Period? currentPeriod,
+    List<String> subjects,
+  ) =>
+      [
+        _Page(
+          context.locale.grades.subjects,
+          SafeArea(
+            bottom: false,
+            left: false,
+            right: false,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildHeader(context, grades, currentPeriod),
+                  MaxWidthContainer(
+                    child: _buildSubjects(
+                        context, subjects, grades, currentPeriod),
+                  ).center().padding(bottom: 8),
+                ],
+              ),
+            ),
+          ),
+        ),
+        _Page(
+          context.locale.grades.grades,
+          SafeArea(
+            bottom: false,
+            left: false,
+            right: false,
+            child: MaxWidthContainer(
+              child: _buildGrades(context, grades),
+            ).center().padding(vertical: 8),
+          ),
+        ),
+      ];
+
+  late final TabController _tabController =
+      TabController(length: 2, vsync: this);
+
   Widget buildOk(BuildContext context, List<Grade> grades,
       Period? currentPeriod, List<String> subjects) {
+    final pages = getPages(context, grades, currentPeriod, subjects);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: GradientAppBar(
@@ -132,21 +184,14 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
             icon: Icon(Icons.menu),
           );
         }),
-      ),
-      body: SafeArea(
-        bottom: false,
-        left: false,
-        right: false,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildHeader(context, grades, currentPeriod),
-              MaxWidthContainer(
-                child: _buildSubjects(context, subjects, grades, currentPeriod),
-              ).center().padding(bottom: 8),
-            ],
-          ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: pages.map((page) => Tab(text: page.title)).toList(),
         ),
+      ),
+      body: TabBarView(
+        children: pages.map((p) => p.content).toList(),
+        controller: _tabController,
       ),
     );
   }
@@ -227,6 +272,21 @@ class _GradesPaneState extends ReloadableState<GradesPane> {
           ],
         ).paddingDirectional(end: 16),
       ),
+    );
+  }
+
+  Widget _buildGrades(BuildContext context, List<Grade> grades) {
+    return ListView.builder(
+      itemBuilder: (context, i) => Hero(
+        child: GradeListItem(
+          grade: grades[i],
+          rebuild: rebuild,
+          session: widget.session,
+          onClick: true,
+        ),
+        tag: grades[i].toString(),
+      ).padding(horizontal: 16),
+      itemCount: grades.length,
     );
   }
 
