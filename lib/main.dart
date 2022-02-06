@@ -132,9 +132,9 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
     final defaultTextThemeLight = ThemeData.light().textTheme;
     final defaultTextThemeDark = ThemeData.dark().textTheme;
 
+    final headerFont = GoogleFonts.outfit();
+    final bodyFont = GoogleFonts.montserrat();
     TextTheme getTextTheme(TextTheme defaultTheme) {
-      final headerFont = GoogleFonts.outfit();
-      final bodyFont = GoogleFonts.montserrat();
       return defaultTheme.copyWith(
         headline1: defaultTheme.headline1.copyWith(
           fontFamily: headerFont.fontFamily,
@@ -178,70 +178,93 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
       );
     }
 
+    final TabBarTheme tabBarTheme = TabBarTheme(
+      labelStyle: TextStyle(
+        fontFamily: bodyFont.fontFamily,
+        fontWeight: FontWeight.w900,
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontFamily: bodyFont.fontFamily,
+        fontWeight: FontWeight.w400,
+      ),
+      indicator: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: accent.contrastText,
+            width: 2,
+          ),
+        ),
+      ),
+    );
+
     return Shortcuts(
       shortcuts: shortcuts,
       child: AnimatedBuilder(
         animation: settings,
-        builder: (context, _) => MaterialApp(
-          title: 'Registro Axios',
-          theme: ThemeData(
-            primaryColor: primary,
-            accentColor: accent,
-            colorScheme: ColorScheme.light(
-              primary: primary,
-              onPrimary: primary.contrastText,
-              secondary: accent,
-              onSecondary: accent.contrastText,
+        builder: (context, _) {
+          return MaterialApp(
+            title: 'Registro Axios',
+            theme: ThemeData(
+              primaryColor: primary,
+              accentColor: accent,
+              colorScheme: ColorScheme.light(
+                primary: primary,
+                onPrimary: primary.contrastText,
+                secondary: accent,
+                onSecondary: accent.contrastText,
+              ),
+              appBarTheme: appBarTheme,
+              textTheme: getTextTheme(defaultTextThemeLight),
+              tabBarTheme: tabBarTheme,
             ),
-            appBarTheme: appBarTheme,
-            textTheme: getTextTheme(defaultTextThemeLight),
-          ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            primaryColor: primary,
-            accentColor: accent,
-            colorScheme: ColorScheme.dark(
-              primary: primary,
-              onPrimary: primary.contrastText,
-              secondary: accent,
-              onSecondary: accent.contrastText,
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              primaryColor: primary,
+              accentColor: accent,
+              colorScheme: ColorScheme.dark(
+                primary: primary,
+                onPrimary: primary.contrastText,
+                secondary: accent,
+                onSecondary: accent.contrastText,
+              ),
+              appBarTheme: appBarTheme,
+              textTheme: getTextTheme(defaultTextThemeDark),
+              tabBarTheme: tabBarTheme,
             ),
-            appBarTheme: appBarTheme,
-            textTheme: getTextTheme(defaultTextThemeDark),
-          ),
-          themeMode: getThemeMode(themeMode),
-          // home: MyHomePage(title: 'Flutter Demo Home Page'),
-          initialRoute: "loading",
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: [
-            AxiosLocalizationDelegate(),
-            GlobalCupertinoLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: [
-            const Locale('en'),
-            const Locale('it'),
-          ],
-          routes: {
-            "/": (_) => Builder(
-                  builder: (context) => RefreshConfiguration(
-                    headerBuilder: () => ClassicHeader(
-                      idleText: context.locale.main.idleText,
-                      completeText: context.locale.main.completeText,
-                      releaseText: context.locale.main.releaseText,
-                      refreshingText: context.locale.main.refreshingText,
-                      failedText: context.locale.main.failedText,
+            themeMode: getThemeMode(themeMode),
+            // home: MyHomePage(title: 'Flutter Demo Home Page'),
+            initialRoute: "loading",
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: [
+              AxiosLocalizationDelegate(),
+              GlobalCupertinoLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('en'),
+              const Locale('it'),
+            ],
+            routes: {
+              "/": (_) => Builder(
+                    builder: (context) => RefreshConfiguration(
+                      headerBuilder: () => ClassicHeader(
+                        idleText: context.locale.main.idleText,
+                        completeText: context.locale.main.completeText,
+                        releaseText: context.locale.main.releaseText,
+                        refreshingText: context.locale.main.refreshingText,
+                        failedText: context.locale.main.failedText,
+                      ),
+                      child: HomeScreen(store: store),
                     ),
-                    child: HomeScreen(store: store),
                   ),
-                ),
-            "login": (_) => LoginScreen(store: store),
-            "loading": (_) => LoadingScreen(),
-            "settings": (_) => SettingsScreen(),
-            "nointernet": (_) => NoInternetScreen(),
-          },
-        ),
+              "login": (_) => LoginScreen(store: store),
+              "loading": (_) => LoadingScreen(),
+              "settings": (_) => SettingsScreen(),
+              "nointernet": (_) => NoInternetScreen(),
+            },
+          );
+        },
       ),
     );
   }
