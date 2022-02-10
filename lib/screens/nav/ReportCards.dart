@@ -5,6 +5,7 @@ import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Views/ReportCard.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
@@ -105,48 +106,51 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
     List<ReportCard> reportCards,
     List<Period> periods,
   ) {
-    return Container(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8)
-              .copyWith(top: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              DropdownButtonFormField<String>(
-                value:
-                    selectedPeriod.isEmpty ? periods.first.id : selectedPeriod,
-                // icon: const Icon(Icons.arrow_downward),
-                onChanged: (String? newValue) {
-                  if (newValue == null) return;
-                  setState(() {
-                    selectedPeriod = newValue;
-                  });
-                },
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: context.locale.reportCard.period,
-                ),
-                items: periods
-                    .toSet()
-                    .map<DropdownMenuItem<String>?>((Period value) {
-                      if (value.id.isEmpty) return null;
-                      return DropdownMenuItem<String>(
-                        value: value.id,
-                        child: Text(value.desc),
-                      );
-                    })
-                    .where((DropdownMenuItem<String>? item) => item != null)
-                    .toList() as List<DropdownMenuItem<String>>,
-              ),
-              if (selectedPeriod.isNotEmpty)
-                ReportCardComponent(
-                  reportCard: reportCards.firstWhere(
-                    (element) => element.periodUUID == selectedPeriod,
-                    orElse: () => ReportCard.empty(),
+    return SingleChildScrollView(
+      child: Center(
+        child: MaxWidthContainer(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8)
+                .copyWith(top: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                DropdownButtonFormField<String>(
+                  value: selectedPeriod.isEmpty
+                      ? periods.first.id
+                      : selectedPeriod,
+                  // icon: const Icon(Icons.arrow_downward),
+                  onChanged: (String? newValue) {
+                    if (newValue == null) return;
+                    setState(() {
+                      selectedPeriod = newValue;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: context.locale.reportCard.period,
                   ),
-                )
-            ],
+                  items: periods
+                      .toSet()
+                      .map<DropdownMenuItem<String>?>((Period value) {
+                        if (value.id.isEmpty) return null;
+                        return DropdownMenuItem<String>(
+                          value: value.id,
+                          child: Text(value.desc),
+                        );
+                      })
+                      .where((DropdownMenuItem<String>? item) => item != null)
+                      .toList() as List<DropdownMenuItem<String>>,
+                ),
+                if (selectedPeriod.isNotEmpty)
+                  ReportCardComponent(
+                    reportCard: reportCards.firstWhere(
+                      (element) => element.periodUUID == selectedPeriod,
+                      orElse: () => ReportCard.empty(),
+                    ),
+                  )
+              ],
+            ),
           ),
         ),
       ),
