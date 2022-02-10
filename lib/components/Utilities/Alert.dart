@@ -8,10 +8,14 @@ class Alert extends StatelessWidget {
     this.text,
     this.color = Colors.blue,
     this.selectable = false,
-  }) : super(key: key);
+    this.textBuilder,
+  })  : assert((text == null) != (textBuilder == null),
+            "Either text or textBuilder must be null, but not both"),
+        super(key: key);
 
   final String title;
   final Widget? text;
+  final Widget? Function(BuildContext context)? textBuilder;
   final MaterialColor color;
   final bool selectable;
 
@@ -39,51 +43,66 @@ class Alert extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: color[dark ? 300 : 700],
-                      ),
-                    ),
-                    if (text != null) ...[
-                      if (text is RichText)
-                        selectable
-                            ? SelectableText.rich(
-                                TextSpan(
-                                  children: [(text as RichText).text],
-                                  style:
-                                      TextStyle(color: color[dark ? 200 : 900]),
+                child: Theme(
+                  data: ThemeData(
+                    textTheme: Theme.of(context).textTheme.copyWith(
+                          bodyText2:
+                              Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    color: color[dark ? 200 : 900],
+                                  ),
+                        ),
+                  ),
+                  child: Builder(
+                    builder: (context) {
+                      final txt = text ?? textBuilder!(context);
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: color[dark ? 300 : 700],
+                            ),
+                          ),
+                          if (txt != null) ...[
+                            if (txt is RichText)
+                              selectable
+                                  ? SelectableText.rich(
+                                      TextSpan(
+                                        children: [txt.text],
+                                        style: TextStyle(
+                                            color: color[dark ? 200 : 900]),
+                                      ),
+                                    )
+                                  : RichText(
+                                      text: TextSpan(
+                                        children: [txt.text],
+                                        style: TextStyle(
+                                            color: color[dark ? 200 : 900]),
+                                      ),
+                                    )
+                            else if (txt is Markdown)
+                              Markdown(
+                                data: txt.data,
+                                styleSheet: MarkdownStyleSheet(
+                                  p: TextStyle(color: color[dark ? 200 : 900]),
                                 ),
                               )
-                            : RichText(
-                                text: TextSpan(
-                                  children: [(text as RichText).text],
-                                  style:
-                                      TextStyle(color: color[dark ? 200 : 900]),
+                            else if (txt is MarkdownBody)
+                              MarkdownBody(
+                                data: txt.data,
+                                styleSheet: MarkdownStyleSheet(
+                                  p: TextStyle(color: color[dark ? 200 : 900]),
                                 ),
                               )
-                      else if (text is Markdown)
-                        Markdown(
-                          data: (text as Markdown).data,
-                          styleSheet: MarkdownStyleSheet(
-                            p: TextStyle(color: color[dark ? 200 : 900]),
-                          ),
-                        )
-                      else if (text is MarkdownBody)
-                        MarkdownBody(
-                          data: (text as MarkdownBody).data,
-                          styleSheet: MarkdownStyleSheet(
-                            p: TextStyle(color: color[dark ? 200 : 900]),
-                          ),
-                        )
-                      else
-                        text!,
-                    ],
-                  ],
+                            else
+                              txt,
+                          ],
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
             ],

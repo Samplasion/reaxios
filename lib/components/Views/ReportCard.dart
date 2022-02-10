@@ -54,25 +54,31 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
       children: [
         Alert(
           title: context.locale.reportCard.overview,
-          text: [
+          textBuilder: (context) => [
             RichText(
-              text: TextSpan(children: [
-                TextSpan(text: context.locale.reportCard.average),
-                GradeText(
-                  context,
-                  grade: simpleAverage(reportCard.subjects
-                      .map((e) => e.gradeAverage)
-                      .where((e) => e > 0)
-                      .toList()),
+              text: TextSpan(
+                children: [
+                  TextSpan(text: context.locale.reportCard.average),
+                  GradeText(
+                    context,
+                    grade: simpleAverage(reportCard.subjects
+                        .map((e) => e.gradeAverage)
+                        .where((e) => e > 0)
+                        .toList()),
+                  ),
+                ],
+                style: TextStyle(
+                  fontFamily: Theme.of(context).textTheme.bodyText2!.fontFamily,
+                  color: Theme.of(context).textTheme.bodyText2!.color,
                 ),
-              ]),
+              ),
             ),
             MarkdownBody(data: () {
               String res = "";
-              res += "${context.locale.reportCard.absences}\n";
-              res += "${context.locale.reportCard.failedSubjects}\n";
+              res += "${context.locale.reportCard.absences}  \n";
+              res += "${context.locale.reportCard.failedSubjects}  \n";
               if (reportCard.result.trim().isNotEmpty)
-                res += "${context.locale.reportCard.outcome}\n";
+                res += "${context.locale.reportCard.outcome}  \n";
               return res.mapFormat({
                 "absences": reportCard.subjects
                     .fold<int>(
@@ -81,11 +87,11 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                           previousValue + (element?.absences ?? 0).toInt(),
                     )
                     .toString(),
-                "failedSubjects": carenze.toString(),
+                "failed": carenze.toString(),
                 "outcome": reportCard.result,
               });
             }()),
-          ].toColumn(),
+          ].toColumn(crossAxisAlignment: CrossAxisAlignment.start),
         ),
         Alert(
           title: context.locale.reportCard.judgment,
