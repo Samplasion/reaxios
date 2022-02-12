@@ -49,6 +49,18 @@ extension ListExtension<T> on List<T> {
   }
 }
 
+extension NullLogExtension on Null {
+  void log() {
+    print(this);
+  }
+}
+
+extension ObjectLogExtension on Object {
+  void log() {
+    print(this);
+  }
+}
+
 extension NextEventExtension on List<Event> {
   Event? getCurrentOrNextEvent([DateTime? now]) {
     now ??= DateTime.now();

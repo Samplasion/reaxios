@@ -59,7 +59,11 @@
     "average": "",
     "grades": "",
     "assignments": "",
-    "topics": ""
+    "topics": "",
+    "todaysEventsTitle": "",
+    "todaysEventsSubtitle": "",
+    "tomorrowsEventsTitle": "",
+    "tomorrowsEventsSubtitle": ""
   },
   "absences": {
     "noPermission": "",

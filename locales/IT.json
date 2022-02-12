@@ -59,7 +59,11 @@
     "average": "Media",
     "grades": "Voti",
     "assignments": "Compiti",
-    "topics": "Argomenti"
+    "topics": "Argomenti",
+    "todaysEventsTitle": "Prossimi eventi",
+    "todaysEventsSubtitle": "Cos'altro c'è da fare?",
+    "tomorrowsEventsTitle": "Domani",
+    "tomorrowsEventsSubtitle": "Ricordati di fare i compiti!"
   },
   "absences": {
     "noPermission": "Non hai il permesso di visualizzare le assenze. Contatta la scuola per saperne di più.",

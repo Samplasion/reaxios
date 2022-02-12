@@ -22,14 +22,18 @@ import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Charts/GradeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
+import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/consts.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/timetable/extensions.dart' hide ColorExtension;
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import '../../components/LowLevel/MaybeMasterDetail.dart';
+import '../../timetable/components/essential/EventView.dart';
+import '../../timetable/structures/Event.dart';
 
 class OverviewPane extends StatefulWidget {
   OverviewPane({
@@ -258,6 +262,8 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .toList();
 
     final items = [
+      TodaysEvents(),
+
       if (gradeCards.isNotEmpty)
         ...[
           Text(
@@ -576,5 +582,68 @@ class UserCard extends StatelessWidget {
         .height(175)
         .alignment(Alignment.center)
         .padding(top: 32, bottom: 16, horizontal: 16);
+  }
+}
+
+class TodaysEvents extends StatelessWidget {
+  const TodaysEvents({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = Provider.of<Settings>(context);
+    final events = settings.getEvents();
+    return Center(
+      child: MaxWidthContainer(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (events.getTodayEvents().isNotEmpty)
+                buildCard(
+                  events.getTodayEvents(),
+                  context.locale.overview.todaysEventsTitle,
+                  context.locale.overview.todaysEventsSubtitle,
+                  Icons.access_time,
+                ),
+              if (events.getTomorrowEvents().isNotEmpty)
+                buildCard(
+                  events.getTomorrowEvents(),
+                  context.locale.overview.tomorrowsEventsTitle,
+                  context.locale.overview.tomorrowsEventsSubtitle,
+                  Icons.calendar_today,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildCard(
+      List<Event> events, String title, String subtitle, IconData icon) {
+    return BigCard(
+      leading: NiceHeader(
+        title: title,
+        subtitle: subtitle,
+        leading: Icon(icon),
+      ),
+      body: Container(
+        child: ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: events
+              .map((event) => EventView(
+                    event,
+                    expandable: false,
+                  ))
+              .toList(),
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        clipBehavior: Clip.antiAlias,
+      ),
+    );
   }
 }

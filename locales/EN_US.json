@@ -59,7 +59,11 @@
     "average": "Average",
     "grades": "Grades",
     "assignments": "Assignments",
-    "topics": "Lesson subjects"
+    "topics": "Lesson subjects",
+    "todaysEventsTitle": "Next up",
+    "todaysEventsSubtitle": "What's next?",
+    "tomorrowsEventsTitle": "Tomorrow",
+    "tomorrowsEventsSubtitle": "Be sure to do your homework!"
   },
   "absences": {
     "noPermission": "You don't have the required permission to view your absences. Contact your school for more information.",

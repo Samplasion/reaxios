@@ -200,6 +200,10 @@ class Localeoverview {
   String get grades => _data["grades"]!;
   String get assignments => _data["assignments"]!;
   String get topics => _data["topics"]!;
+  String get todaysEventsTitle => _data["todaysEventsTitle"]!;
+  String get todaysEventsSubtitle => _data["todaysEventsSubtitle"]!;
+  String get tomorrowsEventsTitle => _data["tomorrowsEventsTitle"]!;
+  String get tomorrowsEventsSubtitle => _data["tomorrowsEventsSubtitle"]!;
 }
 
 class Localeabsences {
