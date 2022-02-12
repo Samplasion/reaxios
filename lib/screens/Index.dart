@@ -19,6 +19,7 @@ import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
+import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';
@@ -37,6 +38,7 @@ import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../consts.dart';
+import '../system/AppInfoStore.dart';
 import 'nav/BulletinBoard.dart';
 import 'nav/Calculator.dart';
 import 'nav/ReportCards.dart';
@@ -370,7 +372,8 @@ class _HomeScreenState extends State<HomeScreen> {
         title: drawerItems[index][1],
         selected: index == selectedPane,
         onTap: () {
-          /* if (width <= kTabBreakpoint) */ Navigator.pop(context);
+          if (!MaybeMasterDetail.shouldBeShowingMaster(context))
+            Navigator.pop(context);
           _switchToTab(index);
         },
       ));
@@ -379,7 +382,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildUserDetail() {
-    final width = MediaQuery.of(context).size.width;
     return Container(
       child: ListView.builder(
         shrinkWrap: true,
@@ -389,7 +391,8 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text("${s.firstName} ${s.lastName}"),
             selected: s.studentUUID == session.student?.studentUUID,
             onTap: () {
-              if (width <= kTabBreakpoint) Navigator.pop(context);
+              if (!MaybeMasterDetail.of(context)!.isShowingMaster)
+                Navigator.pop(context);
               session.student = s;
               widget.store.reset();
               runCallback(0);
@@ -465,10 +468,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: AnimatedCrossFade(
                   duration: Duration(milliseconds: 125),
                   crossFadeState: showUserDetails
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond,
-                  firstChild: _buildUserDetail(),
-                  secondChild: Padding(
+                      ? CrossFadeState.showSecond
+                      : CrossFadeState.showFirst,
+                  secondChild: _buildUserDetail(),
+                  firstChild: Padding(
                     padding: EdgeInsets.only(top: 8),
                     child: Column(
                       // shrinkWrap: true,
@@ -479,8 +482,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: Text(context.locale.drawer.settings),
                           leading: Icon(Icons.settings),
                           onTap: () {
-                            /* if (width <= kTabBreakpoint) */ Navigator.pop(
-                                context);
+                            if (!MaybeMasterDetail.shouldBeShowingMaster(
+                                context)) Navigator.pop(context);
                             Navigator.pushNamed(context, "settings");
                           },
                         ),
@@ -506,52 +509,87 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appInfo = context.watch<AppInfoStore>();
+    final app = appInfo.packageInfo;
+
     initPanes(session, login);
     return Container(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 0),
-        child: PageTransitionSwitcher(
-          transitionBuilder: (
-            Widget child,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) {
-            return FadeThroughTransition(
-              child: child,
-              animation: animation,
-              secondaryAnimation: secondaryAnimation,
+        child: MaybeMasterDetail(
+          master: () {
+            final drawer = _getDrawer();
+            if (drawer == null) return null;
+
+            final child = drawer.child;
+
+            return Scaffold(
+              appBar: GradientAppBar(
+                title: Text(kIsWeb ? "Registro" : app.appName),
+              ),
+              extendBodyBehindAppBar: true,
+              body: child,
             );
-          },
-          child: KeyedSubtree(
-            key: ValueKey(selectedPane),
-            child: Scaffold(
-              appBar: drawerItems[selectedPane][2]
-                  ? GradientAppBar(
-                      title: drawerItems[selectedPane][1],
-                      leading: Builder(builder: (context) {
-                        return IconButton(
-                          tooltip: MaterialLocalizations.of(context)
-                              .openAppDrawerTooltip,
-                          onPressed: () => Scaffold.of(context).openDrawer(),
-                          icon: Icon(Icons.menu),
-                        );
-                      }),
-                    )
-                  : null,
-              drawer: _getDrawer(),
-              body: loading
-                  ? LoadingUI(colorful: true, showHints: true)
-                  : Builder(builder: (context) {
-                      return Actions(
-                        actions: {
-                          MenuIntent:
-                              CallbackAction<MenuIntent>(onInvoke: (intent) {
-                            Scaffold.of(context).openDrawer();
-                          })
-                        },
-                        child: panes[selectedPane],
-                      );
-                    }),
+          }(),
+          detail: PageTransitionSwitcher(
+            transitionBuilder: (
+              Widget child,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              if (kIsWeb)
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              return FadeThroughTransition(
+                child: child,
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+              );
+            },
+            child: KeyedSubtree(
+              key: ValueKey(selectedPane),
+              child: Builder(
+                builder: (BuildContext context) {
+                  return Scaffold(
+                    appBar: drawerItems[selectedPane][2]
+                        ? GradientAppBar(
+                            title: drawerItems[selectedPane][1],
+                            leading: MaybeMasterDetail.of(context)!
+                                    .isShowingMaster
+                                ? null
+                                : Builder(builder: (context) {
+                                    return IconButton(
+                                      tooltip: MaterialLocalizations.of(context)
+                                          .openAppDrawerTooltip,
+                                      onPressed: () =>
+                                          Scaffold.of(context).openDrawer(),
+                                      icon: Icon(Icons.menu),
+                                    );
+                                  }),
+                          )
+                        : null,
+                    drawer: MaybeMasterDetail.of(context)!.isShowingMaster
+                        ? null
+                        : _getDrawer(),
+                    body: loading
+                        ? LoadingUI(colorful: true, showHints: true)
+                        : Builder(builder: (context) {
+                            return Actions(
+                              actions: {
+                                MenuIntent: CallbackAction<MenuIntent>(
+                                    onInvoke: (intent) {
+                                  Scaffold.of(context).openDrawer();
+                                  return null;
+                                })
+                              },
+                              child: panes[selectedPane],
+                            );
+                          }),
+                  );
+                },
+              ),
             ),
           ),
         ),

@@ -9,6 +9,7 @@ import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/utils.dart';
 
+import '../../../components/LowLevel/MaybeMasterDetail.dart';
 import 'EventEditor.dart';
 
 enum View { dayView, weekView }
@@ -117,7 +118,8 @@ class _EventControllerState extends State<EventController> {
     getSettings(context).setEvents(_events);
   }
 
-  bool get isSmall => MediaQuery.of(context).size.width < kTabBreakpoint;
+  bool get isSmall =>
+      MaybeMasterDetail.of(context)!.detailWidth < kTabBreakpoint;
 
   @override
   Widget build(BuildContext context) {
@@ -138,11 +140,14 @@ class _EventControllerState extends State<EventController> {
         ),
       ),
       bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: _getFab(),
+      floatingActionButtonLocation: bottomNavigationBar == null
+          ? null
+          : FloatingActionButtonLocation.endDocked,
     );
   }
 
   Widget? get bottomNavigationBar {
-    final screenWidth = MediaQuery.of(context).size.width;
     if (!isSmall) return null;
     return BottomNavigationBar(
       currentIndex: _currentIndex,
@@ -162,7 +167,6 @@ class _EventControllerState extends State<EventController> {
   bool _railExtended = false;
 
   Widget get navigationRail {
-    final screenWidth = MediaQuery.of(context).size.width;
     if (isSmall) return Container();
     return GestureDetector(
       child: NavigationRail(

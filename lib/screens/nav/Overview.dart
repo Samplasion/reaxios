@@ -29,6 +29,8 @@ import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
+import '../../components/LowLevel/MaybeMasterDetail.dart';
+
 class OverviewPane extends StatefulWidget {
   OverviewPane({
     Key? key,
@@ -135,7 +137,8 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       List<Assignment> assignments, List<Topic> topics, List<Grade> grades) {
     final student = widget.student;
 
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MaybeMasterDetail.of(context)?.detailWidth ??
+        MediaQuery.of(context).size.width;
     final screenBorders = (screenWidth - kTabBreakpoint) / 2;
 
     if (student.studentUUID != lastUUID) {
@@ -372,11 +375,13 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
           SizedBox(
             height: appBarSize < collapsedHeight ? collapsedHeight : appBarSize,
             child: GradientAppBar(
-              leading: IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: openMenu,
-                tooltip: context.materialLocale.openAppDrawerTooltip,
-              ),
+              leading: MaybeMasterDetail.of(context)!.isShowingMaster
+                  ? null
+                  : IconButton(
+                      icon: Icon(Icons.menu),
+                      onPressed: openMenu,
+                      tooltip: context.materialLocale.openAppDrawerTooltip,
+                    ),
               elevation: map(percent, 0, 1, 4, 0).toDouble(),
               title: Opacity(
                 opacity: hideTitleWhenExpanded ? 1.0 - percent : 1.0,

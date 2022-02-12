@@ -12,6 +12,7 @@ import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
+import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
@@ -177,13 +178,16 @@ class _GradesPaneState extends ReloadableState<GradesPane>
       extendBodyBehindAppBar: true,
       appBar: GradientAppBar(
         title: Text(context.locale.drawer.grades),
-        leading: Builder(builder: (context) {
-          return IconButton(
-            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            onPressed: widget.openMainDrawer,
-            icon: Icon(Icons.menu),
-          );
-        }),
+        leading: MaybeMasterDetail.of(context)!.isShowingMaster
+            ? null
+            : Builder(builder: (context) {
+                return IconButton(
+                  tooltip:
+                      MaterialLocalizations.of(context).openAppDrawerTooltip,
+                  onPressed: widget.openMainDrawer,
+                  icon: Icon(Icons.menu),
+                );
+              }),
         bottom: TabBar(
           controller: _tabController,
           tabs: pages.map((page) => Tab(text: page.title)).toList(),
@@ -206,8 +210,8 @@ class _GradesPaneState extends ReloadableState<GradesPane>
       periodCards.add(
         ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth:
-                min(650, max(350, MediaQuery.of(context).size.width * 0.75)),
+            maxWidth: min(650,
+                max(350, MaybeMasterDetail.of(context)!.detailWidth * 0.75)),
           ),
           child: BigCard(
             leading: Row(
@@ -244,7 +248,9 @@ class _GradesPaneState extends ReloadableState<GradesPane>
             ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: min(
-                    650, max(350, MediaQuery.of(context).size.width * 0.75)),
+                    650,
+                    max(350,
+                        MaybeMasterDetail.of(context)!.detailWidth * 0.75)),
               ),
               child: BigCard(
                 leading: Row(

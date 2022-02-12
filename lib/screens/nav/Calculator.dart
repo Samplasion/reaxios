@@ -12,6 +12,7 @@ import '../../api/entities/Structural/Structural.dart';
 import '../../components/LowLevel/Empty.dart';
 import '../../components/LowLevel/GradientAppBar.dart';
 import '../../components/LowLevel/Loading.dart';
+import '../../components/LowLevel/MaybeMasterDetail.dart';
 import '../../components/Utilities/AlertBottomSheet.dart';
 import '../../components/Utilities/BoldText.dart';
 import '../../components/Utilities/GradeAvatar.dart';
@@ -90,13 +91,16 @@ class _CalculatorPaneState extends State<CalculatorPane>
         return Scaffold(
           appBar: GradientAppBar(
             title: Text(context.locale.drawer.calculator),
-            leading: Builder(builder: (context) {
-              return IconButton(
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-                onPressed: widget.openMainDrawer,
-                icon: Icon(Icons.menu),
-              );
-            }),
+            leading: MaybeMasterDetail.of(context)!.isShowingMaster
+                ? null
+                : Builder(builder: (context) {
+                    return IconButton(
+                      tooltip: MaterialLocalizations.of(context)
+                          .openAppDrawerTooltip,
+                      onPressed: widget.openMainDrawer,
+                      icon: Icon(Icons.menu),
+                    );
+                  }),
           ),
           extendBody: true,
           extendBodyBehindAppBar: true,

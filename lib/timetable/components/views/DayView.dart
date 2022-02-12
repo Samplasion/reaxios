@@ -13,6 +13,8 @@ import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Weekday.dart';
 import 'package:reaxios/utils.dart';
 
+import '../../../components/LowLevel/MaybeMasterDetail.dart';
+
 class DayView extends StatefulWidget {
   DayView(
     this.events, {
@@ -163,10 +165,12 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
                 return Tab(text: "$day$week");
               }).toList(),
             ),
-            leading: IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: widget.openMainDrawer,
-            ),
+            leading: MaybeMasterDetail.of(context)!.isShowingMaster
+                ? null
+                : IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: widget.openMainDrawer,
+                  ),
             actions: [
               if (Foundation.kDebugMode)
                 IconButton(
@@ -193,7 +197,8 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
                   thickness: 1,
                   width: 1,
                 ),
-                show: MediaQuery.of(context).size.width >= kTabBreakpoint,
+                show: MaybeMasterDetail.of(context)!.detailWidth >=
+                    kTabBreakpoint,
               ),
               Expanded(
                 child: Center(
@@ -227,7 +232,6 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
               ),
             ],
           ),
-          floatingActionButton: widget.fab,
         );
       }),
     );

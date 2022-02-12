@@ -12,6 +12,7 @@ import 'package:reaxios/timetable/utils.dart';
 import 'package:reaxios/utils.dart';
 
 import '../../../components/LowLevel/ConditionalChild.dart';
+import '../../../components/LowLevel/MaybeMasterDetail.dart';
 import '../../../consts.dart';
 import '../../../tuple.dart';
 
@@ -72,7 +73,7 @@ class _WeekViewState extends State<WeekView>
               thickness: 1,
               width: 1,
             ),
-            show: MediaQuery.of(context).size.width >= kTabBreakpoint,
+            show: MaybeMasterDetail.of(context)!.detailWidth >= kTabBreakpoint,
           ),
           Expanded(
             child: TabBarView(
@@ -129,7 +130,6 @@ class _WeekViewState extends State<WeekView>
           ),
         ],
       ),
-      floatingActionButton: widget.fab,
     );
   }
 
@@ -149,10 +149,12 @@ class _WeekViewState extends State<WeekView>
     final defaultAppBar = GradientAppBar(
       title: Text(context.locale.timetable.weekView),
       bottom: tabBar,
-      leading: IconButton(
-        icon: Icon(Icons.menu),
-        onPressed: widget.openMainDrawer,
-      ),
+      leading: MaybeMasterDetail.of(context)!.isShowingMaster
+          ? null
+          : IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: widget.openMainDrawer,
+            ),
     );
     return PreferredSize(
       child: Material(

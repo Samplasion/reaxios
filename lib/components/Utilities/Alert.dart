@@ -72,14 +72,16 @@ class Alert extends StatelessWidget {
                                       TextSpan(
                                         children: [txt.text],
                                         style: TextStyle(
-                                            color: color[dark ? 200 : 900]),
+                                          color: color[dark ? 200 : 900],
+                                        ),
                                       ),
                                     )
                                   : RichText(
                                       text: TextSpan(
                                         children: [txt.text],
                                         style: TextStyle(
-                                            color: color[dark ? 200 : 900]),
+                                          color: color[dark ? 200 : 900],
+                                        ),
                                       ),
                                     )
                             else if (txt is Markdown)

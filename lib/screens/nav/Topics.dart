@@ -12,6 +12,8 @@ import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:styled_widget/styled_widget.dart';
 
+import '../../components/LowLevel/MaybeMasterDetail.dart';
+
 class TopicsPane extends StatefulWidget {
   TopicsPane({
     Key? key,
@@ -71,14 +73,16 @@ class _TopicsPaneState extends State<TopicsPane> {
             extendBodyBehindAppBar: true,
             appBar: GradientAppBar(
               title: Text(context.locale.drawer.topics),
-              leading: Builder(builder: (context) {
-                return IconButton(
-                  tooltip:
-                      MaterialLocalizations.of(context).openAppDrawerTooltip,
-                  onPressed: widget.openMainDrawer,
-                  icon: Icon(Icons.menu),
-                );
-              }),
+              leading: MaybeMasterDetail.of(context)!.isShowingMaster
+                  ? null
+                  : Builder(builder: (context) {
+                      return IconButton(
+                        tooltip: MaterialLocalizations.of(context)
+                            .openAppDrawerTooltip,
+                        onPressed: widget.openMainDrawer,
+                        icon: Icon(Icons.menu),
+                      );
+                    }),
               actions: [
                 Builder(
                   builder: (context) {
