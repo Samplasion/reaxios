@@ -262,8 +262,6 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .toList();
 
     final items = [
-      TodaysEvents(),
-
       if (gradeCards.isNotEmpty)
         ...[
           Text(
@@ -272,6 +270,8 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
           ).padding(horizontal: 16, top: 8),
           ...gradeCards,
         ].map((e) => MaxWidthContainer(child: e).center()),
+
+      TodaysEvents(),
 
       if (tmrAssignments.isNotEmpty)
         ...[
