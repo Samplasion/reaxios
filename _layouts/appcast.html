@@ -1,0 +1,25 @@
+---
+layout: null
+---
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>{% if page.custom_feed_title %}{{ page.custom_feed_title }}{% else %}{{ site.title }} Changelog{% endif %}</title>
+    <description>{% if page.custom_feed_description %}{{  page.custom_feed_description }}{% else %}Most recent {{ site.title }} releases{% endif %}</description>
+    <link>{{ site.url }}{{ site.baseurl }}{{ page.url }}</link>
+    <language>{% if page.language_code %}{{ page.language_code }}{% else %}en{% endif %}</language>
+    {% for post in site.posts %}
+    <item>
+      <title>{{ post.title | xml_escape }} ({{ post.version }})</title>
+      <description>{{ post.content | xml_escape }}</description>
+      <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
+      <enclosure url="{{ post.enclosure_url }}" sparkle:version="{{ post.version }}" sparkle:shortVersionString="{{ post.short_version_string }}" length="{{ post.size }}" type="application/octet-stream"{% if post.dsa_signature %} sparkle:dsaSignature="{{ post.dsaSignature }}"{% endif %}/>
+      {% if post.minimum_system_version %}
+      <sparkle:minimumSystemVersion>{{ post.minimum_system_version }}</sparkle:minimumSystemVersion>
+      {% elsif page.default_minimum_system_version %}
+      <sparkle:minimumSystemVersion>{{ page.default_minimum_system_version }}</sparkle:minimumSystemVersion>
+      {% endif %}
+    </item>
+    {% endfor %}
+  </channel>
+</rss>

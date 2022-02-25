@@ -1,0 +1,39 @@
+title: Demo App
+description: "Demo App Description"
+tagline: "Demo App Tagline"
+keywords: []
+author:
+  name: "Author Name"
+
+baseurl: ""
+url: ""
+future: false
+show_drafts: false
+limit_posts: 0
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+permalink: pretty
+
+exclude: [
+  "README.md",
+  "LICENSE.txt",
+  "appcast.gemspec",
+  "Gemfile",
+  "Gemfile.lock",
+]
+
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: default
+  -
+    scope:
+      path: ""
+      type: posts
+    values:
+      layout: post

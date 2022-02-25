@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+<h1>{% if page.custom_title %}{{ page.custom_title }}{% else %}{{ site.title }} Changelog{% endif %}</h1>
+
+<ol>
+  {% for post in site.posts %}
+  <li>
+    <h2>
+      {{ post.title }} ({{ post.version }})
+      <time>{{ post.date | date: "%b %-d, %Y" }}</time>
+      <small>
+        <a href="{{ post.url }}">Permalink</a>
+      </small>
+    </h2>
+    <p>{{ post.content }}</p>
+  </li>
+  {% endfor %}
+</ol>

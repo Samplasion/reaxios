@@ -1,0 +1,7 @@
+---
+layout: appcast
+custom_feed_title: "Registro Changelog"
+custom_feed_description: "The changelog of updates to Registro."
+default_minimum_system_version: 0.0
+language_code: "en"
+---
