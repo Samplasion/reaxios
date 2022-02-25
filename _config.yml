@@ -1,12 +1,12 @@
-title: Demo App
-description: "Demo App Description"
-tagline: "Demo App Tagline"
+title: Registro
+description: "Changelog of Registro updates"
+tagline: "Registro updates"
 keywords: []
 author:
-  name: "Author Name"
+  name: "Samplasion"
 
-baseurl: ""
-url: ""
+baseurl: "/reaxios"
+url: "https://samplasion.github.org/reaxios"
 future: false
 show_drafts: false
 limit_posts: 0
