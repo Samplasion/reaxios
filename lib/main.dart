@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
+import 'package:reaxios/components/LowLevel/md_indicator.dart';
 import 'package:reaxios/services/android.dart' as android_service;
 import 'package:reaxios/screens/Index.dart';
 import 'package:reaxios/screens/Loading.dart';
@@ -187,13 +188,10 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
         fontFamily: bodyFont.fontFamily,
         fontWeight: FontWeight.w400,
       ),
-      indicator: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: accent.contrastText,
-            width: 2,
-          ),
-        ),
+      indicatorSize: TabBarIndicatorSize.label,
+      indicator: MaterialDesignIndicator(
+        indicatorHeight: 4,
+        indicatorColor: accent.contrastText,
       ),
     );
 
