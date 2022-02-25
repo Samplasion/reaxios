@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
@@ -41,8 +42,26 @@ class GradeAverageChart extends StatefulWidget {
 }
 
 class _GradeAverageChartState extends State<GradeAverageChart> {
+  bool _showAllYear = false;
+  Period? getPeriod(List<Grade> grades) {
+    if (grades.where((g) => g.period == widget.period?.desc).isEmpty) {
+      return null;
+    }
+
+    if (_showAllYear) {
+      return null;
+    }
+
+    return widget.period;
+  }
+
   List<_GradeChartEntry> _getEntries(List<Grade> grades) {
-    final names = grades.map((g) => g.subject).toSet().toList();
+    final period = getPeriod(grades);
+    final names = grades
+        .where((g) => period == null || g.period == period.desc)
+        .map((g) => g.subject)
+        .toSet()
+        .toList();
     return names
         .map<_GradeChartEntry>(
           (name) => _GradeChartEntry(
@@ -189,60 +208,130 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
 
   @override
   Widget build(BuildContext context) {
-    return <Widget>[
-      NiceHeader(
-        title: context.locale.charts.averages,
-        subtitle: widget.period == null
-            ? context.locale.charts.scopeAllYear
-            : widget.period!.desc,
-        leading: Icon(Icons.av_timer),
-      ).padding(top: 24, horizontal: 8),
-      // if (chart == null) Center(child: CircularProgressIndicator()) else chart!,
-      FutureBuilder<List<Grade>>(
-        future: widget.store.grades,
-        builder: (BuildContext context, snapshot) {
-          if (!snapshot.hasError && snapshot.hasData) {
-            final grades = _getEntries(snapshot.data!);
+    return FutureBuilder<List<Grade>>(
+      future: widget.store.grades,
+      builder: (BuildContext context, snapshot) {
+        final grades = _getEntries(snapshot.data ?? []);
+        final period = getPeriod(snapshot.data ?? []);
 
-            if (grades.isEmpty)
-              return EmptyUI(
-                icon: Icons.error_outline,
-                text: context.locale.main.noDataForPeriod,
-              ).padding(top: 24, horizontal: 8);
-
-            // print("Chart rebuilt");
-
-            // return
-            return AnimatedBuilder(
-              animation: Provider.of<Settings>(context),
-              builder: (BuildContext context, _) {
-                return _buildChart(
-                  grades,
-                  gradeAverage(
-                    Provider.of<Settings>(context).getAverageMode(),
-                    snapshot.data!,
-                  ),
-                );
-              },
+        return PageTransitionSwitcher(
+          transitionBuilder: (
+            Widget child,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
             );
-          }
-          if (snapshot.hasError) return Text("${snapshot.error}");
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
-    ]
-        .toColumn(crossAxisAlignment: CrossAxisAlignment.start)
-        .padding(horizontal: 16, bottom: 16)
-        .borderRadius(all: 15)
-        .backgroundColor(Theme.of(context).cardColor, animate: true)
-        .clipRRect(all: 15) // clip ripple
-        .borderRadius(all: 15, animate: true)
-        .elevation(
-          Theme.of(context).cardTheme.elevation ?? 8,
-          borderRadius: BorderRadius.circular(15),
-          shadowColor: Theme.of(context).shadowColor,
+          },
+          child: KeyedSubtree(
+            key: ValueKey(_showAllYear),
+            child: Container(
+              color: Theme.of(context).cardColor,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!snapshot.hasError && snapshot.hasData) ...[
+                    GestureDetector(
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: NiceHeader(
+                          title: context.locale.charts.averages,
+                          subtitle: period == null
+                              ? context.locale.charts.scopeAllYear
+                              : period.desc,
+                          leading: Icon(Icons.av_timer),
+                        ).padding(top: 24, horizontal: 8),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _showAllYear = !_showAllYear;
+                        });
+                      },
+                    ),
+                    if (grades.isEmpty)
+                      EmptyUI(
+                        icon: Icons.error_outline,
+                        text: context.locale.main.noDataForPeriod,
+                      ).padding(top: 24, horizontal: 8),
+                    AnimatedBuilder(
+                      animation: Provider.of<Settings>(context),
+                      builder: (context, _) {
+                        return _buildChart(
+                          grades,
+                          gradeAverage(
+                            Provider.of<Settings>(context).getAverageMode(),
+                            snapshot.data!,
+                          ),
+                        );
+                      },
+                    )
+                  ] else if (snapshot.hasError)
+                    Text("${snapshot.error}")
+                  else
+                    Center(child: CircularProgressIndicator()),
+                ],
+              ),
+            ),
+          ),
         )
-        .padding(bottom: 16)
-        .animate(Duration(milliseconds: 150), Curves.easeOut);
+            .padding(horizontal: 16, bottom: 16)
+            .borderRadius(all: 15)
+            .backgroundColor(Theme.of(context).cardColor, animate: true)
+            .clipRRect(all: 15) // clip ripple
+            .borderRadius(all: 15, animate: true)
+            .elevation(
+              Theme.of(context).cardTheme.elevation ?? 8,
+              borderRadius: BorderRadius.circular(15),
+              shadowColor: Theme.of(context).shadowColor,
+            )
+            .padding(bottom: 16)
+            .animate(Duration(milliseconds: 150), Curves.easeOut);
+      },
+    );
+    // return <Widget>[
+    //   NiceHeader(
+    //     title: context.locale.charts.averages,
+    //     subtitle: period == null
+    //         ? context.locale.charts.scopeAllYear
+    //         : period!.desc,
+    //     leading: Icon(Icons.av_timer),
+    //   ).padding(top: 24, horizontal: 8),
+    //   // if (chart == null) Center(child: CircularProgressIndicator()) else chart!,
+    //   FutureBuilder<List<Grade>>(
+    //     future: widget.store.grades,
+    //     builder: (BuildContext context, snapshot) {
+    //       if (!snapshot.hasError && snapshot.hasData) {
+    //         final grades = _getEntries(snapshot.data!);
+
+    //         if (grades.isEmpty)
+    //           return EmptyUI(
+    //             icon: Icons.error_outline,
+    //             text: context.locale.main.noDataForPeriod,
+    //           ).padding(top: 24, horizontal: 8);
+
+    //         // print("Chart rebuilt");
+
+    //         // return
+    //         return AnimatedBuilder(
+    //           animation: Provider.of<Settings>(context),
+    //           builder: (BuildContext context, _) {
+    //             return _buildChart(
+    //               grades,
+    //               gradeAverage(
+    //                 Provider.of<Settings>(context).getAverageMode(),
+    //                 snapshot.data!,
+    //               ),
+    //             );
+    //           },
+    //         );
+    //       }
+    //       if (snapshot.hasError) return Text("${snapshot.error}");
+    //       return Center(child: CircularProgressIndicator());
+    //     },
+    //   ),
+    // ]
+    //     .toColumn();
   }
 }
