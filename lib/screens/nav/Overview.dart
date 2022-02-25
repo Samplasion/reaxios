@@ -179,8 +179,8 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       for (Topic e in latestTopics) ...[
         ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth:
-                (MediaQuery.of(context).size.width * 0.65).clamp(350, 500),
+            maxWidth: (MaybeMasterDetail.of(context)!.detailWidth * 0.65)
+                .clamp(350, 500),
           ),
           child: BigCard(
             color: accent,
