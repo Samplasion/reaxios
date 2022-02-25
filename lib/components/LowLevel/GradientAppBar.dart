@@ -11,6 +11,7 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool automaticallyImplyLeading;
   final double radius;
   final PreferredSizeWidget? bottom;
+  final bool clipBottom;
 
   const GradientAppBar({
     Key? key,
@@ -23,6 +24,7 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.automaticallyImplyLeading = true,
     this.radius = 15,
     this.bottom,
+    this.clipBottom = false,
   }) : super(key: key);
 
   @override
@@ -81,6 +83,19 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
   PreferredSizeWidget? _buildBottom(BuildContext context) {
     if (bottom == null) {
       return null;
+    }
+    if (clipBottom) {
+      final ps = bottom!.preferredSize;
+      return PreferredSize(
+        preferredSize: ps,
+        child: ClipRRect(
+          clipBehavior: Clip.antiAlias,
+          child: bottom,
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(radius),
+          ),
+        ),
+      );
     }
     return bottom!;
   }

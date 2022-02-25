@@ -17,7 +17,7 @@ class GradeLineChart extends StatefulWidget {
   // final List<charts.Series> seriesList;
   final bool animate = true;
   final List<Grade> grades;
-  final Period? period;
+  final String? period;
 
   GradeLineChart(this.grades, {this.period});
 
@@ -46,7 +46,7 @@ class _GradeLineChartState extends State<GradeLineChart> {
       title: context.locale.charts.trend,
       subtitle: widget.period == null
           ? context.locale.charts.scopeAllYear
-          : widget.period!.desc,
+          : widget.period!,
     );
   }
 

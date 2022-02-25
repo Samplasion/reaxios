@@ -15,6 +15,7 @@ import 'package:reaxios/components/Utilities/Alert.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
+import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Views/SubjectSettingsView.dart';
 import 'package:reaxios/format.dart';
@@ -28,7 +29,7 @@ class GradeSubjectView extends StatefulWidget {
   final String subject;
   final List<Grade> grades;
   final Axios session;
-  final Period? period;
+  final String? period;
 
   GradeSubjectView({
     Key? key,
@@ -46,7 +47,7 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
   List<Grade> get grades => widget.grades;
   String get subject => widget.subject;
   Axios get session => widget.session;
-  Period? get period => widget.period;
+  String? get period => widget.period;
 
   @override
   void rebuild() {
@@ -99,9 +100,9 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
 
   Widget _buildBody(BuildContext context) {
     final periodGrades = grades
-        .where((element) => period == null || period!.desc.isEmpty
+        .where((element) => period == null || period!.isEmpty
             ? true
-            : element.period == period!.desc)
+            : element.period == period!)
         .toList();
     final items = [
       _buildTeacher(context),
@@ -113,9 +114,15 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
       SizedBox(height: 8)
     ];
 
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) => items[index],
+    return SingleChildScrollView(
+      child: Center(
+        child: MaxWidthContainer(
+          child: Column(
+            children: items,
+          ),
+          strict: true,
+        ),
+      ),
     );
   }
 
@@ -174,7 +181,7 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
     return BigCard(
       leading: NiceHeader(
         title: context.locale.grades.objective,
-        subtitle: period!.desc,
+        subtitle: period!,
         leading: Icon(Icons.assessment),
       ),
       body: _buildAlert(context, grades),

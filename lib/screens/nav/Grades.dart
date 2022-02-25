@@ -129,6 +129,12 @@ class _GradesPaneState extends ReloadableState<GradesPane>
     setState(() {});
   }
 
+  List<String> getPeriods(List<Grade> grades) {
+    final periods =
+        grades.map((grade) => grade.period).toSet().toList().reversed;
+    return periods.toList();
+  }
+
   List<_Page> getPages(
     BuildContext context,
     List<Grade> grades,
@@ -145,16 +151,48 @@ class _GradesPaneState extends ReloadableState<GradesPane>
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  _buildHeader(context, grades, currentPeriod),
+                  MaxWidthContainer(child: _buildHeader(context, grades)),
                   MaxWidthContainer(
                     child: _buildSubjects(
-                        context, subjects, grades, currentPeriod),
+                      context,
+                      subjects,
+                      grades,
+                      currentPeriod?.desc,
+                    ),
                   ).center().padding(bottom: 8),
                 ],
               ),
             ),
           ),
         ),
+        ...getPeriods(grades)
+            .map((period) => _Page(
+                  period,
+                  SafeArea(
+                    bottom: false,
+                    left: false,
+                    right: false,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          MaxWidthContainer(
+                              child: _buildHeader(context, grades, period)),
+                          MaxWidthContainer(
+                            child: _buildSubjects(
+                              context,
+                              subjects,
+                              grades
+                                  .where((grade) => grade.period == period)
+                                  .toList(),
+                              period,
+                            ),
+                          ).center().padding(bottom: 8),
+                        ],
+                      ),
+                    ),
+                  ),
+                ))
+            .toList(),
         _Page(
           context.locale.grades.grades,
           SafeArea(
@@ -168,117 +206,89 @@ class _GradesPaneState extends ReloadableState<GradesPane>
         ),
       ];
 
-  late final TabController _tabController =
-      TabController(length: 2, vsync: this);
-
   Widget buildOk(BuildContext context, List<Grade> grades,
       Period? currentPeriod, List<String> subjects) {
     final pages = getPages(context, grades, currentPeriod, subjects);
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: GradientAppBar(
-        title: Text(context.locale.drawer.grades),
-        leading: MaybeMasterDetail.of(context)!.isShowingMaster
-            ? null
-            : Builder(builder: (context) {
-                return IconButton(
-                  tooltip:
-                      MaterialLocalizations.of(context).openAppDrawerTooltip,
-                  onPressed: widget.openMainDrawer,
-                  icon: Icon(Icons.menu),
-                );
-              }),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: pages.map((page) => Tab(text: page.title)).toList(),
+    return DefaultTabController(
+      length: pages.length,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: GradientAppBar(
+          title: Text(context.locale.drawer.grades),
+          leading: MaybeMasterDetail.of(context)!.isShowingMaster
+              ? null
+              : Builder(builder: (context) {
+                  return IconButton(
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip,
+                    onPressed: widget.openMainDrawer,
+                    icon: Icon(Icons.menu),
+                  );
+                }),
+          bottom: TabBar(
+            tabs: pages.map((page) => Tab(text: page.title)).toList(),
+            isScrollable: true,
+          ),
         ),
-      ),
-      body: TabBarView(
-        children: pages.map((p) => p.content).toList(),
-        controller: _tabController,
+        body: TabBarView(
+          children: pages.map((p) => p.content).toList(),
+        ),
       ),
     );
   }
 
   Widget _buildHeader(
-      BuildContext context, List<Grade> grades, Period? currentPeriod) {
-    final periods = grades.map((g) => g.period).toSet().toList();
+    BuildContext context,
+    List<Grade> grades, [
+    String? period,
+  ]) {
     final averageMode = Provider.of<Settings>(context).getAverageMode();
-    final periodCards = [];
-    for (final period in periods) {
+    if (period != null) {
       final periodGrades = grades.where((g) => g.period == period).toList();
-      periodCards.add(
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: min(650,
-                max(350, MaybeMasterDetail.of(context)!.detailWidth * 0.75)),
-          ),
-          child: BigCard(
-            leading: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                NiceHeader(
-                  title: context.locale.charts.average,
-                  subtitle: period,
-                ).padding(bottom: 8),
-                GradeAvatar(
-                  grade: Grade.fakeFromDouble(
-                    gradeAverage(averageMode, periodGrades),
-                  ),
-                )
-              ],
-            ),
-            body: GradeTimeAverageChart(
-              grades: periodGrades.reversed.toList(),
-              dynamic: true,
-            ),
-          ),
-        ).paddingDirectional(start: 16),
-      );
+      return BigCard(
+        leading: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            NiceHeader(
+              title: context.locale.charts.average,
+              subtitle: period,
+            ).padding(bottom: 8),
+            GradeAvatar(
+              grade: Grade.fakeFromDouble(
+                gradeAverage(averageMode, periodGrades),
+              ),
+            )
+          ],
+        ),
+        body: GradeTimeAverageChart(
+          grades: periodGrades.reversed.toList(),
+          dynamic: true,
+        ),
+      ).paddingDirectional(horizontal: 16);
     }
 
-    return Scrollbar(
-      controller: horizontalController,
-      child: SingleChildScrollView(
-        controller: horizontalController,
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: min(
-                    650,
-                    max(350,
-                        MaybeMasterDetail.of(context)!.detailWidth * 0.75)),
-              ),
-              child: BigCard(
-                leading: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    NiceHeader(
-                      title: context.locale.charts.average,
-                      subtitle: context.locale.charts.scopeAllYear,
-                    ).padding(bottom: 8),
-                    GradeAvatar(
-                      grade: Grade.fakeFromDouble(
-                        gradeAverage(averageMode, grades),
-                      ),
-                    ),
-                  ],
-                ),
-                body: GradeTimeAverageChart(
-                  grades: grades.reversed.toList(),
-                  dynamic: true,
-                ),
-              ),
-            ).paddingDirectional(start: 16),
-            ...periodCards,
-          ],
-        ).paddingDirectional(end: 16),
+    return BigCard(
+      leading: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          NiceHeader(
+            title: context.locale.charts.average,
+            subtitle: context.locale.charts.scopeAllYear,
+          ).padding(bottom: 8),
+          GradeAvatar(
+            grade: Grade.fakeFromDouble(
+              gradeAverage(averageMode, grades),
+            ),
+          ),
+        ],
       ),
-    );
+      body: GradeTimeAverageChart(
+        grades: grades.reversed.toList(),
+        dynamic: true,
+      ),
+    ).paddingDirectional(horizontal: 16);
   }
 
   Widget _buildGrades(BuildContext context, List<Grade> grades) {
@@ -300,7 +310,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
     BuildContext context,
     List<String> subjects,
     List<Grade> grades,
-    Period? currentPeriod,
+    String? currentPeriod,
   ) {
     final averageMode = Provider.of<Settings>(context).getAverageMode();
     List<Widget> children = [];
@@ -331,7 +341,8 @@ class _GradesPaneState extends ReloadableState<GradesPane>
           .toList()
         ..sort((a, b) => b.date.compareTo(a.date));
       final average = gradeAverage(averageMode, subjectGrades);
-      final color = getGradeColor(average);
+      final isEmpty = isNaN(average) || average == 0 || grades.isEmpty;
+      final color = getGradeColor(isEmpty ? double.nan : average);
       children.add(
         CardListItem(
           leading: NotificationBadge(
@@ -346,7 +357,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
             text: TextSpan(
               style: Theme.of(context).textTheme.caption,
               children: [
-                if (!isNaN(average)) ...[
+                if (!isEmpty) ...[
                   TextSpan(text: context.locale.grades.mainPageAverage),
                   GradeText(context, grade: average),
                 ] else
@@ -354,13 +365,13 @@ class _GradesPaneState extends ReloadableState<GradesPane>
               ],
             ),
           ),
-          details: isNaN(average)
+          details: isEmpty
               ? null
               : Text(
                   context.locale.grades.latestGrade
                       .format([context.dateToString(subjectGrades.first.date)]),
                 ),
-          onClick: isNaN(average)
+          onClick: isEmpty
               ? null
               : () {
                   Navigator.push(
