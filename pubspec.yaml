@@ -65,6 +65,7 @@ dependencies:
   duration: ^3.0.8
   flutter_week_view: ^1.2.1+1
   flutter_typeahead: ^3.2.4
+  upgrader: ^3.13.0
 
 dev_dependencies:
   flutter_test:

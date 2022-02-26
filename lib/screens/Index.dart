@@ -20,6 +20,7 @@ import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
+import 'package:reaxios/components/Utilities/update_scope.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';
@@ -513,82 +514,85 @@ class _HomeScreenState extends State<HomeScreen> {
     final app = appInfo.packageInfo;
 
     initPanes(session, login);
-    return Container(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0),
-        child: MaybeMasterDetail(
-          master: () {
-            final drawer = _getDrawer();
-            if (drawer == null) return null;
+    return UpdateScope(
+      child: Container(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 0),
+          child: MaybeMasterDetail(
+            master: () {
+              final drawer = _getDrawer();
+              if (drawer == null) return null;
 
-            final child = drawer.child;
+              final child = drawer.child;
 
-            return Scaffold(
-              appBar: GradientAppBar(
-                title: Text(kIsWeb ? "Registro" : app.appName),
-              ),
-              extendBodyBehindAppBar: true,
-              body: child,
-            );
-          }(),
-          detail: PageTransitionSwitcher(
-            transitionBuilder: (
-              Widget child,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-            ) {
-              if (kIsWeb)
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              return FadeThroughTransition(
-                child: child,
-                animation: animation,
-                secondaryAnimation: secondaryAnimation,
+              return Scaffold(
+                appBar: GradientAppBar(
+                  title: Text(kIsWeb ? "Registro" : app.appName),
+                ),
+                extendBodyBehindAppBar: true,
+                body: child,
               );
-            },
-            child: KeyedSubtree(
-              key: ValueKey(selectedPane),
-              child: Builder(
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: drawerItems[selectedPane][2]
-                        ? GradientAppBar(
-                            title: drawerItems[selectedPane][1],
-                            leading: MaybeMasterDetail.of(context)!
-                                    .isShowingMaster
-                                ? null
-                                : Builder(builder: (context) {
-                                    return IconButton(
-                                      tooltip: MaterialLocalizations.of(context)
-                                          .openAppDrawerTooltip,
-                                      onPressed: () =>
-                                          Scaffold.of(context).openDrawer(),
-                                      icon: Icon(Icons.menu),
-                                    );
-                                  }),
-                          )
-                        : null,
-                    drawer: MaybeMasterDetail.of(context)!.isShowingMaster
-                        ? null
-                        : _getDrawer(),
-                    body: loading
-                        ? LoadingUI(colorful: true, showHints: true)
-                        : Builder(builder: (context) {
-                            return Actions(
-                              actions: {
-                                MenuIntent: CallbackAction<MenuIntent>(
-                                    onInvoke: (intent) {
-                                  Scaffold.of(context).openDrawer();
-                                  return null;
-                                })
-                              },
-                              child: panes[selectedPane],
-                            );
-                          }),
+            }(),
+            detail: PageTransitionSwitcher(
+              transitionBuilder: (
+                Widget child,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+              ) {
+                if (kIsWeb)
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
                   );
-                },
+                return FadeThroughTransition(
+                  child: child,
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                );
+              },
+              child: KeyedSubtree(
+                key: ValueKey(selectedPane),
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return Scaffold(
+                      appBar: drawerItems[selectedPane][2]
+                          ? GradientAppBar(
+                              title: drawerItems[selectedPane][1],
+                              leading: MaybeMasterDetail.of(context)!
+                                      .isShowingMaster
+                                  ? null
+                                  : Builder(builder: (context) {
+                                      return IconButton(
+                                        tooltip:
+                                            MaterialLocalizations.of(context)
+                                                .openAppDrawerTooltip,
+                                        onPressed: () =>
+                                            Scaffold.of(context).openDrawer(),
+                                        icon: Icon(Icons.menu),
+                                      );
+                                    }),
+                            )
+                          : null,
+                      drawer: MaybeMasterDetail.of(context)!.isShowingMaster
+                          ? null
+                          : _getDrawer(),
+                      body: loading
+                          ? LoadingUI(colorful: true, showHints: true)
+                          : Builder(builder: (context) {
+                              return Actions(
+                                actions: {
+                                  MenuIntent: CallbackAction<MenuIntent>(
+                                      onInvoke: (intent) {
+                                    Scaffold.of(context).openDrawer();
+                                    return null;
+                                  })
+                                },
+                                child: panes[selectedPane],
+                              );
+                            }),
+                    );
+                  },
+                ),
               ),
             ),
           ),
