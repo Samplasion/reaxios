@@ -9,9 +9,9 @@ version: 0.5.0
 tags: ["android"]
 ---
 
-\- FIX Thing  
-\- FIX Other thing  
-\- FIX Yet another thing  
-\- ADD New thing  
-\- ADD New other thing  
-\- REMOVE Removed thing  
+- FIX Thing
+- FIX Other thing
+- FIX Yet another thing
+- ADD New thing
+- ADD New other thing
+- REMOVE Removed thing
