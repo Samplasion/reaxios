@@ -44,11 +44,19 @@ echo App version: $VER
 echo Build number: $NOW
 echo 
 
-build() {
+_build_appbundle() {
     echo "📦 Building the bundle..."
     flutter build appbundle --$flavor --build-number $NOW 1> /dev/null
+}
+
+_build_apk() {
     echo "📦 Building the APK..."
     flutter build apk --$flavor --build-number $NOW 1> /dev/null
+}
+
+build() {
+    _build_appbundle & _build_apk
+    wait
 }
 
 cleanup() {
