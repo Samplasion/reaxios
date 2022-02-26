@@ -228,6 +228,16 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
               appBarTheme: appBarTheme,
               textTheme: getTextTheme(defaultTextThemeDark),
               tabBarTheme: tabBarTheme,
+              popupMenuTheme: PopupMenuThemeData(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              dialogTheme: DialogTheme(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
             ),
             themeMode: getThemeMode(themeMode),
             // home: MyHomePage(title: 'Flutter Demo Home Page'),
