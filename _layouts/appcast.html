@@ -9,6 +9,7 @@ layout: null
     <link>{{ site.url }}{{ site.baseurl }}{{ page.url }}</link>
     <language>{% if page.language_code %}{{ page.language_code }}{% else %}en{% endif %}</language>
     {% for post in site.posts %}
+    {% if page.os and post.tags contains page.os %}
     <item>
       <title>{{ post.title | xml_escape }} ({{ post.version }})</title>
       <description>{{ post.content | xml_escape }}</description>
@@ -20,6 +21,7 @@ layout: null
       <sparkle:minimumSystemVersion>{{ page.default_minimum_system_version }}</sparkle:minimumSystemVersion>
       {% endif %}
     </item>
+    {% endif %}
     {% endfor %}
   </channel>
 </rss>

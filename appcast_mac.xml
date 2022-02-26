@@ -1,7 +1,7 @@
 ---
 layout: appcast
-custom_feed_title: "Registro Changelog (Android)"
+custom_feed_title: "Registro Changelog (macOS)"
 custom_feed_description: "The changelog of updates to Registro."
 language_code: "en"
-os: android
+os: macos
 ---
