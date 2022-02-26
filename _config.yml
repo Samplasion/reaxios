@@ -6,7 +6,7 @@ author:
   name: "Samplasion"
 
 baseurl: "/reaxios"
-url: "https://samplasion.github.org/reaxios"
+url: "https://samplasion.github.org"
 future: false
 show_drafts: false
 limit_posts: 0
