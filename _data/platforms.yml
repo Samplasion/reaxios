@@ -1,0 +1,6 @@
+android:
+  id: android
+  name: Android
+macos:
+  id: macos
+  name: macOS

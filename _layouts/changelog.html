@@ -11,10 +11,21 @@ layout: default
       {{ post.title }} ({{ post.version }})
       <time>{{ post.date | date: "%b %-d, %Y" }}</time>
       <small>
-        <a href="{{ post.url }}">Permalink</a>
+        <a href="{{ site.baseurl}}{{ post.url }}">Permalink</a>
       </small>
     </h2>
-    <p>{{ post.content }}</p>
+    {% if post.platforms %}
+    <h4>
+      Available for:
+      {% for platform in post.platforms -%}
+      {{ site.data.platforms[platform.os].name }}
+      {%- unless forloop.last -%}, {% endunless -%}
+      {%- endfor -%}
+    </h4>
+    {% endif %}
+    <p>
+      {{ post.content | newline_to_br }}
+    </p>
   </li>
   {% endfor %}
 </ol>

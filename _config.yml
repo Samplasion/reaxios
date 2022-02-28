@@ -17,22 +17,15 @@ kramdown:
 
 permalink: pretty
 
-exclude: [
-  "README.md",
-  "LICENSE.txt",
-  "appcast.gemspec",
-  "Gemfile",
-  "Gemfile.lock",
-]
+exclude:
+  ["README.md", "LICENSE.txt", "appcast.gemspec", "Gemfile", "Gemfile.lock"]
 
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
     values:
       layout: default
-  -
-    scope:
+  - scope:
       path: ""
       type: posts
     values:

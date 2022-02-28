@@ -68,3 +68,7 @@ app.*.map.json
 
 # Key file
 key.properties
+
+# Jekyll cache
+.jekyll-cache
+.jekyll-metadata

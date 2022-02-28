@@ -2,4 +2,17 @@
 layout: default
 ---
 
-{{ content }}
+<h1 style="margin-bottom: 0.2rem">Version {{ page.version }}</h1>
+<h2>Release date: {{ page.date | date_to_string }}</h2>
+{% if page.platforms %}
+<h4>
+    Available for:
+    {% for platform in page.platforms -%}
+    {{ site.data.platforms[platform.os].name }}
+    {%- unless forloop.last -%}, {% endunless -%}
+    {%- endfor -%}
+</h4>
+{% endif %}
+<p id="changelog">
+    {{ content }}
+</p>

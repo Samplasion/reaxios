@@ -1,12 +1,13 @@
 ---
 date: 2022-02-12 17:10:39 +0100
-enclosure_url: https://github.com/Samplasion/reaxios/releases/download/v0.4.0/Registro-0.4.0+1644682239-release.apk
+platforms:
+  - os: android
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.4.0/Registro-0.4.0+1644682239-release.apk
 short_version_string: 0.4.0
 size: 27728698
 subtitle: "Custom objective subtitle"
 title: "Version 0.4.0"
 version: 0.4.0
-tags: ["android"]
 ---
 
 - Fix NaN

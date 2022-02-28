@@ -1,12 +1,13 @@
 ---
 date: 2022-02-26 11:46:00 +0100
-enclosure_url: https://github.com/Samplasion/reaxios/releases/download/v0.5.0/Registro-0.5.0+1645871381-release.apk
+platforms:
+  - os: android
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.5.0/Registro-0.5.0+1645871381-release.apk
 short_version_string: 0.5.0
 size: 28239311
 subtitle: "Update framework"
 title: "Version 0.5.0"
 version: 0.5.0
-tags: ["android"]
 ---
 
 - UI quality changes
