@@ -1,7 +1,3 @@
-# on:
-#   push:
-#     tags:
-#       - v*
 on:
   release:
     types:
@@ -20,6 +16,8 @@ jobs:
           channel: "stable"
       - name: Install dependencies
         run: flutter pub get
+      - name: Enable Flutter support for macOS
+        run: flutter config --enable-macos-desktop
       - name: Build
         run: |
           tools/build_macos.sh
