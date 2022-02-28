@@ -57,11 +57,9 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
 
   List<_GradeChartEntry> _getEntries(List<Grade> grades) {
     final period = getPeriod(grades);
-    final names = grades
-        .where((g) => period == null || g.period == period.desc)
-        .map((g) => g.subject)
-        .toSet()
-        .toList();
+    grades =
+        grades.where((g) => period == null || g.period == period.desc).toList();
+    final names = grades.map((g) => g.subject).toSet().toList();
     return names
         .map<_GradeChartEntry>(
           (name) => _GradeChartEntry(
