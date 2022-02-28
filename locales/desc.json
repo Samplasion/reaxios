@@ -212,7 +212,8 @@
   "settings": {
     "general": "",
     "time": "",
-    "data": ""
+    "data": "",
+    "update": ""
   },
   "reportCard": {
     "notAvailableTitle": "",
@@ -339,5 +340,11 @@
   "errors": {
     "request": "",
     "authentication": ""
+  },
+  "updateSettings": {
+    "updateNagMode": "",
+    "updateNagModeAlert": "",
+    "updateNagModeBanner": "",
+    "updateNagModeNone": ""
   }
 }

@@ -23,6 +23,7 @@ import 'package:reaxios/components/Charts/GradeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
+import 'package:reaxios/components/Utilities/updates/upgrade_card.dart';
 import 'package:reaxios/consts.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
@@ -262,6 +263,10 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .toList();
 
     final items = [
+      // The card hides itself when there's
+      // no update to show.
+      UpgradeCard(),
+
       if (gradeCards.isNotEmpty)
         ...[
           Text(

@@ -20,7 +20,7 @@ import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
-import 'package:reaxios/components/Utilities/update_scope.dart';
+import 'package:reaxios/components/Utilities/updates/update_scope.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';

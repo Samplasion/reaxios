@@ -212,7 +212,8 @@
   "settings": {
     "general": "General",
     "time": "Time",
-    "data": "Data management"
+    "data": "Data management",
+    "update": "Updates"
   },
   "reportCard": {
     "notAvailableTitle": "Your report card isn't ready yet",
@@ -339,5 +340,11 @@
   "errors": {
     "request": "A request to the Axios servers failed unexpectedly.",
     "authentication": "You have entered an invalid user ID or password."
+  },
+  "updateSettings": {
+    "updateNagMode": "New update alert mode",
+    "updateNagModeAlert": "Alert",
+    "updateNagModeBanner": "Banner",
+    "updateNagModeNone": "Don't notify"
   }
 }

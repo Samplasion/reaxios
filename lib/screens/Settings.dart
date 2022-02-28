@@ -5,6 +5,7 @@ import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/screens/settings/Data.dart';
 import 'package:reaxios/screens/settings/Time.dart';
+import 'package:reaxios/screens/settings/Update.dart';
 import 'package:reaxios/screens/settings/base.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
@@ -43,6 +44,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           DataSettings(),
           Icon(Icons.data_usage),
         ),
+        // The web app is updated server-side, so there's no need to
+        // alert the user about updates.
+        if (!Foundation.kIsWeb)
+          _Fragment(
+            context.locale.settings.update,
+            UpdateSettings(),
+            Icon(Icons.update),
+          ),
       ];
 
   Settings get settings => Provider.of<Settings>(context, listen: false);

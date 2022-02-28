@@ -13,6 +13,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../enums/UpdateNagMode.dart';
 import '../download.dart' if (dart.library.html) '../download_web.dart';
 import 'Event.dart';
 import '../utils.dart';
@@ -186,6 +187,16 @@ class Settings extends _UndisposableChangeNotifier {
 
   void setSubjectObjectives(Map<String, SubjectObjective> objectives) {
     _prefs.setString("subjectObjectives", jsonEncode(objectives));
+    notifyListeners();
+  }
+
+  UpdateNagMode getUpdateNagMode() {
+    return deserializeUpdateNagMode(
+        _prefs.getString("updateNagMode") ?? UpdateNagMode.alert.serialized);
+  }
+
+  void setUpdateNagMode(UpdateNagMode updateNagMode) {
+    _prefs.setString("updateNagMode", updateNagMode.serialized);
     notifyListeners();
   }
 

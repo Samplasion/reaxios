@@ -69,6 +69,8 @@ class LocaleBase {
   LocaledataSettings get dataSettings => _dataSettings;
   late Localeerrors _errors;
   Localeerrors get errors => _errors;
+  late LocaleupdateSettings _updateSettings;
+  LocaleupdateSettings get updateSettings => _updateSettings;
 
   void initAll() {
     _main = Localemain(Map<String, String>.from(_data['main']));
@@ -97,6 +99,7 @@ class LocaleBase {
     _timeSettings = LocaletimeSettings(Map<String, String>.from(_data['timeSettings']));
     _dataSettings = LocaledataSettings(Map<String, String>.from(_data['dataSettings']));
     _errors = Localeerrors(Map<String, String>.from(_data['errors']));
+    _updateSettings = LocaleupdateSettings(Map<String, String>.from(_data['updateSettings']));
   }
 }
 
@@ -441,6 +444,7 @@ class Localesettings {
   String get general => _data["general"]!;
   String get time => _data["time"]!;
   String get data => _data["data"]!;
+  String get update => _data["update"]!;
 }
 
 class LocalereportCard {
@@ -647,5 +651,19 @@ class Localeerrors {
 
   String get request => _data["request"]!;
   String get authentication => _data["authentication"]!;
+}
+
+class LocaleupdateSettings {
+  late final Map<String, String> _data;
+  LocaleupdateSettings(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get updateNagMode => _data["updateNagMode"]!;
+  String get updateNagModeAlert => _data["updateNagModeAlert"]!;
+  String get updateNagModeBanner => _data["updateNagModeBanner"]!;
+  String get updateNagModeNone => _data["updateNagModeNone"]!;
 }
 

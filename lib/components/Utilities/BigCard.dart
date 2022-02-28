@@ -4,22 +4,24 @@ import 'package:styled_widget/styled_widget.dart';
 import '../../utils.dart';
 
 class BigCard extends StatefulWidget {
-  final Widget leading;
+  final Widget? leading;
   final Widget body;
   final Color? color;
   final double elevation;
   final double radius;
   final Function()? onTap;
   final bool gradient;
+  final double innerPadding;
 
   BigCard({
-    required this.leading,
+    this.leading,
     required this.body,
     this.color,
     this.elevation = 8.0,
     this.radius = 15.0,
     this.onTap,
     this.gradient = false,
+    this.innerPadding = 32,
   });
 
   @override
@@ -44,7 +46,7 @@ class _BigCardState extends State<BigCard> {
           highlightColor: Colors.transparent,
           hoverColor: Colors.transparent,
         ),
-        child: (child ?? Container()).padding(all: 32),
+        child: (child ?? Container()).padding(all: widget.innerPadding),
       ),
     ).borderRadius(all: widget.radius);
 
@@ -87,8 +89,10 @@ class _BigCardState extends State<BigCard> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        widget.leading,
-        SizedBox(height: 16),
+        if (widget.leading != null) ...[
+          widget.leading!,
+          SizedBox(height: 16),
+        ],
         widget.body,
       ],
     );

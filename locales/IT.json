@@ -212,7 +212,8 @@
   "settings": {
     "general": "Generali",
     "time": "Orari",
-    "data": "Gestione dati"
+    "data": "Gestione dati",
+    "update": "Aggiornamenti"
   },
   "reportCard": {
     "notAvailableTitle": "Pagella non disponibile",
@@ -339,5 +340,11 @@
   "errors": {
     "request": "La richiesta ai server Axios è fallita inaspettatamente.",
     "authentication": "Hai inserito un codice utente o una password sbagliata."
+  },
+  "updateSettings": {
+    "updateNagMode": "Modalità di avviso nuovi aggiornamenti",
+    "updateNagModeAlert": "Avviso",
+    "updateNagModeBanner": "Banner",
+    "updateNagModeNone": "Non avvisarmi"
   }
 }
