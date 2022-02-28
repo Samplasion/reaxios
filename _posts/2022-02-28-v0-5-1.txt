@@ -1,0 +1,14 @@
+---
+date: 2022-02-28 16:40:00 +0100
+platforms:
+  - os: android
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.5.1/Registro-0.5.1+1646061694-release.apk
+short_version_string: 0.5.1
+size: 28274164
+subtitle: ""
+title: "Version 0.5.1"
+version: 0.5.1
+---
+
+- Improve update system
+- Fix average calculation in the overview chart
