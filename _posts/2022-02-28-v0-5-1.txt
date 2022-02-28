@@ -3,6 +3,8 @@ date: 2022-02-28 16:40:00 +0100
 platforms:
   - os: android
     enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.5.1/Registro-0.5.1+1646061694-release.apk
+  - os: macos
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.5.1/Registro-mac-0.5.1+1646071039-release.zip
 short_version_string: 0.5.1
 size: 28274164
 subtitle: ""
