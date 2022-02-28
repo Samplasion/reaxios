@@ -1,0 +1,13 @@
+---
+date: 2022-02-28 20:42:06 +0100
+platforms:
+  - os: macos
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.5.2/Registro-mac-0.5.2+1646077334-release.zip
+short_version_string: 0.5.2
+size: 28274164
+subtitle: ""
+title: "Version 0.5.2 (macOS only)"
+version: 0.5.2
+---
+
+- Fix updater not being called
