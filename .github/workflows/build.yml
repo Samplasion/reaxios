@@ -1,0 +1,30 @@
+# on:
+#   push:
+#     tags:
+#       - v*
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    name: Build macOS app
+    runs-on: macos-11
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build
+        run: |
+          tools/build_macos.sh
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: out/macos/Registro-*
+          generate_release_notes: true
