@@ -14,7 +14,7 @@ AppcastConfiguration? getAppcastConfig() {
       url: appcastURL,
       supportedOS: ['android'],
     );
-  } else if (Platform.isIOS) {
+  } else if (Platform.isMacOS) {
     final appcastURL = 'https://samplasion.github.io/reaxios/appcast_mac.xml';
     return AppcastConfiguration(
       url: appcastURL,
