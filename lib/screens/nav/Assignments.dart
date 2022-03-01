@@ -47,7 +47,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
 
   Map<String, List<Assignment>> splitAssignments(List<Assignment> assignments) {
     return assignments.fold(new Map(), (map, assmt) {
-      final date = context.dateToString(assmt.date);
+      final date = context.dateToString(assmt.date, includeDayOfWeek: true);
       if (!map.containsKey(date))
         map[date] = [assmt];
       else

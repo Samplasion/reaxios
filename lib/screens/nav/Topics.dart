@@ -44,7 +44,7 @@ class _TopicsPaneState extends State<TopicsPane> {
 
   Map<String, List<Topic>> splitTopics(List<Topic> topics) {
     return topics.fold(new Map(), (map, assmt) {
-      final date = context.dateToString(assmt.date);
+      final date = context.dateToString(assmt.date, includeDayOfWeek: true);
       if (!map.containsKey(date))
         map[date] = [assmt];
       else

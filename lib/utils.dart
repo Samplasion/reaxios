@@ -336,14 +336,25 @@ extension ContextUtils on BuildContext {
     bool short = false,
     includeTime = false,
     includeSeconds = false,
+    includeDayOfWeek = false,
     @deprecated includeMonth = false, // noop
     @deprecated includeYear = false, // noop
   }) {
     String res;
     if (short) {
-      res = DateFormat.yMd(this.currentLocale.toLanguageTag()).format(date);
+      if (includeDayOfWeek) {
+        res = DateFormat.yMEd(this.currentLocale.toLanguageTag()).format(date);
+      } else {
+        res = DateFormat.yMd(this.currentLocale.toLanguageTag()).format(date);
+      }
     } else {
-      res = DateFormat.yMMMMd(this.currentLocale.toLanguageTag()).format(date);
+      if (includeDayOfWeek) {
+        res = DateFormat.yMMMMEEEEd(this.currentLocale.toLanguageTag())
+            .format(date);
+      } else {
+        res =
+            DateFormat.yMMMMd(this.currentLocale.toLanguageTag()).format(date);
+      }
     }
 
     if (includeTime) {
