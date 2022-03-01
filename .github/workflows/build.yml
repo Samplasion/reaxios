@@ -4,6 +4,7 @@ on:
   release:
     types:
       - created
+  workflow_dispatch: {}
 
 jobs:
   build_mac:
@@ -30,10 +31,17 @@ jobs:
         run: |
           tools/build_macos.sh
       - name: Release
+        if: github.event_name == "release"
         uses: softprops/action-gh-release@v1
         with:
           files: out/macos/Registro-*
           generate_release_notes: true
+      - name: Upload artifacts
+        if: github.event_name == "workflow_dispatch"
+        uses: actions/upload-artifact@v2
+        with:
+          name: Registro macOS app
+          path: out/macos/Registro-*
   build_web:
     name: Build web app
     runs-on: ubuntu-latest
@@ -51,7 +59,54 @@ jobs:
       - name: Build
         run: tools/build_web.sh
       - name: Release
+        if: github.event_name == "release"
         uses: softprops/action-gh-release@v1
         with:
           files: out/web/Registro-*
           generate_release_notes: true
+      - name: Upload artifacts
+        if: github.event_name == "workflow_dispatch"
+        uses: actions/upload-artifact@v2
+        with:
+          name: Registro Web app
+          path: out/web/Registro-*
+  build_android:
+    name: Build Android app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Decode Keystore
+        env:
+          ENCODED_STRING: ${{ secrets.KEYSTORE }}
+        run: |
+          TMP_KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/keystore.jks
+          echo $ENCODED_STRING | base64 -di > "${TMP_KEYSTORE_FILE_PATH}"
+          echo "TMP_KEYSTORE_FILE_PATH=${TMP_KEYSTORE_FILE_PATH}" >> $GITHUB_ENV
+      - name: Generate key.properties
+        run: |
+          echo 'storePassword=${{ secrets.SECRET_STORE_PASSWORD }}' >> key.properties
+          echo 'keyPassword=${{ secrets.SECRET_KEY_PASSWORD }}' >> key.properties
+          echo 'keyAlias=${{ secrets.SECRET_KEY_ALIAS }}' >> key.properties
+          echo 'storeFile=${{ env.TMP_KEYSTORE_FILE_PATH }}' >> key.properties
+          mv key.properties android/
+      - name: Build
+        run: tools/build_android.sh
+      - name: Release
+        if: github.event_name == "release"
+        uses: softprops/action-gh-release@v1
+        with:
+          files: out/android/Registro-*
+          generate_release_notes: true
+      - name: Upload artifacts
+        if: github.event_name == "workflow_dispatch"
+        uses: actions/upload-artifact@v2
+        with:
+          name: Registro Android app
+          path: out/android/Registro-*
