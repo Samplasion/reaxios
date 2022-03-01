@@ -92,7 +92,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
                   builder: (context) {
                     return IconButton(
                       onPressed: Scaffold.of(context).openEndDrawer,
-                      icon: Icon(Icons.subject),
+                      icon: Icon(Icons.topic),
                     );
                   },
                 )
