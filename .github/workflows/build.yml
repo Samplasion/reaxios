@@ -18,9 +18,15 @@ jobs:
         run: flutter pub get
       - name: Enable Flutter support for macOS
         run: flutter config --enable-macos-desktop
+      - name: Install Homebrew
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+      - name: Install bash 5
+        run: brew install bash
+      - name: Export brew path
+        run: export PATH="/usr/local/bin:$PATH"
       - name: Build
         run: |
-          tools/build_macos.sh
+          PATH=/usr/local/bin:$PATH tools/build_macos.sh
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
