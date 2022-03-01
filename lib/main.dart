@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/components/LowLevel/md_indicator.dart';
+import 'package:reaxios/components/Utilities/updates/config.dart' as upgrader;
 import 'package:reaxios/services/android.dart' as android_service;
 import 'package:reaxios/screens/Index.dart';
 import 'package:reaxios/screens/Loading.dart';
@@ -74,6 +75,8 @@ void main() async {
             (payload) => registroStore.notificationPayloadAction(payload))
         .then((_) => android_service.startNotificationServices());
   }
+
+  upgrader.initConfig();
 }
 
 ThemeMode getThemeMode(String tm) {

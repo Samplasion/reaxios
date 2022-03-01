@@ -200,6 +200,7 @@ class UpgradeCard extends StatelessWidget {
 
     return _UpgradeCard(
       appcastConfig: cfg,
+      showIgnore: false,
     );
   }
 }

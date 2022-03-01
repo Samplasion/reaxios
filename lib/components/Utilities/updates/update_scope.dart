@@ -30,6 +30,7 @@ class UpdateScope extends StatelessWidget {
     return UpgradeAlert(
       appcastConfig: cfg,
       child: child,
+      showIgnore: true,
     );
   }
 }

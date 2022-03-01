@@ -3,6 +3,10 @@ import 'package:universal_io/io.dart';
 
 import 'package:upgrader/upgrader.dart';
 
+void initConfig() {
+  Upgrader().durationUntilAlertAgain = Duration(hours: 1);
+}
+
 AppcastConfiguration? getAppcastConfig() {
   if (kDebugMode) {
     Upgrader().debugDisplayAlways = true;
