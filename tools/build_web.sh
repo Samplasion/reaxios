@@ -61,7 +61,7 @@ copy() {
     echo "📑 Copying output files from their directory to our organized directory..."
     cp -r $CUR/build/web $CUR/out/web/
     cd $CUR/out/web
-    zip -r $CUR/out/web/$name-$VER+$NOW-$flavor.zip .
+    zip -r $CUR/out/web/$name-web-$VER+$NOW-$flavor.zip .
     # zip -r -X $CUR/out/web/$name-$VER+$NOW-$flavor.zip $CUR/out/web/
     cd -
     rm -rf $CUR/out/web/web

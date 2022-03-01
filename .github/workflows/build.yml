@@ -6,7 +6,7 @@ on:
       - created
 
 jobs:
-  build:
+  build_mac:
     name: Build macOS app
     runs-on: macos-11
     steps:
@@ -33,4 +33,25 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: out/macos/Registro-*
+          generate_release_notes: true
+  build_web:
+    name: Build web app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Enable Flutter support for web
+        run: flutter config --enable-web
+      - name: Build
+        run: tools/build_web.sh
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: out/web/Registro-*
           generate_release_notes: true
