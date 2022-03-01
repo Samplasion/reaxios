@@ -201,7 +201,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
             right: false,
             child: MaxWidthContainer(
               child: _buildGrades(context, grades),
-            ).center().padding(vertical: 8),
+            ).center(),
           ),
         ),
       ];
@@ -293,16 +293,21 @@ class _GradesPaneState extends ReloadableState<GradesPane>
 
   Widget _buildGrades(BuildContext context, List<Grade> grades) {
     return ListView.builder(
-      itemBuilder: (context, i) => Hero(
-        child: GradeListItem(
-          grade: grades[i],
-          rebuild: rebuild,
-          session: widget.session,
-          onClick: true,
-        ),
-        tag: grades[i].toString(),
-      ).padding(horizontal: 16),
-      itemCount: grades.length,
+      itemBuilder: (context, i) {
+        if (i == 0 || i == grades.length) {
+          return SizedBox(height: 8);
+        }
+        return Hero(
+          child: GradeListItem(
+            grade: grades[i - 1],
+            rebuild: rebuild,
+            session: widget.session,
+            onClick: true,
+          ),
+          tag: grades[i].toString(),
+        ).padding(horizontal: 16);
+      },
+      itemCount: grades.length + 1,
     );
   }
 
