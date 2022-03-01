@@ -74,10 +74,12 @@ class BulletinListItem extends StatelessWidget {
             .positioned(bottom: -2, right: -2),
     ].toStack();
 
+    final hasTitle = bulletin.title.isNotEmpty;
     final tile = CardListItem(
       leading: leading,
-      title: getSender(context, bulletin.kind),
+      title: hasTitle ? bulletin.title : getSender(context, bulletin.kind),
       // title: bulletin.humanReadableKind,
+      titleStyle: hasTitle ? null : TextStyle(fontStyle: FontStyle.italic),
       subtitle: bulletin.desc.trim().isEmpty
           ? Container()
           : Linkify(
@@ -92,7 +94,8 @@ class BulletinListItem extends StatelessWidget {
                 }
               },
             ),
-      details: Text(context.dateToString(bulletin.date)),
+      details: Text(
+          "${getSender(context, bulletin.kind)} • ${context.dateToString(bulletin.date)}"),
       onClick: !onClick
           ? null
           : () {

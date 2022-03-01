@@ -11,6 +11,7 @@ class CardListItem extends StatefulWidget {
     this.onClick,
     this.radius = 15,
     this.elevation = 8,
+    this.titleStyle,
   });
 
   final Widget leading;
@@ -20,6 +21,7 @@ class CardListItem extends StatefulWidget {
   final void Function()? onClick;
   final double radius;
   final double elevation;
+  final TextStyle? titleStyle;
 
   @override
   _CardListItemState createState() => _CardListItemState();
@@ -81,7 +83,7 @@ class _CardListItemState extends State<CardListItem> {
         fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
         fontWeight: FontWeight.bold,
         fontSize: 16,
-      ),
+      ).merge(widget.titleStyle),
     ).padding(bottom: 5);
 
     final Widget description = widget.subtitle;
