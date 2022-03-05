@@ -95,7 +95,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
     Settings settings,
   ) {
     return [
-      if (events.isNotEmpty)
+      if (events.isNotEmpty) ...[
         PopupMenuItem<String>(
           onTap: () async {
             // Required to be able to show the dialog
@@ -107,7 +107,8 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
           // child: Text("Edit multiple events"),
           child: Text(context.locale.timetable.editMultiple),
         ),
-      PopupMenuDivider(),
+        PopupMenuDivider(),
+      ],
       PopupMenuItem<String>(
         onTap: () {
           settings.share(["events"]);
