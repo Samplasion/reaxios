@@ -252,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
         [
           Icon(Icons.calendar_today),
           Text(context.locale.drawer.calendar),
-          true,
+          false,
           () {
             widget.store.fetchAssignments(session);
             widget.store.fetchTopics(session);
