@@ -81,6 +81,8 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
+      - name: Clean project
+        run: flutter clean
       - name: Install dependencies
         run: flutter pub get
       - name: Decode Keystore
