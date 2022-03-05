@@ -52,29 +52,27 @@ class HomeScreen extends StatefulWidget {
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
+
+  static _HomeScreenState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_HomeScreenState>();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool loading = true;
-  Axios session = new Axios(new AxiosAccount("", "", ""));
-  Login login = Login.empty();
-  bool showUserDetails = false;
-  String lastStudentUUID = "";
+  bool _loading = true;
+  Axios _session = new Axios(new AxiosAccount("", "", ""));
+  Login _login = Login.empty();
+  bool _showUserDetails = false;
 
-  List<Widget> panes = [];
-  List<List<dynamic>> drawerItems = [];
-  int selectedPane = 0;
+  List<Widget> _panes = [];
+  List<List<dynamic>> _drawerItems = [];
+  int _selectedPane = 0;
 
-  ScrollController drawerController = ScrollController();
-
-  late GlobalKey mdKey;
+  ScrollController _drawerController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    initSession();
-
-    mdKey = GlobalKey(debugLabel: "Master/Detail Global Key");
+    _initSession();
 
     _checkConnection(15000)();
   }
@@ -103,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // StreamSubscription? _subscription;
 
-  void initSession() async {
+  void _initSession() async {
     final store = Provider.of<RegistroStore>(context, listen: false);
 
     if (!store.testMode) {
@@ -124,8 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       // print("$school, $user, $pass");
-      session = Axios(AxiosAccount(school, user, Encrypter.decrypt(pass)));
-      login = await session.login().then((login) {
+      _session = Axios(AxiosAccount(school, user, Encrypter.decrypt(pass)));
+      _login = await _session.login().then((login) {
         return login;
       }).catchError((_, __) {
         prefs.remove("school");
@@ -134,18 +132,17 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.pushReplacementNamed(context, "login");
       });
     } else {
-      session = TestAxios();
-      login = await session.login();
+      _session = TestAxios();
+      _login = await _session.login();
     }
-    await session.getStudents(true);
+    await _session.getStudents(true);
 
-    initPanes(session, login);
+    _initPanes(_session, _login);
 
-    await runCallback(0);
+    await _runCallback(0);
 
     setState(() {
-      loading = false;
-      lastStudentUUID = session.student!.studentUUID;
+      _loading = false;
     });
   }
 
@@ -155,9 +152,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> runCallback([int index = 0]) async {
-    if (drawerItems[index][3] != null && drawerItems[index][3] is Function)
-      await drawerItems[index][3]();
+  Future<void> _runCallback([int index = 0]) async {
+    if (_drawerItems[index][3] != null && _drawerItems[index][3] is Function)
+      await _drawerItems[index][3]();
   }
 
   @override
@@ -165,9 +162,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) super.setState(fn);
   }
 
-  void initPanes(Axios session, Login login) {
+  void _initPanes(Axios session, Login login) {
     setState(() {
-      panes = [
+      _panes = [
         Builder(
           builder: (context) => OverviewPane(
             session: session,
@@ -236,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
         StatsPane(session: session),
         ReportCardsPane(session: session, store: widget.store),
       ];
-      drawerItems = [
+      _drawerItems = [
         [
           Icon(Icons.home),
           Text(context.locale.drawer.overview),
@@ -360,18 +357,18 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Student getStudent() {
-    return session.students.length > 0 ? session.student : Student.empty();
+  Student _getStudent() {
+    return _session.students.length > 0 ? _session.student : Student.empty();
   }
 
-  List<ListTile> buildDrawerItems() {
+  List<ListTile> _buildDrawerItems() {
     // final width = MediaQuery.of(context).size.width;
     List<ListTile> items = [];
-    for (var index = 0; index < drawerItems.length; index++) {
+    for (var index = 0; index < _drawerItems.length; index++) {
       items.add(ListTile(
-        leading: drawerItems[index][0],
-        title: drawerItems[index][1],
-        selected: index == selectedPane,
+        leading: _drawerItems[index][0],
+        title: _drawerItems[index][1],
+        selected: index == _selectedPane,
         onTap: () {
           if (!MaybeMasterDetail.shouldBeShowingMaster(context))
             Navigator.pop(context);
@@ -387,31 +384,31 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView.builder(
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          final s = session.students[index];
+          final s = _session.students[index];
           return ListTile(
             title: Text("${s.firstName} ${s.lastName}"),
-            selected: s.studentUUID == session.student?.studentUUID,
+            selected: s.studentUUID == _session.student?.studentUUID,
             onTap: () {
               if (!MaybeMasterDetail.of(context)!.isShowingMaster)
                 Navigator.pop(context);
-              session.student = s;
+              _session.student = s;
               widget.store.reset();
-              runCallback(0);
+              _runCallback(0);
               setState(() {
-                showUserDetails = false;
-                initPanes(session, login);
+                _showUserDetails = false;
+                _initPanes(_session, _login);
               });
             },
           );
         },
-        itemCount: session.students.length,
+        itemCount: _session.students.length,
       ),
     );
   }
 
   Drawer? _getDrawer() {
     // final width = MediaQuery.of(context).size.width;
-    if (loading) return null;
+    if (_loading) return null;
 
     return Drawer(
       child: Column(
@@ -424,19 +421,19 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Theme.of(context).cardColor,
             ),
             accountName: Text(
-              "${login.firstName} ${login.lastName}",
+              "${_login.firstName} ${_login.lastName}",
               style: Theme.of(context).textTheme.bodyText1?.merge(
                     TextStyle(fontWeight: FontWeight.bold),
                   ),
             ),
             accountEmail: Text(
-              "${session.student!.firstName} ${session.student!.lastName}",
+              "${_session.student!.firstName} ${_session.student!.lastName}",
               style: Theme.of(context).textTheme.caption,
             ),
             arrowColor: Theme.of(context).textTheme.bodyText1!.color!,
             currentAccountPicture: GradientCircleAvatar(
               child: Text(
-                "${login.firstName} ${login.lastName}".trim()[0],
+                "${_login.firstName} ${_login.lastName}".trim()[0],
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -446,10 +443,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onDetailsPressed: () {
               setState(() {
-                showUserDetails = !showUserDetails;
+                _showUserDetails = !_showUserDetails;
               });
             },
-            otherAccountsPictures: session.students
+            otherAccountsPictures: _session.students
                 .map(
                   (s) => GradientCircleAvatar(
                       child: Text(
@@ -462,13 +459,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Flexible(
             child: SingleChildScrollView(
-              controller: drawerController,
+              controller: _drawerController,
               child: ListTileTheme(
                 selectedColor: Theme.of(context).colorScheme.secondary,
                 style: ListTileStyle.drawer,
                 child: AnimatedCrossFade(
                   duration: Duration(milliseconds: 125),
-                  crossFadeState: showUserDetails
+                  crossFadeState: _showUserDetails
                       ? CrossFadeState.showSecond
                       : CrossFadeState.showFirst,
                   secondChild: _buildUserDetail(),
@@ -477,7 +474,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       // shrinkWrap: true,
                       children: [
-                        ...buildDrawerItems(),
+                        ..._buildDrawerItems(),
                         Divider(),
                         ListTile(
                           title: Text(context.locale.drawer.settings),
@@ -493,7 +490,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: Text(context.locale.drawer.logOut),
                           leading: Icon(Icons.exit_to_app),
                           onTap: () {
-                            showExitDialog(context);
+                            _showExitDialog(context);
                           },
                         ),
                       ],
@@ -513,7 +510,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final appInfo = context.watch<AppInfoStore>();
     final app = appInfo.packageInfo;
 
-    initPanes(session, login);
+    _initPanes(_session, _login);
     return UpdateScope(
       child: Container(
         child: Padding(
@@ -551,13 +548,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
               child: KeyedSubtree(
-                key: ValueKey(selectedPane),
+                key: ValueKey(_selectedPane),
                 child: Builder(
                   builder: (BuildContext context) {
                     return Scaffold(
-                      appBar: drawerItems[selectedPane][2]
+                      appBar: _drawerItems[_selectedPane][2]
                           ? GradientAppBar(
-                              title: drawerItems[selectedPane][1],
+                              title: _drawerItems[_selectedPane][1],
                               leading: MaybeMasterDetail.of(context)!
                                       .isShowingMaster
                                   ? null
@@ -576,7 +573,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       drawer: MaybeMasterDetail.of(context)!.isShowingMaster
                           ? null
                           : _getDrawer(),
-                      body: loading
+                      body: _loading
                           ? LoadingUI(colorful: true, showHints: true)
                           : Builder(builder: (context) {
                               return Actions(
@@ -587,7 +584,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     return null;
                                   })
                                 },
-                                child: panes[selectedPane],
+                                child: _panes[_selectedPane],
                               );
                             }),
                     );
@@ -601,11 +598,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  showExitDialog(BuildContext context) {
+  _showExitDialog(BuildContext context) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text(formatString(context.locale.main.logoutTitle,
-          [login.schoolTitle, login.schoolName])),
+          [_login.schoolTitle, _login.schoolName])),
       content: Text(context.locale.main.logoutBody),
       actions: [
         TextButton(
@@ -644,9 +641,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _switchToTab(int index) {
-    runCallback(index);
+    _runCallback(index);
     setState(() {
-      selectedPane = index;
+      _selectedPane = index;
     });
   }
+
+  void openDrawer(BuildContext context) => Scaffold.of(context).openDrawer();
 }
