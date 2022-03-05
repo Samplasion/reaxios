@@ -9,6 +9,7 @@ import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:reaxios/structs/SubjectObjective.dart';
+import 'package:reaxios/structs/calendar_event.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -197,6 +198,21 @@ class Settings extends _UndisposableChangeNotifier {
 
   void setUpdateNagMode(UpdateNagMode updateNagMode) {
     _prefs.setString("updateNagMode", updateNagMode.serialized);
+    notifyListeners();
+  }
+
+  List<CustomCalendarEvent> getCalendarEvents() {
+    final events = _prefs.getString("calendarEvents") ?? "[]";
+    return (jsonDecode(events) as List<dynamic>)
+        .map((e) => CustomCalendarEvent.fromJson(e))
+        .toList();
+  }
+
+  void setCalendarEvents(List<CustomCalendarEvent> events) {
+    _prefs.setString(
+      "calendarEvents",
+      jsonEncode(events.map((e) => e.toJson()).toList()),
+    );
     notifyListeners();
   }
 

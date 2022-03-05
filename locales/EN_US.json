@@ -86,7 +86,16 @@
     "formatMonth": "month",
     "homework": "Homework",
     "topics": "Lesson subjects",
-    "noEvents": "No events"
+    "noEvents": "No events",
+    "customEvents": "Custom events",
+    "eventEditorTitle": "Event editor",
+    "eventEditorSubject": "Subject",
+    "eventEditorDescription": "Description",
+    "eventEditorDate": "Date",
+    "eventEditorColor": "Color",
+    "eventEditorTextError": "Please enter some text",
+    "edit": "Edit",
+    "done": "Done"
   },
   "charts": {
     "average": "Average",

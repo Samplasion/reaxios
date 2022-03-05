@@ -86,7 +86,16 @@
     "formatMonth": "",
     "homework": "",
     "topics": "",
-    "noEvents": ""
+    "noEvents": "",
+    "customEvents": "",
+    "eventEditorTitle": "",
+    "eventEditorSubject": "",
+    "eventEditorDescription": "",
+    "eventEditorDate": "",
+    "eventEditorColor": "",
+    "eventEditorTextError": "",
+    "edit": "",
+    "done": ""
   },
   "charts": {
     "average": "",

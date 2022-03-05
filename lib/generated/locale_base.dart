@@ -246,6 +246,15 @@ class Localecalendar {
   String get homework => _data["homework"]!;
   String get topics => _data["topics"]!;
   String get noEvents => _data["noEvents"]!;
+  String get customEvents => _data["customEvents"]!;
+  String get eventEditorTitle => _data["eventEditorTitle"]!;
+  String get eventEditorSubject => _data["eventEditorSubject"]!;
+  String get eventEditorDescription => _data["eventEditorDescription"]!;
+  String get eventEditorDate => _data["eventEditorDate"]!;
+  String get eventEditorColor => _data["eventEditorColor"]!;
+  String get eventEditorTextError => _data["eventEditorTextError"]!;
+  String get edit => _data["edit"]!;
+  String get done => _data["done"]!;
 }
 
 class Localecharts {

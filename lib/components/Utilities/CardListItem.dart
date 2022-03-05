@@ -9,6 +9,7 @@ class CardListItem extends StatefulWidget {
     required this.subtitle,
     this.details,
     this.onClick,
+    this.onLongPress,
     this.radius = 15,
     this.elevation = 8,
     this.titleStyle,
@@ -19,6 +20,7 @@ class CardListItem extends StatefulWidget {
   final Widget subtitle;
   final Widget? details;
   final void Function()? onClick;
+  final void Function()? onLongPress;
   final double radius;
   final double elevation;
   final TextStyle? titleStyle;
@@ -51,6 +53,7 @@ class _CardListItemState extends State<CardListItem> {
         item = item.ripple().gestures(
               onTapChange: (tapStatus) => setState(() => pressed = tapStatus),
               onTap: widget.onClick,
+              onLongPress: widget.onLongPress,
             );
       }
 

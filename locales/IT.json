@@ -86,7 +86,16 @@
     "formatMonth": "mese",
     "homework": "Compiti",
     "topics": "Argomenti",
-    "noEvents": "Nessun evento"
+    "noEvents": "Nessun evento",
+    "customEvents": "Eventi personali",
+    "eventEditorTitle": "Editor di eventi",
+    "eventEditorSubject": "Oggetto",
+    "eventEditorDescription": "Descrizione",
+    "eventEditorDate": "Data",
+    "eventEditorColor": "Colore",
+    "eventEditorTextError": "Inserisci del testo",
+    "edit": "Modifica",
+    "done": "Fatto"
   },
   "charts": {
     "average": "Media",
