@@ -115,6 +115,9 @@ class _CalculatorPaneState extends State<CalculatorPane>
             },
             behavior: HitTestBehavior.opaque,
             child: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
               onPressed: () => _showFabDialog(grades, subjects, period),
               child: Icon(Icons.add),
             ),
@@ -403,7 +406,16 @@ class _CalculatorPaneState extends State<CalculatorPane>
     }).toList();
 
     return BottomAppBar(
-      shape: CircularNotchedRectangle(),
+      shape: AutomaticNotchedShape(
+        BeveledRectangleBorder(
+          borderRadius: BorderRadius.circular(0),
+        ),
+        RoundedRectangleBorder(
+          // As the outer circle is bigger, its radius
+          // must be as well. 18 looks nice enough.
+          borderRadius: BorderRadius.circular(18),
+        ),
+      ),
       color: Theme.of(context).cardColor,
       child: Container(
         height: 1.5 * kToolbarHeight,

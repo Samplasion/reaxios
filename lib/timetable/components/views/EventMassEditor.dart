@@ -211,6 +211,9 @@ class _EventMassEditorState extends State<EventMassEditor> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         onPressed: processForm,
         child: Icon(Icons.done),
       ),

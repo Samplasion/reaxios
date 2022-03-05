@@ -257,6 +257,9 @@ class _EventControllerState extends State<EventController> {
 
   FloatingActionButton _getFab() {
     return FloatingActionButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
       tooltip: context.locale.timetable.actionsAdd,
       child: Icon(Icons.add),
       onPressed: () {
