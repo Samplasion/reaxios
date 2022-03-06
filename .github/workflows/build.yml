@@ -72,8 +72,12 @@ jobs:
           name: Registro Web app
           path: out/web/Registro-*
   build_android:
-    name: Build Android app
+    name: Build Android app [${{ matrix.flag }}]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # a = apk, b = bundle
+        flag: [a, b]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -100,7 +104,7 @@ jobs:
           echo 'storeFile=${{ env.TMP_KEYSTORE_FILE_PATH }}' >> key.properties
           mv key.properties android/
       - name: Build
-        run: tools/build_android.sh
+        run: tools/build_android.sh -${{ matrix.flag }}
       - name: Release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
@@ -111,5 +115,5 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v2
         with:
-          name: Registro Android app
+          name: Registro Android app [${{ matrix.flag }}]
           path: out/android/Registro-*
