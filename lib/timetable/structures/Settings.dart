@@ -243,7 +243,7 @@ class Settings extends _UndisposableChangeNotifier {
     return Platform.isAndroid || Platform.isIOS;
   }
 
-  Future share([List<String>? keys]) async {
+  Future share([List<String>? keys, String name = "settings.json"]) async {
     final encoded = jsonEncode(
       Map<String, dynamic>.fromIterable(
         json.entries
@@ -258,7 +258,7 @@ class Settings extends _UndisposableChangeNotifier {
         String? path = await FilePicker.platform.saveFile(
           type: FileType.custom,
           allowedExtensions: ["json"],
-          fileName: "settings.json",
+          fileName: name,
         );
         if (path == null) return;
         final file = File(path);
@@ -320,6 +320,8 @@ class Settings extends _UndisposableChangeNotifier {
         "averageMode": getAverageMode().serialized,
         "subjectObjectives": getSubjectObjectives()
             .map((key, value) => MapEntry(key, value.toJson())),
+        "updateNagMode": getUpdateNagMode().serialized,
+        "calendarEvents": getCalendarEvents().map((e) => e.toJson()).toList(),
       };
 
   set json(Map<String, dynamic> obj) {
@@ -372,6 +374,30 @@ class Settings extends _UndisposableChangeNotifier {
         deserializeAverageMode(obj["averageMode"] as String),
       );
     }
+    if (obj.containsKey("subjectObjectives") &&
+        obj["subjectObjectives"] is Map) {
+      setSubjectObjectives(
+        (obj["subjectObjectives"] as Map).map((key, value) {
+          return MapEntry(
+            key,
+            SubjectObjective.fromJson(value as Map<String, dynamic>),
+          );
+        }),
+      );
+    }
+    if (obj.containsKey("updateNagMode") && obj["updateNagMode"] is String) {
+      setUpdateNagMode(
+        deserializeUpdateNagMode(obj["updateNagMode"] as String),
+      );
+    }
+    if (obj.containsKey("calendarEvents") && obj["calendarEvents"] is List) {
+      setCalendarEvents(
+        (obj["calendarEvents"] as List)
+            .map((e) => CustomCalendarEvent.fromJson(e))
+            .toList(),
+      );
+    }
+
     notifyListeners();
   }
 
