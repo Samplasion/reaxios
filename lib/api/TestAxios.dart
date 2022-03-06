@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:reaxios/api/Axios.dart';
+import 'package:reaxios/api/entities/Meeting/Meeting.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
@@ -342,7 +343,7 @@ class TestAxios implements Axios {
   List<Student> get students => [this.student!];
 
   @override
-  Future<List> getTeacherMeetings() async {
+  Future<List<MeetingSchema>> getTeacherMeetings() async {
     return [];
   }
 }

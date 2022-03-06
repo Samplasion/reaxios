@@ -461,7 +461,7 @@ class Axios {
         .toList();
   }
 
-  Future<List> getTeacherMeetings() async {
+  Future<List<MeetingSchema>> getTeacherMeetings() async {
     final List<MeetingSchema> res = await this
         ._makeAuthenticatedCall<dynamic>("GET_COLLOQUI_MASTER", (raw) {
       return (raw as List).map((e) => MeetingSchema.fromJson(e)).toList();
