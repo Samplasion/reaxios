@@ -8,6 +8,7 @@ import 'package:reaxios/api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
+import 'package:reaxios/api/entities/Meeting/Meeting.dart';
 import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/School/School.dart';
@@ -44,6 +45,8 @@ abstract class _RegistroStore with Store {
   ObservableFuture<List<MaterialTeacherData>>? materials;
   @observable
   ObservableFuture<List<String>>? subjects;
+  @observable
+  ObservableFuture<List<MeetingSchema>>? meetings;
   @observable
   StreamController<String?> payloadController = StreamController<String?>();
   @observable
@@ -154,6 +157,14 @@ abstract class _RegistroStore with Store {
       subjects = ObservableFuture(session.getSubjects())
           .then(_successHandler)
           .catchError(_errorHandler<List<String>>(<String>[]));
+    }
+  }
+
+  fetchTeacherMeetings(Axios session, [bool force = false]) {
+    if (meetings == null || force) {
+      meetings = ObservableFuture(session.getTeacherMeetings())
+          .then(_successHandler)
+          .catchError(_errorHandler<List<MeetingSchema>>(<MeetingSchema>[]));
     }
   }
 
