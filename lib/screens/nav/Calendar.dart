@@ -73,7 +73,7 @@ class _CalendarPaneState extends State<CalendarPane> {
           return buildOk(context, topics, assignments, periods);
         } else {
           return Scaffold(
-            appBar: getDefaultAppBar(context, false),
+            appBar: getDefaultAppBar(context, [], [], [], false),
             body: Center(child: CircularProgressIndicator()),
           );
         }
@@ -83,7 +83,10 @@ class _CalendarPaneState extends State<CalendarPane> {
 
   List<PopupMenuEntry<String>> getPopupItems(
     BuildContext context,
+    List<Topic> topics,
+    List<Assignment> assignments,
     Settings settings,
+    List<Period> periods,
   ) {
     // TODO: Copy l10n strings to the calendar group
     return [
@@ -99,6 +102,7 @@ class _CalendarPaneState extends State<CalendarPane> {
           try {
             await settings.load();
             RestartWidget.restartApp(context);
+            _rebuildEvents(context, topics, assignments, periods, _selectedDay);
           } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -159,7 +163,8 @@ class _CalendarPaneState extends State<CalendarPane> {
     }
   }
 
-  GradientAppBar getDefaultAppBar(BuildContext context,
+  GradientAppBar getDefaultAppBar(BuildContext context, List<Topic> topics,
+      List<Assignment> assignments, List<Period> periods,
       [bool showMenu = true]) {
     final settings = Provider.of<Settings>(context, listen: false);
     final isShowingMaster = MaybeMasterDetail.of(context)!.isShowingMaster;
@@ -177,8 +182,8 @@ class _CalendarPaneState extends State<CalendarPane> {
             ),
       actions: [
         PopupMenuButton(
-          itemBuilder: (context) => getPopupItems(context, settings),
-        )
+            itemBuilder: (context) =>
+                getPopupItems(context, topics, assignments, settings, periods))
       ],
     );
   }
@@ -307,7 +312,7 @@ class _CalendarPaneState extends State<CalendarPane> {
         return Scaffold(
           appBar: _editing
               ? getEditingAppBar(topics, assignments, periods)
-              : getDefaultAppBar(context),
+              : getDefaultAppBar(context, topics, assignments, periods),
           body: Container(
             child: Column(
               children: <Widget>[
