@@ -544,6 +544,15 @@ class _CalendarPaneState extends State<CalendarPane> {
                 ]);
               });
             }
+            SchedulerBinding.instance!.addPostFrameCallback((_) {
+              _rebuildEvents(
+                context,
+                topics,
+                assignments,
+                periods,
+                _selectedDay,
+              );
+            });
           },
           child: Icon(Icons.add),
         ),
