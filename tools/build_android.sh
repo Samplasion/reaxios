@@ -79,8 +79,8 @@ cleanup() {
 
 copy() {
     echo "📑 Copying output files from their directory to our organized directory..."
-    cp -r $CUR/build/app/outputs/flutter-apk/app-release.apk $CUR/out/android/$name-android-$VER+$NOW-$flavor.apk
-    cp -r $CUR/build/app/outputs/bundle/release/app-release.aab $CUR/out/android/$name-androidbundle-$VER+$NOW-$flavor.aab
+    cp -r $CUR/build/app/outputs/flutter-apk/app-release.apk $CUR/out/android/$name-android-$VER+$NOW-$flavor.apk || true
+    cp -r $CUR/build/app/outputs/bundle/release/app-release.aab $CUR/out/android/$name-androidbundle-$VER+$NOW-$flavor.aab || true
 }
 
 eval $run
