@@ -21,6 +21,7 @@ import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Charts/GradeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
+import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Utilities/updates/upgrade_card.dart';

@@ -6,17 +6,15 @@ part of 'Material.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MaterialData _$MaterialDataFromJson(Map<String, dynamic> json) {
-  return MaterialData(
-    id: json['idContent'] as int,
-    description: json['descrizione'] as String,
-    rawText: json['testo'] as String,
-    date: const DateSerializer().fromJson(json['data'] as String),
-    url: json['url'] as String,
-    fileName: json['file_name'] as String,
-    fileUrl: json['file_url'] as String,
-  );
-}
+MaterialData _$MaterialDataFromJson(Map<String, dynamic> json) => MaterialData(
+      id: json['idContent'] as int,
+      description: json['descrizione'] as String,
+      rawText: json['testo'] as String,
+      date: const DateSerializer().fromJson(json['data'] as String),
+      url: json['url'] as String,
+      fileName: json['file_name'] as String,
+      fileUrl: json['file_url'] as String,
+    );
 
 Map<String, dynamic> _$MaterialDataToJson(MaterialData instance) =>
     <String, dynamic>{
@@ -29,14 +27,13 @@ Map<String, dynamic> _$MaterialDataToJson(MaterialData instance) =>
       'file_url': instance.fileUrl,
     };
 
-MaterialFolderData _$MaterialFolderDataFromJson(Map<String, dynamic> json) {
-  return MaterialFolderData(
-    id: json['idFolder'] as int,
-    description: json['descrizione'] as String,
-    rawNote: json['note'] as String,
-    path: json['path'] as String,
-  );
-}
+MaterialFolderData _$MaterialFolderDataFromJson(Map<String, dynamic> json) =>
+    MaterialFolderData(
+      id: json['idFolder'] as int,
+      description: json['descrizione'] as String,
+      rawNote: json['note'] as String,
+      path: json['path'] as String,
+    );
 
 Map<String, dynamic> _$MaterialFolderDataToJson(MaterialFolderData instance) =>
     <String, dynamic>{
@@ -46,16 +43,15 @@ Map<String, dynamic> _$MaterialFolderDataToJson(MaterialFolderData instance) =>
       'path': instance.path,
     };
 
-MaterialTeacherData _$MaterialTeacherDataFromJson(Map<String, dynamic> json) {
-  return MaterialTeacherData(
-    id: json['idDocente'] as String,
-    name: json['nome'] as String,
-    subjects: json['materie'] as String,
-    folders: (json['folders'] as List<dynamic>)
-        .map((e) => MaterialFolderData.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+MaterialTeacherData _$MaterialTeacherDataFromJson(Map<String, dynamic> json) =>
+    MaterialTeacherData(
+      id: json['idDocente'] as String,
+      name: json['nome'] as String,
+      subjects: json['materie'] as String,
+      folders: (json['folders'] as List<dynamic>)
+          .map((e) => MaterialFolderData.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$MaterialTeacherDataToJson(
         MaterialTeacherData instance) =>
@@ -66,14 +62,12 @@ Map<String, dynamic> _$MaterialTeacherDataToJson(
       'folders': instance.folders,
     };
 
-APIMaterials _$APIMaterialsFromJson(Map<String, dynamic> json) {
-  return APIMaterials(
-    idAlunno: json['idAlunno'] as String,
-    docenti: (json['docenti'] as List<dynamic>)
-        .map((e) => MaterialTeacherData.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+APIMaterials _$APIMaterialsFromJson(Map<String, dynamic> json) => APIMaterials(
+      idAlunno: json['idAlunno'] as String,
+      docenti: (json['docenti'] as List<dynamic>)
+          .map((e) => MaterialTeacherData.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$APIMaterialsToJson(APIMaterials instance) =>
     <String, dynamic>{

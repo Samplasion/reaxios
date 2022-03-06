@@ -340,6 +340,11 @@ class TestAxios implements Axios {
 
   @override
   List<Student> get students => [this.student!];
+
+  @override
+  Future<List> getTeacherMeetings() async {
+    return [];
+  }
 }
 
 gradeText(int round) {
