@@ -43,7 +43,7 @@ class CustomCalendarEventListItem extends StatelessWidget {
       title: (event.title),
       subtitle: event.description.trim().isEmpty
           ? Container()
-          : SelectableLinkify(
+          : Linkify(
               text: event.description.trim(),
               style:
                   TextStyle(color: Theme.of(context).textTheme.caption?.color),
