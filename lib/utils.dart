@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
@@ -9,6 +10,7 @@ import 'package:reaxios/generated/locale_base.dart';
 import 'dart:math';
 
 import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'enums/AverageMode.dart';
 import 'enums/GradeDisplay.dart';
@@ -368,6 +370,14 @@ extension ContextUtils on BuildContext {
     }
 
     return res;
+  }
+
+  Future<void> defaultLinkHandler(LinkableElement link) async {
+    if (await canLaunch(link.url)) {
+      await launch(link.url);
+    } else {
+      showSnackbar(locale.main.failedLinkOpen);
+    }
   }
 }
 

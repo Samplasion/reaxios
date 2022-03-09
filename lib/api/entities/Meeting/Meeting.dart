@@ -142,7 +142,7 @@ class MeetingDate {
   @JsonKey(name: 'posti')
   final String rawSeats;
   Map<String, bool> get availableSeats {
-    final list = rawSeats.split('').map((s) => s == '1').toList();
+    final list = rawSeats.split('').map((s) => s != '0').toList();
     return Map<String, bool>.fromIterable(
       0.to(list.length - 1),
       key: (i) => times[i],

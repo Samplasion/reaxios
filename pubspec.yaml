@@ -67,6 +67,7 @@ dependencies:
   flutter_typeahead: ^3.2.4
   upgrader: ^3.13.0
   universal_io: ^2.0.4
+  badges: ^2.0.2
 
 dev_dependencies:
   flutter_test:

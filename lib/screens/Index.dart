@@ -28,6 +28,7 @@ import 'package:reaxios/screens/nav/Authorizations.dart';
 import 'package:reaxios/screens/nav/Calendar.dart';
 import 'package:reaxios/screens/nav/Grades.dart';
 import 'package:reaxios/screens/nav/Materials.dart';
+import 'package:reaxios/screens/nav/Meetings.dart';
 import 'package:reaxios/screens/nav/Notes.dart';
 import 'package:reaxios/screens/nav/Reports.dart';
 import 'package:reaxios/screens/nav/Overview.dart';
@@ -229,6 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
         NoticesPane(session: session),
         AbsencesPane(session: session),
         AuthorizationsPane(session: session),
+        MeetingsPane(session: session),
         MaterialsPane(session: session),
         StatsPane(session: session),
         ReportCardsPane(session: session, store: widget.store),
@@ -326,6 +328,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.authorizations),
           true,
           () => widget.store.fetchAuthorizations(session)
+        ],
+        [
+          Icon(Icons.terrain),
+          Text("context.locale.drawer.teacherMeetings"),
+          true,
+          () => widget.store.fetchTeacherMeetings(session)
         ],
         [
           Icon(Icons.badge),
