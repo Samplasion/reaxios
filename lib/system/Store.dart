@@ -3,14 +3,11 @@ import 'dart:async';
 import 'package:mobx/mobx.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
-import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
 import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
-import 'package:reaxios/api/entities/School/School.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
@@ -20,8 +17,6 @@ part 'Store.g.dart';
 class RegistroStore = _RegistroStore with _$RegistroStore;
 
 abstract class _RegistroStore with Store {
-  @observable
-  School? school;
   @observable
   ObservableFuture<List<Topic>>? topics;
   @observable

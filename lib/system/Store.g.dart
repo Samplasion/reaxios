@@ -9,21 +9,6 @@ part of 'Store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$RegistroStore on _RegistroStore, Store {
-  final _$schoolAtom = Atom(name: '_RegistroStore.school');
-
-  @override
-  School? get school {
-    _$schoolAtom.reportRead();
-    return super.school;
-  }
-
-  @override
-  set school(School? value) {
-    _$schoolAtom.reportWrite(value, super.school, () {
-      super.school = value;
-    });
-  }
-
   final _$topicsAtom = Atom(name: '_RegistroStore.topics');
 
   @override
@@ -248,7 +233,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
   @override
   String toString() {
     return '''
-school: ${school},
 topics: ${topics},
 reportCards: ${reportCards},
 bulletins: ${bulletins},
