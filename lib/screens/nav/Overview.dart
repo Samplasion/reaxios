@@ -111,22 +111,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                 ),
               )
             : null,
-        body: loading
-            ? LoadingUI()
-            : FutureBuilder<List<List<dynamic>>>(
-                future: Future.wait([
-                  /* widget.store.topics ??  */ Future.value(<Topic>[]),
-                  /* widget.store.grades ??  */ Future.value(<Grade>[]),
-                ]),
-                initialData: initialData,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  List<List> data =
-                      snapshot.hasData ? snapshot.data! : initialData;
-                  return _buildBody(data[0] as dynamic, data[1] as dynamic);
-
-                  // return Center(child: CircularProgressIndicator());
-                },
-              ),
+        body: loading ? LoadingUI() : _buildBody([]),
       );
     });
   }
@@ -137,9 +122,12 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     setState(() {});
   }
 
-  Widget _buildBody(List<Topic> topics, List<Grade> grades) {
+  Widget _buildBody(
+    List<Topic> topics,
+  ) {
     final cubit = context.watch<AppCubit>();
     final assignments = cubit.assignments;
+    final grades = cubit.grades;
     final student = widget.student;
 
     final screenWidth = MaybeMasterDetail.of(context)?.detailWidth ??
@@ -307,11 +295,9 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         ),
       ],
 
-      // TODO: Bring this back when grades are added to cubit
-      // MaxWidthContainer(
-      //   child: GradeAverageChart(session: widget.session, period: period)
-      //       .padding(all: 16),
-      // ).center(),
+      MaxWidthContainer(
+        child: GradeAverageChart(period: period).padding(all: 16),
+      ).center(),
     ];
 
     final toolbarHeight = AppBar().toolbarHeight ?? kToolbarHeight;
@@ -491,42 +477,23 @@ class UserCard extends StatelessWidget {
   Widget _buildUserStats(BuildContext context) {
     final cubit = context.watch<AppCubit>();
     return <Widget>[
-      FutureBuilder<List<Grade>>(
-        builder: (context, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(
-                context, "...", context.locale.overview.average);
-          }
+      AnimatedBuilder(
+        animation: Provider.of<Settings>(context),
+        builder: (BuildContext context, Widget? child) {
+          final averageMode = Provider.of<Settings>(context).getAverageMode();
           final relevantGrades = period == null
-              ? snapshot.data!
-              : snapshot.data!.where((g) => g.period == period!.desc).toList();
-          return AnimatedBuilder(
-            animation: Provider.of<Settings>(context),
-            builder: (BuildContext context, Widget? child) {
-              final averageMode =
-                  Provider.of<Settings>(context).getAverageMode();
-              return _buildUserStatsItem(
-                context,
-                gradeAverage(averageMode, relevantGrades).toString(),
-                context.locale.overview.average,
-                3,
-              );
-            },
+              ? cubit.grades
+              : cubit.grades.where((g) => g.period == period!.desc).toList();
+          return _buildUserStatsItem(
+            context,
+            gradeAverage(averageMode, relevantGrades).toString(),
+            context.locale.overview.average,
+            3,
           );
         },
-        future: Future.sync(() => <Grade>[]),
       ),
-      FutureBuilder<List<Grade>>(
-        builder: (_, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(
-                context, "...", context.locale.overview.grades);
-          }
-          return _buildUserStatsItem(context, snapshot.data!.length.toString(),
-              context.locale.overview.grades, 3);
-        },
-        future: Future.sync(() => <Grade>[]),
-      ),
+      _buildUserStatsItem(context, cubit.grades.length.toString(),
+          context.locale.overview.grades, 3),
       _buildUserStatsItem(context, cubit.assignments.length.toString(),
           context.locale.overview.assignments, 2),
       FutureBuilder<List<Topic>>(

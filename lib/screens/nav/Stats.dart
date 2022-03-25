@@ -20,18 +20,19 @@ import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
+import '../../cubit/app_cubit.dart';
+
 // lang: it
 
-class _Tuple4<T1, T2, T3, T4> {
+class _Tuple3<T1, T2, T3> {
   final T1 item1;
   final T2 item2;
   final T3 item3;
-  final T4 item4;
 
-  _Tuple4(this.item1, this.item2, this.item3, this.item4);
+  _Tuple3(this.item1, this.item2, this.item3);
 
-  factory _Tuple4.fromList(List<dynamic> list) {
-    return _Tuple4(list[0] as T1, list[1] as T2, list[2] as T3, list[3] as T4);
+  factory _Tuple3.fromList(List<dynamic> list) {
+    return _Tuple3(list[0] as T1, list[1] as T2, list[2] as T3);
   }
 }
 
@@ -52,14 +53,12 @@ class _StatsPaneState extends State<StatsPane> {
 
   Widget _buildBody() {
     final store = Provider.of<RegistroStore>(context);
-    return FutureBuilder<
-        _Tuple4<List<Grade>, List<Period>, List<Absence>, List<Topic>>>(
+    return FutureBuilder<_Tuple3<List<Period>, List<Absence>, List<Topic>>>(
       future: Future.wait(<Future<dynamic>>[
-        store.grades ?? Future.value(<Grade>[]),
         store.periods ?? Future.value(<Period>[]),
         store.absences ?? Future.value(<Absence>[]),
         store.topics ?? Future.value(<Topic>[]),
-      ]).then((elements) => _Tuple4.fromList(elements)),
+      ]).then((elements) => _Tuple3.fromList(elements)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return AnimatedBuilder(
@@ -76,12 +75,12 @@ class _StatsPaneState extends State<StatsPane> {
     );
   }
 
-  Widget _buildStats(
-      _Tuple4<List<Grade>, List<Period>, List<Absence>, List<Topic>> data) {
+  Widget _buildStats(_Tuple3<List<Period>, List<Absence>, List<Topic>> data) {
+    final cubit = context.watch<AppCubit>();
+    final grades = cubit.grades;
     final settings = Provider.of<Settings>(context);
     final averageMode = settings.getAverageMode();
-    final grades = data.item1;
-    final periods = data.item2;
+    final periods = data.item1;
 
     final currentPeriod = (periods as List<Period?>).firstWhere(
         (element) => element?.isCurrent() ?? false,

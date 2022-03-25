@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
@@ -8,6 +9,7 @@ import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
@@ -28,13 +30,9 @@ class _GradeChartEntry {
 class GradeAverageChart extends StatefulWidget {
   const GradeAverageChart({
     Key? key,
-    required this.store,
-    required this.session,
     this.period,
   }) : super(key: key);
 
-  final RegistroStore store;
-  final Axios session;
   final Period? period;
 
   @override
@@ -80,12 +78,12 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
   void initState() {
     super.initState();
 
-    widget.store.fetchGrades(widget.session);
-    widget.store.grades!.then((grades) {
-      SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
-        if (mounted) setState(() {});
-      });
-    });
+    // widget.store.fetchGrades(widget.session);
+    // widget.store.grades!.then((grades) {
+    //   SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
+    //     if (mounted) setState(() {});
+    //   });
+    // });
   }
 
   Widget _buildChart(List<_GradeChartEntry> grades, double average) {
@@ -206,11 +204,11 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Grade>>(
-      future: widget.store.grades,
-      builder: (BuildContext context, snapshot) {
-        final grades = _getEntries(snapshot.data ?? []);
-        final period = getPeriod(snapshot.data ?? []);
+    return BlocBuilder<AppCubit, AppState>(
+      bloc: context.watch<AppCubit>(),
+      builder: (BuildContext context, state) {
+        final grades = _getEntries(state.grades ?? []);
+        final period = getPeriod(state.grades ?? []);
 
         return PageTransitionSwitcher(
           transitionBuilder: (
@@ -230,7 +228,7 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (!snapshot.hasError && snapshot.hasData) ...[
+                  if (state.grades != null) ...[
                     GestureDetector(
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
@@ -260,14 +258,12 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
                           grades,
                           gradeAverage(
                             Provider.of<Settings>(context).getAverageMode(),
-                            snapshot.data!,
+                            state.grades!,
                           ),
                         );
                       },
                     )
-                  ] else if (snapshot.hasError)
-                    Text("${snapshot.error}")
-                  else
+                  ] else
                     Center(child: CircularProgressIndicator()),
                 ],
               ),

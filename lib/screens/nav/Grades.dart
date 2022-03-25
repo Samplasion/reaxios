@@ -23,6 +23,7 @@ import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/GradeSubjectView.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -81,7 +82,6 @@ class _GradesPaneState extends ReloadableState<GradesPane>
       key: key,
       child: FutureBuilder<List<dynamic>>(
         future: Future.wait([
-          widget.store.grades as Future,
           widget.store.subjects as Future,
           widget.store.getCurrentPeriod(widget.session),
         ]),
@@ -98,16 +98,13 @@ class _GradesPaneState extends ReloadableState<GradesPane>
             );
           if (snapshot.hasData &&
               snapshot.data!.isNotEmpty &&
-              (snapshot.connectionState == ConnectionState.done ||
-                  snapshot.data![0].isNotEmpty)) {
-            final grades = snapshot.data![0] as List<Grade>? ?? [];
-            final subjects = snapshot.data![1] as List<String>? ?? [];
-            final period = snapshot.data![2] as Period?;
+              snapshot.connectionState == ConnectionState.done) {
+            final subjects = snapshot.data![0] as List<String>? ?? [];
+            final period = snapshot.data![1] as Period?;
             return AnimatedBuilder(
               animation: Provider.of<Settings>(context),
               builder: (BuildContext context, Widget? child) {
-                return buildOk(
-                    context, grades.reversed.toList(), period, subjects);
+                return buildOk(context, period, subjects);
               },
             );
           }
@@ -206,8 +203,10 @@ class _GradesPaneState extends ReloadableState<GradesPane>
         ),
       ];
 
-  Widget buildOk(BuildContext context, List<Grade> grades,
-      Period? currentPeriod, List<String> subjects) {
+  Widget buildOk(
+      BuildContext context, Period? currentPeriod, List<String> subjects) {
+    final cubit = context.watch<AppCubit>();
+    final grades = cubit.grades.reversed.toList();
     final pages = getPages(context, grades, currentPeriod, subjects);
     return DefaultTabController(
       length: pages.length,

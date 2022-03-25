@@ -247,11 +247,9 @@ class _HomeScreenState extends State<HomeScreen> {
           () async {
             // widget.store.fetchAssignments(session);
             cubit.loadAssignments();
-            widget.store.fetchGrades(session);
+            cubit.loadGrades();
             widget.store.fetchTopics(session);
             await Future.wait(<Future<dynamic>>[
-              // widget.store.assignments ?? Future.value(<Assignment>[]),
-              widget.store.grades ?? Future.value(<Grade>[]),
               widget.store.topics ?? Future.value(<Topic>[]),
             ]);
           }
@@ -277,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.grades),
           false,
           () {
-            widget.store.fetchGrades(session);
+            cubit.loadGrades();
             widget.store.fetchPeriods(session);
             widget.store.fetchSubjects(session);
           }
@@ -287,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.calculator),
           false,
           () {
-            widget.store.fetchGrades(session);
+            cubit.loadGrades();
             widget.store.fetchPeriods(session);
             widget.store.fetchSubjects(session);
           }
@@ -346,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
           true,
           () {
             widget.store.fetchAbsences(session);
-            widget.store.fetchGrades(session);
+            cubit.loadGrades();
             widget.store.fetchPeriods(session);
             widget.store.fetchTopics(session);
           }

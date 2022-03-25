@@ -23,8 +23,6 @@ abstract class _RegistroStore with Store {
   @observable
   School? school;
   @observable
-  ObservableFuture<List<Grade>>? grades;
-  @observable
   ObservableFuture<List<Topic>>? topics;
   @observable
   ObservableFuture<List<ReportCard>>? reportCards;
@@ -61,15 +59,6 @@ abstract class _RegistroStore with Store {
   T _successHandler<T>(T value) {
     networkError = false;
     return value;
-  }
-
-  fetchGrades(Axios session, [bool force = false]) {
-    if (grades == null || force) {
-      grades = null;
-      grades = ObservableFuture(session.getGrades())
-          .then(_successHandler)
-          .catchError(_errorHandler<List<Grade>>(<Grade>[]));
-    }
   }
 
   fetchTopics(Axios session) {
@@ -165,7 +154,7 @@ abstract class _RegistroStore with Store {
 
   @action
   reset() {
-    grades = topics = reportCards = bulletins = notes = null;
+    topics = reportCards = bulletins = notes = null;
     networkError = false;
     testMode = false;
   }

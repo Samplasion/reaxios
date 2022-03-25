@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/average.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/showDialogSuper.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -58,11 +59,10 @@ class _CalculatorPaneState extends State<CalculatorPane>
     final store = Provider.of<RegistroStore>(context);
     return FutureBuilder<List<dynamic>>(
       future: Future.wait([
-        store.grades as Future,
         store.subjects as Future,
         store.getCurrentPeriod(widget.session),
       ]),
-      initialData: [<Grade>[], <String>[], null],
+      initialData: [<String>[], null],
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasError)
           return Scaffold(
@@ -75,8 +75,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
           );
         if (!(snapshot.hasData &&
             snapshot.data!.isNotEmpty &&
-            (snapshot.data[0].isNotEmpty ||
-                snapshot.connectionState == ConnectionState.done))) {
+            (snapshot.connectionState == ConnectionState.done))) {
           return Scaffold(
             appBar: GradientAppBar(
               title: Text(context.locale.drawer.calculator),
@@ -85,9 +84,8 @@ class _CalculatorPaneState extends State<CalculatorPane>
           );
         }
 
-        final grades = snapshot.data![0] as List<Grade>? ?? [];
-        final subjects = snapshot.data![1] as List<String>? ?? [];
-        final period = snapshot.data![2] as Period?;
+        final subjects = snapshot.data![0] as List<String>? ?? [];
+        final period = snapshot.data![1] as Period?;
         return Scaffold(
           appBar: GradientAppBar(
             title: Text(context.locale.drawer.calculator),
@@ -118,7 +116,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              onPressed: () => _showFabDialog(grades, subjects, period),
+              onPressed: () => _showFabDialog(subjects, period),
               child: Icon(Icons.add),
             ),
           ),
@@ -127,8 +125,9 @@ class _CalculatorPaneState extends State<CalculatorPane>
     );
   }
 
-  void _showFabDialog(
-      List<Grade> grades, List<String> subjects, Period? period) async {
+  void _showFabDialog(List<String> subjects, Period? period) async {
+    final cubit = context.read<AppCubit>();
+    final grades = cubit.grades;
     await showModalBottomSheet(
       context: context,
       enableDrag: true,

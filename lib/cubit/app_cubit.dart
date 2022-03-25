@@ -6,6 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
+import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../api/entities/School/School.dart';
@@ -16,12 +17,17 @@ part 'app_state.dart';
 class AppCubit extends HydratedCubit<AppState> {
   AppCubit() : super(AppState.empty());
 
+  BehaviorSubject<int> loadingTasks = BehaviorSubject<int>.seeded(0);
+
+  void load() => loadingTasks.add(loadingTasks.value + 1);
+  void loaded() => loadingTasks.add(loadingTasks.value - 1);
+
   bool get hasAccount => state.axios?.account != null;
 
   School? get school => state.school;
 
-  // BehaviorSubject<List<Assignment>> assignments = BehaviorSubject();
   List<Assignment> get assignments => state.assignments ?? [];
+  List<Grade> get grades => state.grades ?? [];
 
   Future<Object?> login(AxiosAccount account) async {
     Axios axios;
@@ -41,9 +47,17 @@ class AppCubit extends HydratedCubit<AppState> {
   }
 
   Future<void> loadAssignments() async {
+    load();
     final assignments = await state.axios!.getAssignments();
-    // this.assignments.add(assignments);
     emit(state.copyWith(assignments: assignments));
+    loaded();
+  }
+
+  Future<void> loadGrades() async {
+    load();
+    final grades = await state.axios!.getGrades();
+    emit(state.copyWith(grades: grades));
+    loaded();
   }
 
   logout() {

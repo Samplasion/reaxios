@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
@@ -12,6 +13,7 @@ import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 
 import '../../consts.dart';
+import '../../cubit/app_cubit.dart';
 
 class GradeView extends StatefulWidget {
   const GradeView({
@@ -121,7 +123,8 @@ class _GradeViewState extends State<GradeView> {
                   ElevatedButton(
                     onPressed: () {
                       session.markGradeAsRead(grade).then((_) {
-                        store.fetchGrades(session, true);
+                        final cubit = context.read<AppCubit>();
+                        cubit.loadGrades();
                         if (reload != null) reload!();
                         // print(reload);
                         Navigator.pop(context);
