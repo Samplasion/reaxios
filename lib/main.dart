@@ -5,9 +5,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
@@ -25,6 +28,7 @@ import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
 import 'change_notifier_provider.dart';
+import 'cubit/app_cubit.dart';
 import 'timetable/structures/Settings.dart' as timetable;
 import 'timetable/structures/Store.dart' as timetable;
 
@@ -55,19 +59,31 @@ void main() async {
 
   HttpOverrides.global = MyHttpOverrides();
   await S.Settings.init();
-  runApp(RestartWidget(
-    child: MultiProvider(
-      child: RegistroElettronicoApp(),
-      providers: [
-        Provider(create: (_) => registroStore),
-        Provider(create: (_) => AppInfoStore()..getPackageInfo(), lazy: false),
-        ChangeNotifierProvider(create: (_) => timetable.Store()),
-        UndisposingChangeNotifierProvider<timetable.Settings>(
-          create: (_) => settings,
+
+  print(await getApplicationDocumentsDirectory());
+  final storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
+  HydratedBlocOverrides.runZoned(
+    () => runApp(RestartWidget(
+      child: BlocProvider(
+        create: (context) => AppCubit(),
+        child: MultiProvider(
+          child: RegistroElettronicoApp(),
+          providers: [
+            Provider(create: (_) => registroStore),
+            Provider(
+                create: (_) => AppInfoStore()..getPackageInfo(), lazy: false),
+            ChangeNotifierProvider(create: (_) => timetable.Store()),
+            UndisposingChangeNotifierProvider<timetable.Settings>(
+              create: (_) => settings,
+            ),
+          ],
         ),
-      ],
-    ),
-  ));
+      ),
+    )),
+    storage: storage,
+  );
 
   if (Platform.isAndroid) {
     android_service

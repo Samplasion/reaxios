@@ -11,7 +11,6 @@ import 'Weekday.dart';
 part 'Event.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@CopyWith()
 class Event {
   final String name, notes;
 
@@ -41,6 +40,28 @@ class Event {
     if (abbr.isEmpty) {
       abbr = generateAbbreviation(3, name, ignoreList: ignoreList);
     }
+  }
+
+  Event copyWith({
+    String? name,
+    String? notes,
+    DayTime? start,
+    DayTime? end,
+    Color? color,
+    Weekday? weekday,
+    String? abbr,
+    List<String>? ignoreList,
+  }) {
+    return Event(
+      name: name ?? this.name,
+      notes: notes ?? this.notes,
+      start: start ?? this.start,
+      end: end ?? this.end,
+      color: color ?? this.color,
+      weekday: weekday ?? this.weekday,
+      abbr: abbr ?? this.abbr,
+      ignoreList: ignoreList ?? this.ignoreList,
+    );
   }
 
   Event cloneWith({

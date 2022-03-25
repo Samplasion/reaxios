@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
@@ -25,8 +26,8 @@ import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Utilities/updates/upgrade_card.dart';
 import 'package:reaxios/consts.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/extensions.dart' hide ColorExtension;
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
@@ -42,7 +43,6 @@ class OverviewPane extends StatefulWidget {
     required this.session,
     required this.login,
     required this.student,
-    required this.store,
     required this.openMainDrawer,
     required this.switchToTab,
   }) : super(key: key);
@@ -50,7 +50,6 @@ class OverviewPane extends StatefulWidget {
   final Axios session;
   final Login login;
   final Student student;
-  final RegistroStore store;
   final Function() openMainDrawer;
   final void Function(int index) switchToTab;
 
@@ -98,38 +97,38 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     // final tmrAssignments = assignments.where(filterTmr).toList();
     // // final todaysGrades = grades.where(filterToday).toList();
     final initialData = [
-      <Assignment>[],
       <Topic>[],
       <Grade>[],
     ];
 
-    return Scaffold(
-      appBar: loading
-          ? GradientAppBar(
-              title: Text(
-                context.locale.drawer.overview,
-              ),
-            )
-          : null,
-      body: loading
-          ? LoadingUI()
-          : FutureBuilder<List<List<dynamic>>>(
-              future: Future.wait([
-                widget.store.assignments ?? Future.value([]),
-                widget.store.topics ?? Future.value([]),
-                widget.store.grades ?? Future.value([]),
-              ]),
-              initialData: initialData,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                List<List> data =
-                    snapshot.hasData ? snapshot.data! : initialData;
-                return _buildBody(data[0] as List<Assignment>,
-                    data[1] as List<Topic>, data[2] as List<Grade>);
+    return Builder(builder: (context) {
+      final cubit = context.watch<AppCubit>();
+      return Scaffold(
+        appBar: loading
+            ? GradientAppBar(
+                title: Text(
+                  context.locale.drawer.overview,
+                ),
+              )
+            : null,
+        body: loading
+            ? LoadingUI()
+            : FutureBuilder<List<List<dynamic>>>(
+                future: Future.wait([
+                  /* widget.store.topics ??  */ Future.value(<Topic>[]),
+                  /* widget.store.grades ??  */ Future.value(<Grade>[]),
+                ]),
+                initialData: initialData,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  List<List> data =
+                      snapshot.hasData ? snapshot.data! : initialData;
+                  return _buildBody(data[0] as dynamic, data[1] as dynamic);
 
-                // return Center(child: CircularProgressIndicator());
-              },
-            ),
-    );
+                  // return Center(child: CircularProgressIndicator());
+                },
+              ),
+      );
+    });
   }
 
   @override
@@ -138,8 +137,9 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     setState(() {});
   }
 
-  Widget _buildBody(
-      List<Assignment> assignments, List<Topic> topics, List<Grade> grades) {
+  Widget _buildBody(List<Topic> topics, List<Grade> grades) {
+    final cubit = context.watch<AppCubit>();
+    final assignments = cubit.assignments;
     final student = widget.student;
 
     final screenWidth = MaybeMasterDetail.of(context)?.detailWidth ??
@@ -307,12 +307,11 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         ),
       ],
 
-      // Man, this chart lags
-      MaxWidthContainer(
-        child: GradeAverageChart(
-                store: widget.store, session: widget.session, period: period)
-            .padding(all: 16),
-      ).center(),
+      // TODO: Bring this back when grades are added to cubit
+      // MaxWidthContainer(
+      //   child: GradeAverageChart(session: widget.session, period: period)
+      //       .padding(all: 16),
+      // ).center(),
     ];
 
     final toolbarHeight = AppBar().toolbarHeight ?? kToolbarHeight;
@@ -374,7 +373,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    final RegistroStore store = context.watch<RegistroStore>();
+    // final RegistroStore store = context.watch<RegistroStore>();
     final appBarSize = (expandedHeight - shrinkOffset);
     final cardTopPosition = (expandedHeight / 2 - shrinkOffset) / 2; // / 10;
     final proportion = 2 - (expandedHeight / appBarSize);
@@ -416,7 +415,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                       child: UserCard(
                         student: student,
                         period: period,
-                        store: store,
+                        // store: store,
                         switchToTab: switchToTab,
                       ),
                     ).center(),
@@ -445,13 +444,13 @@ class UserCard extends StatelessWidget {
   const UserCard({
     required this.student,
     this.period,
-    required this.store,
+    // required this.store,
     required this.switchToTab,
   });
 
   final Student student;
   final Period? period;
-  final RegistroStore store;
+  // final RegistroStore store;
   final void Function(int index) switchToTab;
 
   bg(BuildContext context) => Theme.of(context).accentColor;
@@ -490,6 +489,7 @@ class UserCard extends StatelessWidget {
   }
 
   Widget _buildUserStats(BuildContext context) {
+    final cubit = context.watch<AppCubit>();
     return <Widget>[
       FutureBuilder<List<Grade>>(
         builder: (context, snapshot) {
@@ -514,7 +514,7 @@ class UserCard extends StatelessWidget {
             },
           );
         },
-        future: store.grades,
+        future: Future.sync(() => <Grade>[]),
       ),
       FutureBuilder<List<Grade>>(
         builder: (_, snapshot) {
@@ -525,19 +525,10 @@ class UserCard extends StatelessWidget {
           return _buildUserStatsItem(context, snapshot.data!.length.toString(),
               context.locale.overview.grades, 3);
         },
-        future: store.grades,
+        future: Future.sync(() => <Grade>[]),
       ),
-      FutureBuilder<List<Assignment>>(
-        builder: (_, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(
-                context, "...", context.locale.overview.assignments);
-          }
-          return _buildUserStatsItem(context, snapshot.data!.length.toString(),
-              context.locale.overview.assignments, 2);
-        },
-        future: store.assignments,
-      ),
+      _buildUserStatsItem(context, cubit.assignments.length.toString(),
+          context.locale.overview.assignments, 2),
       FutureBuilder<List<Topic>>(
         builder: (_, snapshot) {
           if (snapshot.hasError || !snapshot.hasData) {
@@ -547,7 +538,7 @@ class UserCard extends StatelessWidget {
           return _buildUserStatsItem(context, snapshot.data!.length.toString(),
               context.locale.overview.topics, 5);
         },
-        future: store.topics,
+        future: Future.sync(() => <Topic>[]),
       ),
     ]
         .toRow(mainAxisAlignment: MainAxisAlignment.spaceAround)

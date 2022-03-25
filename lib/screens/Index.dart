@@ -21,6 +21,7 @@ import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/Utilities/updates/update_scope.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';
@@ -153,8 +154,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _runCallback([int index = 0]) async {
-    if (_drawerItems[index][3] != null && _drawerItems[index][3] is Function)
-      await _drawerItems[index][3]();
+    try {
+      if (_drawerItems[index][3] != null && _drawerItems[index][3] is Function)
+        await _drawerItems[index][3]();
+    } catch (e) {
+      print(e);
+      // Do nothing; the HydratedCubit will have stale data, but at least
+      // the app will run.
+    }
   }
 
   @override
@@ -163,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _initPanes(Axios session, Login login) {
+    final cubit = context.read<AppCubit>();
     setState(() {
       _panes = [
         Builder(
@@ -170,7 +178,6 @@ class _HomeScreenState extends State<HomeScreen> {
             session: session,
             login: login,
             student: session.student ?? Student.empty(),
-            store: widget.store,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
             switchToTab: _switchToTab,
           ),
@@ -179,7 +186,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Builder(
           builder: (context) => AssignmentsPane(
             session: session,
-            store: widget.store,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -239,11 +245,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.overview),
           false,
           () async {
-            widget.store.fetchAssignments(session);
+            // widget.store.fetchAssignments(session);
+            cubit.loadAssignments();
             widget.store.fetchGrades(session);
             widget.store.fetchTopics(session);
             await Future.wait(<Future<dynamic>>[
-              widget.store.assignments ?? Future.value(<Assignment>[]),
+              // widget.store.assignments ?? Future.value(<Assignment>[]),
               widget.store.grades ?? Future.value(<Grade>[]),
               widget.store.topics ?? Future.value(<Topic>[]),
             ]);
@@ -254,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.calendar),
           false,
           () {
-            widget.store.fetchAssignments(session);
+            cubit.loadAssignments();
             widget.store.fetchTopics(session);
             widget.store.fetchPeriods(session);
           }
@@ -263,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.book),
           Text(context.locale.drawer.assignments),
           false,
-          () => widget.store.fetchAssignments(session)
+          () => cubit.loadAssignments(),
         ],
         [
           Icon(Icons.star),
@@ -393,6 +400,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.pop(context);
               _session.student = s;
               widget.store.reset();
+              context.read<AppCubit>().clearData();
               _runCallback(0);
               setState(() {
                 _showUserDetails = false;

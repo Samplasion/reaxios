@@ -24,21 +24,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
     });
   }
 
-  final _$assignmentsAtom = Atom(name: '_RegistroStore.assignments');
-
-  @override
-  ObservableFuture<List<Assignment>>? get assignments {
-    _$assignmentsAtom.reportRead();
-    return super.assignments;
-  }
-
-  @override
-  set assignments(ObservableFuture<List<Assignment>>? value) {
-    _$assignmentsAtom.reportWrite(value, super.assignments, () {
-      super.assignments = value;
-    });
-  }
-
   final _$gradesAtom = Atom(name: '_RegistroStore.grades');
 
   @override
@@ -279,7 +264,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
   String toString() {
     return '''
 school: ${school},
-assignments: ${assignments},
 grades: ${grades},
 topics: ${topics},
 reportCards: ${reportCards},

@@ -9,6 +9,7 @@ import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/SchoolListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,22 +19,18 @@ import '../format.dart';
 
 final useScreens = (RegistroStore store, onPrev, onNext, onDone) => [
       _LoginScreenPage1(
-        store: store,
         onNext: onNext,
       ),
       _LoginScreenPage2(
-        store: store,
         onPrev: onPrev,
         onDone: onDone,
       )
     ];
 
 class _LoginScreenPage1 extends StatefulWidget {
-  _LoginScreenPage1({Key? key, required this.onNext, required this.store})
-      : super(key: key);
+  _LoginScreenPage1({Key? key, required this.onNext}) : super(key: key);
 
   final void Function() onNext;
-  final RegistroStore store;
 
   @override
   __LoginScreenPage1State createState() => __LoginScreenPage1State();
@@ -155,7 +152,9 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
                               await SharedPreferences.getInstance();
                           prefs.setString(
                               "school", _schools[_selectedIndex].id);
-                          widget.store.school = _schools[_selectedIndex];
+                          // widget.store.school = _schools[_selectedIndex];
+                          final cubit = context.read<AppCubit>();
+                          cubit.setSchool(_schools[_selectedIndex]);
                           widget.onNext();
                         }
                       : null,
@@ -194,16 +193,14 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
 }
 
 class _LoginScreenPage2 extends StatefulWidget {
-  _LoginScreenPage2(
-      {Key? key,
-      required this.onDone,
-      required this.onPrev,
-      required this.store})
-      : super(key: key);
+  _LoginScreenPage2({
+    Key? key,
+    required this.onDone,
+    required this.onPrev,
+  }) : super(key: key);
 
   final void Function() onPrev;
   final void Function() onDone;
-  final RegistroStore store;
 
   @override
   __LoginScreenPage2State createState() => __LoginScreenPage2State();
@@ -223,6 +220,7 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.watch<AppCubit>();
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: SingleChildScrollView(
@@ -245,8 +243,8 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                     ),
                     Text(
                       formatString(context.locale.login.loginPhaseTwoTitle, [
-                        widget.store.school?.title ?? "",
-                        widget.store.school?.name ?? ""
+                        cubit.school?.title ?? "",
+                        cubit.school?.name ?? ""
                       ]),
                       style: Theme.of(context).textTheme.headline5,
                       textAlign: TextAlign.center,
@@ -340,16 +338,20 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
   }
 
   Future<bool> _checkIfCredentialsAreValid() async {
-    try {
-      final account = AxiosAccount(
-        widget.store.school!.id,
-        name,
-        pass,
-      );
-      final session = Axios(account);
-      await session.login();
-      return true;
-    } catch (e) {
+    final cubit = context.read<AppCubit>();
+
+    // try {
+    final account = AxiosAccount(
+      cubit.school!.id,
+      name,
+      pass,
+    );
+    //   final session = Axios(account);
+    //   await session.login();
+    //   return true;
+    // } catch (e) {
+    final e = await cubit.login(account);
+    if (e != null) {
       print(e);
       if (e.toString().toLowerCase().contains("controllare codice utente")) {
         context.showSnackbar(
@@ -366,6 +368,8 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
       }
       return false;
     }
+
+    return true;
   }
 
   _login() async {

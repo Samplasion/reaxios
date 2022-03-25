@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
@@ -8,6 +10,7 @@ import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -19,12 +22,10 @@ class AssignmentsPane extends StatefulWidget {
   AssignmentsPane({
     Key? key,
     required this.session,
-    required this.store,
     required this.openMainDrawer,
   }) : super(key: key);
 
   final Axios session;
-  final RegistroStore store;
   final Function() openMainDrawer;
 
   @override
@@ -67,43 +68,35 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
       ).padding(horizontal: 16);
     }
 
-    return FutureBuilder<List<Assignment>>(
-      future: widget.store.assignments,
-      initialData: [],
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.hasError) return Text("${snapshot.error}");
-        if (snapshot.hasData && snapshot.data!.isNotEmpty)
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: GradientAppBar(
-              title: Text(context.locale.drawer.assignments),
-              leading: MaybeMasterDetail.of(context)!.isShowingMaster
-                  ? null
-                  : Builder(builder: (context) {
-                      return IconButton(
-                        tooltip: MaterialLocalizations.of(context)
-                            .openAppDrawerTooltip,
-                        onPressed: widget.openMainDrawer,
-                        icon: Icon(Icons.menu),
-                      );
-                    }),
-              actions: [
-                Builder(
-                  builder: (context) {
-                    return IconButton(
-                      onPressed: Scaffold.of(context).openEndDrawer,
-                      icon: Icon(Icons.topic),
-                    );
-                  },
-                )
-              ],
-            ),
-            body: buildOk(context, snapshot.data!.reversed.toList()),
-            endDrawer: _getEndDrawer(snapshot.data!.reversed.toList()),
-          );
+    final cubit = context.watch<AppCubit>();
 
-        return LoadingUI();
-      },
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: GradientAppBar(
+        title: Text(context.locale.drawer.assignments),
+        leading: MaybeMasterDetail.of(context)!.isShowingMaster
+            ? null
+            : Builder(builder: (context) {
+                return IconButton(
+                  tooltip:
+                      MaterialLocalizations.of(context).openAppDrawerTooltip,
+                  onPressed: widget.openMainDrawer,
+                  icon: Icon(Icons.menu),
+                );
+              }),
+        actions: [
+          Builder(
+            builder: (context) {
+              return IconButton(
+                onPressed: Scaffold.of(context).openEndDrawer,
+                icon: Icon(Icons.topic),
+              );
+            },
+          )
+        ],
+      ),
+      body: buildOk(context, cubit.assignments.reversed.toList()),
+      endDrawer: _getEndDrawer(cubit.assignments.reversed.toList()),
     );
   }
 
@@ -220,47 +213,52 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
       left: false,
       right: false,
       child: Container(
-        child: ListView.separated(
-          shrinkWrap: true,
-          separatorBuilder: (_a, _b) => Divider(),
-          controller: _mainController,
-          itemBuilder: (context, i) {
-            return StickyHeader(
-              header: Center(
-                child: MaxWidthContainer(
-                  child: Container(
-                    height: 50.0,
-                    color: Theme.of(context).canvasColor,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      entries[i].key,
-                      style: Theme.of(context).textTheme.caption,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await context.read<AppCubit>().loadAssignments();
+          },
+          child: ListView.separated(
+            shrinkWrap: true,
+            separatorBuilder: (_a, _b) => Divider(),
+            controller: _mainController,
+            itemBuilder: (context, i) {
+              return StickyHeader(
+                header: Center(
+                  child: MaxWidthContainer(
+                    child: Container(
+                      height: 50.0,
+                      color: Theme.of(context).canvasColor,
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        entries[i].key,
+                        style: Theme.of(context).textTheme.caption,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              content: Padding(
-                padding: i == entries.length - 1
-                    ? EdgeInsets.only(bottom: 16)
-                    : EdgeInsets.zero,
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, i1) {
-                    final e = entries[i].value[i1];
-                    return Center(
-                      child: MaxWidthContainer(
-                        child: AssignmentListItem(assignment: e),
-                      ),
-                    );
-                  },
-                  itemCount: entries[i].value.length,
-                  shrinkWrap: true,
+                content: Padding(
+                  padding: i == entries.length - 1
+                      ? EdgeInsets.only(bottom: 16)
+                      : EdgeInsets.zero,
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, i1) {
+                      final e = entries[i].value[i1];
+                      return Center(
+                        child: MaxWidthContainer(
+                          child: AssignmentListItem(assignment: e),
+                        ),
+                      );
+                    },
+                    itemCount: entries[i].value.length,
+                    shrinkWrap: true,
+                  ),
                 ),
-              ),
-            );
-          },
-          itemCount: entries.length,
+              );
+            },
+            itemCount: entries.length,
+          ),
         ),
       ),
     );

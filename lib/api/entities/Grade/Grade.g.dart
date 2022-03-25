@@ -6,23 +6,21 @@ part of 'Grade.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Grade _$GradeFromJson(Map<String, dynamic> json) {
-  return Grade(
-    id: json['idVoto'] as String,
-    subjectID: json['idMat'] as String,
-    subject: json['descMat'] as String,
-    date: const DateSerializer().fromJson(json['data'] as String),
-    kind: json['tipo'] as String,
-    prettyGrade: json['voto'] as String,
-    grade: const DoubleSerializer().fromJson(json['votoValore'] as String),
-    weight: const DoubleSerializer().fromJson(json['peso'] as String),
-    comment: json['commento'] as String,
-    teacher: json['docente'] as String,
-    seen: const BooleanSerializer().fromJson(json['vistato'] as String),
-    seenBy: json['vistatoUtente'] as String?,
-    seenOn: const DateSerializer().fromJson(json['vistatoData'] as String),
-  )..period = json['period'] as String;
-}
+Grade _$GradeFromJson(Map<String, dynamic> json) => Grade(
+      id: json['idVoto'] as String,
+      subjectID: json['idMat'] as String,
+      subject: json['descMat'] as String,
+      date: const DateSerializer().fromJson(json['data'] as String),
+      kind: json['tipo'] as String,
+      prettyGrade: json['voto'] as String,
+      grade: const DoubleSerializer().fromJson(json['votoValore'] as String),
+      weight: const DoubleSerializer().fromJson(json['peso'] as String),
+      comment: json['commento'] as String,
+      teacher: json['docente'] as String,
+      seen: const BooleanSerializer().fromJson(json['vistato'] as String),
+      seenBy: json['vistatoUtente'] as String?,
+      seenOn: const DateSerializer().fromJson(json['vistatoData'] as String),
+    )..period = json['period'] as String;
 
 Map<String, dynamic> _$GradeToJson(Grade instance) => <String, dynamic>{
       'idVoto': instance.id,
@@ -41,15 +39,13 @@ Map<String, dynamic> _$GradeToJson(Grade instance) => <String, dynamic>{
       'period': instance.period,
     };
 
-APIGrades _$APIGradesFromJson(Map<String, dynamic> json) {
-  return APIGrades(
-    idAlunno: json['idAlunno'] as String,
-    idFrazione: json['idFrazione'] as String,
-    voti: (json['voti'] as List<dynamic>)
-        .map((e) => Grade.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+APIGrades _$APIGradesFromJson(Map<String, dynamic> json) => APIGrades(
+      idAlunno: json['idAlunno'] as String,
+      idFrazione: json['idFrazione'] as String,
+      voti: (json['voti'] as List<dynamic>)
+          .map((e) => Grade.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$APIGradesToJson(APIGrades instance) => <String, dynamic>{
       'idAlunno': instance.idAlunno,

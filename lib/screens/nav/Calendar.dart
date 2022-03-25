@@ -19,6 +19,7 @@ import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Views/new_calendar_event.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/screens/Index.dart';
 import 'package:reaxios/structs/calendar_event.dart';
 import 'package:reaxios/system/Store.dart';
@@ -48,15 +49,13 @@ class _CalendarPaneState extends State<CalendarPane> {
   Widget build(BuildContext context) {
     final store = Provider.of<RegistroStore>(context);
 
-    return FutureBuilder<Tuple3<List<Topic>, List<Assignment>, List<Period>>>(
+    return FutureBuilder<Tuple2<List<Topic>, List<Period>>>(
       future: Future.wait([
         store.topics ?? Future.value(<Topic>[]),
-        store.assignments ?? Future.value(<Assignment>[]),
         store.periods ?? Future.value(<Period>[]),
-      ]).then((it) => Tuple3.fromIterable(it)),
+      ]).then((it) => Tuple2.fromIterable(it)),
       builder: (BuildContext context,
-          AsyncSnapshot<Tuple3<List<Topic>, List<Assignment>, List<Period>>>
-              snapshot) {
+          AsyncSnapshot<Tuple2<List<Topic>, List<Period>>> snapshot) {
         if (snapshot.hasError) {
           print(snapshot.error);
           if (snapshot.error is Error) {
@@ -65,12 +64,11 @@ class _CalendarPaneState extends State<CalendarPane> {
         }
         if (snapshot.hasData) {
           final topics = snapshot.requireData.first;
-          final assignments = snapshot.requireData.second;
-          final periods = snapshot.requireData.third;
+          final periods = snapshot.requireData.second;
 
           periods.sort((p1, p2) => p1.startDate.compareTo(p2.startDate));
 
-          return buildOk(context, topics, assignments, periods);
+          return buildOk(context, topics, periods);
         } else {
           return Scaffold(
             appBar: getDefaultAppBar(context, [], [], [], false),
@@ -291,8 +289,10 @@ class _CalendarPaneState extends State<CalendarPane> {
     }
   }
 
-  Widget buildOk(BuildContext context, List<Topic> topics,
-      List<Assignment> assignments, List<Period> periods) {
+  Widget buildOk(
+      BuildContext context, List<Topic> topics, List<Period> periods) {
+    final cubit = context.watch<AppCubit>();
+    final assignments = cubit.assignments;
     final settings = Provider.of<Settings>(context);
     if (_events == null) {
       _events = _getEvents(
