@@ -1,12 +1,16 @@
 // ignore_for_file: close_sinks
 
+import 'dart:ui';
+
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
+import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -30,6 +34,7 @@ class AppCubit extends HydratedCubit<AppState> {
   List<Assignment> get assignments => state.assignments ?? [];
   List<Grade> get grades => state.grades ?? [];
   List<Topic> get topics => state.topics ?? [];
+  List<ReportCard> get reportCards => state.reportCards ?? [];
 
   Future<Object?> login(AxiosAccount account) async {
     Axios axios;
@@ -48,40 +53,43 @@ class AppCubit extends HydratedCubit<AppState> {
     emit(state.copyWith(school: school));
   }
 
-  Future<void> loadAssignments() async {
+  Future<void> loadObject(VoidFutureCallBack objectGetter) async {
     try {
       load();
-      final assignments = await state.axios!.getAssignments();
-      emit(state.copyWith(assignments: assignments));
+      await objectGetter();
     } catch (e) {
       print(e);
     } finally {
       loaded();
     }
+  }
+
+  Future<void> loadAssignments() async {
+    loadObject(() async {
+      final assignments = await state.axios!.getAssignments();
+      emit(state.copyWith(assignments: assignments));
+    });
   }
 
   Future<void> loadGrades() async {
-    try {
-      load();
+    loadObject(() async {
       final grades = await state.axios!.getGrades();
       emit(state.copyWith(grades: grades));
-    } catch (e) {
-      print(e);
-    } finally {
-      loaded();
-    }
+    });
   }
 
   Future<void> loadTopics() async {
-    try {
-      load();
+    loadObject(() async {
       final topics = await state.axios!.getTopics();
       emit(state.copyWith(topics: topics));
-    } catch (e) {
-      print(e);
-    } finally {
-      loaded();
-    }
+    });
+  }
+
+  Future<void> loadReportCards() async {
+    loadObject(() async {
+      final reportCards = await state.axios!.getReportCards();
+      emit(state.copyWith(reportCards: reportCards));
+    });
   }
 
   logout() {

@@ -350,7 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.reportCards),
           true,
           () {
-            widget.store.fetchReportCards(session);
+            cubit.loadReportCards();
             widget.store.fetchPeriods(session);
           }
         ],

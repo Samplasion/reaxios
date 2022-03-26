@@ -18,8 +18,6 @@ class RegistroStore = _RegistroStore with _$RegistroStore;
 
 abstract class _RegistroStore with Store {
   @observable
-  ObservableFuture<List<ReportCard>>? reportCards;
-  @observable
   ObservableFuture<List<Bulletin>>? bulletins;
   @observable
   ObservableFuture<List<Period>>? periods;
@@ -52,13 +50,6 @@ abstract class _RegistroStore with Store {
   T _successHandler<T>(T value) {
     networkError = false;
     return value;
-  }
-
-  fetchReportCards(Axios session) {
-    if (reportCards == null)
-      reportCards = ObservableFuture(session.getReportCards())
-          .then(_successHandler)
-          .catchError(_errorHandler<List<ReportCard>>(<ReportCard>[]));
   }
 
   fetchBulletins(Axios session, [bool force = false]) {
@@ -140,7 +131,7 @@ abstract class _RegistroStore with Store {
 
   @action
   reset() {
-    reportCards = bulletins = notes = null;
+    bulletins = notes = null;
     networkError = false;
     testMode = false;
   }
