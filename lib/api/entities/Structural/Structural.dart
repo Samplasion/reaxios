@@ -1,78 +1,95 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/utils/DateSerializer.dart';
 
 part "Structural.g.dart";
 
 @JsonSerializable()
-class Structural {
+class Structural extends Equatable {
   @JsonKey(name: "tipoVoti")
-  List<GradeKinds> gradeKinds;
+  final List<GradeKinds> gradeKinds;
   @JsonKey(name: "tipoAssenze")
-  List<SimpleKind> absenceKinds;
+  final List<SimpleKind> absenceKinds;
   @JsonKey(name: "tipoAutorizzazioni")
-  List<SimpleKind> authorizationKinds;
+  final List<SimpleKind> authorizationKinds;
   @JsonKey(name: "tipoGiustificazione")
-  List<SimpleKind> justificationKinds;
+  final List<SimpleKind> justificationKinds;
   @JsonKey(name: "frazioniTemporali")
-  List<Periods> periods;
+  final List<Periods> periods;
 
-  List absenceReasons = [];
+  final List absenceReasons;
 
-  Structural({
+  const Structural({
     required this.gradeKinds,
     required this.absenceKinds,
     required this.authorizationKinds,
     required this.justificationKinds,
     required this.periods,
+    this.absenceReasons = const [],
   });
 
   factory Structural.fromJson(Map<String, dynamic> json) =>
       _$StructuralFromJson(json);
 
   Map<String, dynamic> toJson() => _$StructuralToJson(this);
+
+  @override
+  List<Object?> get props => [
+        gradeKinds,
+        absenceKinds,
+        authorizationKinds,
+        justificationKinds,
+        periods,
+      ];
 }
 
 @JsonSerializable()
-class GradeKinds {
+class GradeKinds extends Equatable {
   @JsonKey(name: "idPlesso")
-  String schoolID;
+  final String schoolID;
 
   @JsonKey(name: "tipi")
-  List<GradeKind> kinds;
+  final List<GradeKind> kinds;
 
-  GradeKinds({required this.schoolID, required this.kinds});
+  const GradeKinds({required this.schoolID, required this.kinds});
 
   factory GradeKinds.fromJson(Map<String, dynamic> json) =>
       _$GradeKindsFromJson(json);
 
   Map<String, dynamic> toJson() => _$GradeKindsToJson(this);
+
+  @override
+  List<Object?> get props => [schoolID, kinds];
 }
 
 @JsonSerializable()
-class GradeKind {
+class GradeKind extends Equatable {
   @JsonKey(name: "tipo")
-  String kind;
+  final String kind;
   @JsonKey(name: "codice")
-  String code;
+  final String code;
   @JsonKey(name: "desc")
-  String desc;
+  final String desc;
 
-  GradeKind({required this.kind, required this.code, required this.desc});
+  const GradeKind({required this.kind, required this.code, required this.desc});
 
   factory GradeKind.fromJson(Map<String, dynamic> json) =>
       _$GradeKindFromJson(json);
 
   Map<String, dynamic> toJson() => _$GradeKindToJson(this);
+
+  @override
+  List<Object?> get props => [kind, code, desc];
 }
 
 @JsonSerializable()
-class SimpleKind {
+class SimpleKind extends Equatable {
   @JsonKey(name: "tipo")
-  String kind;
+  final String kind;
   @JsonKey(name: "desc")
-  String desc;
+  final String desc;
 
-  SimpleKind({required this.kind, required this.desc});
+  const SimpleKind({required this.kind, required this.desc});
 
   static SimpleKind empty() {
     return SimpleKind(kind: "", desc: "");
@@ -82,22 +99,25 @@ class SimpleKind {
       _$SimpleKindFromJson(json);
 
   Map<String, dynamic> toJson() => _$SimpleKindToJson(this);
+
+  @override
+  List<Object?> get props => [kind, desc];
 }
 
 @JsonSerializable()
-class Period {
+class Period extends Equatable {
   @JsonKey(name: "idFrazione", defaultValue: "", disallowNullValue: true)
-  String id;
+  final String id;
   @JsonKey(name: "descFrazione", defaultValue: "")
-  String desc;
+  final String desc;
   @JsonKey(name: "dataInizio")
   @DateSerializer()
-  DateTime startDate;
+  final DateTime startDate;
   @JsonKey(name: "dataFine")
   @DateSerializer()
-  DateTime endDate;
+  final DateTime endDate;
 
-  Period({
+  const Period({
     required this.id,
     required this.desc,
     required this.startDate,
@@ -121,17 +141,20 @@ class Period {
       endDate: DateTime.now(),
     );
   }
+
+  @override
+  List<Object?> get props => [id, desc, startDate, endDate];
 }
 
 @JsonSerializable()
-class Periods {
+class Periods extends Equatable {
   @JsonKey(name: "idPlesso")
-  String schoolID;
+  final String schoolID;
 
   @JsonKey(name: "frazioni")
-  List<Period> periods;
+  final List<Period> periods;
 
-  Periods({required this.schoolID, required this.periods});
+  const Periods({required this.schoolID, required this.periods});
 
   factory Periods.fromJson(Map<String, dynamic> json) =>
       _$PeriodsFromJson(json);
@@ -144,4 +167,7 @@ class Periods {
     return (periods as List<Period?>)
         .firstWhere((p) => p?.isCurrent(date) ?? false, orElse: () => null);
   }
+
+  @override
+  List<Object?> get props => [schoolID, periods];
 }

@@ -24,21 +24,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
     });
   }
 
-  final _$periodsAtom = Atom(name: '_RegistroStore.periods');
-
-  @override
-  ObservableFuture<List<Period>>? get periods {
-    _$periodsAtom.reportRead();
-    return super.periods;
-  }
-
-  @override
-  set periods(ObservableFuture<List<Period>>? value) {
-    _$periodsAtom.reportWrite(value, super.periods, () {
-      super.periods = value;
-    });
-  }
-
   final _$notesAtom = Atom(name: '_RegistroStore.notes');
 
   @override
@@ -204,7 +189,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
   String toString() {
     return '''
 bulletins: ${bulletins},
-periods: ${periods},
 notes: ${notes},
 absences: ${absences},
 authorizations: ${authorizations},

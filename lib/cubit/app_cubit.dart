@@ -11,6 +11,7 @@ import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
+import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -31,10 +32,32 @@ class AppCubit extends HydratedCubit<AppState> {
 
   School? get school => state.school;
 
+  List<String> get subjects {
+    final List<String> res = <String>[];
+    topics.forEach((topic) {
+      if (topic.subject.isNotEmpty) {
+        res.add(topic.subject);
+      }
+    });
+    assignments.forEach((assignment) {
+      if (assignment.subject.isNotEmpty) {
+        res.add(assignment.subject);
+      }
+    });
+
+    return res.toSet().toList();
+  }
+
   List<Assignment> get assignments => state.assignments ?? [];
   List<Grade> get grades => state.grades ?? [];
   List<Topic> get topics => state.topics ?? [];
   List<ReportCard> get reportCards => state.reportCards ?? [];
+  Structural? get structural => state.structural;
+  List<Period> get periods => structural?.periods[0].periods ?? [];
+  Period? get currentPeriod =>
+      // ignore: unnecessary_cast
+      (periods as List<Period?>)
+          .firstWhere((period) => period!.isCurrent(), orElse: () => null);
 
   Future<Object?> login(AxiosAccount account) async {
     Axios axios;
@@ -89,6 +112,13 @@ class AppCubit extends HydratedCubit<AppState> {
     loadObject(() async {
       final reportCards = await state.axios!.getReportCards();
       emit(state.copyWith(reportCards: reportCards));
+    });
+  }
+
+  Future<void> loadStructural() async {
+    loadObject(() async {
+      final structural = await state.axios!.getStructural();
+      emit(state.copyWith(structural: structural));
     });
   }
 

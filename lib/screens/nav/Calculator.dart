@@ -60,7 +60,6 @@ class _CalculatorPaneState extends State<CalculatorPane>
     return FutureBuilder<List<dynamic>>(
       future: Future.wait([
         store.subjects as Future,
-        store.getCurrentPeriod(widget.session),
       ]),
       initialData: [<String>[], null],
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -85,7 +84,6 @@ class _CalculatorPaneState extends State<CalculatorPane>
         }
 
         final subjects = snapshot.data![0] as List<String>? ?? [];
-        final period = snapshot.data![1] as Period?;
         return Scaffold(
           appBar: GradientAppBar(
             title: Text(context.locale.drawer.calculator),
@@ -116,7 +114,8 @@ class _CalculatorPaneState extends State<CalculatorPane>
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              onPressed: () => _showFabDialog(subjects, period),
+              onPressed: () => _showFabDialog(
+                  subjects, context.read<AppCubit>().currentPeriod),
               child: Icon(Icons.add),
             ),
           ),

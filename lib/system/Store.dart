@@ -20,8 +20,6 @@ abstract class _RegistroStore with Store {
   @observable
   ObservableFuture<List<Bulletin>>? bulletins;
   @observable
-  ObservableFuture<List<Period>>? periods;
-  @observable
   ObservableFuture<List<Note>>? notes;
   @observable
   ObservableFuture<List<Absence>>? absences;
@@ -59,14 +57,6 @@ abstract class _RegistroStore with Store {
           .then(_successHandler)
           .catchError(_errorHandler<List<Bulletin>>(<Bulletin>[]));
     }
-  }
-
-  fetchPeriods(Axios session) {
-    if (periods == null)
-      periods = ObservableFuture(session.getPeriods())
-          .then(_successHandler)
-          .catchError(_errorHandler<List<Period>>(<Period>[]));
-    return periods;
   }
 
   fetchNotes(Axios session, [bool force = false]) {
@@ -112,21 +102,6 @@ abstract class _RegistroStore with Store {
           .then(_successHandler)
           .catchError(_errorHandler<List<String>>(<String>[]));
     }
-  }
-
-  Future<Period?> getCurrentPeriod(Axios session) async {
-    if (session.account.schoolID.isEmpty) return null;
-    final List<Period?> periods =
-        (this.periods == null || this.periods!.error != null)
-            ? await this.fetchPeriods(session)
-            : await this.periods!;
-    return periods.firstWhere((Period? period) {
-      if (period == null) return false;
-      return period.startDate.millisecondsSinceEpoch <
-              DateTime.now().millisecondsSinceEpoch &&
-          DateTime.now().millisecondsSinceEpoch <
-              period.endDate.millisecondsSinceEpoch;
-    }, orElse: () => null);
   }
 
   @action

@@ -52,17 +52,14 @@ class _StatsPaneState extends State<StatsPane> {
 
   Widget _buildBody() {
     final store = Provider.of<RegistroStore>(context);
-    return FutureBuilder<_Tuple2<List<Period>, List<Absence>>>(
-      future: Future.wait(<Future<dynamic>>[
-        store.periods ?? Future.value(<Period>[]),
-        store.absences ?? Future.value(<Absence>[]),
-      ]).then((elements) => _Tuple2.fromList(elements)),
+    return FutureBuilder<List<Absence>>(
+      future: store.absences ?? Future.value(<Absence>[]),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return AnimatedBuilder(
             animation: Provider.of<Settings>(context),
             builder: (BuildContext context, Widget? child) {
-              return _buildStats(snapshot.requireData);
+              return _buildStats();
             },
           );
         } else if (snapshot.hasError) {
@@ -73,12 +70,12 @@ class _StatsPaneState extends State<StatsPane> {
     );
   }
 
-  Widget _buildStats(_Tuple2<List<Period>, List<Absence>> data) {
+  Widget _buildStats() {
     final cubit = context.watch<AppCubit>();
     final grades = cubit.grades;
+    final periods = cubit.periods;
     final settings = Provider.of<Settings>(context);
     final averageMode = settings.getAverageMode();
-    final periods = data.item1;
 
     final currentPeriod = (periods as List<Period?>).firstWhere(
         (element) => element?.isCurrent() ?? false,

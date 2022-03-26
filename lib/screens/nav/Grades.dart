@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
@@ -78,42 +79,18 @@ class _GradesPaneState extends ReloadableState<GradesPane>
       ).padding(horizontal: 16);
     }
 
+    final cubit = context.watch<AppCubit>();
+
     return KeyedSubtree(
       key: key,
-      child: FutureBuilder<List<dynamic>>(
-        future: Future.wait([
-          widget.store.subjects as Future,
-          widget.store.getCurrentPeriod(widget.session),
-        ]),
-        initialData: [<Grade>[], <String>[], null],
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.hasError)
-            return Scaffold(
-              appBar: GradientAppBar(
-                title: Text(context.locale.drawer.grades),
-              ),
-              body: Text(
-                "${snapshot.error}\n${snapshot is Error ? snapshot.stackTrace : ""}",
-              ),
-            );
-          if (snapshot.hasData &&
-              snapshot.data!.isNotEmpty &&
-              snapshot.connectionState == ConnectionState.done) {
-            final subjects = snapshot.data![0] as List<String>? ?? [];
-            final period = snapshot.data![1] as Period?;
-            return AnimatedBuilder(
-              animation: Provider.of<Settings>(context),
-              builder: (BuildContext context, Widget? child) {
-                return buildOk(context, period, subjects);
-              },
-            );
-          }
-
-          return Scaffold(
-            appBar: GradientAppBar(
-              title: Text(context.locale.drawer.grades),
-            ),
-            body: LoadingUI(),
+      child: AnimatedBuilder(
+        animation: Provider.of<Settings>(context),
+        builder: (BuildContext context, Widget? child) {
+          return BlocBuilder(
+            bloc: cubit,
+            builder: (context, state) {
+              return buildOk(context, cubit.currentPeriod, cubit.subjects);
+            },
           );
         },
       ),

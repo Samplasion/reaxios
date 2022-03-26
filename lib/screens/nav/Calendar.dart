@@ -4,6 +4,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
@@ -47,19 +48,12 @@ class CalendarPane extends StatefulWidget {
 class _CalendarPaneState extends State<CalendarPane> {
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<RegistroStore>(context);
-
-    return FutureBuilder<List<Period>>(
-      future: store.periods ?? Future.value(<Period>[]),
-      builder: (BuildContext context, AsyncSnapshot<List<Period>> snapshot) {
-        if (snapshot.hasError) {
-          print(snapshot.error);
-          if (snapshot.error is Error) {
-            print((snapshot.error as Error?)?.stackTrace);
-          }
-        }
-        if (snapshot.hasData) {
-          final periods = snapshot.requireData;
+    final cubit = context.watch<AppCubit>();
+    return BlocBuilder<AppCubit, AppState>(
+      bloc: cubit,
+      builder: (BuildContext context, AppState state) {
+        if (state.structural != null) {
+          final periods = cubit.periods;
 
           periods.sort((p1, p2) => p1.startDate.compareTo(p2.startDate));
 

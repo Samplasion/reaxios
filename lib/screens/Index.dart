@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:animations/animations.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/TestAxios.dart';
@@ -73,7 +76,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _initSession();
+
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      _initSession();
+    });
 
     _checkConnection(15000)();
   }
@@ -140,6 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _initPanes(_session, _login);
 
+    await context.read<AppCubit>().loadStructural();
     await _runCallback(0);
 
     setState(() {
@@ -190,32 +197,18 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Builder(
-          builder: (_) => FutureBuilder<Period?>(
-            future: widget.store.getCurrentPeriod(session),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) return Text("${snapshot.error}");
-              // if (!snapshot.hasData) return LoadingUI();
-              return GradesPane(
-                session: session,
-                openMainDrawer: () => Scaffold.of(context).openDrawer(),
-                store: widget.store,
-                period: snapshot.data,
-              );
-            },
+          builder: (_) => GradesPane(
+            session: session,
+            openMainDrawer: () => Scaffold.of(context).openDrawer(),
+            store: widget.store,
+            period: cubit.currentPeriod,
           ),
         ),
         Builder(
-          builder: (_) => FutureBuilder<Period?>(
-            future: widget.store.getCurrentPeriod(session),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) return Text("${snapshot.error}");
-              // if (!snapshot.hasData) return LoadingUI();
-              return CalculatorPane(
-                session: session,
-                openMainDrawer: () => Scaffold.of(context).openDrawer(),
-                period: snapshot.data,
-              );
-            },
+          builder: (_) => CalculatorPane(
+            session: session,
+            openMainDrawer: () => Scaffold.of(context).openDrawer(),
+            period: cubit.currentPeriod,
           ),
         ),
         Builder(
@@ -257,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
           () {
             cubit.loadAssignments();
             cubit.loadTopics();
-            widget.store.fetchPeriods(session);
+            cubit.loadStructural();
           }
         ],
         [
@@ -272,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
           false,
           () {
             cubit.loadGrades();
-            widget.store.fetchPeriods(session);
+            cubit.loadStructural();
             widget.store.fetchSubjects(session);
           }
         ],
@@ -282,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
           false,
           () {
             cubit.loadGrades();
-            widget.store.fetchPeriods(session);
+            cubit.loadStructural();
             widget.store.fetchSubjects(session);
           }
         ],
@@ -341,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
           () {
             widget.store.fetchAbsences(session);
             cubit.loadGrades();
-            widget.store.fetchPeriods(session);
+            cubit.loadStructural();
             cubit.loadTopics();
           }
         ],
@@ -351,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
           true,
           () {
             cubit.loadReportCards();
-            widget.store.fetchPeriods(session);
+            cubit.loadStructural();
           }
         ],
       ];
@@ -509,6 +502,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.watch<AppCubit>();
     final appInfo = context.watch<AppInfoStore>();
     final app = appInfo.packageInfo;
 
@@ -549,49 +543,84 @@ class _HomeScreenState extends State<HomeScreen> {
                   secondaryAnimation: secondaryAnimation,
                 );
               },
-              child: KeyedSubtree(
-                key: ValueKey(_selectedPane),
-                child: Builder(
-                  builder: (BuildContext context) {
-                    return Scaffold(
-                      appBar: _drawerItems[_selectedPane][2]
-                          ? GradientAppBar(
-                              title: _drawerItems[_selectedPane][1],
-                              leading: MaybeMasterDetail.of(context)!
-                                      .isShowingMaster
-                                  ? null
-                                  : Builder(builder: (context) {
-                                      return IconButton(
-                                        tooltip:
-                                            MaterialLocalizations.of(context)
+              child: Stack(
+                children: [
+                  KeyedSubtree(
+                    key: ValueKey(_selectedPane),
+                    child: Builder(
+                      builder: (BuildContext context) {
+                        return Scaffold(
+                          appBar: _drawerItems[_selectedPane][2]
+                              ? GradientAppBar(
+                                  title: _drawerItems[_selectedPane][1],
+                                  leading: MaybeMasterDetail.of(context)!
+                                          .isShowingMaster
+                                      ? null
+                                      : Builder(builder: (context) {
+                                          return IconButton(
+                                            tooltip: MaterialLocalizations.of(
+                                                    context)
                                                 .openAppDrawerTooltip,
-                                        onPressed: () =>
-                                            Scaffold.of(context).openDrawer(),
-                                        icon: Icon(Icons.menu),
-                                      );
-                                    }),
-                            )
-                          : null,
-                      drawer: MaybeMasterDetail.of(context)!.isShowingMaster
-                          ? null
-                          : _getDrawer(),
-                      body: _loading
-                          ? LoadingUI(colorful: true, showHints: true)
-                          : Builder(builder: (context) {
-                              return Actions(
-                                actions: {
-                                  MenuIntent: CallbackAction<MenuIntent>(
-                                      onInvoke: (intent) {
-                                    Scaffold.of(context).openDrawer();
-                                    return null;
-                                  })
-                                },
-                                child: _panes[_selectedPane],
-                              );
-                            }),
-                    );
-                  },
-                ),
+                                            onPressed: () =>
+                                                Scaffold.of(context)
+                                                    .openDrawer(),
+                                            icon: Icon(Icons.menu),
+                                          );
+                                        }),
+                                )
+                              : null,
+                          drawer: MaybeMasterDetail.of(context)!.isShowingMaster
+                              ? null
+                              : _getDrawer(),
+                          body: _loading
+                              ? LoadingUI(colorful: true, showHints: true)
+                              : Builder(builder: (context) {
+                                  return Actions(
+                                    actions: {
+                                      MenuIntent: CallbackAction<MenuIntent>(
+                                          onInvoke: (intent) {
+                                        Scaffold.of(context).openDrawer();
+                                        return null;
+                                      })
+                                    },
+                                    child: _panes[_selectedPane],
+                                  );
+                                }),
+                        );
+                      },
+                    ),
+                  ),
+                  StreamBuilder<int>(
+                    stream: cubit.loadingTasks,
+                    builder: (context, state) {
+                      final child = Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 500),
+                          padding: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            boxShadow: kElevationToShadow[4],
+                            color: Theme.of(context).cardColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: CupertinoActivityIndicator(),
+                        ),
+                      );
+                      return AnimatedCrossFade(
+                        crossFadeState: state.requireData < 1
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
+                        firstChild: child,
+                        secondChild: Opacity(
+                          opacity: 0,
+                          child: child,
+                        ),
+                        duration: Duration(milliseconds: 500),
+                      );
+                    },
+                  ),
+                ],
+                alignment: Alignment.bottomLeft,
               ),
             ),
           ),

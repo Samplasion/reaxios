@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
@@ -87,21 +88,24 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
   }
 
   initREData() async {
-    Future.wait([
-      // TODO: Convert this to cubit
-      widget.session.getCurrentPeriod().then((p) => setState(() => period = p)),
-    ]).then((_) => setState(() => loading = false));
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      final cubit = context.read<AppCubit>();
+      if (cubit.structural != null) {
+        setState(() {
+          period = cubit.currentPeriod;
+          loading = false;
+        });
+      } else {
+        cubit.loadStructural().then((p) => setState(() {
+              period = cubit.currentPeriod;
+              loading = false;
+            }));
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // final tmrAssignments = assignments.where(filterTmr).toList();
-    // // final todaysGrades = grades.where(filterToday).toList();
-    final initialData = [
-      <Topic>[],
-      <Grade>[],
-    ];
-
     return Builder(builder: (context) {
       final cubit = context.watch<AppCubit>();
       return Scaffold(
@@ -304,18 +308,24 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 
     return CustomScrollView(
       slivers: [
-        SliverPersistentHeader(
-          pinned: true,
-          floating: false,
-          delegate: CustomSliverDelegate(
-            hideTitleWhenExpanded: false,
-            openMenu: widget.openMainDrawer,
-            expandedHeight: MediaQuery.of(context).padding.top + 185,
-            collapsedHeight: MediaQuery.of(context).padding.top + toolbarHeight,
-            period: period,
-            student: student,
-            switchToTab: widget.switchToTab,
-          ),
+        BlocBuilder<AppCubit, AppState>(
+          bloc: cubit,
+          builder: (context, _) {
+            return SliverPersistentHeader(
+              pinned: true,
+              floating: false,
+              delegate: CustomSliverDelegate(
+                hideTitleWhenExpanded: false,
+                openMenu: widget.openMainDrawer,
+                expandedHeight: MediaQuery.of(context).padding.top + 185,
+                collapsedHeight:
+                    MediaQuery.of(context).padding.top + toolbarHeight,
+                period: cubit.currentPeriod,
+                student: student,
+                switchToTab: widget.switchToTab,
+              ),
+            );
+          },
         ),
         SliverList(
           delegate: SliverChildListDelegate(items),
