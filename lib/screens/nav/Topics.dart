@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
@@ -7,6 +8,7 @@ import 'package:reaxios/components/ListItems/TopicListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -63,12 +65,10 @@ class _TopicsPaneState extends State<TopicsPane> {
       ).padding(horizontal: 16);
     }
 
-    return FutureBuilder<List<Topic>>(
-      future: widget.store.topics,
-      initialData: [],
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.hasError) return Text("${snapshot.error}");
-        if (snapshot.hasData && snapshot.data!.isNotEmpty)
+    return BlocBuilder<AppCubit, AppState>(
+      bloc: context.watch<AppCubit>(),
+      builder: (BuildContext context, state) {
+        if (state.topics != null)
           return Scaffold(
             extendBodyBehindAppBar: true,
             appBar: GradientAppBar(
@@ -94,8 +94,8 @@ class _TopicsPaneState extends State<TopicsPane> {
                 )
               ],
             ),
-            body: buildOk(context, snapshot.data!.reversed.toList()),
-            endDrawer: _getEndDrawer(snapshot.data!.reversed.toList()),
+            body: buildOk(context, state.topics!.reversed.toList()),
+            endDrawer: _getEndDrawer(state.topics!.reversed.toList()),
           );
 
         return Center(child: CircularProgressIndicator());

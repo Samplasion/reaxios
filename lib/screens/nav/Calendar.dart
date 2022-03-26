@@ -49,13 +49,9 @@ class _CalendarPaneState extends State<CalendarPane> {
   Widget build(BuildContext context) {
     final store = Provider.of<RegistroStore>(context);
 
-    return FutureBuilder<Tuple2<List<Topic>, List<Period>>>(
-      future: Future.wait([
-        store.topics ?? Future.value(<Topic>[]),
-        store.periods ?? Future.value(<Period>[]),
-      ]).then((it) => Tuple2.fromIterable(it)),
-      builder: (BuildContext context,
-          AsyncSnapshot<Tuple2<List<Topic>, List<Period>>> snapshot) {
+    return FutureBuilder<List<Period>>(
+      future: store.periods ?? Future.value(<Period>[]),
+      builder: (BuildContext context, AsyncSnapshot<List<Period>> snapshot) {
         if (snapshot.hasError) {
           print(snapshot.error);
           if (snapshot.error is Error) {
@@ -63,12 +59,11 @@ class _CalendarPaneState extends State<CalendarPane> {
           }
         }
         if (snapshot.hasData) {
-          final topics = snapshot.requireData.first;
-          final periods = snapshot.requireData.second;
+          final periods = snapshot.requireData;
 
           periods.sort((p1, p2) => p1.startDate.compareTo(p2.startDate));
 
-          return buildOk(context, topics, periods);
+          return buildOk(context, periods);
         } else {
           return Scaffold(
             appBar: getDefaultAppBar(context, [], [], [], false),
@@ -289,10 +284,10 @@ class _CalendarPaneState extends State<CalendarPane> {
     }
   }
 
-  Widget buildOk(
-      BuildContext context, List<Topic> topics, List<Period> periods) {
+  Widget buildOk(BuildContext context, List<Period> periods) {
     final cubit = context.watch<AppCubit>();
     final assignments = cubit.assignments;
+    final topics = cubit.topics;
     final settings = Provider.of<Settings>(context);
     if (_events == null) {
       _events = _getEvents(

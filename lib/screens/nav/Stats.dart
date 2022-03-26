@@ -24,15 +24,14 @@ import '../../cubit/app_cubit.dart';
 
 // lang: it
 
-class _Tuple3<T1, T2, T3> {
+class _Tuple2<T1, T2> {
   final T1 item1;
   final T2 item2;
-  final T3 item3;
 
-  _Tuple3(this.item1, this.item2, this.item3);
+  _Tuple2(this.item1, this.item2);
 
-  factory _Tuple3.fromList(List<dynamic> list) {
-    return _Tuple3(list[0] as T1, list[1] as T2, list[2] as T3);
+  factory _Tuple2.fromList(List<dynamic> list) {
+    return _Tuple2(list[0] as T1, list[1] as T2);
   }
 }
 
@@ -53,12 +52,11 @@ class _StatsPaneState extends State<StatsPane> {
 
   Widget _buildBody() {
     final store = Provider.of<RegistroStore>(context);
-    return FutureBuilder<_Tuple3<List<Period>, List<Absence>, List<Topic>>>(
+    return FutureBuilder<_Tuple2<List<Period>, List<Absence>>>(
       future: Future.wait(<Future<dynamic>>[
         store.periods ?? Future.value(<Period>[]),
         store.absences ?? Future.value(<Absence>[]),
-        store.topics ?? Future.value(<Topic>[]),
-      ]).then((elements) => _Tuple3.fromList(elements)),
+      ]).then((elements) => _Tuple2.fromList(elements)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return AnimatedBuilder(
@@ -75,7 +73,7 @@ class _StatsPaneState extends State<StatsPane> {
     );
   }
 
-  Widget _buildStats(_Tuple3<List<Period>, List<Absence>, List<Topic>> data) {
+  Widget _buildStats(_Tuple2<List<Period>, List<Absence>> data) {
     final cubit = context.watch<AppCubit>();
     final grades = cubit.grades;
     final settings = Provider.of<Settings>(context);

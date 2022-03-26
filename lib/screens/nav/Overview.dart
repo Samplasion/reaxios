@@ -88,6 +88,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 
   initREData() async {
     Future.wait([
+      // TODO: Convert this to cubit
       widget.session.getCurrentPeriod().then((p) => setState(() => period = p)),
     ]).then((_) => setState(() => loading = false));
   }
@@ -111,7 +112,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                 ),
               )
             : null,
-        body: loading ? LoadingUI() : _buildBody([]),
+        body: loading ? LoadingUI() : _buildBody(),
       );
     });
   }
@@ -122,12 +123,11 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     setState(() {});
   }
 
-  Widget _buildBody(
-    List<Topic> topics,
-  ) {
+  Widget _buildBody() {
     final cubit = context.watch<AppCubit>();
     final assignments = cubit.assignments;
     final grades = cubit.grades;
+    final topics = cubit.topics;
     final student = widget.student;
 
     final screenWidth = MaybeMasterDetail.of(context)?.detailWidth ??
@@ -496,17 +496,8 @@ class UserCard extends StatelessWidget {
           context.locale.overview.grades, 3),
       _buildUserStatsItem(context, cubit.assignments.length.toString(),
           context.locale.overview.assignments, 2),
-      FutureBuilder<List<Topic>>(
-        builder: (_, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(
-                context, "...", context.locale.overview.topics);
-          }
-          return _buildUserStatsItem(context, snapshot.data!.length.toString(),
-              context.locale.overview.topics, 5);
-        },
-        future: Future.sync(() => <Topic>[]),
-      ),
+      _buildUserStatsItem(context, cubit.topics.length.toString(),
+          context.locale.overview.topics, 5),
     ]
         .toRow(mainAxisAlignment: MainAxisAlignment.spaceAround)
         .padding(vertical: 10);

@@ -10,12 +10,14 @@ class AppState extends Equatable {
   final School? school;
   final List<Assignment>? assignments;
   final List<Grade>? grades;
+  final List<Topic>? topics;
 
   const AppState({
     this.axios,
     this.school,
     this.assignments,
     this.grades,
+    this.topics,
   });
 
   @override
@@ -24,6 +26,7 @@ class AppState extends Equatable {
         school,
         assignments,
         grades,
+        topics,
       ];
 
   factory AppState.empty() => AppState(school: null);
@@ -38,12 +41,14 @@ class AppState extends Equatable {
     School? school,
     List<Assignment>? assignments,
     List<Grade>? grades,
+    List<Topic>? topics,
   }) {
     return AppState(
       axios: axios ?? this.axios,
       school: school ?? this.school,
       assignments: assignments ?? this.assignments,
       grades: grades ?? this.grades,
+      topics: topics ?? this.topics,
     );
   }
 }
