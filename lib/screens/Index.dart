@@ -607,7 +607,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       );
                       return AnimatedCrossFade(
-                        crossFadeState: state.requireData < 1
+                        crossFadeState: (state.data ?? 0) < 1
                             ? CrossFadeState.showSecond
                             : CrossFadeState.showFirst,
                         firstChild: child,
