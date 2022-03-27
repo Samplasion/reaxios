@@ -14,6 +14,13 @@ class AppState extends Equatable {
   final List<ReportCard>? reportCards;
   final Structural? structural;
 
+  bool get isEmpty =>
+      assignments == null &&
+      grades == null &&
+      topics == null &&
+      reportCards == null &&
+      structural == null;
+
   const AppState({
     this.axios,
     this.school,
@@ -68,7 +75,7 @@ class AxiosConverter implements JsonConverter<Axios?, Map<String, dynamic>> {
 
   @override
   Axios? fromJson(Map<String, dynamic> json) {
-    return Axios(AxiosAccount.fromJson(json));
+    return Axios(AxiosAccount.fromJson(json), compute: compute);
   }
 
   @override

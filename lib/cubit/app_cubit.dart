@@ -1,7 +1,5 @@
 // ignore_for_file: close_sinks
 
-import 'dart:ui';
-
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -12,10 +10,10 @@ import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
+import 'package:reaxios/api/entities/School/School.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
+import 'package:reaxios/services/compute.dart';
 import 'package:rxdart/rxdart.dart';
-
-import '../api/entities/School/School.dart';
 
 part 'app_cubit.g.dart';
 part 'app_state.dart';
@@ -28,10 +26,10 @@ class AppCubit extends HydratedCubit<AppState> {
   void load() => loadingTasks.add(loadingTasks.value + 1);
   void loaded() => loadingTasks.add(loadingTasks.value - 1);
 
+  late Stream<bool> isEmpty = stream.map((state) => state.isEmpty);
+
   bool get hasAccount => state.axios?.account != null;
-
   School? get school => state.school;
-
   List<String> get subjects {
     final List<String> res = <String>[];
     topics.forEach((topic) {
@@ -62,7 +60,7 @@ class AppCubit extends HydratedCubit<AppState> {
   Future<Object?> login(AxiosAccount account) async {
     Axios axios;
     try {
-      axios = Axios(account);
+      axios = Axios(account, compute: compute);
       await axios.login();
     } catch (e) {
       return e;

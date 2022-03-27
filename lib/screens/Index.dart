@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:animations/animations.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' hide compute;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +37,7 @@ import 'package:reaxios/screens/nav/Reports.dart';
 import 'package:reaxios/screens/nav/Overview.dart';
 import 'package:reaxios/screens/nav/Stats.dart';
 import 'package:reaxios/screens/nav/Topics.dart';
+import 'package:reaxios/services/compute.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
@@ -63,7 +64,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _loading = true;
-  Axios _session = new Axios(new AxiosAccount("", "", ""));
+  Axios _session = new Axios(new AxiosAccount("", "", ""), compute: compute);
   Login _login = Login.empty();
   bool _showUserDetails = false;
 
@@ -129,7 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       // print("$school, $user, $pass");
-      _session = Axios(AxiosAccount(school, user, Encrypter.decrypt(pass)));
+      _session = Axios(AxiosAccount(school, user, Encrypter.decrypt(pass)),
+          compute: compute);
       _login = await _session.login().then((login) {
         return login;
       }).catchError((_, __) {
@@ -507,124 +509,138 @@ class _HomeScreenState extends State<HomeScreen> {
     final app = appInfo.packageInfo;
 
     _initPanes(_session, _login);
-    return UpdateScope(
-      child: Container(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0),
-          child: MaybeMasterDetail(
-            master: () {
-              final drawer = _getDrawer();
-              if (drawer == null) return null;
 
-              final child = drawer.child;
+    return BlocBuilder<AppCubit, AppState>(
+      bloc: cubit,
+      builder: (context, state) {
+        final isLoading = _loading || state.isEmpty;
+        return UpdateScope(
+          child: Container(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0),
+              child: MaybeMasterDetail(
+                master: () {
+                  if (isLoading) return null;
 
-              return Scaffold(
-                appBar: GradientAppBar(
-                  title: Text(kIsWeb ? "Registro" : app.appName),
-                ),
-                extendBodyBehindAppBar: true,
-                body: child,
-              );
-            }(),
-            detail: PageTransitionSwitcher(
-              transitionBuilder: (
-                Widget child,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-              ) {
-                if (kIsWeb)
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                return FadeThroughTransition(
-                  child: child,
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                );
-              },
-              child: Stack(
-                children: [
-                  KeyedSubtree(
-                    key: ValueKey(_selectedPane),
-                    child: Builder(
-                      builder: (BuildContext context) {
-                        return Scaffold(
-                          appBar: _drawerItems[_selectedPane][2]
-                              ? GradientAppBar(
-                                  title: _drawerItems[_selectedPane][1],
-                                  leading: MaybeMasterDetail.of(context)!
-                                          .isShowingMaster
-                                      ? null
-                                      : Builder(builder: (context) {
-                                          return IconButton(
-                                            tooltip: MaterialLocalizations.of(
-                                                    context)
-                                                .openAppDrawerTooltip,
-                                            onPressed: () =>
-                                                Scaffold.of(context)
-                                                    .openDrawer(),
-                                            icon: Icon(Icons.menu),
-                                          );
-                                        }),
-                                )
-                              : null,
-                          drawer: MaybeMasterDetail.of(context)!.isShowingMaster
-                              ? null
-                              : _getDrawer(),
-                          body: _loading
-                              ? LoadingUI(colorful: true, showHints: true)
-                              : Builder(builder: (context) {
-                                  return Actions(
-                                    actions: {
-                                      MenuIntent: CallbackAction<MenuIntent>(
-                                          onInvoke: (intent) {
-                                        Scaffold.of(context).openDrawer();
-                                        return null;
-                                      })
-                                    },
-                                    child: _panes[_selectedPane],
-                                  );
-                                }),
-                        );
-                      },
+                  final drawer = _getDrawer();
+                  if (drawer == null) return null;
+
+                  final child = drawer.child;
+
+                  return Scaffold(
+                    appBar: GradientAppBar(
+                      title: Text(kIsWeb ? "Registro" : app.appName),
                     ),
-                  ),
-                  StreamBuilder<int>(
-                    stream: cubit.loadingTasks,
-                    builder: (context, state) {
-                      final child = Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 500),
-                          padding: const EdgeInsets.all(4.0),
-                          decoration: BoxDecoration(
-                            boxShadow: kElevationToShadow[4],
-                            color: Theme.of(context).cardColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: CupertinoActivityIndicator(),
-                        ),
-                      );
-                      return AnimatedCrossFade(
-                        crossFadeState: (state.data ?? 0) < 1
-                            ? CrossFadeState.showSecond
-                            : CrossFadeState.showFirst,
-                        firstChild: child,
-                        secondChild: Opacity(
-                          opacity: 0,
-                          child: child,
-                        ),
-                        duration: Duration(milliseconds: 500),
-                      );
-                    },
-                  ),
-                ],
-                alignment: Alignment.bottomLeft,
+                    extendBodyBehindAppBar: true,
+                    body: child,
+                  );
+                }(),
+                detail: _buildDetailView(state),
               ),
             ),
           ),
-        ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailView(AppState state) {
+    final cubit = context.watch<AppCubit>();
+    final isLoading = _loading || state.isEmpty;
+    return PageTransitionSwitcher(
+      transitionBuilder: (
+        Widget child,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+      ) {
+        if (kIsWeb)
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        return FadeThroughTransition(
+          child: child,
+          animation: animation,
+          secondaryAnimation: secondaryAnimation,
+        );
+      },
+      child: Stack(
+        children: [
+          KeyedSubtree(
+            key: ValueKey(_selectedPane),
+            child: Builder(
+              builder: (BuildContext context) {
+                return Scaffold(
+                  appBar: _drawerItems[_selectedPane][2]
+                      ? GradientAppBar(
+                          title: _drawerItems[_selectedPane][1],
+                          leading: MaybeMasterDetail.of(context)!
+                                  .isShowingMaster
+                              ? null
+                              : Builder(builder: (context) {
+                                  return IconButton(
+                                    tooltip: MaterialLocalizations.of(context)
+                                        .openAppDrawerTooltip,
+                                    onPressed: () =>
+                                        Scaffold.of(context).openDrawer(),
+                                    icon: Icon(Icons.menu),
+                                  );
+                                }),
+                        )
+                      : null,
+                  drawer: MaybeMasterDetail.of(context)!.isShowingMaster ||
+                          isLoading
+                      ? null
+                      : _getDrawer(),
+                  body: isLoading
+                      ? LoadingUI(colorful: true, showHints: true)
+                      : Builder(builder: (context) {
+                          return Actions(
+                            actions: {
+                              MenuIntent: CallbackAction<MenuIntent>(
+                                  onInvoke: (intent) {
+                                Scaffold.of(context).openDrawer();
+                                return null;
+                              })
+                            },
+                            child: _panes[_selectedPane],
+                          );
+                        }),
+                );
+              },
+            ),
+          ),
+          StreamBuilder<int>(
+            stream: cubit.loadingTasks,
+            builder: (context, state) {
+              final child = Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 500),
+                  padding: const EdgeInsets.all(4.0),
+                  decoration: BoxDecoration(
+                    boxShadow: kElevationToShadow[4],
+                    color: Theme.of(context).cardColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: CupertinoActivityIndicator(),
+                ),
+              );
+              return AnimatedCrossFade(
+                crossFadeState: (state.data ?? 0) < 1
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                firstChild: child,
+                secondChild: Opacity(
+                  opacity: 0,
+                  child: child,
+                ),
+                duration: Duration(milliseconds: 500),
+              );
+            },
+          ),
+        ],
+        alignment: Alignment.bottomLeft,
       ),
     );
   }

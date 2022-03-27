@@ -19,7 +19,9 @@ import 'package:reaxios/api/enums/ReportCardSubjectKind.dart';
 import 'package:reaxios/api/utils/utils.dart';
 
 class TestAxios implements Axios {
-  TestAxios();
+  TestAxios() : super();
+
+  ComputeImpl compute = defaultCompute;
 
   @override
   void Function() get onError => () => print("error");
