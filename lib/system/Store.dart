@@ -14,8 +14,6 @@ class RegistroStore = _RegistroStore with _$RegistroStore;
 
 abstract class _RegistroStore with Store {
   @observable
-  ObservableFuture<List<Note>>? notes;
-  @observable
   ObservableFuture<List<Absence>>? absences;
   @observable
   ObservableFuture<List<Authorization>>? authorizations;
@@ -42,15 +40,6 @@ abstract class _RegistroStore with Store {
   T _successHandler<T>(T value) {
     networkError = false;
     return value;
-  }
-
-  fetchNotes(Axios session, [bool force = false]) {
-    if (notes == null || force) {
-      notes = null;
-      notes = ObservableFuture(session.getNotes())
-          .then(_successHandler)
-          .catchError(_errorHandler<List<Note>>(<Note>[]));
-    }
   }
 
   fetchAbsences(Axios session, [bool force = false]) {
@@ -87,13 +76,6 @@ abstract class _RegistroStore with Store {
           .then(_successHandler)
           .catchError(_errorHandler<List<String>>(<String>[]));
     }
-  }
-
-  @action
-  reset() {
-    notes = null;
-    networkError = false;
-    testMode = false;
   }
 
   @action

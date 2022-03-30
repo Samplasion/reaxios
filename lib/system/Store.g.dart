@@ -9,21 +9,6 @@ part of 'Store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$RegistroStore on _RegistroStore, Store {
-  final _$notesAtom = Atom(name: '_RegistroStore.notes');
-
-  @override
-  ObservableFuture<List<Note>>? get notes {
-    _$notesAtom.reportRead();
-    return super.notes;
-  }
-
-  @override
-  set notes(ObservableFuture<List<Note>>? value) {
-    _$notesAtom.reportWrite(value, super.notes, () {
-      super.notes = value;
-    });
-  }
-
   final _$absencesAtom = Atom(name: '_RegistroStore.absences');
 
   @override
@@ -149,17 +134,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
       ActionController(name: '_RegistroStore');
 
   @override
-  dynamic reset() {
-    final _$actionInfo = _$_RegistroStoreActionController.startAction(
-        name: '_RegistroStore.reset');
-    try {
-      return super.reset();
-    } finally {
-      _$_RegistroStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic notificationPayloadAction(String? payload) {
     final _$actionInfo = _$_RegistroStoreActionController.startAction(
         name: '_RegistroStore.notificationPayloadAction');
@@ -173,7 +147,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
   @override
   String toString() {
     return '''
-notes: ${notes},
 absences: ${absences},
 authorizations: ${authorizations},
 materials: ${materials},

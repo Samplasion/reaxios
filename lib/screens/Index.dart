@@ -17,6 +17,7 @@ import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
+import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
@@ -32,7 +33,6 @@ import 'package:reaxios/screens/nav/Authorizations.dart';
 import 'package:reaxios/screens/nav/Calendar.dart';
 import 'package:reaxios/screens/nav/Grades.dart';
 import 'package:reaxios/screens/nav/Materials.dart';
-import 'package:reaxios/screens/nav/Notes.dart';
 import 'package:reaxios/screens/nav/Reports.dart';
 import 'package:reaxios/screens/nav/Overview.dart';
 import 'package:reaxios/screens/nav/Stats.dart';
@@ -226,8 +226,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         BulletinsPane(session: session, store: widget.store),
-        NotesPane(session: session),
-        NoticesPane(session: session),
+        NotesPane(
+          session: session,
+          kind: NoteKind.Note,
+        ),
+        NotesPane(
+          session: session,
+          kind: NoteKind.Notice,
+        ),
         AbsencesPane(session: session),
         AuthorizationsPane(session: session),
         MaterialsPane(session: session),
@@ -303,13 +309,13 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.contact_mail),
           Text(context.locale.drawer.teacherNotes),
           true,
-          () => widget.store.fetchNotes(session, true)
+          () => cubit.loadNotes(),
         ],
         [
           Icon(Icons.perm_contact_cal),
           Text(context.locale.drawer.notices),
           true,
-          () => widget.store.fetchNotes(session, true)
+          () => cubit.loadNotes(),
         ],
         [
           Icon(Icons.no_accounts),
@@ -388,7 +394,6 @@ class _HomeScreenState extends State<HomeScreen> {
               if (!MaybeMasterDetail.of(context)!.isShowingMaster)
                 Navigator.pop(context);
               _session.student = s;
-              widget.store.reset();
               context.read<AppCubit>().clearData();
               _runCallback(0);
               setState(() {
@@ -662,7 +667,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text(MaterialLocalizations.of(context).okButtonLabel),
           onPressed: () async {
             // Refresh store
-            await widget.store.reset();
+            context.read<AppCubit>().logout();
 
             final prefs = await SharedPreferences.getInstance();
 

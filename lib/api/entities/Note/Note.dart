@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/api/interfaces/AbstractJson.dart';
@@ -6,7 +7,7 @@ import 'package:reaxios/api/utils/DateSerializer.dart';
 part 'Note.g.dart';
 
 @JsonSerializable()
-class Note implements AbstractJson {
+class Note extends Equatable implements AbstractJson {
   // num id;
   @JsonKey(name: "data")
   @DateSerializer()
@@ -95,16 +96,28 @@ class Note implements AbstractJson {
       period: "I QUADRIMESTRE",
     );
   }
+
+  @override
+  List<Object> get props => [
+        date,
+        content,
+        rawKind,
+        id,
+        subjectID,
+        subject,
+        teacher,
+        period,
+      ];
 }
 
 @JsonSerializable()
-class APINotes {
-  String idAlunno;
-  String idFrazione;
-  String descFrazione;
-  List<Note> note;
+class APINotes extends Equatable {
+  final String idAlunno;
+  final String idFrazione;
+  final String descFrazione;
+  final List<Note> note;
 
-  APINotes({
+  const APINotes({
     required this.idAlunno,
     required this.idFrazione,
     required this.descFrazione,
@@ -115,30 +128,15 @@ class APINotes {
       _$APINotesFromJson(json);
 
   Map<String, dynamic> toJson() => _$APINotesToJson(this);
+
+  @override
+  List<Object> get props => [
+        idAlunno,
+        idFrazione,
+        descFrazione,
+        note,
+      ];
 }
-
-// @JsonSerializable()
-// class BulletinAttachment {
-//   @JsonKey(name: "tipo")
-//   @BulletinAttachmentKindSerializer()
-//   BulletinAttachmentKind kind;
-//   @JsonKey(name: "URL")
-//   String url;
-//   String? desc;
-//   String? sourceName;
-
-//   BulletinAttachment({
-//     required this.kind,
-//     required this.url,
-//     required this.desc,
-//     required this.sourceName,
-//   });
-
-//   factory BulletinAttachment.fromJson(Map<String, dynamic> json) =>
-//       _$BulletinAttachmentFromJson(json);
-
-//   Map<String, dynamic> toJson() => _$BulletinAttachmentToJson(this);
-// }
 
 class NoteKindSerializer implements JsonConverter<NoteKind, String> {
   const NoteKindSerializer();
@@ -165,29 +163,3 @@ class NoteKindSerializer implements JsonConverter<NoteKind, String> {
     }
   }
 }
-
-// class BulletinAttachmentKindSerializer
-//     implements JsonConverter<BulletinAttachmentKind, String> {
-//   const BulletinAttachmentKindSerializer();
-
-//   @override
-//   BulletinAttachmentKind fromJson(String json) {
-//     switch ("$json".toUpperCase()) {
-//       case "1":
-//         return BulletinAttachmentKind.File;
-//       case "O":
-//       default:
-//         return BulletinAttachmentKind.Other;
-//     }
-//   }
-
-//   @override
-//   String toJson(BulletinAttachmentKind b) {
-//     switch (b) {
-//       case BulletinAttachmentKind.File:
-//         return "1";
-//       case BulletinAttachmentKind.Other:
-//         return "O";
-//     }
-//   }
-// }

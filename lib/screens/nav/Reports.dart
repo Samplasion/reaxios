@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/api/enums/NoteKind.dart';
@@ -7,25 +9,40 @@ import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/ListItems/NoteListItem.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import "package:styled_widget/styled_widget.dart";
 
-class NoticesPane extends StatefulWidget {
-  NoticesPane({
+class NotesPane extends StatefulWidget {
+  NotesPane({
     Key? key,
     required this.session,
+    required this.kind,
   }) : super(key: key);
 
   final Axios session;
+  final NoteKind kind;
 
   @override
-  _NoticesPaneState createState() => _NoticesPaneState();
+  _NotesPaneState createState() => _NotesPaneState();
 }
 
-class _NoticesPaneState extends State<NoticesPane> {
+class _NotesPaneState extends State<NotesPane> {
   final ScrollController controller = ScrollController();
+  final RefreshController refreshController = RefreshController(
+    initialRefresh: false,
+  );
+
+  _refresh() {
+    try {
+      context.read<AppCubit>().loadNotes();
+      refreshController.refreshCompleted();
+    } catch (e) {
+      refreshController.refreshFailed();
+    }
+  }
 
   Map<String, List<Note>> splitNotices(List<Note> notices) {
     return notices.fold(new Map(), (map, note) {
@@ -41,22 +58,18 @@ class _NoticesPaneState extends State<NoticesPane> {
 
   @override
   Widget build(BuildContext context) {
-    RegistroStore store = Provider.of<RegistroStore>(context);
-    return FutureBuilder<List<Note>>(
-      future: store.notes ?? Future.value([]),
-      initialData: [],
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.hasError) return Text("${snapshot.error}");
-        if (snapshot.hasData && snapshot.data!.isNotEmpty)
-          return buildOk(context, snapshot.data!.reversed.toList());
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (BuildContext context, state) {
+        if (state.notes != null)
+          return buildOk(context, state.notes!.reversed.toList());
 
         return LoadingUI();
       },
     );
   }
 
-  Widget buildOk(BuildContext context, List<Note> notices) {
-    notices = notices.where((n) => n.kind == NoteKind.Notice).toList();
+  Widget buildOk(BuildContext context, List<Note> rawNotices) {
+    final notices = rawNotices.where((n) => n.kind == widget.kind).toList();
     final map = splitNotices(notices);
     final entries = map.entries.toList();
 
@@ -67,7 +80,9 @@ class _NoticesPaneState extends State<NoticesPane> {
       );
     }
 
-    return Container(
+    return SmartRefresher(
+      controller: refreshController,
+      onRefresh: _refresh,
       child: ListView.separated(
         shrinkWrap: true,
         separatorBuilder: (_a, _b) => Divider(),

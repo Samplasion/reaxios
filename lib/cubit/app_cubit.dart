@@ -9,6 +9,7 @@ import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
+import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/School/School.dart';
@@ -52,6 +53,7 @@ class AppCubit extends HydratedCubit<AppState> {
   List<Topic> get topics => state.topics ?? [];
   List<ReportCard> get reportCards => state.reportCards ?? [];
   List<Bulletin> get bulletins => state.bulletins ?? [];
+  List<Note> get notes => state.notes ?? [];
 
   Structural? get structural => state.structural;
   List<Period> get periods => structural?.periods[0].periods ?? [];
@@ -120,6 +122,13 @@ class AppCubit extends HydratedCubit<AppState> {
     await loadObject(() async {
       final bulletins = await state.axios!.getBulletins();
       emit(state.copyWith(bulletins: bulletins));
+    });
+  }
+
+  Future<void> loadNotes() async {
+    await loadObject(() async {
+      final notes = await state.axios!.getNotes();
+      emit(state.copyWith(notes: notes));
     });
   }
 
