@@ -4,12 +4,8 @@ import 'package:mobx/mobx.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/api/entities/Authorization/Authorization.dart';
-import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
 import 'package:reaxios/api/entities/Note/Note.dart';
-import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
-import 'package:reaxios/api/entities/Structural/Structural.dart';
-import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 
 part 'Store.g.dart';
@@ -17,8 +13,6 @@ part 'Store.g.dart';
 class RegistroStore = _RegistroStore with _$RegistroStore;
 
 abstract class _RegistroStore with Store {
-  @observable
-  ObservableFuture<List<Bulletin>>? bulletins;
   @observable
   ObservableFuture<List<Note>>? notes;
   @observable
@@ -48,15 +42,6 @@ abstract class _RegistroStore with Store {
   T _successHandler<T>(T value) {
     networkError = false;
     return value;
-  }
-
-  fetchBulletins(Axios session, [bool force = false]) {
-    if (bulletins == null || force) {
-      bulletins = null;
-      bulletins = ObservableFuture(session.getBulletins())
-          .then(_successHandler)
-          .catchError(_errorHandler<List<Bulletin>>(<Bulletin>[]));
-    }
   }
 
   fetchNotes(Axios session, [bool force = false]) {
@@ -106,7 +91,7 @@ abstract class _RegistroStore with Store {
 
   @action
   reset() {
-    bulletins = notes = null;
+    notes = null;
     networkError = false;
     testMode = false;
   }

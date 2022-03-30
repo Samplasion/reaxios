@@ -9,21 +9,6 @@ part of 'Store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$RegistroStore on _RegistroStore, Store {
-  final _$bulletinsAtom = Atom(name: '_RegistroStore.bulletins');
-
-  @override
-  ObservableFuture<List<Bulletin>>? get bulletins {
-    _$bulletinsAtom.reportRead();
-    return super.bulletins;
-  }
-
-  @override
-  set bulletins(ObservableFuture<List<Bulletin>>? value) {
-    _$bulletinsAtom.reportWrite(value, super.bulletins, () {
-      super.bulletins = value;
-    });
-  }
-
   final _$notesAtom = Atom(name: '_RegistroStore.notes');
 
   @override
@@ -188,7 +173,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
   @override
   String toString() {
     return '''
-bulletins: ${bulletins},
 notes: ${notes},
 absences: ${absences},
 authorizations: ${authorizations},

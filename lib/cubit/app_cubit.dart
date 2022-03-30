@@ -7,6 +7,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
+import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
@@ -50,6 +51,8 @@ class AppCubit extends HydratedCubit<AppState> {
   List<Grade> get grades => state.grades ?? [];
   List<Topic> get topics => state.topics ?? [];
   List<ReportCard> get reportCards => state.reportCards ?? [];
+  List<Bulletin> get bulletins => state.bulletins ?? [];
+
   Structural? get structural => state.structural;
   List<Period> get periods => structural?.periods[0].periods ?? [];
   Period? get currentPeriod =>
@@ -86,35 +89,42 @@ class AppCubit extends HydratedCubit<AppState> {
   }
 
   Future<void> loadAssignments() async {
-    loadObject(() async {
+    await loadObject(() async {
       final assignments = await state.axios!.getAssignments();
       emit(state.copyWith(assignments: assignments));
     });
   }
 
   Future<void> loadGrades() async {
-    loadObject(() async {
+    await loadObject(() async {
       final grades = await state.axios!.getGrades();
       emit(state.copyWith(grades: grades));
     });
   }
 
   Future<void> loadTopics() async {
-    loadObject(() async {
+    await loadObject(() async {
       final topics = await state.axios!.getTopics();
       emit(state.copyWith(topics: topics));
     });
   }
 
   Future<void> loadReportCards() async {
-    loadObject(() async {
+    await loadObject(() async {
       final reportCards = await state.axios!.getReportCards();
       emit(state.copyWith(reportCards: reportCards));
     });
   }
 
+  Future<void> loadBulletins() async {
+    await loadObject(() async {
+      final bulletins = await state.axios!.getBulletins();
+      emit(state.copyWith(bulletins: bulletins));
+    });
+  }
+
   Future<void> loadStructural() async {
-    loadObject(() async {
+    await loadObject(() async {
       final structural = await state.axios!.getStructural();
       emit(state.copyWith(structural: structural));
     });

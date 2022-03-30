@@ -199,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Builder(
-          builder: (_) => GradesPane(
+          builder: (context) => GradesPane(
             session: session,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
             store: widget.store,
@@ -297,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.mail),
           Text(context.locale.drawer.secretary),
           true,
-          () => widget.store.fetchBulletins(session)
+          () => cubit.loadBulletins(),
         ],
         [
           Icon(Icons.contact_mail),

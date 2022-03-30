@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/enums/BulletinAttachmentKind.dart';
@@ -11,6 +12,7 @@ import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
@@ -74,8 +76,9 @@ class BulletinView extends StatelessWidget {
       if (!bulletin.read)
         ElevatedButton(
           onPressed: () {
+            final cubit = context.read<AppCubit>();
             axios.markBulletinAsRead(bulletin).then((_) {
-              store.fetchBulletins(axios, true);
+              cubit.loadBulletins();
               if (reload != null) reload!();
               Navigator.pop(context);
 

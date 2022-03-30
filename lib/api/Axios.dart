@@ -618,7 +618,7 @@ class Axios {
     return res.toSet().toList();
   }
 
-  Future<void> markBulletinAsRead(Bulletin bulletin) async {
+  Future<Bulletin> markBulletinAsRead(Bulletin bulletin) async {
     String result = await this._makeAuthenticatedCall(
       "APP_PROCESS_QUEUE",
       (_any) => "$_any",
@@ -627,7 +627,9 @@ class Axios {
       "COMUNICAZIONI_READ",
     );
 
-    bulletin.read = result.toString().contains("ok");
+    return bulletin.copyWith(
+      read: result.toString().contains("ok"),
+    );
   }
 
   Future<void> markGradeAsRead(Grade grade) async {

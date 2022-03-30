@@ -330,7 +330,7 @@ class TestAxios implements Axios {
   }
 
   @override
-  Future<void> markBulletinAsRead(Bulletin bulletin) async {}
+  Future<Bulletin> markBulletinAsRead(Bulletin bulletin) async => bulletin;
 
   @override
   Future<void> markGradeAsRead(Grade grade) async {}
