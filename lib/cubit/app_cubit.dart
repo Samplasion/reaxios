@@ -141,6 +141,13 @@ class AppCubit extends HydratedCubit<AppState> {
     });
   }
 
+  Future<void> loadSubjects() async {
+    await loadObject(() async {
+      await loadTopics();
+      await loadAssignments();
+    });
+  }
+
   Future<void> loadStructural() async {
     await loadObject(() async {
       final structural = await state.axios!.getStructural();

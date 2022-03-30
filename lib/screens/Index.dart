@@ -274,7 +274,9 @@ class _HomeScreenState extends State<HomeScreen> {
           () {
             cubit.loadGrades();
             cubit.loadStructural();
-            widget.store.fetchSubjects(session);
+            // Subsitute for store.fetchSubjects()
+            cubit.loadTopics();
+            cubit.loadAssignments();
           }
         ],
         [
@@ -284,7 +286,9 @@ class _HomeScreenState extends State<HomeScreen> {
           () {
             cubit.loadGrades();
             cubit.loadStructural();
-            widget.store.fetchSubjects(session);
+            // Subsitute for store.fetchSubjects()
+            cubit.loadTopics();
+            cubit.loadAssignments();
           }
         ],
         [

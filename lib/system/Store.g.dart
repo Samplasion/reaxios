@@ -39,21 +39,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
     });
   }
 
-  final _$subjectsAtom = Atom(name: '_RegistroStore.subjects');
-
-  @override
-  ObservableFuture<List<String>>? get subjects {
-    _$subjectsAtom.reportRead();
-    return super.subjects;
-  }
-
-  @override
-  set subjects(ObservableFuture<List<String>>? value) {
-    _$subjectsAtom.reportWrite(value, super.subjects, () {
-      super.subjects = value;
-    });
-  }
-
   final _$payloadControllerAtom =
       Atom(name: '_RegistroStore.payloadController');
 
@@ -134,7 +119,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
     return '''
 authorizations: ${authorizations},
 materials: ${materials},
-subjects: ${subjects},
 payloadController: ${payloadController},
 gradeDisplay: ${gradeDisplay},
 testMode: ${testMode},

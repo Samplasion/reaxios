@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/average.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
@@ -56,34 +57,10 @@ class _CalculatorPaneState extends State<CalculatorPane>
 
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<RegistroStore>(context);
-    return FutureBuilder<List<dynamic>>(
-      future: Future.wait([
-        store.subjects as Future,
-      ]),
-      initialData: [<String>[], null],
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasError)
-          return Scaffold(
-            appBar: GradientAppBar(
-              title: Text(context.locale.drawer.grades),
-            ),
-            body: Text(
-              "${snapshot.error}\n${snapshot is Error ? snapshot.stackTrace : ""}",
-            ),
-          );
-        if (!(snapshot.hasData &&
-            snapshot.data!.isNotEmpty &&
-            (snapshot.connectionState == ConnectionState.done))) {
-          return Scaffold(
-            appBar: GradientAppBar(
-              title: Text(context.locale.drawer.calculator),
-            ),
-            body: LoadingUI(),
-          );
-        }
-
-        final subjects = snapshot.data![0] as List<String>? ?? [];
+    final cubit = context.read<AppCubit>();
+    return BlocBuilder<AppCubit, AppState>(
+      bloc: cubit,
+      builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: GradientAppBar(
             title: Text(context.locale.drawer.calculator),
@@ -115,7 +92,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
                 borderRadius: BorderRadius.circular(15),
               ),
               onPressed: () => _showFabDialog(
-                  subjects, context.read<AppCubit>().currentPeriod),
+                  cubit.subjects, context.read<AppCubit>().currentPeriod),
               child: Icon(Icons.add),
             ),
           ),
