@@ -4,6 +4,7 @@ import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/components/ListItems/AbsenceListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 
@@ -58,9 +59,10 @@ class AbsenceView extends StatelessWidget {
       if (absence.isJustifiable && !absence.isJustified)
         ElevatedButton(
           onPressed: () {
+            final cubit = context.read<AppCubit>();
             absence.justify().then((justified) {
               if (justified) {
-                store.fetchAbsences(axios, true);
+                cubit.loadAbsences();
                 if (reload != null) reload!();
                 Navigator.pop(context);
 

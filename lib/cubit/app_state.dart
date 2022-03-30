@@ -14,6 +14,7 @@ class AppState extends Equatable {
   final List<ReportCard>? reportCards;
   final List<Bulletin>? bulletins;
   final List<Note>? notes;
+  final List<Absence>? absences;
   final Structural? structural;
 
   bool get isEmpty =>
@@ -23,6 +24,7 @@ class AppState extends Equatable {
       reportCards == null &&
       bulletins == null &&
       notes == null &&
+      absences == null &&
       structural == null;
 
   const AppState({
@@ -34,6 +36,7 @@ class AppState extends Equatable {
     this.reportCards,
     this.bulletins,
     this.notes,
+    this.absences,
     this.structural,
   });
 
@@ -47,6 +50,7 @@ class AppState extends Equatable {
         reportCards,
         bulletins,
         notes,
+        absences,
         structural,
       ];
 
@@ -66,6 +70,7 @@ class AppState extends Equatable {
     List<ReportCard>? reportCards,
     List<Bulletin>? bulletins,
     List<Note>? notes,
+    List<Absence>? absences,
     Structural? structural,
   }) {
     return AppState(
@@ -77,6 +82,7 @@ class AppState extends Equatable {
       reportCards: reportCards ?? this.reportCards,
       bulletins: bulletins ?? this.bulletins,
       notes: notes ?? this.notes,
+      absences: absences ?? this.absences,
       structural: structural ?? this.structural,
     );
   }

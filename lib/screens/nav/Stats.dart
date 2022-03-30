@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_cast, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
@@ -51,19 +52,15 @@ class _StatsPaneState extends State<StatsPane> {
   }
 
   Widget _buildBody() {
-    final store = Provider.of<RegistroStore>(context);
-    return FutureBuilder<List<Absence>>(
-      future: store.absences ?? Future.value(<Absence>[]),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) {
+        if (state.absences != null) {
           return AnimatedBuilder(
             animation: Provider.of<Settings>(context),
             builder: (BuildContext context, Widget? child) {
               return _buildStats();
             },
           );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
         }
         return Center(child: CircularProgressIndicator());
       },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
@@ -9,6 +10,7 @@ import 'package:reaxios/components/Utilities/Alert.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -53,16 +55,9 @@ class _AbsencesPaneState extends State<AbsencesPane> {
       ).padding(horizontal: 16);
     }
 
-    return FutureBuilder<List<Absence>>(
-      future: store.absences ?? Future.value([]),
-      initialData: [],
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.hasError) {
-          print(snapshot.stackTrace);
-          return Text("${snapshot.error}");
-        }
-        if (snapshot.hasData && snapshot.data!.isNotEmpty)
-          return buildOk(context, snapshot.data!);
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (BuildContext context, state) {
+        if (state.absences != null) return buildOk(context, state.absences!);
 
         return LoadingUI();
       },
@@ -81,6 +76,7 @@ class _AbsencesPaneState extends State<AbsencesPane> {
       );
     }
 
+    // TODO: Convert to Scaffold + SliverList
     return Container(
       child: SingleChildScrollView(
         controller: controller,

@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
@@ -10,7 +11,7 @@ import 'package:reaxios/api/utils/utils.dart';
 part 'Absence.g.dart';
 
 @JsonSerializable()
-class Absence implements AbstractJson {
+class Absence extends Equatable implements AbstractJson {
   // num id;
   String id;
 
@@ -146,10 +147,27 @@ class Absence implements AbstractJson {
       period: "I QUADRIMESTRE",
     );
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        date,
+        rawReason,
+        kind,
+        kindJustified,
+        concurs,
+        hasTime,
+        isJustifiable,
+        rawDateJustified,
+        lessonHour,
+        rawKind,
+        rawKindJustified,
+        period,
+      ];
 }
 
 @JsonSerializable()
-class APIAbsences {
+class APIAbsences extends Equatable {
   String idAlunno;
   String idFrazione;
   String descFrazione;
@@ -166,28 +184,12 @@ class APIAbsences {
       _$APIAbsencesFromJson(json);
 
   Map<String, dynamic> toJson() => _$APIAbsencesToJson(this);
+
+  @override
+  List<Object?> get props => [
+        idAlunno,
+        idFrazione,
+        descFrazione,
+        assenze,
+      ];
 }
-
-// class AbsenceKindSerializer implements JsonConverter<AbsenceKind, String> {
-//   const AbsenceKindSerializer();
-
-//   @override
-//   AbsenceKind fromJson(String json) {
-//     switch ("$json".toUpperCase()) {
-//       case "C":
-//         return AbsenceKind.Absence;
-//       default:
-//         return AbsenceKind.Notice;
-//     }
-//   }
-
-//   @override
-//   String toJson(AbsenceKind b) {
-//     switch (b) {
-//       case AbsenceKind.Notice:
-//         return "N";
-//       case AbsenceKind.Absence:
-//         return "C";
-//     }
-//   }
-// }

@@ -321,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.no_accounts),
           Text(context.locale.drawer.absences),
           true,
-          () => widget.store.fetchAbsences(session, true)
+          () => cubit.loadAbsences()
         ],
         [
           Icon(Icons.edit),
@@ -340,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.stats),
           true,
           () {
-            widget.store.fetchAbsences(session);
+            cubit.loadAbsences();
             cubit.loadGrades();
             cubit.loadStructural();
             cubit.loadTopics();
