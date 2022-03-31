@@ -397,9 +397,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Drawer? _getDrawer() {
-    // final width = MediaQuery.of(context).size.width;
-    if (_loading) return null;
+  Drawer? _getDrawer(bool loading) {
+    if (loading) return null;
 
     return Drawer(
       child: Column(
@@ -516,7 +515,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 master: () {
                   if (isLoading) return null;
 
-                  final drawer = _getDrawer();
+                  final drawer = _getDrawer(isLoading);
                   if (drawer == null) return null;
 
                   final child = drawer.child;
@@ -582,10 +581,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }),
                         )
                       : null,
-                  drawer: MaybeMasterDetail.of(context)!.isShowingMaster ||
-                          isLoading
+                  drawer: MaybeMasterDetail.of(context)!.isShowingMaster
                       ? null
-                      : _getDrawer(),
+                      : _getDrawer(isLoading),
                   body: isLoading
                       ? LoadingUI(colorful: true, showHints: true)
                       : Builder(builder: (context) {
