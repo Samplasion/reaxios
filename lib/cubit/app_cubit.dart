@@ -173,6 +173,10 @@ class AppCubit extends HydratedCubit<AppState> {
     });
   }
 
+  void setTestMode(bool testMode) {
+    emit(state.copyWith(testMode: testMode));
+  }
+
   logout() {
     emit(AppState.empty());
   }

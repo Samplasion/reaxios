@@ -199,9 +199,8 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
         : toReachAverage(grades.map((g) => [g.grade, g.weight]).toList(), n, s)
             .toDouble();
 
-    // TODO: Grade display
     final GradeAlertBoundaries bounds =
-        GradeAlertBoundaries.get(/* store.gradeDisplay */ GradeDisplay.letter);
+        GradeAlertBoundaries.get(settings.getGradeDisplay());
 
     if (thisSubjectObjective != null) {
       if (periodAvg < thisSubjectObjective.objective) {

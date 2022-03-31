@@ -9,6 +9,7 @@ import 'package:reaxios/generated/locale_base.dart';
 import 'dart:math';
 
 import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
 
 import 'cubit/app_cubit.dart';
 import 'enums/AverageMode.dart';
@@ -306,9 +307,8 @@ extension ContextUtils on BuildContext {
     bool round = true,
     bool showAsNumber = false,
   }) {
-    // TODO: Grade display
-    final cubit = read<AppCubit>();
-    final gradeDisplay = GradeDisplay.letter;
+    final settings = read<Settings>();
+    final gradeDisplay = settings.getGradeDisplay();
     switch (gradeDisplay) {
       case GradeDisplay.letter:
         // Edit: It sucks less, but still...

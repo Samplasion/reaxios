@@ -22,6 +22,7 @@ import 'package:reaxios/screens/Loading.dart';
 import 'package:reaxios/screens/Login.dart';
 import 'package:reaxios/screens/NoInternet.dart';
 import 'package:reaxios/screens/Settings.dart';
+import 'package:reaxios/services/notifications.dart';
 import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
@@ -83,8 +84,7 @@ void main() async {
 
   if (Platform.isAndroid) {
     android_service
-        // TODO: ...this?
-        .initializeNotifications((payload) => print)
+        .initializeNotifications((pload) => notificationsSubject.add(pload))
         .then((_) => android_service.startNotificationServices());
   }
 
@@ -121,10 +121,6 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
   Widget build(BuildContext context) {
     final settings = Provider.of<timetable.Settings>(context);
     final themeMode = settings.getThemeMode();
-
-    // TODO: Grade display
-    // store.gradeDisplay = deserializeGradeDisplay(
-    //     S.Settings.getValue("grade-display", "decimal"));
 
     // final primary = cs.fromJson(
     //   S.Settings.getValue("primary-color", cs.toJson(Colors.orange[400])),

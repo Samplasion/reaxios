@@ -438,7 +438,7 @@ class _LoginScreenState extends State<LoginScreen> {
             IconButton(
               icon: Icon(Icons.science),
               onPressed: () {
-                // TODO: Test mode
+                context.read<AppCubit>().setTestMode(true);
                 _onDone();
               },
             ),

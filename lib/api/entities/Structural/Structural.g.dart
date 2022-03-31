@@ -22,7 +22,7 @@ Structural _$StructuralFromJson(Map<String, dynamic> json) => Structural(
       periods: (json['frazioniTemporali'] as List<dynamic>)
           .map((e) => Periods.fromJson(e as Map<String, dynamic>))
           .toList(),
-      absenceReasons: json['absenceReasons'] as List<dynamic>,
+      absenceReasons: json['absenceReasons'] as List<dynamic>? ?? const [],
     );
 
 Map<String, dynamic> _$StructuralToJson(Structural instance) =>

@@ -591,7 +591,7 @@ class Axios {
               ...e.permessiAutorizzati
             ].map((auth) => auth
                 .setSession(this)
-                .setPeriod(periods.getCurrentPeriod()?.desc ?? "")
+                .setPeriod(periods.getCurrentPeriod(auth.startDate)?.desc ?? "")
                 .setKinds(structural)))
         .expand((i) => i)
         .toList()

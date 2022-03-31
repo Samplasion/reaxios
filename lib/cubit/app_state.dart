@@ -5,6 +5,8 @@ class AppState extends Equatable {
   @override
   final bool? stringify = true;
 
+  final bool testMode;
+
   @AxiosConverter()
   final Axios? axios;
   final School? school;
@@ -32,6 +34,7 @@ class AppState extends Equatable {
       structural == null;
 
   const AppState({
+    required this.testMode,
     this.axios,
     this.school,
     this.assignments,
@@ -48,6 +51,7 @@ class AppState extends Equatable {
 
   @override
   List<Object?> get props => [
+        testMode,
         axios,
         school,
         assignments,
@@ -62,7 +66,7 @@ class AppState extends Equatable {
         structural,
       ];
 
-  factory AppState.empty() => AppState(school: null);
+  factory AppState.empty() => AppState(testMode: false, school: null);
 
   factory AppState.fromJson(Map<String, dynamic> json) =>
       _$AppStateFromJson(json);
@@ -70,6 +74,7 @@ class AppState extends Equatable {
   Map<String, dynamic> toJson() => _$AppStateToJson(this);
 
   AppState copyWith({
+    bool? testMode,
     Axios? axios,
     School? school,
     List<Assignment>? assignments,
@@ -84,6 +89,7 @@ class AppState extends Equatable {
     Structural? structural,
   }) {
     return AppState(
+      testMode: testMode ?? this.testMode,
       axios: axios ?? this.axios,
       school: school ?? this.school,
       assignments: assignments ?? this.assignments,

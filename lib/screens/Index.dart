@@ -102,8 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // StreamSubscription? _subscription;
 
   void _initSession() async {
-    // TODO: Test mode
-    if (! /* store.testMode */ false) {
+    final cubit = context.read<AppCubit>();
+    if (!cubit.state.testMode) {
       final prefs = await SharedPreferences.getInstance();
       final school = prefs.getString("school")!;
       final user = prefs.getString("user")!;

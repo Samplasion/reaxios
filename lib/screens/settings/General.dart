@@ -58,8 +58,6 @@ class GeneralSettings extends BaseSettings {
         onChange: (dynamic value) {
           print("Value changed: $value");
           settings.setGradeDisplay(deserializeGradeDisplay(value));
-          // TODO: Grade display
-          // store.gradeDisplay = deserializeGradeDisplay(value);
         },
       ),
       RadioModalTile(

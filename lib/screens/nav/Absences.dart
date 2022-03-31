@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
@@ -11,7 +12,7 @@ import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils.dart';
-import 'package:sticky_headers/sticky_headers.dart';
+// import 'package:sticky_headers/sticky_headers.dart';
 import "package:styled_widget/styled_widget.dart";
 
 class AbsencesPane extends StatefulWidget {
@@ -53,18 +54,12 @@ class _AbsencesPaneState extends State<AbsencesPane> {
 
     return BlocBuilder<AppCubit, AppState>(
       builder: (BuildContext context, state) {
-        if (state.absences != null) return buildOk(context, state.absences!);
-
-        return LoadingUI();
+        return buildOk(context, state.absences ?? []);
       },
     );
   }
 
   Widget buildOk(BuildContext context, List<Absence> absences) {
-    // absences = absences.where((n) => n.kind == NoteKind.Absence).toList();
-    final map = splitAbsences(absences);
-    final entries = map.entries.toList();
-
     if (absences.isEmpty) {
       return EmptyUI(
         icon: Icons.no_accounts_outlined,
@@ -72,73 +67,60 @@ class _AbsencesPaneState extends State<AbsencesPane> {
       );
     }
 
-    // TODO: Convert to Scaffold + SliverList
-    return Container(
-      child: SingleChildScrollView(
-        controller: controller,
-        child: Column(
-          children: [
-            Center(
+    final map = splitAbsences(absences);
+    final entries = map.entries;
+
+    final slivers = <Widget>[
+      SliverToBoxAdapter(
+        child: Center(
+          child: MaxWidthContainer(
+            child: Alert(
+              title: context.locale.absences.sectionAlertTitle,
+              color: Colors.orange,
+              text:
+                  MarkdownBody(data: context.locale.absences.sectionAlertBody),
+            ),
+          ),
+        ).padding(horizontal: 16, top: 16),
+      ),
+      for (final MapEntry<String, List<Absence>> entry in entries) ...[
+        SliverStickyHeader(
+          header: Container(
+            height: 50.0,
+            color: Theme.of(context).canvasColor,
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            alignment: Alignment.centerLeft,
+            child: Center(
               child: MaxWidthContainer(
-                child: Alert(
-                  title: context.locale.absences.sectionAlertTitle,
-                  color: Colors.orange,
-                  text: MarkdownBody(
-                      data: context.locale.absences.sectionAlertBody),
+                child: Text(
+                  entry.key,
+                  style: Theme.of(context).textTheme.caption,
                 ),
               ),
-            ).padding(horizontal: 16, top: 16),
-            ListView.separated(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              separatorBuilder: (_a, _b) => Divider(),
-              itemBuilder: (context, i) {
-                return StickyHeader(
-                  header: Container(
-                    height: 50.0,
-                    color: Theme.of(context).canvasColor,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    alignment: Alignment.centerLeft,
-                    child: Center(
-                      child: MaxWidthContainer(
-                        child: Text(
-                          entries[i].key,
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                      ),
+            ),
+          ),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, i) => Hero(
+                tag: entry.value[i].toString(),
+                child: Center(
+                  child: MaxWidthContainer(
+                    child: AbsenceListItem(
+                      absence: entry.value[i],
+                      session: widget.session,
                     ),
                   ),
-                  content: Padding(
-                    padding: i == entries.length - 1
-                        ? EdgeInsets.only(bottom: 16)
-                        : EdgeInsets.zero,
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, i1) {
-                        final e = entries[i].value[i1];
-                        return Hero(
-                          tag: e.toString(),
-                          child: Center(
-                            child: MaxWidthContainer(
-                              child: AbsenceListItem(
-                                absence: e,
-                                session: widget.session,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      itemCount: entries[i].value.length,
-                      shrinkWrap: true,
-                    ).paddingDirectional(horizontal: 16),
-                  ),
-                );
-              },
-              itemCount: entries.length,
+                ),
+              ).paddingDirectional(horizontal: 16),
+              childCount: entry.value.length,
             ),
-          ],
-        ),
-      ),
+          ),
+        )
+      ],
+    ];
+
+    return Scaffold(
+      body: CustomScrollView(controller: controller, slivers: slivers),
     );
   }
 }
