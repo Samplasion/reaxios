@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
@@ -11,7 +10,6 @@ import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import "package:styled_widget/styled_widget.dart";
@@ -45,8 +43,6 @@ class _AbsencesPaneState extends State<AbsencesPane> {
 
   @override
   Widget build(BuildContext context) {
-    RegistroStore store = Provider.of<RegistroStore>(context);
-
     if (widget.session.student?.securityBits[SecurityBits.hideAbsences] ==
         "1") {
       return EmptyUI(

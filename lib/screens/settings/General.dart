@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:reaxios/screens/settings/base.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 
@@ -13,7 +11,6 @@ class GeneralSettings extends BaseSettings {
 
   @override
   List<SettingsTile> getTiles(BuildContext context, Settings settings) {
-    final store = Provider.of<RegistroStore>(context);
     return [
       SettingsHeaderTile(
         title: Text(context.locale.generalSettings.groupsColorsTitle),
@@ -61,7 +58,8 @@ class GeneralSettings extends BaseSettings {
         onChange: (dynamic value) {
           print("Value changed: $value");
           settings.setGradeDisplay(deserializeGradeDisplay(value));
-          store.gradeDisplay = deserializeGradeDisplay(value);
+          // TODO: Grade display
+          // store.gradeDisplay = deserializeGradeDisplay(value);
         },
       ),
       RadioModalTile(

@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
-import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Views/MaterialTeacherView.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -30,7 +27,6 @@ class MaterialsPane extends StatefulWidget {
 }
 
 class _MaterialsPaneState extends State<MaterialsPane> {
-  RegistroStore get store => Provider.of<RegistroStore>(context, listen: false);
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   String _selectedTeacher = "";

@@ -19,7 +19,7 @@ import '../../components/Utilities/AlertBottomSheet.dart';
 import '../../components/Utilities/BoldText.dart';
 import '../../components/Utilities/GradeAvatar.dart';
 import '../../components/Utilities/GradeText.dart';
-import '../../system/Store.dart';
+
 import '../../utils.dart';
 
 class CalculatorPane extends StatefulWidget {

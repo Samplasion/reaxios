@@ -23,7 +23,6 @@ import 'package:reaxios/screens/Login.dart';
 import 'package:reaxios/screens/NoInternet.dart';
 import 'package:reaxios/screens/Settings.dart';
 import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
@@ -55,8 +54,6 @@ void main() async {
   final timetable.Settings settings = timetable.Settings();
   await settings.init();
 
-  RegistroStore registroStore = RegistroStore();
-
   HttpOverrides.global = MyHttpOverrides();
   await S.Settings.init();
 
@@ -71,7 +68,6 @@ void main() async {
         child: MultiProvider(
           child: RegistroElettronicoApp(),
           providers: [
-            Provider(create: (_) => registroStore),
             Provider(
                 create: (_) => AppInfoStore()..getPackageInfo(), lazy: false),
             ChangeNotifierProvider(create: (_) => timetable.Store()),
@@ -87,8 +83,8 @@ void main() async {
 
   if (Platform.isAndroid) {
     android_service
-        .initializeNotifications(
-            (payload) => registroStore.notificationPayloadAction(payload))
+        // TODO: ...this?
+        .initializeNotifications((payload) => print)
         .then((_) => android_service.startNotificationServices());
   }
 
@@ -126,10 +122,9 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
     final settings = Provider.of<timetable.Settings>(context);
     final themeMode = settings.getThemeMode();
 
-    var store = Provider.of<RegistroStore>(context);
-
-    store.gradeDisplay = deserializeGradeDisplay(
-        S.Settings.getValue("grade-display", "decimal"));
+    // TODO: Grade display
+    // store.gradeDisplay = deserializeGradeDisplay(
+    //     S.Settings.getValue("grade-display", "decimal"));
 
     // final primary = cs.fromJson(
     //   S.Settings.getValue("primary-color", cs.toJson(Colors.orange[400])),
@@ -282,10 +277,10 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
                         refreshingText: context.locale.main.refreshingText,
                         failedText: context.locale.main.failedText,
                       ),
-                      child: HomeScreen(store: store),
+                      child: HomeScreen(),
                     ),
                   ),
-              "login": (_) => LoginScreen(store: store),
+              "login": (_) => LoginScreen(),
               "loading": (_) => LoadingScreen(),
               "settings": (_) => SettingsScreen(),
               "nointernet": (_) => NoInternetScreen(),

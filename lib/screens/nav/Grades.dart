@@ -26,7 +26,6 @@ import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/GradeSubjectView.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -36,13 +35,11 @@ class GradesPane extends StatefulWidget {
     Key? key,
     required this.session,
     required this.openMainDrawer,
-    required this.store,
     this.period,
   }) : super(key: key);
 
   final Axios session;
   final Function() openMainDrawer;
-  final RegistroStore store;
   final Period? period;
 
   @override

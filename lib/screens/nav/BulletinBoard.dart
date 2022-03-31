@@ -9,18 +9,15 @@ import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/system/Store.dart';
 import "package:styled_widget/styled_widget.dart";
 
 class BulletinsPane extends StatefulWidget {
   BulletinsPane({
     Key? key,
     required this.session,
-    required this.store,
   }) : super(key: key);
 
   final Axios session;
-  final RegistroStore store;
 
   @override
   _BulletinsPaneState createState() => _BulletinsPaneState();
@@ -84,7 +81,6 @@ class _BulletinsPaneState extends ReloadableState<BulletinsPane> {
                     child: BulletinListItem(
                       bulletin: entries[i],
                       session: widget.session,
-                      store: widget.store,
                       reload: rebuild,
                     ),
                   ),

@@ -9,7 +9,6 @@ import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -20,12 +19,10 @@ class TopicsPane extends StatefulWidget {
   TopicsPane({
     Key? key,
     required this.session,
-    required this.store,
     required this.openMainDrawer,
   }) : super(key: key);
 
   final Axios session;
-  final RegistroStore store;
   final Function() openMainDrawer;
 
   @override

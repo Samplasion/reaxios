@@ -9,7 +9,6 @@ import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/format.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 
 import '../../consts.dart';
@@ -20,13 +19,11 @@ class GradeView extends StatefulWidget {
     Key? key,
     required this.grade,
     required this.session,
-    required this.store,
     this.reload,
   }) : super(key: key);
 
   final Grade grade;
   final Axios session;
-  final RegistroStore store;
   final void Function()? reload;
 
   @override
@@ -36,7 +33,6 @@ class GradeView extends StatefulWidget {
 class _GradeViewState extends State<GradeView> {
   Grade get grade => widget.grade;
   Axios get session => widget.session;
-  RegistroStore get store => widget.store;
   void Function()? get reload => widget.reload;
 
   Key key = UniqueKey();

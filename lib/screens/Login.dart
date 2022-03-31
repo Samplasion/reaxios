@@ -10,14 +10,13 @@ import 'package:reaxios/components/ListItems/SchoolListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../consts.dart';
 import '../format.dart';
 
-final useScreens = (RegistroStore store, onPrev, onNext, onDone) => [
+final useScreens = (onPrev, onNext, onDone) => [
       _LoginScreenPage1(
         onNext: onNext,
       ),
@@ -402,9 +401,7 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
 }
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key? key, required this.store}) : super(key: key);
-
-  final RegistroStore store;
+  LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -432,7 +429,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    screens = useScreens(widget.store, _onPrev, _onNext, _onDone);
+    screens = useScreens(_onPrev, _onNext, _onDone);
     return Scaffold(
       appBar: GradientAppBar(
         title: Text(context.locale.login.title),
@@ -441,8 +438,7 @@ class _LoginScreenState extends State<LoginScreen> {
             IconButton(
               icon: Icon(Icons.science),
               onPressed: () {
-                Provider.of<RegistroStore>(context, listen: false).testMode =
-                    true;
+                // TODO: Test mode
                 _onDone();
               },
             ),

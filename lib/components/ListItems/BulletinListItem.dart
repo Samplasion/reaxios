@@ -8,7 +8,6 @@ import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Views/BulletinView.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import "package:styled_widget/styled_widget.dart";
@@ -18,7 +17,6 @@ class BulletinListItem extends StatelessWidget {
     Key? key,
     required this.bulletin,
     required this.session,
-    required this.store,
     this.reload,
     this.onClick = true,
   }) : super(key: key);
@@ -26,7 +24,6 @@ class BulletinListItem extends StatelessWidget {
   final Bulletin bulletin;
   final bool onClick;
   final Axios session;
-  final RegistroStore store;
   final void Function()? reload;
 
   final Map<BulletinKind, Color> colors = {
@@ -103,7 +100,6 @@ class BulletinListItem extends StatelessWidget {
                 return BulletinView(
                   bulletin: bulletin,
                   axios: session,
-                  store: store,
                   reload: reload,
                 );
               }));

@@ -23,7 +23,6 @@ import 'package:reaxios/components/Views/new_calendar_event.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/screens/Index.dart';
 import 'package:reaxios/structs/calendar_event.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/extensions.dart'
     show ColorExtension, RangeExtension;
 import 'package:reaxios/timetable/structures/Settings.dart';

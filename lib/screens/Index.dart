@@ -7,16 +7,11 @@ import 'package:flutter/foundation.dart' hide compute;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/TestAxios.dart';
 import 'package:reaxios/api/entities/Account.dart';
-import 'package:reaxios/api/entities/Assignment/Assignment.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Login/Login.dart';
-import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
-import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
@@ -38,7 +33,6 @@ import 'package:reaxios/screens/nav/Overview.dart';
 import 'package:reaxios/screens/nav/Stats.dart';
 import 'package:reaxios/screens/nav/Topics.dart';
 import 'package:reaxios/services/compute.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,9 +45,7 @@ import 'nav/ReportCards.dart';
 import 'nav/Timetable.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key, required this.store}) : super(key: key);
-
-  final RegistroStore store;
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -110,9 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // StreamSubscription? _subscription;
 
   void _initSession() async {
-    final store = Provider.of<RegistroStore>(context, listen: false);
-
-    if (!store.testMode) {
+    // TODO: Test mode
+    if (! /* store.testMode */ false) {
       final prefs = await SharedPreferences.getInstance();
       final school = prefs.getString("school")!;
       final user = prefs.getString("user")!;
@@ -202,7 +193,6 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context) => GradesPane(
             session: session,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
-            store: widget.store,
             period: cubit.currentPeriod,
           ),
         ),
@@ -216,7 +206,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Builder(
           builder: (context) => TopicsPane(
             session: session,
-            store: widget.store,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -225,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
           ),
         ),
-        BulletinsPane(session: session, store: widget.store),
+        BulletinsPane(session: session),
         NotesPane(
           session: session,
           kind: NoteKind.Note,
@@ -238,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
         AuthorizationsPane(session: session),
         MaterialsPane(session: session),
         StatsPane(session: session),
-        ReportCardsPane(session: session, store: widget.store),
+        ReportCardsPane(session: session),
       ];
       _drawerItems = [
         [

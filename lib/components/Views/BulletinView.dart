@@ -14,7 +14,6 @@ import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,13 +22,11 @@ class BulletinView extends StatelessWidget {
     Key? key,
     required this.bulletin,
     required this.axios,
-    required this.store,
     this.reload,
   }) : super(key: key);
 
   final Bulletin bulletin;
   final Axios axios;
-  final RegistroStore store;
   final void Function()? reload;
 
   @override
@@ -55,7 +52,6 @@ class BulletinView extends StatelessWidget {
                       bulletin: bulletin,
                       onClick: false,
                       session: axios,
-                      store: store,
                     ),
                     tag: bulletin.toString(),
                   ),

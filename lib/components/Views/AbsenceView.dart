@@ -5,7 +5,6 @@ import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/components/ListItems/AbsenceListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 
 import '../../consts.dart';
@@ -53,7 +52,6 @@ class AbsenceView extends StatelessWidget {
   }
 
   List<Widget> _getAccessories(BuildContext context) {
-    final store = Provider.of<RegistroStore>(context);
     return [
       Divider(),
       if (absence.isJustifiable && !absence.isJustified)
