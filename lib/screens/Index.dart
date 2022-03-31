@@ -274,9 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
           () {
             cubit.loadGrades();
             cubit.loadStructural();
-            // Subsitute for store.fetchSubjects()
-            cubit.loadTopics();
-            cubit.loadAssignments();
+            cubit.loadSubjects();
           }
         ],
         [
@@ -286,9 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
           () {
             cubit.loadGrades();
             cubit.loadStructural();
-            // Subsitute for store.fetchSubjects()
-            cubit.loadTopics();
-            cubit.loadAssignments();
+            cubit.loadSubjects();
           }
         ],
         [
@@ -331,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.edit),
           Text(context.locale.drawer.authorizations),
           true,
-          () => widget.store.fetchAuthorizations(session)
+          () => cubit.loadAuthorizations()
         ],
         [
           Icon(Icons.badge),

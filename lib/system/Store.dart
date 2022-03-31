@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:mobx/mobx.dart';
 import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
-import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 
 part 'Store.g.dart';
@@ -13,8 +11,6 @@ part 'Store.g.dart';
 class RegistroStore = _RegistroStore with _$RegistroStore;
 
 abstract class _RegistroStore with Store {
-  @observable
-  ObservableFuture<List<Authorization>>? authorizations;
   @observable
   ObservableFuture<List<MaterialTeacherData>>? materials;
   @observable
@@ -36,15 +32,6 @@ abstract class _RegistroStore with Store {
   T _successHandler<T>(T value) {
     networkError = false;
     return value;
-  }
-
-  fetchAuthorizations(Axios session, [bool force = false]) {
-    if (authorizations == null || force) {
-      authorizations = null;
-      authorizations = ObservableFuture(session.getAuthorizations())
-          .then(_successHandler)
-          .catchError(_errorHandler<List<Authorization>>(<Authorization>[]));
-    }
   }
 
   fetchMaterials(Axios session, [bool force = false]) {

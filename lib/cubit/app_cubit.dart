@@ -8,6 +8,7 @@ import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
+import 'package:reaxios/api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Note/Note.dart';
@@ -56,6 +57,7 @@ class AppCubit extends HydratedCubit<AppState> {
   List<Bulletin> get bulletins => state.bulletins ?? [];
   List<Note> get notes => state.notes ?? [];
   List<Absence> get absences => state.absences ?? [];
+  List<Authorization> get authorizations => state.authorizations ?? [];
 
   Structural? get structural => state.structural;
   List<Period> get periods => structural?.periods[0].periods ?? [];
@@ -138,6 +140,13 @@ class AppCubit extends HydratedCubit<AppState> {
     await loadObject(() async {
       final absences = await state.axios!.getAbsences();
       emit(state.copyWith(absences: absences));
+    });
+  }
+
+  Future<void> loadAuthorizations() async {
+    await loadObject(() async {
+      final authorizations = await state.axios!.getAuthorizations();
+      emit(state.copyWith(authorizations: authorizations));
     });
   }
 

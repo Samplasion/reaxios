@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Authorization/Authorization.dart';
@@ -7,6 +8,7 @@ import 'package:reaxios/components/ListItems/AuthorizationListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -30,6 +32,7 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
 
   Map<String, List<Authorization>> splitAuthorizations(
       List<Authorization> authorizations) {
+    authorizations.sort((a1, a2) => a2.startDate.compareTo(a1.startDate));
     return authorizations.fold(new Map(), (map, note) {
       final date = note.period;
       if (!map.containsKey(date))
@@ -43,8 +46,6 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
 
   @override
   Widget build(BuildContext context) {
-    RegistroStore store = Provider.of<RegistroStore>(context);
-
     if (widget.session.student?.securityBits[SecurityBits.hideAuthorizations] ==
         "1") {
       return EmptyUI(
@@ -53,16 +54,10 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
       ).padding(horizontal: 16);
     }
 
-    return FutureBuilder<List<Authorization>>(
-      future: store.authorizations ?? Future.value([]),
-      initialData: [],
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.hasError) {
-          print(snapshot.stackTrace);
-          return Text("${snapshot.error}");
-        }
-        if (snapshot.hasData && snapshot.data!.isNotEmpty)
-          return buildOk(context, snapshot.data!.reversed.toList());
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (BuildContext context, state) {
+        if (state.authorizations != null)
+          return buildOk(context, state.authorizations!.reversed.toList());
 
         return LoadingUI();
       },
@@ -85,6 +80,7 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
       );
     }
 
+    // TODO: Convert to Scaffold + SliverList
     return KeyedSubtree(
       key: key,
       child: Container(

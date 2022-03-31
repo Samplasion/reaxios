@@ -6,6 +6,7 @@ import 'package:reaxios/components/ListItems/AuthorizationListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 
@@ -82,9 +83,10 @@ class AuthorizationView extends StatelessWidget {
       if (justifiable && !authorization.justified)
         ElevatedButton(
           onPressed: () {
+            final cubit = context.read<AppCubit>();
             authorization.justify().then((justified) {
               if (justified) {
-                store.fetchAuthorizations(axios, true);
+                cubit.loadAuthorizations();
                 if (reload != null) reload!();
                 Navigator.pop(context);
 
