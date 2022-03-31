@@ -333,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.badge),
           Text(context.locale.drawer.teachingMaterials),
           true,
-          () => widget.store.fetchMaterials(session)
+          () => cubit.loadMaterials()
         ],
         [
           Icon(Icons.star_outline),

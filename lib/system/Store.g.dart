@@ -9,21 +9,6 @@ part of 'Store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$RegistroStore on _RegistroStore, Store {
-  final _$materialsAtom = Atom(name: '_RegistroStore.materials');
-
-  @override
-  ObservableFuture<List<MaterialTeacherData>>? get materials {
-    _$materialsAtom.reportRead();
-    return super.materials;
-  }
-
-  @override
-  set materials(ObservableFuture<List<MaterialTeacherData>>? value) {
-    _$materialsAtom.reportWrite(value, super.materials, () {
-      super.materials = value;
-    });
-  }
-
   final _$payloadControllerAtom =
       Atom(name: '_RegistroStore.payloadController');
 
@@ -102,7 +87,6 @@ mixin _$RegistroStore on _RegistroStore, Store {
   @override
   String toString() {
     return '''
-materials: ${materials},
 payloadController: ${payloadController},
 gradeDisplay: ${gradeDisplay},
 testMode: ${testMode},

@@ -12,8 +12,6 @@ class RegistroStore = _RegistroStore with _$RegistroStore;
 
 abstract class _RegistroStore with Store {
   @observable
-  ObservableFuture<List<MaterialTeacherData>>? materials;
-  @observable
   StreamController<String?> payloadController = StreamController<String?>();
   @observable
   GradeDisplay gradeDisplay = GradeDisplay.decimal;
@@ -23,26 +21,6 @@ abstract class _RegistroStore with Store {
 
   @observable
   bool networkError = false;
-
-  Future<T> Function(Object) _errorHandler<T>(T val) => (_) {
-        networkError = true;
-        return Future.value(val);
-      };
-
-  T _successHandler<T>(T value) {
-    networkError = false;
-    return value;
-  }
-
-  fetchMaterials(Axios session, [bool force = false]) {
-    if (materials == null || force) {
-      materials = null;
-      materials = ObservableFuture(session.getMaterials())
-          .then(_successHandler)
-          .catchError(_errorHandler<List<MaterialTeacherData>>(
-              <MaterialTeacherData>[]));
-    }
-  }
 
   @action
   notificationPayloadAction(String? payload) {
