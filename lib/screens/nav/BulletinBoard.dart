@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/components/ListItems/BulletinListItem.dart';
@@ -25,17 +23,9 @@ class BulletinsPane extends StatefulWidget {
 
 class _BulletinsPaneState extends ReloadableState<BulletinsPane> {
   final ScrollController controller = ScrollController();
-  final RefreshController refreshController = RefreshController(
-    initialRefresh: false,
-  );
 
-  _refresh() {
-    try {
-      context.read<AppCubit>().loadBulletins();
-      refreshController.refreshCompleted();
-    } catch (e) {
-      refreshController.refreshFailed();
-    }
+  Future<void> _refresh() async {
+    await context.read<AppCubit>().loadBulletins();
   }
 
   @override
@@ -60,8 +50,7 @@ class _BulletinsPaneState extends ReloadableState<BulletinsPane> {
     print("build");
 
     return Container(
-      child: SmartRefresher(
-        controller: refreshController,
+      child: RefreshIndicator(
         onRefresh: _refresh,
         child: ListView.builder(
           // shrinkWrap: true,

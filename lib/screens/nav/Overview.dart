@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -306,31 +307,42 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 
     final toolbarHeight = AppBar().toolbarHeight ?? kToolbarHeight;
 
-    return CustomScrollView(
-      slivers: [
-        BlocBuilder<AppCubit, AppState>(
-          bloc: cubit,
-          builder: (context, _) {
-            return SliverPersistentHeader(
-              pinned: true,
-              floating: false,
-              delegate: CustomSliverDelegate(
-                hideTitleWhenExpanded: false,
-                openMenu: widget.openMainDrawer,
-                expandedHeight: MediaQuery.of(context).padding.top + 185,
-                collapsedHeight:
-                    MediaQuery.of(context).padding.top + toolbarHeight,
-                period: cubit.currentPeriod,
-                student: student,
-                switchToTab: widget.switchToTab,
-              ),
-            );
-          },
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate(items),
-        ),
-      ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        final cubit = context.read<AppCubit>();
+        await Future.wait([
+          cubit.loadGrades(force: true),
+          cubit.loadAssignments(force: true),
+          cubit.loadTopics(force: true),
+          cubit.loadStructural(force: true),
+        ]);
+      },
+      child: CustomScrollView(
+        slivers: [
+          BlocBuilder<AppCubit, AppState>(
+            bloc: cubit,
+            builder: (context, _) {
+              return SliverPersistentHeader(
+                pinned: true,
+                floating: false,
+                delegate: CustomSliverDelegate(
+                  hideTitleWhenExpanded: false,
+                  openMenu: widget.openMainDrawer,
+                  expandedHeight: MediaQuery.of(context).padding.top + 185,
+                  collapsedHeight:
+                      MediaQuery.of(context).padding.top + toolbarHeight,
+                  period: cubit.currentPeriod,
+                  student: student,
+                  switchToTab: widget.switchToTab,
+                ),
+              );
+            },
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(items),
+          ),
+        ],
+      ),
     );
   }
 

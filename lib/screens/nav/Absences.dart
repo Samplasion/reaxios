@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -119,8 +120,11 @@ class _AbsencesPaneState extends State<AbsencesPane> {
       ],
     ];
 
-    return Scaffold(
-      body: CustomScrollView(controller: controller, slivers: slivers),
+    return RefreshIndicator(
+      onRefresh: () async {
+        await context.read<AppCubit>().loadAbsences(force: true);
+      },
+      child: CustomScrollView(controller: controller, slivers: slivers),
     );
   }
 }

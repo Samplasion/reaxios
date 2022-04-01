@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/api/enums/NoteKind.dart';
@@ -30,17 +28,9 @@ class NotesPane extends StatefulWidget {
 
 class _NotesPaneState extends State<NotesPane> {
   final ScrollController controller = ScrollController();
-  final RefreshController refreshController = RefreshController(
-    initialRefresh: false,
-  );
 
-  _refresh() {
-    try {
-      context.read<AppCubit>().loadNotes();
-      refreshController.refreshCompleted();
-    } catch (e) {
-      refreshController.refreshFailed();
-    }
+  Future<void> _refresh() async {
+    await context.read<AppCubit>().loadNotes(force: true);
   }
 
   Map<String, List<Note>> splitNotices(List<Note> notices) {
@@ -79,8 +69,7 @@ class _NotesPaneState extends State<NotesPane> {
       );
     }
 
-    return SmartRefresher(
-      controller: refreshController,
+    return RefreshIndicator(
       onRefresh: _refresh,
       child: ListView.separated(
         shrinkWrap: true,

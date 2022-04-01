@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
@@ -26,39 +25,33 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
   bool loading = true;
   List<Period> periods = [];
   String selectedPeriod = '';
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
-    // initREData();
-  }
 
-  _onRefresh() async {
-    final cubit = context.read<AppCubit>();
-    try {
-      await cubit.loadStructural();
-      await cubit.loadReportCards();
-      _refreshController.refreshCompleted();
-    } catch (e) {
-      _refreshController.refreshFailed();
-    }
-    setState(() {
-      if (selectedPeriod.isEmpty && cubit.structural != null)
-        selectedPeriod = cubit.periods.first.id;
+    Future.delayed(Duration(milliseconds: 200)).then((_) {
+      final cubit = context.read<AppCubit>();
+      return Future.wait([
+        cubit.loadStructural(),
+        cubit.loadReportCards(),
+      ]).then((_) {
+        setState(() {
+          if (selectedPeriod.isEmpty && cubit.structural != null)
+            selectedPeriod = cubit.periods.first.id;
+        });
+      });
     });
   }
 
-  _onLoad() async {
+  Future<void> _onRefresh() async {
     final cubit = context.read<AppCubit>();
-    try {
-      await cubit.loadStructural();
-      await cubit.loadReportCards();
-      _refreshController.loadComplete();
-    } catch (e) {
-      _refreshController.loadFailed();
-    }
+    await Future.wait([
+      cubit.loadStructural(force: true),
+      cubit.loadReportCards(force: true),
+    ]);
     setState(() {
       if (selectedPeriod.isEmpty && cubit.structural != null)
         selectedPeriod = cubit.periods.first.id;
@@ -72,15 +65,10 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
 
   Widget _buildBody(BuildContext context) {
     final cubit = context.watch<AppCubit>();
-    return SmartRefresher(
+    return RefreshIndicator(
       onRefresh: _onRefresh,
-      onLoading: _onLoad,
-      controller: _refreshController,
-      enablePullDown: true,
-      enablePullUp: false,
+      key: _refreshIndicatorKey,
       child: () {
-        if (cubit.reportCards.isEmpty || cubit.structural == null)
-          return LoadingUI();
         if (cubit.structural != null)
           return buildOk(context, cubit.reportCards, cubit.periods);
         return LoadingUI();

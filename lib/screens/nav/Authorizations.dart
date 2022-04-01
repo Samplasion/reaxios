@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/components/ListItems/AuthorizationListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
-import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 import "package:styled_widget/styled_widget.dart";
 
 class AuthorizationsPane extends StatefulWidget {
@@ -115,9 +112,14 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
 
     return KeyedSubtree(
       key: key,
-      child: CustomScrollView(
-        controller: controller,
-        slivers: slivers,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await context.read<AppCubit>().loadAuthorizations(force: true);
+        },
+        child: CustomScrollView(
+          controller: controller,
+          slivers: slivers,
+        ),
       ),
     );
   }

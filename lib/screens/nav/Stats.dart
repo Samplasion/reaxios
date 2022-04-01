@@ -50,6 +50,15 @@ class _StatsPaneState extends State<StatsPane> {
     return MaxWidthContainer(child: _buildBody()).center();
   }
 
+  Future<void> _refresh() async {
+    final cubit = context.read<AppCubit>();
+    await Future.wait([
+      cubit.loadStructural(force: true),
+      cubit.loadGrades(force: true),
+      cubit.loadAbsences(force: true),
+    ]);
+  }
+
   Widget _buildBody() {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
@@ -212,11 +221,14 @@ class _StatsPaneState extends State<StatsPane> {
         ).padding(horizontal: 16),
     ];
 
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return items[index];
-      },
-      itemCount: items.length,
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return items[index];
+        },
+        itemCount: items.length,
+      ),
     );
   }
 }

@@ -65,37 +65,34 @@ class _TopicsPaneState extends State<TopicsPane> {
     return BlocBuilder<AppCubit, AppState>(
       bloc: context.watch<AppCubit>(),
       builder: (BuildContext context, state) {
-        if (state.topics != null)
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: GradientAppBar(
-              title: Text(context.locale.drawer.topics),
-              leading: MaybeMasterDetail.of(context)!.isShowingMaster
-                  ? null
-                  : Builder(builder: (context) {
-                      return IconButton(
-                        tooltip: MaterialLocalizations.of(context)
-                            .openAppDrawerTooltip,
-                        onPressed: widget.openMainDrawer,
-                        icon: Icon(Icons.menu),
-                      );
-                    }),
-              actions: [
-                Builder(
-                  builder: (context) {
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: GradientAppBar(
+            title: Text(context.locale.drawer.topics),
+            leading: MaybeMasterDetail.of(context)!.isShowingMaster
+                ? null
+                : Builder(builder: (context) {
                     return IconButton(
-                      onPressed: Scaffold.of(context).openEndDrawer,
-                      icon: Icon(Icons.topic),
+                      tooltip: MaterialLocalizations.of(context)
+                          .openAppDrawerTooltip,
+                      onPressed: widget.openMainDrawer,
+                      icon: Icon(Icons.menu),
                     );
-                  },
-                )
-              ],
-            ),
-            body: buildOk(context, state.topics!.reversed.toList()),
-            endDrawer: _getEndDrawer(state.topics!.reversed.toList()),
-          );
-
-        return Center(child: CircularProgressIndicator());
+                  }),
+            actions: [
+              Builder(
+                builder: (context) {
+                  return IconButton(
+                    onPressed: Scaffold.of(context).openEndDrawer,
+                    icon: Icon(Icons.topic),
+                  );
+                },
+              )
+            ],
+          ),
+          body: buildOk(context, (state.topics ?? []).reversed.toList()),
+          endDrawer: _getEndDrawer((state.topics ?? []).reversed.toList()),
+        );
       },
     );
   }
@@ -211,49 +208,54 @@ class _TopicsPaneState extends State<TopicsPane> {
       left: false,
       right: false,
       child: Container(
-        child: ListView.separated(
-          shrinkWrap: true,
-          separatorBuilder: (_a, _b) => Divider(),
-          controller: _mainController,
-          itemBuilder: (context, i) {
-            return StickyHeader(
-              header: Center(
-                child: MaxWidthContainer(
-                  child: Container(
-                    height: 50.0,
-                    color: Theme.of(context).canvasColor,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      entries[i].key,
-                      style: Theme.of(context).textTheme.caption,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await context.read<AppCubit>().loadTopics(force: true);
+          },
+          child: ListView.separated(
+            shrinkWrap: true,
+            separatorBuilder: (_a, _b) => Divider(),
+            controller: _mainController,
+            itemBuilder: (context, i) {
+              return StickyHeader(
+                header: Center(
+                  child: MaxWidthContainer(
+                    child: Container(
+                      height: 50.0,
+                      color: Theme.of(context).canvasColor,
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        entries[i].key,
+                        style: Theme.of(context).textTheme.caption,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              content: Padding(
-                padding: i == entries.length - 1
-                    ? EdgeInsets.only(bottom: 16)
-                    : EdgeInsets.zero,
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, i1) {
-                    final e = (entries[i].value
-                      ..sort(
-                          (a, b) => a.lessonHour.compareTo(b.lessonHour)))[i1];
-                    return Center(
-                      child: MaxWidthContainer(
-                        child: TopicListItem(topic: e),
-                      ),
-                    );
-                  },
-                  itemCount: entries[i].value.length,
-                  shrinkWrap: true,
+                content: Padding(
+                  padding: i == entries.length - 1
+                      ? EdgeInsets.only(bottom: 16)
+                      : EdgeInsets.zero,
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, i1) {
+                      final e = (entries[i].value
+                        ..sort((a, b) =>
+                            a.lessonHour.compareTo(b.lessonHour)))[i1];
+                      return Center(
+                        child: MaxWidthContainer(
+                          child: TopicListItem(topic: e),
+                        ),
+                      );
+                    },
+                    itemCount: entries[i].value.length,
+                    shrinkWrap: true,
+                  ),
                 ),
-              ),
-            );
-          },
-          itemCount: entries.length,
+              );
+            },
+            itemCount: entries.length,
+          ),
         ),
       ),
     );

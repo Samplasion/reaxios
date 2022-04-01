@@ -10,7 +10,6 @@ import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Views/MaterialTeacherView.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -27,8 +26,6 @@ class MaterialsPane extends StatefulWidget {
 }
 
 class _MaterialsPaneState extends State<MaterialsPane> {
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
   String _selectedTeacher = "";
 
   @override
@@ -61,9 +58,7 @@ class _MaterialsPaneState extends State<MaterialsPane> {
       builder: (context, state) {
         final _materials = cubit.materials;
 
-        return SmartRefresher(
-          controller: _refreshController,
-          enablePullDown: true,
+        return RefreshIndicator(
           onRefresh: _refresh,
           child: _materials.isEmpty
               ? SingleChildScrollView(
@@ -112,12 +107,7 @@ class _MaterialsPaneState extends State<MaterialsPane> {
     );
   }
 
-  _refresh() async {
-    try {
-      context.read<AppCubit>().loadMaterials();
-      _refreshController.refreshCompleted();
-    } catch (e) {
-      _refreshController.refreshFailed();
-    }
+  Future<void> _refresh() async {
+    await context.read<AppCubit>().loadMaterials(force: true);
   }
 }

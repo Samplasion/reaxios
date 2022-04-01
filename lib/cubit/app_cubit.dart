@@ -96,81 +96,92 @@ class AppCubit extends HydratedCubit<AppState> {
     }
   }
 
-  Future<void> loadAssignments() async {
-    await loadObject(() async {
-      final assignments = await state.axios!.getAssignments();
-      emit(state.copyWith(assignments: assignments));
-    });
+  Future<void> loadAssignments({bool force = false}) async {
+    if (force || this.state.assignments == null)
+      await loadObject(() async {
+        final assignments = await state.axios!.getAssignments();
+        emit(state.copyWith(assignments: assignments));
+      });
   }
 
-  Future<void> loadGrades() async {
-    await loadObject(() async {
-      final grades = await state.axios!.getGrades();
-      emit(state.copyWith(grades: grades));
-    });
+  Future<void> loadGrades({bool force = false}) async {
+    if (force || this.state.grades == null)
+      await loadObject(() async {
+        final grades = await state.axios!.getGrades();
+        emit(state.copyWith(grades: grades));
+      });
   }
 
-  Future<void> loadTopics() async {
-    await loadObject(() async {
-      final topics = await state.axios!.getTopics();
-      emit(state.copyWith(topics: topics));
-    });
+  Future<void> loadTopics({bool force = false}) async {
+    if (force || this.state.topics == null)
+      await loadObject(() async {
+        final topics = await state.axios!.getTopics();
+        emit(state.copyWith(topics: topics));
+      });
   }
 
-  Future<void> loadReportCards() async {
-    await loadObject(() async {
-      final reportCards = await state.axios!.getReportCards();
-      emit(state.copyWith(reportCards: reportCards));
-    });
+  Future<void> loadReportCards({bool force = false}) async {
+    if (force || this.state.reportCards == null)
+      await loadObject(() async {
+        final reportCards = await state.axios!.getReportCards();
+        emit(state.copyWith(reportCards: reportCards));
+      });
   }
 
-  Future<void> loadBulletins() async {
-    await loadObject(() async {
-      final bulletins = await state.axios!.getBulletins();
-      emit(state.copyWith(bulletins: bulletins));
-    });
+  Future<void> loadBulletins({bool force = false}) async {
+    if (force || this.state.bulletins == null)
+      await loadObject(() async {
+        final bulletins = await state.axios!.getBulletins();
+        emit(state.copyWith(bulletins: bulletins));
+      });
   }
 
-  Future<void> loadNotes() async {
-    await loadObject(() async {
-      final notes = await state.axios!.getNotes();
-      emit(state.copyWith(notes: notes));
-    });
+  Future<void> loadNotes({bool force = false}) async {
+    if (force || this.state.notes == null)
+      await loadObject(() async {
+        final notes = await state.axios!.getNotes();
+        emit(state.copyWith(notes: notes));
+      });
   }
 
-  Future<void> loadAbsences() async {
-    await loadObject(() async {
-      final absences = await state.axios!.getAbsences();
-      emit(state.copyWith(absences: absences));
-    });
+  Future<void> loadAbsences({bool force = false}) async {
+    if (force || this.state.absences == null)
+      await loadObject(() async {
+        final absences = await state.axios!.getAbsences();
+        emit(state.copyWith(absences: absences));
+      });
   }
 
-  Future<void> loadAuthorizations() async {
-    await loadObject(() async {
-      final authorizations = await state.axios!.getAuthorizations();
-      emit(state.copyWith(authorizations: authorizations));
-    });
+  Future<void> loadAuthorizations({bool force = false}) async {
+    if (force || this.state.authorizations == null)
+      await loadObject(() async {
+        final authorizations = await state.axios!.getAuthorizations();
+        emit(state.copyWith(authorizations: authorizations));
+      });
   }
 
-  Future<void> loadMaterials() async {
-    await loadObject(() async {
-      final materials = await state.axios!.getMaterials();
-      emit(state.copyWith(materials: materials));
-    });
+  Future<void> loadMaterials({bool force = false}) async {
+    if (force || this.state.materials == null)
+      await loadObject(() async {
+        final materials = await state.axios!.getMaterials();
+        emit(state.copyWith(materials: materials));
+      });
   }
 
-  Future<void> loadSubjects() async {
-    await loadObject(() async {
-      await loadTopics();
-      await loadAssignments();
-    });
+  Future<void> loadSubjects({bool force = false}) async {
+    if (force || this.state.topics == null || this.state.assignments == null)
+      await loadObject(() async {
+        await loadTopics();
+        await loadAssignments();
+      });
   }
 
-  Future<void> loadStructural() async {
-    await loadObject(() async {
-      final structural = await state.axios!.getStructural();
-      emit(state.copyWith(structural: structural));
-    });
+  Future<void> loadStructural({bool force = false}) async {
+    if (force || this.state.structural == null)
+      await loadObject(() async {
+        final structural = await state.axios!.getStructural();
+        emit(state.copyWith(structural: structural));
+      });
   }
 
   void setTestMode(bool testMode) {
