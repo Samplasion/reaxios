@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:reaxios/components/LowLevel/ConditionalChild.dart';
 import 'package:reaxios/consts.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/subjects.dart';
 
 const kDefaultMasterWidth = 320.0;
 
@@ -28,12 +30,25 @@ class MaybeMasterDetail extends StatefulWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     return screenWidth >= kTabBreakpoint;
   }
+
+  static ValueStream<bool>? getShowingStream(BuildContext context) {
+    return of(context)?._showMaster;
+  }
 }
 
 class _MaybeMasterDetailState extends State<MaybeMasterDetail> {
+  late final ValueStream<bool> _showMaster =
+      Stream.periodic(Duration(milliseconds: 500), (_) {
+    return isShowingMaster;
+  }).distinct().shareValueSeeded(false);
+
   bool get isShowingMaster {
-    final screenWidth = MediaQuery.of(context).size.width;
-    return screenWidth >= kTabBreakpoint;
+    try {
+      final screenWidth = MediaQuery.of(context).size.width;
+      return screenWidth >= kTabBreakpoint;
+    } catch (e) {
+      return false;
+    }
   }
 
   double get detailWidth {
@@ -63,9 +78,11 @@ class _MaybeMasterDetailState extends State<MaybeMasterDetail> {
             show: MediaQuery.of(context).size.width >= kTabBreakpoint,
           ),
         ],
-        Expanded(
-          child: widget.detail,
-        ),
+        Builder(builder: (context) {
+          return Expanded(
+            child: widget.detail,
+          );
+        }),
       ],
     );
   }

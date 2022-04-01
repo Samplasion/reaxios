@@ -417,13 +417,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
             ),
             accountEmail: Text(
-              "${_session.student!.firstName} ${_session.student!.lastName}",
+              _session.student == null
+                  ? "Null student! Please report"
+                  : "${_session.student!.firstName} ${_session.student!.lastName}",
               style: Theme.of(context).textTheme.caption,
             ),
             arrowColor: Theme.of(context).textTheme.bodyText1!.color!,
             currentAccountPicture: GradientCircleAvatar(
               child: Text(
-                "${_login.firstName} ${_login.lastName}".trim()[0],
+                "${_login.firstName} ${_login.lastName}.".trim()[0],
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -563,42 +565,51 @@ class _HomeScreenState extends State<HomeScreen> {
             key: ValueKey(_selectedPane),
             child: Builder(
               builder: (BuildContext context) {
-                return Scaffold(
-                  appBar: _drawerItems[_selectedPane][2]
-                      ? GradientAppBar(
-                          title: _drawerItems[_selectedPane][1],
-                          leading: MaybeMasterDetail.of(context)!
-                                  .isShowingMaster
-                              ? null
-                              : Builder(builder: (context) {
-                                  return IconButton(
-                                    tooltip: MaterialLocalizations.of(context)
-                                        .openAppDrawerTooltip,
-                                    onPressed: () =>
-                                        Scaffold.of(context).openDrawer(),
-                                    icon: Icon(Icons.menu),
-                                  );
-                                }),
-                        )
-                      : null,
-                  drawer: MaybeMasterDetail.of(context)!.isShowingMaster
-                      ? null
-                      : _getDrawer(isLoading),
-                  body: isLoading
-                      ? LoadingUI(colorful: true, showHints: true)
-                      : Builder(builder: (context) {
-                          return Actions(
-                            actions: {
-                              MenuIntent: CallbackAction<MenuIntent>(
-                                  onInvoke: (intent) {
-                                Scaffold.of(context).openDrawer();
-                                return null;
-                              })
-                            },
-                            child: _panes[_selectedPane],
-                          );
-                        }),
-                );
+                final drawer = _getDrawer(false);
+                return StreamBuilder(
+                    stream: MaybeMasterDetail.getShowingStream(context),
+                    builder: (context, AsyncSnapshot<bool> state) {
+                      final showingMaster = state.data ?? false;
+                      return Scaffold(
+                        appBar: _drawerItems[_selectedPane][2]
+                            ? GradientAppBar(
+                                title: _drawerItems[_selectedPane][1],
+                                leading: MaybeMasterDetail.of(context)!
+                                        .isShowingMaster
+                                    ? null
+                                    : Builder(builder: (context) {
+                                        return IconButton(
+                                          tooltip:
+                                              MaterialLocalizations.of(context)
+                                                  .openAppDrawerTooltip,
+                                          onPressed: () {
+                                            print(drawer);
+                                            Scaffold.of(context).openDrawer();
+                                          },
+                                          icon: Icon(Icons.menu),
+                                        );
+                                      }),
+                              )
+                            : null,
+                        drawer: showingMaster ? null : drawer,
+                        // drawerEnableOpenDragGesture:
+                        //     !MaybeMasterDetail.of(context)!.isShowingMaster,
+                        body: isLoading
+                            ? LoadingUI(colorful: true, showHints: true)
+                            : Builder(builder: (context) {
+                                return Actions(
+                                  actions: {
+                                    MenuIntent: CallbackAction<MenuIntent>(
+                                        onInvoke: (intent) {
+                                      Scaffold.of(context).openDrawer();
+                                      return null;
+                                    })
+                                  },
+                                  child: _panes[_selectedPane],
+                                );
+                              }),
+                      );
+                    });
               },
             ),
           ),
