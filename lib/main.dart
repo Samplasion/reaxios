@@ -12,7 +12,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/components/LowLevel/md_indicator.dart';
 import 'package:reaxios/components/Utilities/updates/config.dart' as upgrader;
@@ -264,18 +263,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
               const Locale('it'),
             ],
             routes: {
-              "/": (_) => Builder(
-                    builder: (context) => RefreshConfiguration(
-                      headerBuilder: () => ClassicHeader(
-                        idleText: context.locale.main.idleText,
-                        completeText: context.locale.main.completeText,
-                        releaseText: context.locale.main.releaseText,
-                        refreshingText: context.locale.main.refreshingText,
-                        failedText: context.locale.main.failedText,
-                      ),
-                      child: HomeScreen(),
-                    ),
-                  ),
+              "/": (_) => HomeScreen(),
               "login": (_) => LoginScreen(),
               "loading": (_) => LoadingScreen(),
               "settings": (_) => SettingsScreen(),

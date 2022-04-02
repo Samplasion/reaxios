@@ -3,7 +3,6 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/api/entities/Account.dart';
@@ -22,6 +21,8 @@ import 'package:rxdart/rxdart.dart';
 
 part 'app_cubit.g.dart';
 part 'app_state.dart';
+
+typedef Future<void> VoidFutureCallback();
 
 class AppCubit extends HydratedCubit<AppState> {
   AppCubit() : super(AppState.empty());
@@ -85,7 +86,7 @@ class AppCubit extends HydratedCubit<AppState> {
     emit(state.copyWith(school: school));
   }
 
-  Future<void> loadObject(VoidFutureCallBack objectGetter) async {
+  Future<void> loadObject(VoidFutureCallback objectGetter) async {
     try {
       load();
       await objectGetter();
