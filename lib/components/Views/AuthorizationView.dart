@@ -84,7 +84,7 @@ class AuthorizationView extends StatelessWidget {
             final cubit = context.read<AppCubit>();
             authorization.justify().then((justified) {
               if (justified) {
-                cubit.loadAuthorizations();
+                cubit.loadAuthorizations(force: true);
                 if (reload != null) reload!();
                 Navigator.pop(context);
 

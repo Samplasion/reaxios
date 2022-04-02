@@ -60,7 +60,7 @@ class AbsenceView extends StatelessWidget {
             final cubit = context.read<AppCubit>();
             absence.justify().then((justified) {
               if (justified) {
-                cubit.loadAbsences();
+                cubit.loadAbsences(force: true);
                 if (reload != null) reload!();
                 Navigator.pop(context);
 

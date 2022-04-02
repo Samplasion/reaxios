@@ -74,7 +74,7 @@ class BulletinView extends StatelessWidget {
           onPressed: () {
             final cubit = context.read<AppCubit>();
             axios.markBulletinAsRead(bulletin).then((_) {
-              cubit.loadBulletins();
+              cubit.loadBulletins(force: true);
               if (reload != null) reload!();
               Navigator.pop(context);
 

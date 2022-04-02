@@ -120,7 +120,7 @@ class _GradeViewState extends State<GradeView> {
                     onPressed: () {
                       session.markGradeAsRead(grade).then((_) {
                         final cubit = context.read<AppCubit>();
-                        cubit.loadGrades();
+                        cubit.loadGrades(force: true);
                         if (reload != null) reload!();
                         // print(reload);
                         Navigator.pop(context);
