@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -97,6 +98,16 @@ class _GradesPaneState extends ReloadableState<GradesPane>
     setState(() {});
   }
 
+  Widget _reloadParent({required Widget child}) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        final cubit = context.read<AppCubit>();
+        await cubit.loadGrades(force: true);
+      },
+      child: child,
+    );
+  }
+
   List<String> getPeriods(List<Grade> grades) {
     final periods =
         grades.map((grade) => grade.period).toSet().toList().reversed;
@@ -130,7 +141,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
                   ).center().padding(bottom: 8),
                 ],
               ),
-            ),
+            ).parent(_reloadParent),
           ),
         ),
         ...getPeriods(grades)
@@ -157,7 +168,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
                           ).center().padding(bottom: 8),
                         ],
                       ),
-                    ),
+                    ).parent(_reloadParent),
                   ),
                 ))
             .toList(),
@@ -278,7 +289,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
         ).padding(horizontal: 16);
       },
       itemCount: grades.length + 1,
-    );
+    ).parent(_reloadParent);
   }
 
   Widget _buildSubjects(
