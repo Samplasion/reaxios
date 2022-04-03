@@ -108,7 +108,6 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      final cubit = context.watch<AppCubit>();
       return Scaffold(
         appBar: loading
             ? GradientAppBar(
@@ -310,12 +309,11 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     return RefreshIndicator(
       onRefresh: () async {
         final cubit = context.read<AppCubit>();
-        await Future.wait([
-          cubit.loadGrades(force: true),
-          cubit.loadAssignments(force: true),
-          cubit.loadTopics(force: true),
-          cubit.loadStructural(force: true),
-        ]);
+        // Only await the futures that are most likely to freeze the UI
+        cubit.loadStructural(force: true);
+        cubit.loadAssignments(force: true);
+        await cubit.loadGrades(force: true);
+        await cubit.loadTopics(force: true);
       },
       child: CustomScrollView(
         slivers: [
