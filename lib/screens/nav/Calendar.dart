@@ -4,6 +4,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
@@ -15,13 +16,14 @@ import 'package:reaxios/components/ListItems/TopicListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
+import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Views/new_calendar_event.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/screens/Index.dart';
 import 'package:reaxios/structs/calendar_event.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/extensions.dart'
     show ColorExtension, RangeExtension;
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -46,35 +48,20 @@ class CalendarPane extends StatefulWidget {
 class _CalendarPaneState extends State<CalendarPane> {
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<RegistroStore>(context);
-
-    return FutureBuilder<Tuple3<List<Topic>, List<Assignment>, List<Period>>>(
-      future: Future.wait([
-        store.topics ?? Future.value(<Topic>[]),
-        store.assignments ?? Future.value(<Assignment>[]),
-        store.periods ?? Future.value(<Period>[]),
-      ]).then((it) => Tuple3.fromIterable(it)),
-      builder: (BuildContext context,
-          AsyncSnapshot<Tuple3<List<Topic>, List<Assignment>, List<Period>>>
-              snapshot) {
-        if (snapshot.hasError) {
-          print(snapshot.error);
-          if (snapshot.error is Error) {
-            print((snapshot.error as Error?)?.stackTrace);
-          }
-        }
-        if (snapshot.hasData) {
-          final topics = snapshot.requireData.first;
-          final assignments = snapshot.requireData.second;
-          final periods = snapshot.requireData.third;
+    final cubit = context.watch<AppCubit>();
+    return BlocBuilder<AppCubit, AppState>(
+      bloc: cubit,
+      builder: (BuildContext context, AppState state) {
+        if (state.structural != null) {
+          final periods = cubit.periods;
 
           periods.sort((p1, p2) => p1.startDate.compareTo(p2.startDate));
 
-          return buildOk(context, topics, assignments, periods);
+          return buildOk(context, periods);
         } else {
           return Scaffold(
             appBar: getDefaultAppBar(context, [], [], [], false),
-            body: Center(child: CircularProgressIndicator()),
+            body: LoadingUI(),
           );
         }
       },
@@ -291,8 +278,10 @@ class _CalendarPaneState extends State<CalendarPane> {
     }
   }
 
-  Widget buildOk(BuildContext context, List<Topic> topics,
-      List<Assignment> assignments, List<Period> periods) {
+  Widget buildOk(BuildContext context, List<Period> periods) {
+    final cubit = context.watch<AppCubit>();
+    final assignments = cubit.assignments;
+    final topics = cubit.topics;
     final settings = Provider.of<Settings>(context);
     if (_events == null) {
       _events = _getEvents(

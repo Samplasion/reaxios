@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:reaxios/api/entities/Account.dart';
+import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../cubit/app_cubit.dart';
 
 class LoadingScreen extends StatefulWidget {
   LoadingScreen({Key? key}) : super(key: key);
@@ -37,13 +42,15 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // setState(() {
     //   checked = true;
     // });
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 50), () {
       SchedulerBinding.instance!.addPostFrameCallback((_) async {
+        final cubit = context.read<AppCubit>();
         final prefs = await SharedPreferences.getInstance();
 
         if (!prefs.containsKey("school") ||
             !prefs.containsKey("user") ||
             !prefs.containsKey("pass")) {
+          print("No login details found [1]");
           Navigator.pushReplacementNamed(context, "login");
           return;
         }
@@ -53,6 +60,25 @@ class _LoadingScreenState extends State<LoadingScreen> {
         final pass = prefs.getString("pass")!;
 
         if (school.trim() == "" || user.trim() == "" || pass.trim() == "") {
+          print("No login details found [2]");
+          Navigator.pushReplacementNamed(context, "login");
+          return;
+        }
+
+        if (cubit.hasAccount) {
+          print("Already logged in");
+          Navigator.pushReplacementNamed(context, "/");
+          return;
+        }
+
+        final error = await cubit.login(AxiosAccount(
+          school,
+          user,
+          Encrypter.decrypt(pass),
+        ));
+
+        if (error != null) {
+          print(error);
           Navigator.pushReplacementNamed(context, "login");
           return;
         }

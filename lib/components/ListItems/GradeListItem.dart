@@ -6,7 +6,6 @@ import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/GradeView.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/utils.dart';
 
 class GradeListItem extends StatelessWidget {
@@ -35,7 +34,6 @@ class GradeListItem extends StatelessWidget {
       showBadge: !grade.seen,
       rightOffset: 5,
     );
-    final store = Provider.of<RegistroStore>(context);
 
     return CardListItem(
       leading: leading,
@@ -52,7 +50,6 @@ class GradeListItem extends StatelessWidget {
                   return GradeView(
                     grade: grade,
                     session: session,
-                    store: store,
                     reload: rebuild,
                   );
                 }),

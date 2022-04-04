@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
@@ -18,13 +17,12 @@ import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
-import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/GradeSubjectView.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -34,13 +32,11 @@ class GradesPane extends StatefulWidget {
     Key? key,
     required this.session,
     required this.openMainDrawer,
-    required this.store,
     this.period,
   }) : super(key: key);
 
   final Axios session;
   final Function() openMainDrawer;
-  final RegistroStore store;
   final Period? period;
 
   @override
@@ -77,46 +73,18 @@ class _GradesPaneState extends ReloadableState<GradesPane>
       ).padding(horizontal: 16);
     }
 
+    final cubit = context.watch<AppCubit>();
+
     return KeyedSubtree(
       key: key,
-      child: FutureBuilder<List<dynamic>>(
-        future: Future.wait([
-          widget.store.grades as Future,
-          widget.store.subjects as Future,
-          widget.store.getCurrentPeriod(widget.session),
-        ]),
-        initialData: [<Grade>[], <String>[], null],
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.hasError)
-            return Scaffold(
-              appBar: GradientAppBar(
-                title: Text(context.locale.drawer.grades),
-              ),
-              body: Text(
-                "${snapshot.error}\n${snapshot is Error ? snapshot.stackTrace : ""}",
-              ),
-            );
-          if (snapshot.hasData &&
-              snapshot.data!.isNotEmpty &&
-              (snapshot.connectionState == ConnectionState.done ||
-                  snapshot.data![0].isNotEmpty)) {
-            final grades = snapshot.data![0] as List<Grade>? ?? [];
-            final subjects = snapshot.data![1] as List<String>? ?? [];
-            final period = snapshot.data![2] as Period?;
-            return AnimatedBuilder(
-              animation: Provider.of<Settings>(context),
-              builder: (BuildContext context, Widget? child) {
-                return buildOk(
-                    context, grades.reversed.toList(), period, subjects);
-              },
-            );
-          }
-
-          return Scaffold(
-            appBar: GradientAppBar(
-              title: Text(context.locale.drawer.grades),
-            ),
-            body: LoadingUI(),
+      child: AnimatedBuilder(
+        animation: Provider.of<Settings>(context),
+        builder: (BuildContext context, Widget? child) {
+          return BlocBuilder(
+            bloc: cubit,
+            builder: (context, state) {
+              return buildOk(context, cubit.currentPeriod, cubit.subjects);
+            },
           );
         },
       ),
@@ -127,6 +95,16 @@ class _GradesPaneState extends ReloadableState<GradesPane>
   rebuild() {
     super.rebuild();
     setState(() {});
+  }
+
+  Widget _reloadParent({required Widget child}) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        final cubit = context.read<AppCubit>();
+        await cubit.loadGrades(force: true);
+      },
+      child: child,
+    );
   }
 
   List<String> getPeriods(List<Grade> grades) {
@@ -162,7 +140,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
                   ).center().padding(bottom: 8),
                 ],
               ),
-            ),
+            ).parent(_reloadParent),
           ),
         ),
         ...getPeriods(grades)
@@ -189,7 +167,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
                           ).center().padding(bottom: 8),
                         ],
                       ),
-                    ),
+                    ).parent(_reloadParent),
                   ),
                 ))
             .toList(),
@@ -206,8 +184,10 @@ class _GradesPaneState extends ReloadableState<GradesPane>
         ),
       ];
 
-  Widget buildOk(BuildContext context, List<Grade> grades,
-      Period? currentPeriod, List<String> subjects) {
+  Widget buildOk(
+      BuildContext context, Period? currentPeriod, List<String> subjects) {
+    final cubit = context.watch<AppCubit>();
+    final grades = cubit.grades.reversed.toList();
     final pages = getPages(context, grades, currentPeriod, subjects);
     return DefaultTabController(
       length: pages.length,
@@ -308,7 +288,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
         ).padding(horizontal: 16);
       },
       itemCount: grades.length + 1,
-    );
+    ).parent(_reloadParent);
   }
 
   Widget _buildSubjects(

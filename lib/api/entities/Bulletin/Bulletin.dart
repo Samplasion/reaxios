@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/enums/BulletinAttachmentKind.dart';
 import 'package:reaxios/api/enums/BulletinKind.dart';
@@ -8,37 +9,37 @@ import 'package:reaxios/api/utils/DateSerializer.dart';
 part 'Bulletin.g.dart';
 
 @JsonSerializable()
-class Bulletin implements AbstractJson {
-  num id;
+class Bulletin extends Equatable implements AbstractJson {
+  final num id;
   @JsonKey(name: "data")
   @DateSerializer()
-  DateTime date;
+  final DateTime date;
   @JsonKey(name: "titolo")
-  String title;
+  final String title;
   @JsonKey(name: "desc")
-  String desc;
+  final String desc;
   @JsonKey(name: "tipo")
   @BulletinKindSerializer()
-  BulletinKind kind;
+  final BulletinKind kind;
   @JsonKey(name: "tipo_risposta")
-  String responseKind;
+  final String responseKind;
   @JsonKey(name: "opzioni")
-  String options;
+  final String options;
   @JsonKey(name: "pin")
   @BooleanSerializer()
-  bool pin;
+  final bool pin;
   @JsonKey(name: "modificabile")
   @BooleanSerializer()
-  bool editable;
+  final bool editable;
   @JsonKey(name: "letta")
   @BooleanSerializer()
-  bool read;
+  final bool read;
   @JsonKey(name: "risposta")
-  String reply;
+  final String reply;
   @JsonKey(name: "risposta_testo")
-  String textReply;
+  final String textReply;
   @JsonKey(name: "allegati")
-  List<BulletinAttachment> attachments;
+  final List<BulletinAttachment> attachments;
 
   get humanReadableKind {
     switch (kind) {
@@ -55,7 +56,7 @@ class Bulletin implements AbstractJson {
     }
   }
 
-  Bulletin({
+  const Bulletin({
     required this.id,
     required this.date,
     required this.title,
@@ -123,6 +124,55 @@ class Bulletin implements AbstractJson {
       ],
     );
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        date,
+        title,
+        desc,
+        kind,
+        responseKind,
+        options,
+        pin,
+        editable,
+        read,
+        reply,
+        textReply,
+        attachments,
+      ];
+
+  copyWith({
+    num? id,
+    DateTime? date,
+    String? title,
+    String? desc,
+    BulletinKind? kind,
+    String? responseKind,
+    String? options,
+    bool? pin,
+    bool? editable,
+    bool? read,
+    String? reply,
+    String? textReply,
+    List<BulletinAttachment>? attachments,
+  }) {
+    return Bulletin(
+      id: id ?? this.id,
+      date: date ?? this.date,
+      title: title ?? this.title,
+      desc: desc ?? this.desc,
+      kind: kind ?? this.kind,
+      responseKind: responseKind ?? this.responseKind,
+      options: options ?? this.options,
+      pin: pin ?? this.pin,
+      editable: editable ?? this.editable,
+      read: read ?? this.read,
+      reply: reply ?? this.reply,
+      textReply: textReply ?? this.textReply,
+      attachments: attachments ?? this.attachments,
+    );
+  }
 }
 
 @JsonSerializable()
@@ -142,16 +192,16 @@ class APIBulletins {
 }
 
 @JsonSerializable()
-class BulletinAttachment {
+class BulletinAttachment extends Equatable {
   @JsonKey(name: "tipo")
   @BulletinAttachmentKindSerializer()
-  BulletinAttachmentKind kind;
+  final BulletinAttachmentKind kind;
   @JsonKey(name: "URL")
-  String url;
-  String? desc;
-  String? sourceName;
+  final String url;
+  final String? desc;
+  final String? sourceName;
 
-  BulletinAttachment({
+  const BulletinAttachment({
     required this.kind,
     required this.url,
     required this.desc,
@@ -162,6 +212,14 @@ class BulletinAttachment {
       _$BulletinAttachmentFromJson(json);
 
   Map<String, dynamic> toJson() => _$BulletinAttachmentToJson(this);
+
+  @override
+  List<Object?> get props => [
+        kind,
+        url,
+        desc,
+        sourceName,
+      ];
 }
 
 class BulletinKindSerializer implements JsonConverter<BulletinKind, String> {

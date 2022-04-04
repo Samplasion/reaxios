@@ -14,6 +14,7 @@ import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/notifications.dart';
+import 'package:reaxios/services/compute.dart';
 import 'package:reaxios/tuple.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,8 +52,9 @@ Future<Axios?> getSession(Isolate current) async {
     return null;
   }
 
-  Axios session =
-      new Axios(new AxiosAccount(school, user, Encrypter.decrypt(pass)));
+  Axios session = new Axios(
+      new AxiosAccount(school, user, Encrypter.decrypt(pass)),
+      compute: compute);
   try {
     await session.login();
   } catch (e) {

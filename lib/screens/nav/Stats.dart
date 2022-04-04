@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_cast, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
@@ -10,28 +11,28 @@ import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
+import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
+import '../../cubit/app_cubit.dart';
+
 // lang: it
 
-class _Tuple4<T1, T2, T3, T4> {
+class _Tuple2<T1, T2> {
   final T1 item1;
   final T2 item2;
-  final T3 item3;
-  final T4 item4;
 
-  _Tuple4(this.item1, this.item2, this.item3, this.item4);
+  _Tuple2(this.item1, this.item2);
 
-  factory _Tuple4.fromList(List<dynamic> list) {
-    return _Tuple4(list[0] as T1, list[1] as T2, list[2] as T3, list[3] as T4);
+  factory _Tuple2.fromList(List<dynamic> list) {
+    return _Tuple2(list[0] as T1, list[1] as T2);
   }
 }
 
@@ -50,38 +51,37 @@ class _StatsPaneState extends State<StatsPane> {
     return MaxWidthContainer(child: _buildBody()).center();
   }
 
+  Future<void> _refresh() async {
+    final cubit = context.read<AppCubit>();
+    await Future.wait([
+      cubit.loadStructural(force: true),
+      cubit.loadGrades(force: true),
+      cubit.loadAbsences(force: true),
+    ]);
+  }
+
   Widget _buildBody() {
-    final store = Provider.of<RegistroStore>(context);
-    return FutureBuilder<
-        _Tuple4<List<Grade>, List<Period>, List<Absence>, List<Topic>>>(
-      future: Future.wait(<Future<dynamic>>[
-        store.grades ?? Future.value(<Grade>[]),
-        store.periods ?? Future.value(<Period>[]),
-        store.absences ?? Future.value(<Absence>[]),
-        store.topics ?? Future.value(<Topic>[]),
-      ]).then((elements) => _Tuple4.fromList(elements)),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) {
+        if (state.absences != null) {
           return AnimatedBuilder(
             animation: Provider.of<Settings>(context),
             builder: (BuildContext context, Widget? child) {
-              return _buildStats(snapshot.requireData);
+              return _buildStats();
             },
           );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
         }
-        return Center(child: CircularProgressIndicator());
+        return LoadingUI();
       },
     );
   }
 
-  Widget _buildStats(
-      _Tuple4<List<Grade>, List<Period>, List<Absence>, List<Topic>> data) {
+  Widget _buildStats() {
+    final cubit = context.watch<AppCubit>();
+    final grades = cubit.grades;
+    final periods = cubit.periods;
     final settings = Provider.of<Settings>(context);
     final averageMode = settings.getAverageMode();
-    final grades = data.item1;
-    final periods = data.item2;
 
     final currentPeriod = (periods as List<Period?>).firstWhere(
         (element) => element?.isCurrent() ?? false,
@@ -222,11 +222,14 @@ class _StatsPaneState extends State<StatsPane> {
         ).padding(horizontal: 16),
     ];
 
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return items[index];
-      },
-      itemCount: items.length,
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return items[index];
+        },
+        itemCount: items.length,
+      ),
     );
   }
 }

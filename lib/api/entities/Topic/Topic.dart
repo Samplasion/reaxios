@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/interfaces/AbstractJson.dart';
 import 'package:reaxios/api/utils/DateSerializer.dart';
@@ -11,25 +12,25 @@ part 'Topic.g.dart';
 // }
 
 @JsonSerializable()
-class Topic implements AbstractJson {
+class Topic extends Equatable implements AbstractJson {
   @JsonKey(name: "data")
   @DateSerializer()
-  DateTime date;
+  final DateTime date;
   @JsonKey(name: "descMat")
-  String subject;
+  final String subject;
   @JsonKey(name: "oreLezione")
-  String lessonHour;
+  final String lessonHour;
   @JsonKey(name: "descArgomenti", defaultValue: "")
-  String topic;
+  final String topic;
   @JsonKey(name: "flagStato")
-  String flags;
+  final String flags;
   @JsonKey(name: "data_pubblicazione")
   @DateSerializer()
-  DateTime publicationDate;
+  final DateTime publicationDate;
   @JsonKey(name: "idCollabora", defaultValue: "")
-  String id;
+  final String id;
 
-  Topic({
+  const Topic({
     required this.date,
     required this.publicationDate,
     required this.subject,
@@ -66,6 +67,17 @@ class Topic implements AbstractJson {
       flags: "",
     );
   }
+
+  @override
+  List<Object?> get props => [
+        date,
+        subject,
+        lessonHour,
+        id,
+        topic,
+        flags,
+        publicationDate,
+      ];
 }
 
 @JsonSerializable()

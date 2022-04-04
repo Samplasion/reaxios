@@ -6,25 +6,24 @@ part of 'Structural.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Structural _$StructuralFromJson(Map<String, dynamic> json) {
-  return Structural(
-    gradeKinds: (json['tipoVoti'] as List<dynamic>)
-        .map((e) => GradeKinds.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    absenceKinds: (json['tipoAssenze'] as List<dynamic>)
-        .map((e) => SimpleKind.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    authorizationKinds: (json['tipoAutorizzazioni'] as List<dynamic>)
-        .map((e) => SimpleKind.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    justificationKinds: (json['tipoGiustificazione'] as List<dynamic>)
-        .map((e) => SimpleKind.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    periods: (json['frazioniTemporali'] as List<dynamic>)
-        .map((e) => Periods.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  )..absenceReasons = json['absenceReasons'] as List<dynamic>;
-}
+Structural _$StructuralFromJson(Map<String, dynamic> json) => Structural(
+      gradeKinds: (json['tipoVoti'] as List<dynamic>)
+          .map((e) => GradeKinds.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      absenceKinds: (json['tipoAssenze'] as List<dynamic>)
+          .map((e) => SimpleKind.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      authorizationKinds: (json['tipoAutorizzazioni'] as List<dynamic>)
+          .map((e) => SimpleKind.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      justificationKinds: (json['tipoGiustificazione'] as List<dynamic>)
+          .map((e) => SimpleKind.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      periods: (json['frazioniTemporali'] as List<dynamic>)
+          .map((e) => Periods.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      absenceReasons: json['absenceReasons'] as List<dynamic>? ?? const [],
+    );
 
 Map<String, dynamic> _$StructuralToJson(Structural instance) =>
     <String, dynamic>{
@@ -36,14 +35,12 @@ Map<String, dynamic> _$StructuralToJson(Structural instance) =>
       'absenceReasons': instance.absenceReasons,
     };
 
-GradeKinds _$GradeKindsFromJson(Map<String, dynamic> json) {
-  return GradeKinds(
-    schoolID: json['idPlesso'] as String,
-    kinds: (json['tipi'] as List<dynamic>)
-        .map((e) => GradeKind.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+GradeKinds _$GradeKindsFromJson(Map<String, dynamic> json) => GradeKinds(
+      schoolID: json['idPlesso'] as String,
+      kinds: (json['tipi'] as List<dynamic>)
+          .map((e) => GradeKind.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$GradeKindsToJson(GradeKinds instance) =>
     <String, dynamic>{
@@ -51,13 +48,11 @@ Map<String, dynamic> _$GradeKindsToJson(GradeKinds instance) =>
       'tipi': instance.kinds,
     };
 
-GradeKind _$GradeKindFromJson(Map<String, dynamic> json) {
-  return GradeKind(
-    kind: json['tipo'] as String,
-    code: json['codice'] as String,
-    desc: json['desc'] as String,
-  );
-}
+GradeKind _$GradeKindFromJson(Map<String, dynamic> json) => GradeKind(
+      kind: json['tipo'] as String,
+      code: json['codice'] as String,
+      desc: json['desc'] as String,
+    );
 
 Map<String, dynamic> _$GradeKindToJson(GradeKind instance) => <String, dynamic>{
       'tipo': instance.kind,
@@ -65,12 +60,10 @@ Map<String, dynamic> _$GradeKindToJson(GradeKind instance) => <String, dynamic>{
       'desc': instance.desc,
     };
 
-SimpleKind _$SimpleKindFromJson(Map<String, dynamic> json) {
-  return SimpleKind(
-    kind: json['tipo'] as String,
-    desc: json['desc'] as String,
-  );
-}
+SimpleKind _$SimpleKindFromJson(Map<String, dynamic> json) => SimpleKind(
+      kind: json['tipo'] as String,
+      desc: json['desc'] as String,
+    );
 
 Map<String, dynamic> _$SimpleKindToJson(SimpleKind instance) =>
     <String, dynamic>{
@@ -79,7 +72,10 @@ Map<String, dynamic> _$SimpleKindToJson(SimpleKind instance) =>
     };
 
 Period _$PeriodFromJson(Map<String, dynamic> json) {
-  $checkKeys(json, disallowNullValues: const ['idFrazione']);
+  $checkKeys(
+    json,
+    disallowNullValues: const ['idFrazione'],
+  );
   return Period(
     id: json['idFrazione'] as String? ?? '',
     desc: json['descFrazione'] as String? ?? '',
@@ -95,14 +91,12 @@ Map<String, dynamic> _$PeriodToJson(Period instance) => <String, dynamic>{
       'dataFine': const DateSerializer().toJson(instance.endDate),
     };
 
-Periods _$PeriodsFromJson(Map<String, dynamic> json) {
-  return Periods(
-    schoolID: json['idPlesso'] as String,
-    periods: (json['frazioni'] as List<dynamic>)
-        .map((e) => Period.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+Periods _$PeriodsFromJson(Map<String, dynamic> json) => Periods(
+      schoolID: json['idPlesso'] as String,
+      periods: (json['frazioni'] as List<dynamic>)
+          .map((e) => Period.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$PeriodsToJson(Periods instance) => <String, dynamic>{
       'idPlesso': instance.schoolID,

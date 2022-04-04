@@ -6,23 +6,23 @@ part of 'Absence.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Absence _$AbsenceFromJson(Map<String, dynamic> json) {
-  return Absence(
-    id: json['id'] as String,
-    date: const DateSerializer().fromJson(json['data'] as String),
-    rawReason: json['motivo'] as String,
-    kind: json['kind'] as String,
-    kindJustified: json['kindJustified'] as String,
-    concurs: const BooleanSerializer().fromJson(json['calcolo'] as String),
-    hasTime: const BooleanSerializer().fromJson(json['ora'] as String),
-    isJustifiable:
-        const BooleanSerializer().fromJson(json['giustificabile'] as String),
-    rawDateJustified: json['datagiust'] as String,
-    rawKind: json['tipo'] as String,
-    rawKindJustified: json['tipogiust'] as String,
-    lessonHour: const IntSerializer().fromJson(json['oralez'] as String),
-  );
-}
+Absence _$AbsenceFromJson(Map<String, dynamic> json) => Absence(
+      id: json['id'] as String,
+      date: const DateSerializer().fromJson(json['data'] as String),
+      rawReason: json['motivo'] as String,
+      kind: json['kind'] as String,
+      kindJustified: json['kindJustified'] as String,
+      concurs: const BooleanSerializer().fromJson(json['calcolo'] as String),
+      hasTime: const BooleanSerializer().fromJson(json['ora'] as String),
+      isJustifiable:
+          const BooleanSerializer().fromJson(json['giustificabile'] as String),
+      rawDateJustified: json['datagiust'] as String,
+      rawKind: json['tipo'] as String,
+      rawKindJustified: json['tipogiust'] as String,
+      lessonHour: json['oralez'] == null
+          ? 0
+          : const IntSerializer().fromJson(json['oralez'] as String),
+    );
 
 Map<String, dynamic> _$AbsenceToJson(Absence instance) => <String, dynamic>{
       'id': instance.id,
@@ -40,16 +40,14 @@ Map<String, dynamic> _$AbsenceToJson(Absence instance) => <String, dynamic>{
           const BooleanSerializer().toJson(instance.isJustifiable),
     };
 
-APIAbsences _$APIAbsencesFromJson(Map<String, dynamic> json) {
-  return APIAbsences(
-    idAlunno: json['idAlunno'] as String,
-    idFrazione: json['idFrazione'] as String,
-    descFrazione: json['descFrazione'] as String,
-    assenze: (json['assenze'] as List<dynamic>)
-        .map((e) => Absence.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+APIAbsences _$APIAbsencesFromJson(Map<String, dynamic> json) => APIAbsences(
+      idAlunno: json['idAlunno'] as String,
+      idFrazione: json['idFrazione'] as String,
+      descFrazione: json['descFrazione'] as String,
+      assenze: (json['assenze'] as List<dynamic>)
+          .map((e) => Absence.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$APIAbsencesToJson(APIAbsences instance) =>
     <String, dynamic>{

@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/average.dart';
 import 'package:reaxios/components/Charts/GradeLineChart.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
@@ -18,9 +17,9 @@ import 'package:reaxios/components/Utilities/GradeAvatar.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Views/SubjectSettingsView.dart';
+import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/structs/GradeAlertBoundaries.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -200,9 +199,8 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
         : toReachAverage(grades.map((g) => [g.grade, g.weight]).toList(), n, s)
             .toDouble();
 
-    final store = Provider.of<RegistroStore>(context, listen: false);
     final GradeAlertBoundaries bounds =
-        GradeAlertBoundaries.get(store.gradeDisplay);
+        GradeAlertBoundaries.get(settings.getGradeDisplay());
 
     if (thisSubjectObjective != null) {
       if (periodAvg < thisSubjectObjective.objective) {
