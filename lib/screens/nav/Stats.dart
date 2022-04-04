@@ -11,6 +11,7 @@ import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
+import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
@@ -70,7 +71,7 @@ class _StatsPaneState extends State<StatsPane> {
             },
           );
         }
-        return Center(child: CircularProgressIndicator());
+        return LoadingUI();
       },
     );
   }

@@ -8,6 +8,7 @@ import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/LowLevel/Empty.dart';
+import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -263,7 +264,7 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
                       },
                     )
                   ] else
-                    Center(child: CircularProgressIndicator()),
+                    LoadingUI(),
                 ],
               ),
             ),
@@ -283,48 +284,5 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
             .animate(Duration(milliseconds: 150), Curves.easeOut);
       },
     );
-    // return <Widget>[
-    //   NiceHeader(
-    //     title: context.locale.charts.averages,
-    //     subtitle: period == null
-    //         ? context.locale.charts.scopeAllYear
-    //         : period!.desc,
-    //     leading: Icon(Icons.av_timer),
-    //   ).padding(top: 24, horizontal: 8),
-    //   // if (chart == null) Center(child: CircularProgressIndicator()) else chart!,
-    //   FutureBuilder<List<Grade>>(
-    //     future: widget.store.grades,
-    //     builder: (BuildContext context, snapshot) {
-    //       if (!snapshot.hasError && snapshot.hasData) {
-    //         final grades = _getEntries(snapshot.data!);
-
-    //         if (grades.isEmpty)
-    //           return EmptyUI(
-    //             icon: Icons.error_outline,
-    //             text: context.locale.main.noDataForPeriod,
-    //           ).padding(top: 24, horizontal: 8);
-
-    //         // print("Chart rebuilt");
-
-    //         // return
-    //         return AnimatedBuilder(
-    //           animation: Provider.of<Settings>(context),
-    //           builder: (BuildContext context, _) {
-    //             return _buildChart(
-    //               grades,
-    //               gradeAverage(
-    //                 Provider.of<Settings>(context).getAverageMode(),
-    //                 snapshot.data!,
-    //               ),
-    //             );
-    //           },
-    //         );
-    //       }
-    //       if (snapshot.hasError) return Text("${snapshot.error}");
-    //       return Center(child: CircularProgressIndicator());
-    //     },
-    //   ),
-    // ]
-    //     .toColumn();
   }
 }

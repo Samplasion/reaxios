@@ -16,6 +16,7 @@ import 'package:reaxios/components/ListItems/TopicListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
+import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
@@ -60,7 +61,7 @@ class _CalendarPaneState extends State<CalendarPane> {
         } else {
           return Scaffold(
             appBar: getDefaultAppBar(context, [], [], [], false),
-            body: Center(child: CircularProgressIndicator()),
+            body: LoadingUI(),
           );
         }
       },
