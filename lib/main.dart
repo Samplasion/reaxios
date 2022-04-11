@@ -46,11 +46,14 @@ class MyHttpOverrides extends HttpOverrides {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // FIXME: currently this crashes with a "null check operator used on a null value" exception
-  // LicenseRegistry.addLicense(() async* {
-  //   final license = await rootBundle.loadString('google_fonts/OFL.txt');
-  //   yield LicenseEntryWithLineBreaks(['google_fonts'], license);
-  // });
+  LicenseRegistry.addLicense(() async* {
+    try {
+      final license = await rootBundle.loadString('google_fonts/OFL.txt');
+      yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+    } catch (e) {
+      print(e);
+    }
+  });
 
   final timetable.Settings settings = timetable.Settings();
   await settings.init();

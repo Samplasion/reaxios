@@ -1,4 +1,5 @@
 Copyright 2011 The Montserrat Project Authors (https://github.com/JulietaUla/Montserrat)
+Copyright 2021 The Outfit Project Authors (https://github.com/Outfitio/Outfit-Fonts)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
