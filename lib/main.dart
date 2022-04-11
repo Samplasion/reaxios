@@ -3,6 +3,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,9 +58,10 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   await S.Settings.init();
 
-  print(await getApplicationDocumentsDirectory());
   final storage = await HydratedStorage.build(
-    storageDirectory: await getApplicationDocumentsDirectory(),
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getApplicationDocumentsDirectory(),
   );
   HydratedBlocOverrides.runZoned(
     () => runApp(RestartWidget(
