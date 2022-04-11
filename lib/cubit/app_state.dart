@@ -49,14 +49,15 @@ class AppState extends Equatable {
     this.structural,
   });
 
+  // Use _propsX for potentially expensive lists that could freeze the UI
   @override
   List<Object?> get props => [
         testMode,
         axios,
         school,
-        assignments,
-        grades,
-        topics,
+        _propsAssignments,
+        _propsGrades,
+        _propsTopics,
         reportCards,
         bulletins,
         notes,
@@ -64,6 +65,19 @@ class AppState extends Equatable {
         authorizations,
         materials,
         structural,
+      ];
+
+  List<Object?> get _propsAssignments => [
+        assignments?.length,
+      ];
+
+  List<Object?> get _propsGrades => [
+        grades?.length,
+        grades?.where((g) => g.seen).length,
+      ];
+
+  List<Object?> get _propsTopics => [
+        topics?.length,
       ];
 
   factory AppState.empty() => AppState(testMode: false, school: null);
