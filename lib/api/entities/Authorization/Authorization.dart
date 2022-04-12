@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
@@ -9,7 +10,7 @@ import 'package:reaxios/api/utils/IntSerializer.dart';
 part 'Authorization.g.dart';
 
 @JsonSerializable()
-class Authorization implements AbstractJson {
+class Authorization extends Equatable implements AbstractJson {
   // num id;
   @JsonKey(name: "idPermesso")
   String id;
@@ -160,13 +161,31 @@ class Authorization implements AbstractJson {
       authorizedDate: DateTime.now(),
     );
   }
+
+  @override
+  List<Object> get props => [
+        id,
+        rawKind,
+        startDate,
+        endDate,
+        rawLessonHour,
+        time,
+        reason,
+        notes,
+        concurs,
+        // justified,
+        entireClass,
+        insertedBy,
+        authorizedBy,
+        authorizedDate,
+      ];
 }
 
 @JsonSerializable()
 class Request implements AbstractJson {}
 
 @JsonSerializable()
-class APIAuthorizations {
+class APIAuthorizations extends Equatable {
   String idAlunno;
   List<Authorization> permessiDaAutorizzare;
   List<Authorization> permessiAutorizzati;
@@ -181,4 +200,11 @@ class APIAuthorizations {
       _$APIAuthorizationsFromJson(json);
 
   Map<String, dynamic> toJson() => _$APIAuthorizationsToJson(this);
+
+  @override
+  List<Object> get props => [
+        idAlunno,
+        permessiDaAutorizzare,
+        permessiAutorizzati,
+      ];
 }

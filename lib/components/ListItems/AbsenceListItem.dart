@@ -49,15 +49,12 @@ class AbsenceListItem extends StatelessWidget {
           ])
         : null;
 
-    final showSubtitle = absence.kindJustified.isNotEmpty ||
-        justifiedText != null && justifiedText.isNotEmpty;
-
     final tile = CardListItem(
       leading: leading,
       title: context.locale.absences.getByKey("type${absence.kind}"),
-      subtitle: showSubtitle
+      subtitle: justifiedText != null && justifiedText.isNotEmpty
           ? MarkdownBody(
-              data: justifiedText!,
+              data: justifiedText,
               styleSheet: MarkdownStyleSheet(
                 p: TextStyle(color: Theme.of(context).textTheme.caption!.color),
               ),

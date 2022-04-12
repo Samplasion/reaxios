@@ -3,7 +3,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
@@ -26,9 +25,6 @@ class MaterialFolderView extends StatefulWidget {
 }
 
 class _MaterialFolderViewState extends State<MaterialFolderView> {
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
-
   List<MaterialData> _materials = [];
 
   @override
@@ -37,12 +33,8 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
       appBar: GradientAppBar(
         title: Text(widget.folder.description),
       ),
-      body: SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: false,
-        controller: _refreshController,
+      body: RefreshIndicator(
         onRefresh: _onRefresh,
-        onLoading: _onLoading,
         child: ListView.builder(
           itemBuilder: (context, index) {
             if (index >= _materials.length)
@@ -139,25 +131,7 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
     if (mounted) setState(() {});
   }
 
-  _onRefresh() async {
-    try {
-      await _loadData();
-      _refreshController.refreshCompleted();
-    } catch (e) {
-      // print(e);
-      if (e is Error) // print(e.stackTrace);
-        _refreshController.refreshFailed();
-    }
-  }
-
-  _onLoading() async {
-    try {
-      await _loadData();
-      _refreshController.loadComplete();
-    } catch (e) {
-      // print(e);
-      if (e is Error) // print(e.stackTrace);
-        _refreshController.loadFailed();
-    }
+  Future<void> _onRefresh() async {
+    await _loadData();
   }
 }

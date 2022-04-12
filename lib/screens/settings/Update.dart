@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:reaxios/components/Views/SubjectObjectivesManagerView.dart';
 import 'package:reaxios/enums/UpdateNagMode.dart';
 import 'package:reaxios/format.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
 import 'base.dart';
@@ -14,8 +13,6 @@ class UpdateSettings extends BaseSettings {
 
   @override
   List<SettingsTile> getTiles(BuildContext context, Settings settings) {
-    final store = Provider.of<RegistroStore>(context);
-
     return [
       RadioModalTile<UpdateNagMode>(
         title: Text(context.locale.updateSettings.updateNagMode),

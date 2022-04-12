@@ -3,7 +3,10 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
@@ -26,8 +29,8 @@ import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Utilities/updates/upgrade_card.dart';
 import 'package:reaxios/consts.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/timetable/extensions.dart' hide ColorExtension;
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
@@ -43,7 +46,6 @@ class OverviewPane extends StatefulWidget {
     required this.session,
     required this.login,
     required this.student,
-    required this.store,
     required this.openMainDrawer,
     required this.switchToTab,
   }) : super(key: key);
@@ -51,7 +53,6 @@ class OverviewPane extends StatefulWidget {
   final Axios session;
   final Login login;
   final Student student;
-  final RegistroStore store;
   final Function() openMainDrawer;
   final void Function(int index) switchToTab;
 
@@ -89,48 +90,36 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
   }
 
   initREData() async {
-    Future.wait([
-      widget.session.getCurrentPeriod().then((p) => setState(() => period = p)),
-    ]).then((_) => setState(() => loading = false));
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      final cubit = context.read<AppCubit>();
+      if (cubit.structural != null) {
+        setState(() {
+          period = cubit.currentPeriod;
+          loading = false;
+        });
+      } else {
+        cubit.loadStructural().then((p) => setState(() {
+              period = cubit.currentPeriod;
+              loading = false;
+            }));
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // final tmrAssignments = assignments.where(filterTmr).toList();
-    // // final todaysGrades = grades.where(filterToday).toList();
-    final initialData = [
-      <Assignment>[],
-      <Topic>[],
-      <Grade>[],
-    ];
-
-    return Scaffold(
-      appBar: loading
-          ? GradientAppBar(
-              title: Text(
-                context.locale.drawer.overview,
-              ),
-            )
-          : null,
-      body: loading
-          ? LoadingUI()
-          : FutureBuilder<List<List<dynamic>>>(
-              future: Future.wait([
-                widget.store.assignments ?? Future.value([]),
-                widget.store.topics ?? Future.value([]),
-                widget.store.grades ?? Future.value([]),
-              ]),
-              initialData: initialData,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                List<List> data =
-                    snapshot.hasData ? snapshot.data! : initialData;
-                return _buildBody(data[0] as List<Assignment>,
-                    data[1] as List<Topic>, data[2] as List<Grade>);
-
-                // return Center(child: CircularProgressIndicator());
-              },
-            ),
-    );
+    return Builder(builder: (context) {
+      return Scaffold(
+        appBar: loading
+            ? GradientAppBar(
+                title: Text(
+                  context.locale.drawer.overview,
+                ),
+              )
+            : null,
+        body: loading ? LoadingUI() : _buildBody(),
+      );
+    });
   }
 
   @override
@@ -139,8 +128,11 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     setState(() {});
   }
 
-  Widget _buildBody(
-      List<Assignment> assignments, List<Topic> topics, List<Grade> grades) {
+  Widget _buildBody() {
+    final cubit = context.watch<AppCubit>();
+    final assignments = cubit.assignments;
+    final grades = cubit.grades;
+    final topics = cubit.topics;
     final student = widget.student;
 
     final screenWidth = MaybeMasterDetail.of(context)?.detailWidth ??
@@ -308,35 +300,48 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         ),
       ],
 
-      // Man, this chart lags
       MaxWidthContainer(
-        child: GradeAverageChart(
-                store: widget.store, session: widget.session, period: period)
-            .padding(all: 16),
+        child: GradeAverageChart(period: period).padding(all: 16),
       ).center(),
     ];
 
     final toolbarHeight = AppBar().toolbarHeight ?? kToolbarHeight;
 
-    return CustomScrollView(
-      slivers: [
-        SliverPersistentHeader(
-          pinned: true,
-          floating: false,
-          delegate: CustomSliverDelegate(
-            hideTitleWhenExpanded: false,
-            openMenu: widget.openMainDrawer,
-            expandedHeight: MediaQuery.of(context).padding.top + 185,
-            collapsedHeight: MediaQuery.of(context).padding.top + toolbarHeight,
-            period: period,
-            student: student,
-            switchToTab: widget.switchToTab,
+    return RefreshIndicator(
+      onRefresh: () async {
+        final cubit = context.read<AppCubit>();
+        // Only await the futures that are most likely to freeze the UI
+        cubit.loadStructural(force: true);
+        cubit.loadAssignments(force: true);
+        await cubit.loadGrades(force: true);
+        await cubit.loadTopics(force: true);
+      },
+      child: CustomScrollView(
+        slivers: [
+          BlocBuilder<AppCubit, AppState>(
+            bloc: cubit,
+            builder: (context, _) {
+              return SliverPersistentHeader(
+                pinned: true,
+                floating: false,
+                delegate: CustomSliverDelegate(
+                  hideTitleWhenExpanded: false,
+                  openMenu: widget.openMainDrawer,
+                  expandedHeight: MediaQuery.of(context).padding.top + 185,
+                  collapsedHeight:
+                      MediaQuery.of(context).padding.top + toolbarHeight,
+                  period: cubit.currentPeriod,
+                  student: student,
+                  switchToTab: widget.switchToTab,
+                ),
+              );
+            },
           ),
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate(items),
-        ),
-      ],
+          SliverList(
+            delegate: SliverChildListDelegate(items),
+          ),
+        ],
+      ),
     );
   }
 
@@ -375,7 +380,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    final RegistroStore store = context.watch<RegistroStore>();
+    // final RegistroStore store = context.watch<RegistroStore>();
     final appBarSize = (expandedHeight - shrinkOffset);
     final cardTopPosition = (expandedHeight / 2 - shrinkOffset) / 2; // / 10;
     final proportion = 2 - (expandedHeight / appBarSize);
@@ -417,7 +422,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                       child: UserCard(
                         student: student,
                         period: period,
-                        store: store,
+                        // store: store,
                         switchToTab: switchToTab,
                       ),
                     ).center(),
@@ -446,13 +451,13 @@ class UserCard extends StatelessWidget {
   const UserCard({
     required this.student,
     this.period,
-    required this.store,
+    // required this.store,
     required this.switchToTab,
   });
 
   final Student student;
   final Period? period;
-  final RegistroStore store;
+  // final RegistroStore store;
   final void Function(int index) switchToTab;
 
   bg(BuildContext context) => Theme.of(context).accentColor;
@@ -491,65 +496,29 @@ class UserCard extends StatelessWidget {
   }
 
   Widget _buildUserStats(BuildContext context) {
+    final cubit = context.watch<AppCubit>();
     return <Widget>[
-      FutureBuilder<List<Grade>>(
-        builder: (context, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(
-                context, "...", context.locale.overview.average);
-          }
+      AnimatedBuilder(
+        animation: Provider.of<Settings>(context),
+        builder: (BuildContext context, Widget? child) {
+          final averageMode = Provider.of<Settings>(context).getAverageMode();
           final relevantGrades = period == null
-              ? snapshot.data!
-              : snapshot.data!.where((g) => g.period == period!.desc).toList();
-          return AnimatedBuilder(
-            animation: Provider.of<Settings>(context),
-            builder: (BuildContext context, Widget? child) {
-              final averageMode =
-                  Provider.of<Settings>(context).getAverageMode();
-              return _buildUserStatsItem(
-                context,
-                gradeAverage(averageMode, relevantGrades).toString(),
-                context.locale.overview.average,
-                3,
-              );
-            },
+              ? cubit.grades
+              : cubit.grades.where((g) => g.period == period!.desc).toList();
+          return _buildUserStatsItem(
+            context,
+            gradeAverage(averageMode, relevantGrades).toString(),
+            context.locale.overview.average,
+            3,
           );
         },
-        future: store.grades,
       ),
-      FutureBuilder<List<Grade>>(
-        builder: (_, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(
-                context, "...", context.locale.overview.grades);
-          }
-          return _buildUserStatsItem(context, snapshot.data!.length.toString(),
-              context.locale.overview.grades, 3);
-        },
-        future: store.grades,
-      ),
-      FutureBuilder<List<Assignment>>(
-        builder: (_, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(
-                context, "...", context.locale.overview.assignments);
-          }
-          return _buildUserStatsItem(context, snapshot.data!.length.toString(),
-              context.locale.overview.assignments, 2);
-        },
-        future: store.assignments,
-      ),
-      FutureBuilder<List<Topic>>(
-        builder: (_, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) {
-            return _buildUserStatsItem(
-                context, "...", context.locale.overview.topics);
-          }
-          return _buildUserStatsItem(context, snapshot.data!.length.toString(),
-              context.locale.overview.topics, 5);
-        },
-        future: store.topics,
-      ),
+      _buildUserStatsItem(context, cubit.grades.length.toString(),
+          context.locale.overview.grades, 3),
+      _buildUserStatsItem(context, cubit.assignments.length.toString(),
+          context.locale.overview.assignments, 2),
+      _buildUserStatsItem(context, cubit.topics.length.toString(),
+          context.locale.overview.topics, 5),
     ]
         .toRow(mainAxisAlignment: MainAxisAlignment.spaceAround)
         .padding(vertical: 10);

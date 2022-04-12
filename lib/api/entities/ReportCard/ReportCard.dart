@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/enums/ReportCardSubjectKind.dart';
 import 'package:reaxios/api/utils/BooleanSerializer.dart';
@@ -7,41 +8,41 @@ import 'package:reaxios/api/utils/IntSerializer.dart';
 part "ReportCard.g.dart";
 
 @JsonSerializable()
-class ReportCard {
+class ReportCard extends Equatable {
   @JsonKey(name: "idAlunno")
-  String studentUUID;
+  final String studentUUID;
   @JsonKey(name: "idFrazione")
-  String periodUUID;
+  final String periodUUID;
   @JsonKey(name: "codiceFrazione")
-  String periodCode;
+  final String periodCode;
   @JsonKey(name: "descFrazione")
-  String period;
+  final String period;
   @JsonKey(name: "esito")
-  String result;
+  final String result;
   @JsonKey(name: "giudizio")
-  String rating;
+  final String rating;
   @JsonKey(name: "URL")
-  String url;
+  final String url;
   @JsonKey(name: "letta")
   @BooleanSerializer()
-  bool read;
+  final bool read;
   @JsonKey(name: "visibile")
   @BooleanSerializer()
-  bool visible;
+  final bool visible;
   @JsonKey(name: "materie")
-  List<ReportCardSubject> subjects;
+  final List<ReportCardSubject> subjects;
   @JsonKey(name: "dataVisualizzazione")
   @DateSerializer()
-  DateTime dateRead;
+  final DateTime dateRead;
   @JsonKey(name: "flagAssenzeVisibili")
   @BooleanSerializer()
-  bool canViewAbsences;
+  final bool canViewAbsences;
   @JsonKey(name: "ordineScuola", defaultValue: "")
-  String eduGrade;
+  final String eduGrade;
   @JsonKey(name: "tipoPagella", defaultValue: "")
-  String cardKind;
+  final String cardKind;
 
-  ReportCard({
+  const ReportCard({
     required this.studentUUID,
     required this.periodUUID,
     required this.periodCode,
@@ -96,27 +97,45 @@ class ReportCard {
         eduGrade: "",
         cardKind: "",
       );
+
+  @override
+  List<Object?> get props => [
+        studentUUID,
+        periodUUID,
+        periodCode,
+        period,
+        result,
+        rating,
+        url,
+        read,
+        visible,
+        subjects,
+        dateRead,
+        canViewAbsences,
+        eduGrade,
+        cardKind,
+      ];
 }
 
 @JsonSerializable()
-class ReportCardSubject {
+class ReportCardSubject extends Equatable {
   @JsonKey(name: "idMat")
-  String id;
+  final String id;
   @JsonKey(name: "descMat", defaultValue: "")
-  String name;
+  final String name;
   @JsonKey(name: "tipoMat")
   @ReportCardSubjectKindSerializer()
-  ReportCardSubjectKind kind;
+  final ReportCardSubjectKind kind;
   @JsonKey(name: "tipoRecupero")
-  String recoveryKind;
+  final String recoveryKind;
   @JsonKey(name: "assenze", defaultValue: 0)
-  double absences;
+  final double absences;
   @JsonKey(name: "mediaVoti", defaultValue: 0)
-  double gradeAverage;
+  final double gradeAverage;
   @JsonKey(name: "detail")
-  List<ReportCardSubjectDetail> details;
+  final List<ReportCardSubjectDetail> details;
 
-  ReportCardSubject({
+  const ReportCardSubject({
     required this.id,
     required this.name,
     required this.kind,
@@ -130,20 +149,31 @@ class ReportCardSubject {
       _$ReportCardSubjectFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReportCardSubjectToJson(this);
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        kind,
+        recoveryKind,
+        absences,
+        gradeAverage,
+        details,
+      ];
 }
 
 @JsonSerializable()
-class ReportCardSubjectDetail {
+class ReportCardSubjectDetail extends Equatable {
   @JsonKey(name: "tipo")
-  String kind;
-  String label;
+  final String kind;
+  final String label;
   @JsonKey(name: "voto")
-  String textGrade;
+  final String textGrade;
   @JsonKey(name: "votoValore")
   @IntSerializer()
-  int grade;
+  final int grade;
 
-  ReportCardSubjectDetail({
+  const ReportCardSubjectDetail({
     required this.kind,
     required this.label,
     required this.textGrade,
@@ -154,6 +184,14 @@ class ReportCardSubjectDetail {
       _$ReportCardSubjectDetailFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReportCardSubjectDetailToJson(this);
+
+  @override
+  List<Object?> get props => [
+        kind,
+        label,
+        textGrade,
+        grade,
+      ];
 }
 
 class ReportCardSubjectKindSerializer

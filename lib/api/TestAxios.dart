@@ -20,7 +20,9 @@ import 'package:reaxios/api/enums/ReportCardSubjectKind.dart';
 import 'package:reaxios/api/utils/utils.dart';
 
 class TestAxios implements Axios {
-  TestAxios();
+  TestAxios() : super();
+
+  ComputeImpl compute = defaultCompute;
 
   @override
   void Function() get onError => () => print("error");
@@ -329,7 +331,7 @@ class TestAxios implements Axios {
   }
 
   @override
-  Future<void> markBulletinAsRead(Bulletin bulletin) async {}
+  Future<Bulletin> markBulletinAsRead(Bulletin bulletin) async => bulletin;
 
   @override
   Future<void> markGradeAsRead(Grade grade) async {}

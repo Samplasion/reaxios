@@ -1,28 +1,29 @@
+import 'package:reaxios/api/utils/Encrypter.dart';
+
 class AxiosAccount {
-    late String _schoolID;
-    late String _userID;
-    late String _userPassword;
+  final String schoolID;
+  final String userID;
+  final String userPassword;
 
-    AxiosAccount(String schoolID, String userID, String userPassword) {
-        this._schoolID = schoolID;
-        this._userID = userID;
-        this._userPassword = userPassword;
-    }
+  const AxiosAccount(this.schoolID, this.userID, this.userPassword);
 
-    String get schoolID {
-        return this._schoolID;
-    }
-    String get userID {
-        return this._userID;
-    }
-    String get userPassword {
-        return this._userPassword;
-    }
-    set userPassword(String pass) {
-        this._userPassword = pass;
-    }
+  toString() {
+    return "AxiosInstance(school: ${this.schoolID}, uid: ${this.userID}, password: ${this.userPassword})";
+  }
 
-    toString() {
-        return "AxiosInstance(school: ${this._schoolID}, uid: ${this._userID}, password: ${this._userPassword})";
-    }
+  Map<String, dynamic> toJson() {
+    return {
+      "schoolID": this.schoolID,
+      "userID": this.userID,
+      "userPassword": Encrypter.encrypt(this.userPassword),
+    };
+  }
+
+  factory AxiosAccount.fromJson(Map<String, dynamic> json) {
+    return AxiosAccount(
+      json["schoolID"] as String,
+      json["userID"] as String,
+      Encrypter.decrypt(json["userPassword"] as String),
+    );
+  }
 }

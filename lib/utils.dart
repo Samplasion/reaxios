@@ -11,10 +11,11 @@ import 'dart:math';
 
 import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:reaxios/timetable/structures/Settings.dart';
 
+import 'cubit/app_cubit.dart';
 import 'enums/AverageMode.dart';
 import 'enums/GradeDisplay.dart';
-import 'system/Store.dart';
 
 extension StringUtils on String {
   repeat(int times) {
@@ -308,8 +309,9 @@ extension ContextUtils on BuildContext {
     bool round = true,
     bool showAsNumber = false,
   }) {
-    final store = Provider.of<RegistroStore>(this, listen: false);
-    switch (store.gradeDisplay) {
+    final settings = read<Settings>();
+    final gradeDisplay = settings.getGradeDisplay();
+    switch (gradeDisplay) {
       case GradeDisplay.letter:
         // Edit: It sucks less, but still...
         if (!showAsNumber) return axios_utils.gradeToLetter(grade);

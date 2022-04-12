@@ -3,13 +3,16 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/components/LowLevel/md_indicator.dart';
 import 'package:reaxios/components/Utilities/updates/config.dart' as upgrader;
@@ -19,12 +22,13 @@ import 'package:reaxios/screens/Loading.dart';
 import 'package:reaxios/screens/Login.dart';
 import 'package:reaxios/screens/NoInternet.dart';
 import 'package:reaxios/screens/Settings.dart';
+import 'package:reaxios/services/notifications.dart';
 import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
-import 'package:reaxios/system/Store.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
 import 'change_notifier_provider.dart';
+import 'cubit/app_cubit.dart';
 import 'timetable/structures/Settings.dart' as timetable;
 import 'timetable/structures/Store.dart' as timetable;
 
@@ -42,37 +46,49 @@ class MyHttpOverrides extends HttpOverrides {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // FIXME: currently this crashes with a "null check operator used on a null value" exception
-  // LicenseRegistry.addLicense(() async* {
-  //   final license = await rootBundle.loadString('google_fonts/OFL.txt');
-  //   yield LicenseEntryWithLineBreaks(['google_fonts'], license);
-  // });
+  LicenseRegistry.addLicense(() async* {
+    try {
+      final license = await rootBundle.loadString('google_fonts/OFL.txt');
+      yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+    } catch (e) {
+      print(e);
+    }
+  });
 
   final timetable.Settings settings = timetable.Settings();
   await settings.init();
 
-  RegistroStore registroStore = RegistroStore();
-
   HttpOverrides.global = MyHttpOverrides();
   await S.Settings.init();
-  runApp(RestartWidget(
-    child: MultiProvider(
-      child: RegistroElettronicoApp(),
-      providers: [
-        Provider(create: (_) => registroStore),
-        Provider(create: (_) => AppInfoStore()..getPackageInfo(), lazy: false),
-        ChangeNotifierProvider(create: (_) => timetable.Store()),
-        UndisposingChangeNotifierProvider<timetable.Settings>(
-          create: (_) => settings,
+
+  final storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getApplicationDocumentsDirectory(),
+  );
+  HydratedBlocOverrides.runZoned(
+    () => runApp(RestartWidget(
+      child: BlocProvider(
+        create: (context) => AppCubit(),
+        child: MultiProvider(
+          child: RegistroElettronicoApp(),
+          providers: [
+            Provider(
+                create: (_) => AppInfoStore()..getPackageInfo(), lazy: false),
+            ChangeNotifierProvider(create: (_) => timetable.Store()),
+            UndisposingChangeNotifierProvider<timetable.Settings>(
+              create: (_) => settings,
+            ),
+          ],
         ),
-      ],
-    ),
-  ));
+      ),
+    )),
+    storage: storage,
+  );
 
   if (Platform.isAndroid) {
     android_service
-        .initializeNotifications(
-            (payload) => registroStore.notificationPayloadAction(payload))
+        .initializeNotifications((pload) => notificationsSubject.add(pload))
         .then((_) => android_service.startNotificationServices());
   }
 
@@ -109,11 +125,6 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
   Widget build(BuildContext context) {
     final settings = Provider.of<timetable.Settings>(context);
     final themeMode = settings.getThemeMode();
-
-    var store = Provider.of<RegistroStore>(context);
-
-    store.gradeDisplay = deserializeGradeDisplay(
-        S.Settings.getValue("grade-display", "decimal"));
 
     // final primary = cs.fromJson(
     //   S.Settings.getValue("primary-color", cs.toJson(Colors.orange[400])),
@@ -257,19 +268,8 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
               const Locale('it'),
             ],
             routes: {
-              "/": (_) => Builder(
-                    builder: (context) => RefreshConfiguration(
-                      headerBuilder: () => ClassicHeader(
-                        idleText: context.locale.main.idleText,
-                        completeText: context.locale.main.completeText,
-                        releaseText: context.locale.main.releaseText,
-                        refreshingText: context.locale.main.refreshingText,
-                        failedText: context.locale.main.failedText,
-                      ),
-                      child: HomeScreen(store: store),
-                    ),
-                  ),
-              "login": (_) => LoginScreen(store: store),
+              "/": (_) => HomeScreen(),
+              "login": (_) => LoginScreen(),
               "loading": (_) => LoadingScreen(),
               "settings": (_) => SettingsScreen(),
               "nointernet": (_) => NoInternetScreen(),

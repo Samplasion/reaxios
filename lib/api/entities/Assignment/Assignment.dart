@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/interfaces/AbstractJson.dart';
 import 'package:reaxios/api/utils/DateSerializer.dart';
@@ -12,7 +13,7 @@ part 'Assignment.g.dart';
 // }
 
 @JsonSerializable()
-class Assignment implements AbstractJson {
+class Assignment extends Equatable implements AbstractJson {
   @JsonKey(name: "data")
   @DateSerializer()
   DateTime date;
@@ -68,6 +69,16 @@ class Assignment implements AbstractJson {
       assignment: "Verifica sistemi",
     );
   }
+
+  @override
+  List<Object?> get props => [
+        date,
+        publicationDate,
+        subject,
+        lessonHour,
+        id,
+        assignment,
+      ];
 }
 
 @JsonSerializable()

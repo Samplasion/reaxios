@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/interfaces/AbstractJson.dart';
@@ -15,7 +16,7 @@ part 'Grade.g.dart';
 // }
 
 @JsonSerializable()
-class Grade implements AbstractJson {
+class Grade extends Equatable implements AbstractJson {
   @JsonKey(name: "idVoto")
   String id;
   @JsonKey(name: "idMat")
@@ -182,6 +183,23 @@ class Grade implements AbstractJson {
       seenOn: seenOn ?? this.seenOn,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        subjectID,
+        subject,
+        date,
+        kind,
+        prettyGrade,
+        grade,
+        weight,
+        comment,
+        teacher,
+        seen,
+        seenBy,
+        seenOn,
+      ];
 }
 
 @JsonSerializable()

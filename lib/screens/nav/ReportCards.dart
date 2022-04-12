@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Views/ReportCard.dart';
-import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils.dart';
 
 class ReportCardsPane extends StatefulWidget {
   ReportCardsPane({
     Key? key,
     required this.session,
-    required this.store,
   }) : super(key: key);
 
   final Axios session;
-  final RegistroStore store;
 
   @override
   _ReportCardsPaneState createState() => _ReportCardsPaneState();
@@ -28,47 +25,36 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
   bool loading = true;
   List<Period> periods = [];
   String selectedPeriod = '';
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
 
-    widget.store.fetchPeriods(widget.session);
-    widget.store.fetchReportCards(widget.session);
-    // initREData();
-  }
-
-  _onRefresh() async {
-    try {
-      await widget.store.fetchPeriods(widget.session);
-      await widget.store.fetchReportCards(widget.session);
-      _refreshController.refreshCompleted();
-    } catch (e) {
-      _refreshController.refreshFailed();
-    }
-    setState(() {
-      if (selectedPeriod.isEmpty &&
-          widget.store.periods != null &&
-          widget.store.periods!.status == FutureStatus.fulfilled)
-        selectedPeriod = widget.store.periods!.value!.first.id;
+    Future.delayed(Duration(milliseconds: 200)).then((_) {
+      final cubit = context.read<AppCubit>();
+      return Future.wait([
+        cubit.loadStructural(),
+        cubit.loadReportCards(),
+      ]).then((_) {
+        setState(() {
+          if (selectedPeriod.isEmpty && cubit.structural != null)
+            selectedPeriod = cubit.periods.first.id;
+        });
+      });
     });
   }
 
-  _onLoad() async {
-    try {
-      await widget.store.fetchPeriods(widget.session);
-      await widget.store.fetchReportCards(widget.session);
-      _refreshController.loadComplete();
-    } catch (e) {
-      _refreshController.loadFailed();
-    }
+  Future<void> _onRefresh() async {
+    final cubit = context.read<AppCubit>();
+    await Future.wait([
+      cubit.loadStructural(force: true),
+      cubit.loadReportCards(force: true),
+    ]);
     setState(() {
-      if (selectedPeriod.isEmpty &&
-          widget.store.periods != null &&
-          widget.store.periods!.status == FutureStatus.fulfilled)
-        selectedPeriod = widget.store.periods!.value!.first.id;
+      if (selectedPeriod.isEmpty && cubit.structural != null)
+        selectedPeriod = cubit.periods.first.id;
     });
   }
 
@@ -78,24 +64,13 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return SmartRefresher(
+    final cubit = context.watch<AppCubit>();
+    return RefreshIndicator(
       onRefresh: _onRefresh,
-      onLoading: _onLoad,
-      controller: _refreshController,
-      enablePullDown: true,
-      enablePullUp: false,
+      key: _refreshIndicatorKey,
       child: () {
-        if (widget.store.reportCards == null || widget.store.periods == null)
-          return LoadingUI();
-        if (widget.store.reportCards!.value != null &&
-            widget.store.periods!.value != null &&
-            (widget.store.reportCards!.status == FutureStatus.fulfilled ||
-                widget.store.periods!.status == FutureStatus.fulfilled))
-          return buildOk(context, widget.store.reportCards!.value!,
-              widget.store.periods!.value!);
-        if (widget.store.reportCards!.status == FutureStatus.rejected ||
-            widget.store.periods!.status == FutureStatus.rejected)
-          return Text("${widget.store.reportCards!.error}");
+        if (cubit.structural != null)
+          return buildOk(context, cubit.reportCards, cubit.periods);
         return LoadingUI();
       }(),
     );

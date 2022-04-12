@@ -2,18 +2,17 @@ import 'dart:async';
 
 import 'package:animations/animations.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' hide compute;
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/TestAxios.dart';
 import 'package:reaxios/api/entities/Account.dart';
-import 'package:reaxios/api/entities/Assignment/Assignment.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Login/Login.dart';
-import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
-import 'package:reaxios/api/entities/Topic/Topic.dart';
+import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
@@ -21,6 +20,7 @@ import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/Utilities/updates/update_scope.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';
@@ -28,13 +28,11 @@ import 'package:reaxios/screens/nav/Authorizations.dart';
 import 'package:reaxios/screens/nav/Calendar.dart';
 import 'package:reaxios/screens/nav/Grades.dart';
 import 'package:reaxios/screens/nav/Materials.dart';
-import 'package:reaxios/screens/nav/Meetings.dart';
-import 'package:reaxios/screens/nav/Notes.dart';
 import 'package:reaxios/screens/nav/Reports.dart';
 import 'package:reaxios/screens/nav/Overview.dart';
 import 'package:reaxios/screens/nav/Stats.dart';
 import 'package:reaxios/screens/nav/Topics.dart';
-import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/services/compute.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,9 +45,7 @@ import 'nav/ReportCards.dart';
 import 'nav/Timetable.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key, required this.store}) : super(key: key);
-
-  final RegistroStore store;
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -60,7 +56,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _loading = true;
-  Axios _session = new Axios(new AxiosAccount("", "", ""));
+  Axios _session = new Axios(new AxiosAccount("", "", ""), compute: compute);
   Login _login = Login.empty();
   bool _showUserDetails = false;
 
@@ -73,7 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _initSession();
+
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      _initSession();
+    });
 
     _checkConnection(15000)();
   }
@@ -103,9 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // StreamSubscription? _subscription;
 
   void _initSession() async {
-    final store = Provider.of<RegistroStore>(context, listen: false);
-
-    if (!store.testMode) {
+    final cubit = context.read<AppCubit>();
+    if (!cubit.state.testMode) {
       final prefs = await SharedPreferences.getInstance();
       final school = prefs.getString("school")!;
       final user = prefs.getString("user")!;
@@ -123,7 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       // print("$school, $user, $pass");
-      _session = Axios(AxiosAccount(school, user, Encrypter.decrypt(pass)));
+      _session = Axios(AxiosAccount(school, user, Encrypter.decrypt(pass)),
+          compute: compute);
       _login = await _session.login().then((login) {
         return login;
       }).catchError((_, __) {
@@ -140,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _initPanes(_session, _login);
 
+    await context.read<AppCubit>().loadStructural();
     await _runCallback(0);
 
     setState(() {
@@ -154,8 +154,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _runCallback([int index = 0]) async {
-    if (_drawerItems[index][3] != null && _drawerItems[index][3] is Function)
-      await _drawerItems[index][3]();
+    try {
+      if (_drawerItems[index][3] != null && _drawerItems[index][3] is Function)
+        await _drawerItems[index][3]();
+    } catch (e) {
+      print(e);
+      // Do nothing; the HydratedCubit will have stale data, but at least
+      // the app will run.
+    }
   }
 
   @override
@@ -164,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _initPanes(Axios session, Login login) {
+    final cubit = context.read<AppCubit>();
     setState(() {
       _panes = [
         Builder(
@@ -171,7 +178,6 @@ class _HomeScreenState extends State<HomeScreen> {
             session: session,
             login: login,
             student: session.student ?? Student.empty(),
-            store: widget.store,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
             switchToTab: _switchToTab,
           ),
@@ -180,43 +186,26 @@ class _HomeScreenState extends State<HomeScreen> {
         Builder(
           builder: (context) => AssignmentsPane(
             session: session,
-            store: widget.store,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
           ),
         ),
         Builder(
-          builder: (_) => FutureBuilder<Period?>(
-            future: widget.store.getCurrentPeriod(session),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) return Text("${snapshot.error}");
-              // if (!snapshot.hasData) return LoadingUI();
-              return GradesPane(
-                session: session,
-                openMainDrawer: () => Scaffold.of(context).openDrawer(),
-                store: widget.store,
-                period: snapshot.data,
-              );
-            },
+          builder: (context) => GradesPane(
+            session: session,
+            openMainDrawer: () => Scaffold.of(context).openDrawer(),
+            period: cubit.currentPeriod,
           ),
         ),
         Builder(
-          builder: (_) => FutureBuilder<Period?>(
-            future: widget.store.getCurrentPeriod(session),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) return Text("${snapshot.error}");
-              // if (!snapshot.hasData) return LoadingUI();
-              return CalculatorPane(
-                session: session,
-                openMainDrawer: () => Scaffold.of(context).openDrawer(),
-                period: snapshot.data,
-              );
-            },
+          builder: (_) => CalculatorPane(
+            session: session,
+            openMainDrawer: () => Scaffold.of(context).openDrawer(),
+            period: cubit.currentPeriod,
           ),
         ),
         Builder(
           builder: (context) => TopicsPane(
             session: session,
-            store: widget.store,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -225,15 +214,21 @@ class _HomeScreenState extends State<HomeScreen> {
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
           ),
         ),
-        BulletinsPane(session: session, store: widget.store),
-        NotesPane(session: session),
-        NoticesPane(session: session),
+        BulletinsPane(session: session),
+        NotesPane(
+          session: session,
+          kind: NoteKind.Note,
+        ),
+        NotesPane(
+          session: session,
+          kind: NoteKind.Notice,
+        ),
         AbsencesPane(session: session),
         AuthorizationsPane(session: session),
         MeetingsPane(session: session),
         MaterialsPane(session: session),
         StatsPane(session: session),
-        ReportCardsPane(session: session, store: widget.store),
+        ReportCardsPane(session: session),
       ];
       _drawerItems = [
         [
@@ -241,14 +236,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.overview),
           false,
           () async {
-            widget.store.fetchAssignments(session);
-            widget.store.fetchGrades(session);
-            widget.store.fetchTopics(session);
-            await Future.wait(<Future<dynamic>>[
-              widget.store.assignments ?? Future.value(<Assignment>[]),
-              widget.store.grades ?? Future.value(<Grade>[]),
-              widget.store.topics ?? Future.value(<Topic>[]),
-            ]);
+            cubit.loadAssignments();
+            cubit.loadGrades();
+            cubit.loadTopics();
           }
         ],
         [
@@ -256,25 +246,25 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.calendar),
           false,
           () {
-            widget.store.fetchAssignments(session);
-            widget.store.fetchTopics(session);
-            widget.store.fetchPeriods(session);
+            cubit.loadAssignments();
+            cubit.loadTopics();
+            cubit.loadStructural();
           }
         ],
         [
           Icon(Icons.book),
           Text(context.locale.drawer.assignments),
           false,
-          () => widget.store.fetchAssignments(session)
+          () => cubit.loadAssignments(),
         ],
         [
           Icon(Icons.star),
           Text(context.locale.drawer.grades),
           false,
           () {
-            widget.store.fetchGrades(session);
-            widget.store.fetchPeriods(session);
-            widget.store.fetchSubjects(session);
+            cubit.loadGrades();
+            cubit.loadStructural();
+            cubit.loadSubjects();
           }
         ],
         [
@@ -282,16 +272,16 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.calculator),
           false,
           () {
-            widget.store.fetchGrades(session);
-            widget.store.fetchPeriods(session);
-            widget.store.fetchSubjects(session);
+            cubit.loadGrades();
+            cubit.loadStructural();
+            cubit.loadSubjects();
           }
         ],
         [
           Icon(Icons.topic),
           Text(context.locale.drawer.topics),
           false,
-          () => widget.store.fetchTopics(session)
+          () => cubit.loadTopics(),
         ],
         [
           Icon(Icons.access_time),
@@ -303,31 +293,31 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.mail),
           Text(context.locale.drawer.secretary),
           true,
-          () => widget.store.fetchBulletins(session)
+          () => cubit.loadBulletins(),
         ],
         [
           Icon(Icons.contact_mail),
           Text(context.locale.drawer.teacherNotes),
           true,
-          () => widget.store.fetchNotes(session, true)
+          () => cubit.loadNotes(),
         ],
         [
           Icon(Icons.perm_contact_cal),
           Text(context.locale.drawer.notices),
           true,
-          () => widget.store.fetchNotes(session, true)
+          () => cubit.loadNotes(),
         ],
         [
           Icon(Icons.no_accounts),
           Text(context.locale.drawer.absences),
           true,
-          () => widget.store.fetchAbsences(session, true)
+          () => cubit.loadAbsences()
         ],
         [
           Icon(Icons.edit),
           Text(context.locale.drawer.authorizations),
           true,
-          () => widget.store.fetchAuthorizations(session)
+          () => cubit.loadAuthorizations()
         ],
         [
           Icon(Icons.terrain),
@@ -339,17 +329,17 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.badge),
           Text(context.locale.drawer.teachingMaterials),
           true,
-          () => widget.store.fetchMaterials(session)
+          () => cubit.loadMaterials()
         ],
         [
           Icon(Icons.star_outline),
           Text(context.locale.drawer.stats),
           true,
           () {
-            widget.store.fetchAbsences(session);
-            widget.store.fetchGrades(session);
-            widget.store.fetchPeriods(session);
-            widget.store.fetchTopics(session);
+            cubit.loadAbsences();
+            cubit.loadGrades();
+            cubit.loadStructural();
+            cubit.loadTopics();
           }
         ],
         [
@@ -357,8 +347,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.reportCards),
           true,
           () {
-            widget.store.fetchReportCards(session);
-            widget.store.fetchPeriods(session);
+            cubit.loadReportCards();
+            cubit.loadStructural();
           }
         ],
       ];
@@ -400,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (!MaybeMasterDetail.of(context)!.isShowingMaster)
                 Navigator.pop(context);
               _session.student = s;
-              widget.store.reset();
+              context.read<AppCubit>().clearData();
               _runCallback(0);
               setState(() {
                 _showUserDetails = false;
@@ -414,9 +404,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Drawer? _getDrawer() {
-    // final width = MediaQuery.of(context).size.width;
-    if (_loading) return null;
+  Drawer? _getDrawer(bool loading) {
+    if (loading) return null;
 
     return Drawer(
       child: Column(
@@ -435,13 +424,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
             ),
             accountEmail: Text(
-              "${_session.student!.firstName} ${_session.student!.lastName}",
+              _session.student == null
+                  ? "Null student! Please report"
+                  : "${_session.student!.firstName} ${_session.student!.lastName}",
               style: Theme.of(context).textTheme.caption,
             ),
             arrowColor: Theme.of(context).textTheme.bodyText1!.color!,
             currentAccountPicture: GradientCircleAvatar(
               child: Text(
-                "${_login.firstName} ${_login.lastName}".trim()[0],
+                "${_login.firstName} ${_login.lastName}.".trim()[0],
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -515,93 +506,151 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.watch<AppCubit>();
     final appInfo = context.watch<AppInfoStore>();
     final app = appInfo.packageInfo;
 
     _initPanes(_session, _login);
-    return UpdateScope(
-      child: Container(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0),
-          child: MaybeMasterDetail(
-            master: () {
-              final drawer = _getDrawer();
-              if (drawer == null) return null;
 
-              final child = drawer.child;
+    return BlocBuilder<AppCubit, AppState>(
+      bloc: cubit,
+      builder: (context, state) {
+        final isLoading = _loading || state.isEmpty;
+        return UpdateScope(
+          child: Container(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0),
+              child: MaybeMasterDetail(
+                master: () {
+                  if (isLoading) return null;
 
-              return Scaffold(
-                appBar: GradientAppBar(
-                  title: Text(kIsWeb ? "Registro" : app.appName),
-                ),
-                extendBodyBehindAppBar: true,
-                body: child,
-              );
-            }(),
-            detail: PageTransitionSwitcher(
-              transitionBuilder: (
-                Widget child,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-              ) {
-                if (kIsWeb)
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
+                  final drawer = _getDrawer(isLoading);
+                  if (drawer == null) return null;
+
+                  final child = drawer.child;
+
+                  return Scaffold(
+                    appBar: GradientAppBar(
+                      title: Text(kIsWeb ? "Registro" : app.appName),
+                    ),
+                    extendBodyBehindAppBar: true,
+                    body: child,
                   );
-                return FadeThroughTransition(
-                  child: child,
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                );
-              },
-              child: KeyedSubtree(
-                key: ValueKey(_selectedPane),
-                child: Builder(
-                  builder: (BuildContext context) {
-                    return Scaffold(
-                      appBar: _drawerItems[_selectedPane][2]
-                          ? GradientAppBar(
-                              title: _drawerItems[_selectedPane][1],
-                              leading: MaybeMasterDetail.of(context)!
-                                      .isShowingMaster
-                                  ? null
-                                  : Builder(builder: (context) {
-                                      return IconButton(
-                                        tooltip:
-                                            MaterialLocalizations.of(context)
-                                                .openAppDrawerTooltip,
-                                        onPressed: () =>
-                                            Scaffold.of(context).openDrawer(),
-                                        icon: Icon(Icons.menu),
-                                      );
-                                    }),
-                            )
-                          : null,
-                      drawer: MaybeMasterDetail.of(context)!.isShowingMaster
-                          ? null
-                          : _getDrawer(),
-                      body: _loading
-                          ? LoadingUI(colorful: true, showHints: true)
-                          : Builder(builder: (context) {
-                              return Actions(
-                                actions: {
-                                  MenuIntent: CallbackAction<MenuIntent>(
-                                      onInvoke: (intent) {
-                                    Scaffold.of(context).openDrawer();
-                                    return null;
-                                  })
-                                },
-                                child: _panes[_selectedPane],
-                              );
-                            }),
-                    );
-                  },
-                ),
+                }(),
+                detail: _buildDetailView(state),
               ),
             ),
           ),
-        ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailView(AppState state) {
+    final cubit = context.watch<AppCubit>();
+    final isLoading = _loading || state.isEmpty;
+    return PageTransitionSwitcher(
+      transitionBuilder: (
+        Widget child,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+      ) {
+        if (kIsWeb)
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        return FadeThroughTransition(
+          child: child,
+          animation: animation,
+          secondaryAnimation: secondaryAnimation,
+        );
+      },
+      child: Stack(
+        children: [
+          KeyedSubtree(
+            key: ValueKey(_selectedPane),
+            child: Builder(
+              builder: (BuildContext context) {
+                final drawer = _getDrawer(false);
+                return StreamBuilder(
+                    stream: MaybeMasterDetail.getShowingStream(context),
+                    builder: (context, AsyncSnapshot<bool> state) {
+                      final showingMaster = state.data ?? false;
+                      return Scaffold(
+                        appBar: _drawerItems[_selectedPane][2]
+                            ? GradientAppBar(
+                                title: _drawerItems[_selectedPane][1],
+                                leading: MaybeMasterDetail.of(context)!
+                                        .isShowingMaster
+                                    ? null
+                                    : Builder(builder: (context) {
+                                        return IconButton(
+                                          tooltip:
+                                              MaterialLocalizations.of(context)
+                                                  .openAppDrawerTooltip,
+                                          onPressed: () {
+                                            print(drawer);
+                                            Scaffold.of(context).openDrawer();
+                                          },
+                                          icon: Icon(Icons.menu),
+                                        );
+                                      }),
+                              )
+                            : null,
+                        drawer: showingMaster ? null : drawer,
+                        // drawerEnableOpenDragGesture:
+                        //     !MaybeMasterDetail.of(context)!.isShowingMaster,
+                        body: isLoading
+                            ? LoadingUI(colorful: true, showHints: true)
+                            : Builder(builder: (context) {
+                                return Actions(
+                                  actions: {
+                                    MenuIntent: CallbackAction<MenuIntent>(
+                                        onInvoke: (intent) {
+                                      Scaffold.of(context).openDrawer();
+                                      return null;
+                                    })
+                                  },
+                                  child: _panes[_selectedPane],
+                                );
+                              }),
+                      );
+                    });
+              },
+            ),
+          ),
+          StreamBuilder<int>(
+            stream: cubit.loadingTasks,
+            builder: (context, state) {
+              final child = Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 500),
+                  padding: const EdgeInsets.all(4.0),
+                  decoration: BoxDecoration(
+                    boxShadow: kElevationToShadow[4],
+                    color: Theme.of(context).cardColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: CupertinoActivityIndicator(),
+                ),
+              );
+              return AnimatedCrossFade(
+                crossFadeState: (state.data ?? 0) < 1
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                firstChild: child,
+                secondChild: Opacity(
+                  opacity: 0,
+                  child: child,
+                ),
+                duration: Duration(milliseconds: 500),
+              );
+            },
+          ),
+        ],
+        alignment: Alignment.bottomLeft,
       ),
     );
   }
@@ -623,7 +672,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text(MaterialLocalizations.of(context).okButtonLabel),
           onPressed: () async {
             // Refresh store
-            await widget.store.reset();
+            context.read<AppCubit>().logout();
 
             final prefs = await SharedPreferences.getInstance();
 

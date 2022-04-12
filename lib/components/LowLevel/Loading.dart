@@ -35,30 +35,33 @@ class _LoadingUIState extends State<LoadingUI> {
               Theme.of(context).colorScheme.primary,
               Theme.of(context).colorScheme.secondary,
             ]),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SpinKitDualRing(
-                color: widget.colorful
-                    ? Colors.white
-                    : Theme.of(context).colorScheme.primary,
-              ),
-              if (widget.showHints) ...[
-                SizedBox(height: 10),
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    list[randomIndex % list.length],
-                    style: TextStyle(
-                      color: widget.colorful
-                          ? Colors.white
-                          : Theme.of(context).colorScheme.onBackground,
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  color: widget.colorful
+                      ? Colors.white
+                      : Theme.of(context).colorScheme.primary,
+                ),
+                if (widget.showHints) ...[
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      list[randomIndex % list.length],
+                      style: TextStyle(
+                        color: widget.colorful
+                            ? Colors.white
+                            : Theme.of(context).colorScheme.onBackground,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                ),
+                ],
               ],
-            ],
+            ),
           ),
         ],
       ),

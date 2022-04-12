@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:html/parser.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reaxios/api/Axios.dart';
@@ -11,13 +12,13 @@ part 'Material.g.dart';
 String stripHtml(String str) => parseFragment(str).text ?? "";
 
 @JsonSerializable()
-class MaterialData implements AbstractJson {
+class MaterialData extends Equatable implements AbstractJson {
   @JsonKey(name: 'idContent')
-  int id;
+  final int id;
   @JsonKey(name: 'descrizione')
-  String description;
+  final String description;
   @JsonKey(name: 'testo')
-  String rawText;
+  final String rawText;
   String get text {
     Codec<String, String> stringToBase64 = utf8.fuse(base64);
     return stripHtml(stringToBase64.decode(rawText));
@@ -25,17 +26,17 @@ class MaterialData implements AbstractJson {
 
   @JsonKey(name: 'data')
   @DateSerializer()
-  DateTime date;
+  final DateTime date;
   @JsonKey(name: 'url')
-  String url;
+  final String url;
   @JsonKey(name: 'file_name')
-  String fileName;
+  final String fileName;
   @JsonKey(name: 'file_url')
-  String fileUrl;
+  final String fileUrl;
 
   bool get isLink => url.isNotEmpty;
 
-  MaterialData({
+  const MaterialData({
     required this.id,
     required this.description,
     required this.rawText,
@@ -79,10 +80,21 @@ class MaterialData implements AbstractJson {
       fileUrl: '',
     );
   }
+
+  @override
+  List<Object> get props => [
+        id,
+        description,
+        text,
+        date,
+        url,
+        fileName,
+        fileUrl,
+      ];
 }
 
 @JsonSerializable()
-class MaterialFolderData implements AbstractJson {
+class MaterialFolderData extends Equatable implements AbstractJson {
   @JsonKey(name: 'idFolder')
   int id;
   @JsonKey(name: 'descrizione')
@@ -152,20 +164,28 @@ class MaterialFolderData implements AbstractJson {
       path: '',
     );
   }
+
+  @override
+  List<Object> get props => [
+        id,
+        description,
+        note,
+        path,
+      ];
 }
 
 @JsonSerializable()
-class MaterialTeacherData implements AbstractJson {
+class MaterialTeacherData extends Equatable implements AbstractJson {
   @JsonKey(name: 'idDocente')
-  String id;
+  final String id;
   @JsonKey(name: 'nome')
-  String name;
+  final String name;
   @JsonKey(name: 'materie')
-  String subjects;
+  final String subjects;
   @JsonKey(name: 'folders')
-  List<MaterialFolderData> folders;
+  final List<MaterialFolderData> folders;
 
-  MaterialTeacherData({
+  const MaterialTeacherData({
     required this.id,
     required this.name,
     required this.subjects,
@@ -199,14 +219,22 @@ class MaterialTeacherData implements AbstractJson {
       folders: [],
     );
   }
+
+  @override
+  List<Object> get props => [
+        id,
+        name,
+        subjects,
+        folders,
+      ];
 }
 
 @JsonSerializable()
-class APIMaterials {
-  String idAlunno;
-  List<MaterialTeacherData> docenti;
+class APIMaterials extends Equatable implements AbstractJson {
+  final String idAlunno;
+  final List<MaterialTeacherData> docenti;
 
-  APIMaterials({
+  const APIMaterials({
     required this.idAlunno,
     required this.docenti,
   });
@@ -215,4 +243,10 @@ class APIMaterials {
       _$APIMaterialsFromJson(json);
 
   Map<String, dynamic> toJson() => _$APIMaterialsToJson(this);
+
+  @override
+  List<Object> get props => [
+        idAlunno,
+        docenti,
+      ];
 }

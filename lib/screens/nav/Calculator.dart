@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/average.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/showDialogSuper.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -17,7 +19,7 @@ import '../../components/Utilities/AlertBottomSheet.dart';
 import '../../components/Utilities/BoldText.dart';
 import '../../components/Utilities/GradeAvatar.dart';
 import '../../components/Utilities/GradeText.dart';
-import '../../system/Store.dart';
+
 import '../../utils.dart';
 
 class CalculatorPane extends StatefulWidget {
@@ -55,39 +57,10 @@ class _CalculatorPaneState extends State<CalculatorPane>
 
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<RegistroStore>(context);
-    return FutureBuilder<List<dynamic>>(
-      future: Future.wait([
-        store.grades as Future,
-        store.subjects as Future,
-        store.getCurrentPeriod(widget.session),
-      ]),
-      initialData: [<Grade>[], <String>[], null],
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasError)
-          return Scaffold(
-            appBar: GradientAppBar(
-              title: Text(context.locale.drawer.grades),
-            ),
-            body: Text(
-              "${snapshot.error}\n${snapshot is Error ? snapshot.stackTrace : ""}",
-            ),
-          );
-        if (!(snapshot.hasData &&
-            snapshot.data!.isNotEmpty &&
-            (snapshot.data[0].isNotEmpty ||
-                snapshot.connectionState == ConnectionState.done))) {
-          return Scaffold(
-            appBar: GradientAppBar(
-              title: Text(context.locale.drawer.calculator),
-            ),
-            body: LoadingUI(),
-          );
-        }
-
-        final grades = snapshot.data![0] as List<Grade>? ?? [];
-        final subjects = snapshot.data![1] as List<String>? ?? [];
-        final period = snapshot.data![2] as Period?;
+    final cubit = context.read<AppCubit>();
+    return BlocBuilder<AppCubit, AppState>(
+      bloc: cubit,
+      builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: GradientAppBar(
             title: Text(context.locale.drawer.calculator),
@@ -118,7 +91,8 @@ class _CalculatorPaneState extends State<CalculatorPane>
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              onPressed: () => _showFabDialog(grades, subjects, period),
+              onPressed: () => _showFabDialog(
+                  cubit.subjects, context.read<AppCubit>().currentPeriod),
               child: Icon(Icons.add),
             ),
           ),
@@ -127,8 +101,9 @@ class _CalculatorPaneState extends State<CalculatorPane>
     );
   }
 
-  void _showFabDialog(
-      List<Grade> grades, List<String> subjects, Period? period) async {
+  void _showFabDialog(List<String> subjects, Period? period) async {
+    final cubit = context.read<AppCubit>();
+    final grades = cubit.grades;
     await showModalBottomSheet(
       context: context,
       enableDrag: true,
