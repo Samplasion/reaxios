@@ -1,9 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:reaxios/components/ListItems/MeetingListItem.dart';
-import 'package:reaxios/system/Store.dart';
+import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import '../../api/Axios.dart';
@@ -26,19 +26,22 @@ class MeetingsPane extends StatefulWidget {
 }
 
 class _MeetingsPaneState extends State<MeetingsPane> {
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
-  ScrollController _animationScrollController = ScrollController();
   ScrollController _scrollController = ScrollController();
   List<MeetingSchema> _meetingSchemas = [];
 
   @override
+  void initState() {
+    super.initState();
+
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      _onRefresh();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
-      controller: _refreshController,
-      scrollController: _animationScrollController,
+    return RefreshIndicator(
       onRefresh: _onRefresh,
-      onLoading: _onLoading,
       child: _meetingSchemas.isEmpty
           ? SingleChildScrollView(
               child: EmptyUI(
@@ -51,7 +54,7 @@ class _MeetingsPaneState extends State<MeetingsPane> {
 
   Widget _buildBody() {
     final bookedMeetings = _meetingSchemas
-        .where((m) => m.meetings.dates.any((date) => !date.isBooked));
+        .where((m) => m.meetings.dates.any((date) => date.isBooked));
     if (bookedMeetings.isNotEmpty) {
       return Container(
         child: ListView.builder(
@@ -100,36 +103,12 @@ class _MeetingsPaneState extends State<MeetingsPane> {
   }
 
   Future<void> _onRefresh() async {
-    final store = Provider.of<RegistroStore>(context, listen: false);
-    try {
-      await store.fetchTeacherMeetings(widget.session, true);
-      final schemas = await store.meetings;
-      if (schemas != null)
-        setState(() {
-          _meetingSchemas = schemas;
-        });
-      else
-        return _refreshController.refreshFailed();
-    } catch (e) {
-      return _refreshController.refreshFailed();
-    }
-    _refreshController.refreshCompleted();
-  }
-
-  Future<void> _onLoading() async {
-    final store = Provider.of<RegistroStore>(context, listen: false);
-    try {
-      await store.fetchTeacherMeetings(widget.session);
-      final schemas = await store.meetings;
-      if (schemas != null)
-        setState(() {
-          _meetingSchemas = schemas;
-        });
-      else
-        return _refreshController.loadFailed();
-    } catch (e) {
-      return _refreshController.loadFailed();
-    }
-    _refreshController.loadComplete();
+    final cubit = context.read<AppCubit>();
+    await cubit.loadMeetings(force: true);
+    final schemas = cubit.state.meetings;
+    if (schemas != null)
+      setState(() {
+        _meetingSchemas = schemas;
+      });
   }
 }

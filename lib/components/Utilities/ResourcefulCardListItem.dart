@@ -124,12 +124,18 @@ class _ResourcefulCardListItemState extends State<ResourcefulCardListItem> {
           ),
           widget.location.copyWith(
             style: (widget.location.style ?? TextStyle()).merge(
-              Theme.of(context).textTheme.labelMedium,
+              Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontFamily:
+                        Theme.of(context).textTheme.bodyText2?.fontFamily,
+                  ),
             ),
           ),
           widget.date.copyWith(
             style: (widget.date.style ?? TextStyle()).merge(
-              Theme.of(context).textTheme.labelMedium,
+              Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontFamily:
+                        Theme.of(context).textTheme.bodyText2?.fontFamily,
+                  ),
             ),
           ),
           SizedBox(height: 8),

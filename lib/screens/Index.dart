@@ -41,6 +41,7 @@ import '../consts.dart';
 import '../system/AppInfoStore.dart';
 import 'nav/BulletinBoard.dart';
 import 'nav/Calculator.dart';
+import 'nav/Meetings.dart';
 import 'nav/ReportCards.dart';
 import 'nav/Timetable.dart';
 
@@ -323,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.terrain),
           Text("context.locale.drawer.teacherMeetings"),
           true,
-          () => widget.store.fetchTeacherMeetings(session)
+          () => cubit.loadMeetings()
         ],
         [
           Icon(Icons.badge),
