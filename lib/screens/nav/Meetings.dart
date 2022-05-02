@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/components/ListItems/MeetingListItem.dart';
+import 'package:reaxios/components/Views/book_meeting.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -97,7 +98,14 @@ class _MeetingsPaneState extends State<MeetingsPane> {
 
   Widget get newMeetingButton {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return Provider.value(
+            value: widget.session,
+            child: BookMeetingView(),
+          );
+        }));
+      },
       child: Text("context.locale.teacherMeetings.bookMeeting"),
     );
   }

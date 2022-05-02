@@ -30,20 +30,24 @@ class MeetingListItem extends StatelessWidget {
       ),
       title: meeting.subject,
       subtitle: Text(meeting.teacher),
-      description: Linkify(
-        text: meeting.meetings.note,
-        style: TextStyle(color: Theme.of(context).textTheme.caption!.color),
-        onOpen: context.defaultLinkHandler,
-      ),
+      description: meeting.meetings.note.isNotEmpty
+          ? Linkify(
+              text: meeting.meetings.note,
+              style:
+                  TextStyle(color: Theme.of(context).textTheme.caption!.color),
+              onOpen: context.defaultLinkHandler,
+            )
+          : Container(),
       location: Text(meeting.meetings.location),
       date: Text(
         "${meeting.meetings.day} ${meeting.meetings.startTime} - ${meeting.meetings.endTime}",
       ),
       footer: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (showBooked)
             for (var date in meeting.meetings.dates)
-              if (!date.isBooked)
+              if (date.isBooked)
                 ListTile(
                   leading: Icon(Icons.book),
                   title: Text(date.date),
@@ -57,6 +61,9 @@ class MeetingListItem extends StatelessWidget {
       onClick: onClick
           ? () {
               // TODO: Open meeting time picker
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Not implemented yet"),
+              ));
             }
           : null,
     );
