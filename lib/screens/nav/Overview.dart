@@ -483,7 +483,7 @@ class UserCard extends StatelessWidget {
           overflow: TextOverflow.fade,
         ).padding(bottom: 5),
         Text(
-          "${context.dateToString(student.birthday)} - ${context.locale.main.getByKey("gender${describeEnum(student.gender)[0]}")}",
+          "${context.dateToString(student.birthday)} [${calculateAge(student.birthday)}] - ${context.locale.main.getByKey("gender${describeEnum(student.gender)[0]}")}",
           style: TextStyle(
             color: fg.withOpacity(smallTextOpacity),
             fontSize: 12,

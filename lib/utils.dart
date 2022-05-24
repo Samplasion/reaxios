@@ -253,6 +253,16 @@ double gradeAverage(AverageMode mode, List<Grade> grades) {
   return double.parse((sum / weights).toStringAsFixed(2));
 }
 
+int calculateAge(DateTime birthDate) {
+  var now = DateTime.now();
+  var age = now.year - birthDate.year;
+  var month = now.month - birthDate.month;
+  if (month < 0 || (month == 0 && now.day < birthDate.day)) {
+    age--;
+  }
+  return age;
+}
+
 extension ColorUtils on Color {
   Color get contrastText => axios_utils.getContrastText(this);
 
