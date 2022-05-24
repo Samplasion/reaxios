@@ -45,7 +45,8 @@
     "settings": "Settings",
     "logOut": "Log out",
     "calculator": "Calculator",
-    "timetable": "Timetable"
+    "timetable": "Timetable",
+    "teacherMeetings": "Meetings"
   },
   "about": {
     "aboutApp": "About Registro",
@@ -355,5 +356,13 @@
     "updateNagModeAlert": "Alert",
     "updateNagModeBanner": "Banner",
     "updateNagModeNone": "Don't notify"
+  },
+  "teacherMeetings": {
+    "noData": "There aren't any meetings you can book.",
+    "noBookedMeetings": "You haven't booked any meeting.",
+    "bookMeeting": "Book a new meeting",
+    "seatsAvailable": "Seats available",
+    "noSeatsAvailable": "No seat available",
+    "unimplemented": "Not yet implemented :)"
   }
 }

@@ -41,6 +41,7 @@ import '../consts.dart';
 import '../system/AppInfoStore.dart';
 import 'nav/BulletinBoard.dart';
 import 'nav/Calculator.dart';
+import 'nav/Meetings.dart';
 import 'nav/ReportCards.dart';
 import 'nav/Timetable.dart';
 
@@ -225,6 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         AbsencesPane(session: session),
         AuthorizationsPane(session: session),
+        MeetingsPane(session: session),
         MaterialsPane(session: session),
         StatsPane(session: session),
         ReportCardsPane(session: session),
@@ -317,6 +319,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.locale.drawer.authorizations),
           true,
           () => cubit.loadAuthorizations()
+        ],
+        [
+          Icon(Icons.terrain),
+          Text(context.locale.drawer.teacherMeetings),
+          true,
+          () => cubit.loadMeetings()
         ],
         [
           Icon(Icons.badge),

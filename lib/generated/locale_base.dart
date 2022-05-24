@@ -71,6 +71,8 @@ class LocaleBase {
   Localeerrors get errors => _errors;
   late LocaleupdateSettings _updateSettings;
   LocaleupdateSettings get updateSettings => _updateSettings;
+  late LocaleteacherMeetings _teacherMeetings;
+  LocaleteacherMeetings get teacherMeetings => _teacherMeetings;
 
   void initAll() {
     _main = Localemain(Map<String, String>.from(_data['main']));
@@ -100,6 +102,7 @@ class LocaleBase {
     _dataSettings = LocaledataSettings(Map<String, String>.from(_data['dataSettings']));
     _errors = Localeerrors(Map<String, String>.from(_data['errors']));
     _updateSettings = LocaleupdateSettings(Map<String, String>.from(_data['updateSettings']));
+    _teacherMeetings = LocaleteacherMeetings(Map<String, String>.from(_data['teacherMeetings']));
   }
 }
 
@@ -173,6 +176,7 @@ class Localedrawer {
   String get logOut => _data["logOut"]!;
   String get calculator => _data["calculator"]!;
   String get timetable => _data["timetable"]!;
+  String get teacherMeetings => _data["teacherMeetings"]!;
 }
 
 class Localeabout {
@@ -674,5 +678,21 @@ class LocaleupdateSettings {
   String get updateNagModeAlert => _data["updateNagModeAlert"]!;
   String get updateNagModeBanner => _data["updateNagModeBanner"]!;
   String get updateNagModeNone => _data["updateNagModeNone"]!;
+}
+
+class LocaleteacherMeetings {
+  late final Map<String, String> _data;
+  LocaleteacherMeetings(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get noData => _data["noData"]!;
+  String get noBookedMeetings => _data["noBookedMeetings"]!;
+  String get bookMeeting => _data["bookMeeting"]!;
+  String get seatsAvailable => _data["seatsAvailable"]!;
+  String get noSeatsAvailable => _data["noSeatsAvailable"]!;
+  String get unimplemented => _data["unimplemented"]!;
 }
 

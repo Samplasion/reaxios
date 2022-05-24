@@ -11,6 +11,7 @@ import 'package:reaxios/api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
+import 'package:reaxios/api/entities/Meeting/Meeting.dart';
 import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
@@ -61,6 +62,7 @@ class AppCubit extends HydratedCubit<AppState> {
   List<Absence> get absences => state.absences ?? [];
   List<Authorization> get authorizations => state.authorizations ?? [];
   List<MaterialTeacherData> get materials => state.materials ?? [];
+  List<MeetingSchema> get meetings => state.meetings ?? [];
 
   Structural? get structural => state.structural;
   List<Period> get periods => structural?.periods[0].periods ?? [];
@@ -166,6 +168,14 @@ class AppCubit extends HydratedCubit<AppState> {
       await loadObject(() async {
         final materials = await state.axios!.getMaterials();
         emit(state.copyWith(materials: materials));
+      });
+  }
+
+  Future<void> loadMeetings({bool force = false}) async {
+    if (force || this.state.meetings == null)
+      await loadObject(() async {
+        final meetings = await state.axios!.getTeacherMeetings();
+        emit(state.copyWith(meetings: meetings));
       });
   }
 

@@ -71,6 +71,7 @@ class Event {
     DayTime? end,
     Color? color,
     Weekday? weekday,
+    String? abbr,
   }) {
     return Event(
       name: name ?? this.name,
@@ -79,7 +80,7 @@ class Event {
       end: end ?? this.end,
       color: color ?? this.color,
       weekday: weekday ?? this.weekday,
-      abbr: abbr,
+      abbr: abbr ?? this.abbr,
       ignoreList: [],
     );
   }
@@ -144,7 +145,7 @@ class EventTransformation {
   }
 
   Event apply(Event event) {
-    return event.copyWith(
+    return event.cloneWith(
       color: color,
       abbr: abbr,
       name: name,

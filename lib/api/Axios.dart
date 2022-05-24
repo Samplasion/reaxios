@@ -7,6 +7,7 @@ import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
+import 'package:reaxios/api/entities/Meeting/Meeting.dart';
 import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/School/School.dart';
@@ -548,6 +549,24 @@ class Axios {
             });
           }))
         .expand((i) => i)
+        .toList();
+  }
+
+  Future<List<MeetingSchema>> getTeacherMeetings() async {
+    final List<MeetingSchema> res = await this
+        ._makeAuthenticatedCall<dynamic>("GET_COLLOQUI_MASTER", (raw) {
+      return (raw as List).map((e) => MeetingSchema.fromJson(e)).toList();
+    });
+    print(res);
+    return res
+        .where((element) => element.studentID == student!.studentUUID)
+        // .map((e) => e.docenti
+        //   ..forEach((teacher) {
+        //     teacher.folders.forEach((folder) {
+        //       folder.setSession(this).setTeacher(teacher);
+        //     });
+        //   }))
+        // .expand((i) => i)
         .toList();
   }
 

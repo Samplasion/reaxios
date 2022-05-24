@@ -45,7 +45,8 @@
     "settings": "Impostazioni",
     "logOut": "Esci",
     "calculator": "Calcolatrice",
-    "timetable": "Orario"
+    "timetable": "Orario",
+    "teacherMeetings": "Colloqui"
   },
   "about": {
     "aboutApp": "Informazioni su Registro",
@@ -355,5 +356,13 @@
     "updateNagModeAlert": "Avviso",
     "updateNagModeBanner": "Banner",
     "updateNagModeNone": "Non avvisarmi"
+  },
+  "teacherMeetings": {
+    "noData": "Nessun colloquio prenotabile.",
+    "noBookedMeetings": "Non hai prenotato alcun colloquio.",
+    "bookMeeting": "Prenota colloquio",
+    "seatsAvailable": "Posti liberi",
+    "noSeatsAvailable": "Nessun posto libero",
+    "unimplemented": "Non ancora implementato :)"
   }
 }
