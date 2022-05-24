@@ -322,7 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.terrain),
-          Text("context.locale.drawer.teacherMeetings"),
+          Text(context.locale.drawer.teacherMeetings),
           true,
           () => cubit.loadMeetings()
         ],

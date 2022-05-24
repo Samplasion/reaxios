@@ -45,7 +45,8 @@
     "settings": "",
     "logOut": "",
     "calculator": "",
-    "timetable": ""
+    "timetable": "",
+    "teacherMeetings": ""
   },
   "about": {
     "aboutApp": "\"About Registro\"",
@@ -355,5 +356,13 @@
     "updateNagModeAlert": "",
     "updateNagModeBanner": "",
     "updateNagModeNone": ""
+  },
+  "teacherMeetings": {
+    "noData": "",
+    "noBookedMeetings": "",
+    "bookMeeting": "",
+    "seatsAvailable": "",
+    "noSeatsAvailable": "",
+    "unimplemented": ""
   }
 }
