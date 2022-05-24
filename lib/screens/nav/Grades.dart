@@ -25,6 +25,7 @@ import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class GradesPane extends StatefulWidget {
@@ -178,7 +179,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
             left: false,
             right: false,
             child: MaxWidthContainer(
-              child: _buildGrades(context, grades),
+              child: _buildSeparatedGrades(context, grades),
             ).center(),
           ),
         ),
@@ -284,10 +285,67 @@ class _GradesPaneState extends ReloadableState<GradesPane>
             session: widget.session,
             onClick: true,
           ),
-          tag: grades[i].toString(),
+          tag: grades[i - 1].toString(),
         ).padding(horizontal: 16);
       },
       itemCount: grades.length + 1,
+    ).parent(_reloadParent);
+  }
+
+  Widget _buildSeparatedGrades(BuildContext context, List<Grade> grades) {
+    final terms = grades.map((g) => g.period).toSet().toList();
+    return ListView.builder(
+      itemBuilder: (context, i) {
+        final entries = grades.where((g) => g.period == terms[i]).toList();
+        final average =
+            gradeAverage(context.watch<Settings>().getAverageMode(), entries);
+        return StickyHeader(
+          header: Container(
+            height: 50.0,
+            color: Theme.of(context).canvasColor,
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            alignment: Alignment.centerLeft,
+            child: Center(
+              child: MaxWidthContainer(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(text: terms[i]),
+                      TextSpan(text: " ("),
+                      GradeText(context, grade: average),
+                      TextSpan(text: ")"),
+                    ],
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          content: Padding(
+            padding: i == entries.length - 1
+                ? EdgeInsets.only(bottom: 16)
+                : EdgeInsets.zero,
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, j) {
+                final e = entries[j];
+                return Hero(
+                  child: GradeListItem(
+                    grade: e,
+                    rebuild: rebuild,
+                    session: widget.session,
+                    onClick: true,
+                  ),
+                  tag: e.toString(),
+                );
+              },
+              itemCount: entries.length,
+              shrinkWrap: true,
+            ).paddingDirectional(horizontal: 16),
+          ),
+        );
+      },
+      itemCount: terms.length,
     ).parent(_reloadParent);
   }
 
