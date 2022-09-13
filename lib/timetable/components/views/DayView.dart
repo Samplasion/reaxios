@@ -78,14 +78,15 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
   }
 
   _handleChange() {
-    setState(() {
-      controller = TabController(
-        initialIndex: 0,
-        vsync: this,
-        length: getSettings(context).getEnabledDays().length *
-            getSettings(context).getWeeks(),
-      );
-    });
+    if (mounted)
+      setState(() {
+        controller = TabController(
+          initialIndex: 0,
+          vsync: this,
+          length: getSettings(context).getEnabledDays().length *
+              getSettings(context).getWeeks(),
+        );
+      });
   }
 
   List<Event> get events => widget.events;

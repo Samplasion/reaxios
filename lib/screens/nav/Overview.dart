@@ -317,6 +317,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         await cubit.loadTopics(force: true);
       },
       child: CustomScrollView(
+        controller: controller,
         slivers: [
           BlocBuilder<AppCubit, AppState>(
             bloc: cubit,

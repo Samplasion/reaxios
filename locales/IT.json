@@ -96,7 +96,9 @@
     "eventEditorColor": "Colore",
     "eventEditorTextError": "Inserisci del testo",
     "edit": "Modifica",
-    "done": "Fatto"
+    "done": "Fatto",
+    "emptyTitle": "Nessun dato",
+    "emptyMessage": "Torna dopo l'inizio di scuola per poter aggiungere eventi."
   },
   "charts": {
     "average": "Media",

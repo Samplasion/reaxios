@@ -118,7 +118,7 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
               return BarTooltipItem(
                 '${grades[groupIndex].name}: ${context.gradeToString(grades[groupIndex].avg, showAsNumber: true, round: false)}',
                 TextStyle(
-                  color: tooltipColor(rod.colors[1], 0.2, -0.1),
+                  color: tooltipColor(rod.gradient!.colors[1], 0.2, -0.1),
                   fontWeight: FontWeight.bold,
                 ),
               );
@@ -127,28 +127,36 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
         ),
         titlesData: FlTitlesData(
           show: true,
-          bottomTitles: SideTitles(
-            showTitles: true,
-            margin: 10,
-            reservedSize: 30,
-            getTitles: (double value) {
-              if (value < 0 || value >= grades.length) return "";
-              return Utils.generateAbbreviation(
-                  3, grades[value.toInt()].name.toTitleCase());
-            },
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              // margin: 10,
+              reservedSize: 30,
+              getTitlesWidget: (double value, _) {
+                if (value < 0 || value >= grades.length) return Text("");
+                return Text(Utils.generateAbbreviation(
+                    3, grades[value.toInt()].name.toTitleCase()));
+              },
+            ),
           ),
-          leftTitles: SideTitles(
-            showTitles: true,
-            getTitles: (double value) {
-              if (value < 1 || value > 10) return "";
-              return value.toInt().toString();
-            },
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: (double value, _) {
+                if (value < 1 || value > 10) return Text("");
+                return Text(value.toInt().toString());
+              },
+            ),
           ),
-          rightTitles: SideTitles(
-            showTitles: false,
+          rightTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: false,
+            ),
           ),
-          topTitles: SideTitles(
-            showTitles: false,
+          topTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: false,
+            ),
           ),
         ),
         borderData: FlBorderData(
@@ -159,9 +167,17 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
             x: grades.indexOf(g),
             barRods: [
               BarChartRodData(
-                y: g.avg,
+                toY: g.avg,
                 width: 16,
-                colors: [g.color.darken(0.22), g.color, g.color.lighten(0.15)],
+                gradient: LinearGradient(
+                  colors: [
+                    g.color.darken(0.22),
+                    g.color,
+                    g.color.lighten(0.15)
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
                 // isRound: true,
               ),
             ],
@@ -250,19 +266,20 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
                       EmptyUI(
                         icon: Icons.error_outline,
                         text: context.locale.main.noDataForPeriod,
-                      ).padding(top: 24, horizontal: 8),
-                    AnimatedBuilder(
-                      animation: Provider.of<Settings>(context),
-                      builder: (context, _) {
-                        return _buildChart(
-                          grades,
-                          gradeAverage(
-                            Provider.of<Settings>(context).getAverageMode(),
-                            state.grades!,
-                          ),
-                        );
-                      },
-                    )
+                      ).padding(top: 24, horizontal: 8)
+                    else
+                      AnimatedBuilder(
+                        animation: Provider.of<Settings>(context),
+                        builder: (context, _) {
+                          return _buildChart(
+                            grades,
+                            gradeAverage(
+                              Provider.of<Settings>(context).getAverageMode(),
+                              state.grades!,
+                            ),
+                          );
+                        },
+                      )
                   ] else
                     LoadingUI(),
                 ],

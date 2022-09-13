@@ -22,15 +22,14 @@ class UpdateScope extends StatelessWidget {
     final settings = Provider.of<Settings>(context);
     if (settings.getUpdateNagMode() != UpdateNagMode.alert) return child;
 
-    AppcastConfiguration? cfg = getAppcastConfig();
-    if (cfg == null) {
+    Upgrader upgrader = getAppcastConfig();
+    if (upgrader.appcastConfig == null) {
       return child;
     }
 
     return UpgradeAlert(
-      appcastConfig: cfg,
+      upgrader: upgrader,
       child: child,
-      showIgnore: true,
     );
   }
 }

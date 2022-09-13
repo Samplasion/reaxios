@@ -259,6 +259,8 @@ class Localecalendar {
   String get eventEditorTextError => _data["eventEditorTextError"]!;
   String get edit => _data["edit"]!;
   String get done => _data["done"]!;
+  String get emptyTitle => _data["emptyTitle"]!;
+  String get emptyMessage => _data["emptyMessage"]!;
 }
 
 class Localecharts {

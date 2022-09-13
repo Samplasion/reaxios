@@ -105,66 +105,73 @@ class _GradeLineChartState extends State<GradeLineChart> {
             ),
             titlesData: FlTitlesData(
               show: true,
-              topTitles: SideTitles(
-                showTitles: false,
+              topTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: false,
+                ),
               ),
-              bottomTitles: SideTitles(
-                showTitles: true,
-                margin: 8,
-                getTitles: (double value) {
-                  if (value >= usefulGrades.length) return "";
-                  final date = usefulGrades[value.toInt()].date;
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  // margin: 8,
+                  getTitlesWidget: (double value, _) {
+                    final _ = (String s) => Text(
+                          s,
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption!
+                              .copyWith(fontWeight: FontWeight.w100),
+                        );
+                    if (value >= usefulGrades.length) return _("");
+                    final date = usefulGrades[value.toInt()].date;
 
-                  if (value == 0) {
-                    return context.dateToString(date, short: true);
-                  } else {
-                    final previous = usefulGrades[value.toInt() - 1].date;
-                    if (date.year == previous.year) {
-                      if (date.month == previous.month &&
-                          value.toInt() != usefulGrades.length - 1) {
-                        return context.dateToString(
-                          date,
-                          short: true,
-                        );
-                      } else {
-                        return context.dateToString(
-                          date,
-                          short: true,
-                        );
-                      }
+                    if (value == 0) {
+                      return _(context.dateToString(date, short: true));
                     } else {
-                      return context.dateToString(date, short: true);
+                      final previous = usefulGrades[value.toInt() - 1].date;
+                      if (date.year == previous.year) {
+                        if (date.month == previous.month &&
+                            value.toInt() != usefulGrades.length - 1) {
+                          return _(context.dateToString(
+                            date,
+                            short: true,
+                          ));
+                        } else {
+                          return _(context.dateToString(
+                            date,
+                            short: true,
+                          ));
+                        }
+                      } else {
+                        return _(context.dateToString(date, short: true));
+                      }
                     }
-                  }
-                },
-                getTextStyles: (context, double value) {
-                  return Theme.of(context)
-                      .textTheme
-                      .caption!
-                      .copyWith(fontWeight: FontWeight.w100);
-                },
+                  },
+                ),
               ),
-              leftTitles: SideTitles(
-                showTitles: true,
-                margin: 8,
-                reservedSize: 30,
-                getTitles: (double value) {
-                  return "";
-                },
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 30,
+                  getTitlesWidget: (double value, _) {
+                    return Text("");
+                  },
+                ),
               ),
-              rightTitles: SideTitles(
-                showTitles: true,
-                margin: 8,
-                reservedSize: 30,
-                getTitles: (double value) {
-                  return value.toInt().toString();
-                },
-                getTextStyles: (context, double value) {
-                  return TextStyle(
-                    color: tooltipColor(getGradeColor(value), 0.1, 0.2),
-                    fontSize: 10,
-                  );
-                },
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(
+                    showTitles: true,
+                    // margin: 8,
+                    reservedSize: 30,
+                    getTitlesWidget: (double value, _) {
+                      return Text(
+                        value.toInt().toString(),
+                        style: TextStyle(
+                          color: tooltipColor(getGradeColor(value), 0.1, 0.2),
+                          fontSize: 10,
+                        ),
+                      );
+                    }),
               ),
             ),
             borderData: FlBorderData(
@@ -196,9 +203,11 @@ class _GradeLineChartState extends State<GradeLineChart> {
                   );
                 }).toList(),
                 isCurved: true,
-                colors: usefulGrades.map((Grade grade) {
-                  return getGradeColor(grade.grade);
-                }).toList(),
+                gradient: LinearGradient(
+                  colors: usefulGrades.map((Grade grade) {
+                    return getGradeColor(grade.grade);
+                  }).toList(),
+                ),
                 barWidth: 4,
                 isStrokeCapRound: true,
                 dotData: FlDotData(
@@ -206,9 +215,11 @@ class _GradeLineChartState extends State<GradeLineChart> {
                 ),
                 belowBarData: BarAreaData(
                   show: true,
-                  colors: usefulGrades.map((Grade grade) {
-                    return getGradeColor(grade.grade).withOpacity(0.2);
-                  }).toList(),
+                  gradient: LinearGradient(
+                    colors: usefulGrades.map((Grade grade) {
+                      return getGradeColor(grade.grade).withOpacity(0.2);
+                    }).toList(),
+                  ),
                   spotsLine: BarAreaSpotsLine(
                     show: true,
                     flLineStyle: FlLine(

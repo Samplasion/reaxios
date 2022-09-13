@@ -96,7 +96,9 @@
     "eventEditorColor": "Color",
     "eventEditorTextError": "Please enter some text",
     "edit": "Edit",
-    "done": "Done"
+    "done": "Done",
+    "emptyTitle": "No data",
+    "emptyMessage": "You can start adding events after the first day of school."
   },
   "charts": {
     "average": "Average",

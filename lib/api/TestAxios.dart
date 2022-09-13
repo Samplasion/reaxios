@@ -165,7 +165,7 @@ class TestAxios implements Axios {
   }
 
   @override
-  Future<List<MaterialTeacherData>> getMaterials() async {
+  Future<List<MaterialTeacherData>> getMaterials([String? _]) async {
     return [MaterialTeacherData.test()];
   }
 

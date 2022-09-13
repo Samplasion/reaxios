@@ -16,6 +16,7 @@ import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/School/School.dart';
+import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/services/compute.dart';
 import 'package:rxdart/rxdart.dart';
@@ -26,7 +27,9 @@ part 'app_state.dart';
 typedef Future<void> VoidFutureCallback();
 
 class AppCubit extends HydratedCubit<AppState> {
-  AppCubit() : super(AppState.empty());
+  AppCubit() : super(AppState.empty()) {
+    hydrate();
+  }
 
   BehaviorSubject<int> loadingTasks = BehaviorSubject<int>.seeded(0);
 
@@ -71,6 +74,8 @@ class AppCubit extends HydratedCubit<AppState> {
       (periods as List<Period?>)
           .firstWhere((period) => period!.isCurrent(), orElse: () => null);
 
+  Student? get student => state.student ?? state.axios?.student;
+
   Future<Object?> login(AxiosAccount account) async {
     Axios axios;
     try {
@@ -80,7 +85,7 @@ class AppCubit extends HydratedCubit<AppState> {
       return e;
     }
 
-    emit(state.copyWith(axios: axios));
+    emit(state.copyWith(axios: axios, student: axios.student));
     return null;
   }
 
@@ -166,7 +171,8 @@ class AppCubit extends HydratedCubit<AppState> {
   Future<void> loadMaterials({bool force = false}) async {
     if (force || this.state.materials == null)
       await loadObject(() async {
-        final materials = await state.axios!.getMaterials();
+        final materials =
+            await state.axios!.getMaterials(state.axios!.student!.studentUUID);
         emit(state.copyWith(materials: materials));
       });
   }
@@ -197,6 +203,14 @@ class AppCubit extends HydratedCubit<AppState> {
 
   void setTestMode(bool testMode) {
     emit(state.copyWith(testMode: testMode));
+  }
+
+  void setStudent(Student s) {
+    state.axios!.student = s;
+    emit(state.copyWith(
+      axios: state.axios!,
+      student: s,
+    ));
   }
 
   logout() {

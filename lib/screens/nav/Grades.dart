@@ -68,10 +68,26 @@ class _GradesPaneState extends ReloadableState<GradesPane>
   @override
   Widget build(BuildContext context) {
     if (widget.session.student?.securityBits[SecurityBits.hideGrades] == "1") {
-      return EmptyUI(
-        text: context.locale.main.noPermission,
-        icon: Icons.lock,
-      ).padding(horizontal: 16);
+      return Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: GradientAppBar(
+          title: Text(context.locale.drawer.grades),
+          leading: MaybeMasterDetail.of(context)!.isShowingMaster
+              ? null
+              : Builder(builder: (context) {
+                  return IconButton(
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip,
+                    onPressed: widget.openMainDrawer,
+                    icon: Icon(Icons.menu),
+                  );
+                }),
+        ),
+        body: EmptyUI(
+          text: context.locale.main.noPermission,
+          icon: Icons.lock,
+        ).padding(horizontal: 16),
+      );
     }
 
     final cubit = context.watch<AppCubit>();
@@ -128,6 +144,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
             left: false,
             right: false,
             child: SingleChildScrollView(
+              controller: controller,
               child: Column(
                 children: [
                   MaxWidthContainer(child: _buildHeader(context, grades)),
@@ -152,6 +169,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
                     left: false,
                     right: false,
                     child: SingleChildScrollView(
+                      controller: controller,
                       child: Column(
                         children: [
                           MaxWidthContainer(
@@ -190,6 +208,30 @@ class _GradesPaneState extends ReloadableState<GradesPane>
     final cubit = context.watch<AppCubit>();
     final grades = cubit.grades.reversed.toList();
     final pages = getPages(context, grades, currentPeriod, subjects);
+
+    if (grades.isEmpty) {
+      return Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: GradientAppBar(
+          title: Text(context.locale.drawer.grades),
+          leading: MaybeMasterDetail.of(context)!.isShowingMaster
+              ? null
+              : Builder(builder: (context) {
+                  return IconButton(
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip,
+                    onPressed: widget.openMainDrawer,
+                    icon: Icon(Icons.menu),
+                  );
+                }),
+        ),
+        body: EmptyUI(
+          text: context.locale.grades.noGrades,
+          icon: Icons.star_border,
+        ).padding(horizontal: 16),
+      );
+    }
+
     return DefaultTabController(
       length: pages.length,
       child: Scaffold(

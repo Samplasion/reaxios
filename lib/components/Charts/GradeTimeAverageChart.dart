@@ -85,19 +85,29 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
           ),
           titlesData: FlTitlesData(
             show: true,
-            topTitles: SideTitles(showTitles: false),
-            rightTitles: SideTitles(showTitles: false),
-            bottomTitles: SideTitles(showTitles: false),
-            leftTitles: SideTitles(
+            topTitles: AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            rightTitles: AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
                 showTitles: true,
                 reservedSize: 20,
-                getTextStyles: (context, _) =>
-                    Theme.of(context).textTheme.caption,
-                getTitles: (double value) {
-                  if (value >= 4) return value.toInt().toString();
-                  return "";
+                getTitlesWidget: (double value, _) {
+                  if (value >= 4)
+                    return Text(
+                      value.toInt().toString(),
+                      style: Theme.of(context).textTheme.caption,
+                    );
+                  return Text("", style: Theme.of(context).textTheme.caption);
                 },
-                checkToShowTitle: (_, __, ___, ____, _____) => true),
+              ),
+            ),
           ),
           maxY: maxY.toDouble(),
           minY: minY.toDouble(),
@@ -107,7 +117,7 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
               isCurved: true,
               preventCurveOverShooting: true,
               // colors: averages.map((e) => getGradeColor(e)).toList(),
-              colors: [Theme.of(context).primaryColor],
+              color: Theme.of(context).primaryColor,
               barWidth: 2,
               isStrokeCapRound: false,
               dotData: FlDotData(
@@ -115,12 +125,14 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
               ),
               belowBarData: BarAreaData(
                 show: true,
-                colors: [
-                  Theme.of(context).primaryColor.withOpacity(0.4),
-                  Theme.of(context).primaryColor.withOpacity(0.0)
-                ],
-                gradientFrom: Offset(0, 0),
-                gradientTo: Offset(0, 1),
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).primaryColor.withOpacity(0.4),
+                    Theme.of(context).primaryColor.withOpacity(0.0)
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
           ],

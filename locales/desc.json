@@ -96,7 +96,9 @@
     "eventEditorColor": "",
     "eventEditorTextError": "",
     "edit": "",
-    "done": ""
+    "done": "",
+    "emptyTitle": "",
+    "emptyMessage": ""
   },
   "charts": {
     "average": "",

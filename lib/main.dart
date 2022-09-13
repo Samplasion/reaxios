@@ -142,6 +142,9 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
           bottom: Radius.circular(15),
         ),
       ),
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarBrightness: ThemeData.estimateBrightnessForColor(primary),
+      ),
     );
 
     final defaultTextThemeLight = ThemeData.light().textTheme;
@@ -228,6 +231,17 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
               appBarTheme: appBarTheme,
               textTheme: getTextTheme(defaultTextThemeLight),
               tabBarTheme: tabBarTheme,
+              popupMenuTheme: PopupMenuThemeData(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              dialogTheme: DialogTheme(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              useMaterial3: false,
             ),
             darkTheme: ThemeData(
               brightness: Brightness.dark,
@@ -252,6 +266,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
+              useMaterial3: false,
             ),
             themeMode: getThemeMode(themeMode),
             // home: MyHomePage(title: 'Flutter Demo Home Page'),

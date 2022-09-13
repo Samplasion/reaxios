@@ -21,6 +21,7 @@ class AppState extends Equatable {
   final List<MaterialTeacherData>? materials;
   final List<MeetingSchema>? meetings;
   final Structural? structural;
+  final Student? student;
 
   bool get isEmpty =>
       assignments == null &&
@@ -33,7 +34,8 @@ class AppState extends Equatable {
       authorizations == null &&
       materials == null &&
       meetings == null &&
-      structural == null;
+      structural == null &&
+      student == null;
 
   const AppState({
     required this.testMode,
@@ -50,6 +52,7 @@ class AppState extends Equatable {
     this.materials,
     this.meetings,
     this.structural,
+    this.student,
   });
 
   // Use _propsX for potentially expensive lists that could freeze the UI
@@ -69,6 +72,7 @@ class AppState extends Equatable {
         materials,
         meetings,
         structural,
+        student,
       ];
 
   List<Object?> get _propsAssignments => [
@@ -106,6 +110,7 @@ class AppState extends Equatable {
     List<MaterialTeacherData>? materials,
     List<MeetingSchema>? meetings,
     Structural? structural,
+    Student? student,
   }) {
     return AppState(
       testMode: testMode ?? this.testMode,
@@ -122,6 +127,7 @@ class AppState extends Equatable {
       materials: materials ?? this.materials,
       meetings: meetings ?? this.meetings,
       structural: structural ?? this.structural,
+      student: student ?? this.student,
     );
   }
 }

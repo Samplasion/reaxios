@@ -14,45 +14,18 @@ class _UpgradeCard extends UpgradeBase {
   final EdgeInsetsGeometry margin;
 
   _UpgradeCard({
-    this.margin = const EdgeInsets.all(1.0),
+    // ignore: unused_element
+    this.margin = const EdgeInsets.all(1),
+    required Upgrader upgrader,
     Key? key,
-    AppcastConfiguration? appcastConfig,
-    UpgraderMessages? messages,
-    bool? debugAlwaysUpgrade,
-    bool? debugDisplayOnce,
-    bool? debugLogging,
-    Duration? durationToAlertAgain,
-    BoolCallback? onIgnore,
-    BoolCallback? onLater,
-    BoolCallback? onUpdate,
-    http.Client? client,
-    bool? showIgnore,
-    bool? showLater,
-    bool? showReleaseNotes,
-    String? countryCode,
-    String? minAppVersion,
   }) : super(
+          upgrader,
           key: key,
-          appcastConfig: appcastConfig,
-          messages: messages,
-          debugDisplayAlways: debugAlwaysUpgrade,
-          debugDisplayOnce: debugDisplayOnce,
-          debugLogging: debugLogging,
-          durationToAlertAgain: durationToAlertAgain,
-          onIgnore: onIgnore,
-          onLater: onLater,
-          onUpdate: onUpdate,
-          client: client,
-          showIgnore: showIgnore,
-          showLater: showLater,
-          showReleaseNotes: showReleaseNotes,
-          countryCode: countryCode,
-          minAppVersion: minAppVersion,
         );
 
   @override
   Widget build(BuildContext context, UpgradeBaseState state) {
-    if (Upgrader().debugLogging) {
+    if (upgrader.debugLogging) {
       print('UpgradeCard: build UpgradeCard');
     }
 
@@ -62,13 +35,12 @@ class _UpgradeCard extends UpgradeBase {
         if (processed.connectionState == ConnectionState.done &&
             processed.data != null &&
             processed.data!) {
-          assert(Upgrader().messages != null);
-          if (Upgrader().shouldDisplayUpgrade()) {
-            final title = Upgrader().messages!.message(UpgraderMessage.title);
-            final message = Upgrader().message();
-            final releaseNotes = Upgrader().releaseNotes;
+          if (upgrader.shouldDisplayUpgrade()) {
+            final title = upgrader.messages.message(UpgraderMessage.title);
+            final message = upgrader.message();
+            final releaseNotes = upgrader.releaseNotes;
             final shouldDisplayReleaseNotes =
-                Upgrader().shouldDisplayReleaseNotes();
+                upgrader.shouldDisplayReleaseNotes();
 
             Widget? notes;
             if (shouldDisplayReleaseNotes && releaseNotes != null) {
@@ -107,8 +79,7 @@ class _UpgradeCard extends UpgradeBase {
                           Padding(
                             padding: const EdgeInsets.only(top: 15.0),
                             child: Text(
-                              Upgrader()
-                                      .messages!
+                              upgrader.messages!
                                       .message(UpgraderMessage.prompt) ??
                                   '',
                             ),
@@ -117,47 +88,47 @@ class _UpgradeCard extends UpgradeBase {
                         ],
                       ),
                       actions: <Widget>[
-                        if (Upgrader().showIgnore)
+                        if (upgrader.showIgnore)
                           TextButton(
                             child: Text(
-                              Upgrader().messages!.message(
+                              upgrader.messages.message(
                                       UpgraderMessage.buttonTitleIgnore) ??
                                   '',
                             ),
                             onPressed: () {
                               // Save the date/time as the last time alerted.
-                              Upgrader().saveLastAlerted();
+                              upgrader.saveLastAlerted();
 
-                              Upgrader().onUserIgnored(context, false);
+                              upgrader.onUserIgnored(context, false);
                               state.forceUpdateState();
                             },
                           ),
-                        if (Upgrader().showLater)
+                        if (upgrader.showLater)
                           TextButton(
                             child: Text(
-                              Upgrader().messages!.message(
+                              upgrader.messages.message(
                                       UpgraderMessage.buttonTitleLater) ??
                                   '',
                             ),
                             onPressed: () {
                               // Save the date/time as the last time alerted.
-                              Upgrader().saveLastAlerted();
+                              upgrader.saveLastAlerted();
 
-                              Upgrader().onUserLater(context, false);
+                              upgrader.onUserLater(context, false);
                               state.forceUpdateState();
                             },
                           ),
                         TextButton(
                           child: Text(
-                            Upgrader().messages!.message(
+                            upgrader.messages.message(
                                     UpgraderMessage.buttonTitleUpdate) ??
                                 '',
                           ),
                           onPressed: () {
                             // Save the date/time as the last time alerted.
-                            Upgrader().saveLastAlerted();
+                            upgrader.saveLastAlerted();
 
-                            Upgrader().onUserUpdated(context, false);
+                            upgrader.onUserUpdated(context, false);
                             state.forceUpdateState();
                           },
                         ),
@@ -168,7 +139,7 @@ class _UpgradeCard extends UpgradeBase {
               ),
             );
           } else {
-            if (Upgrader().debugLogging) {
+            if (upgrader.debugLogging) {
               print('UpgradeCard: will not display');
             }
           }
@@ -191,16 +162,14 @@ class UpgradeCard extends StatelessWidget {
       return Container();
     }
 
-    AppcastConfiguration? cfg = getAppcastConfig();
-
-    if (cfg == null) {
+    Upgrader upgrader = getAppcastConfig();
+    if (upgrader.appcastConfig == null) {
       debugPrint('UpgradeCard: no appcast configuration found');
       return Container();
     }
 
     return _UpgradeCard(
-      appcastConfig: cfg,
-      showIgnore: false,
+      upgrader: upgrader,
     );
   }
 }

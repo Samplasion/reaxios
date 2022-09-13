@@ -68,6 +68,12 @@ class _CalendarPaneState extends State<CalendarPane> {
     );
   }
 
+  bool _isEnabled() {
+    final period = context.read<AppCubit>().currentPeriod;
+
+    return period != null;
+  }
+
   List<PopupMenuEntry<String>> getPopupItems(
     BuildContext context,
     List<Topic> topics,
@@ -302,304 +308,327 @@ class _CalendarPaneState extends State<CalendarPane> {
           appBar: _editing
               ? getEditingAppBar(topics, assignments, periods)
               : getDefaultAppBar(context, topics, assignments, periods),
-          body: Container(
-            child: Column(
-              children: <Widget>[
-                TableCalendar(
-                  firstDay: periods.first.startDate,
-                  lastDay: periods.last.endDate,
-                  focusedDay: _focusedDay,
-                  selectedDayPredicate: (DateTime date) =>
-                      _selectedDay.isSameDay(date),
-                  onDaySelected: (selected, focused) {
-                    setState(() {
-                      _previouslyFocusedDay = _focusedDay;
-                      _focusedDay = focused;
-                      _selectedDay = selected;
-                      _events = _getEvents(
+          body: _buildBody(
+            periods,
+            topics,
+            assignments,
+            settings,
+            context,
+            emptyDays,
+          ),
+          floatingActionButton: _isEnabled()
+              ? FloatingActionButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  onPressed: () async {
+                    CustomCalendarEvent? event =
+                        await Navigator.push<CustomCalendarEvent>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CalendarEventEditorView(
+                          selectedDate: _focusedDay,
+                          firstDate: periods.first.startDate,
+                          lastDate: periods.last.endDate,
+                          selectableDayPredicate: (date) {
+                            // Ignore the days that fall outside period
+                            // boundaries (e.g. holidays)
+                            // Note that days that are not part of the
+                            // schoolyear are ignored by the
+                            // firstDate/lastDate properties above
+                            return periods.any((period) {
+                              return date.isAfter(period.startDate) &&
+                                  date.isBefore(period.endDate);
+                            });
+                          },
+                        ),
+                      ),
+                    );
+
+                    if (event != null) {
+                      setState(() {
+                        settings.setCalendarEvents([
+                          ...settings.getCalendarEvents(),
+                          event,
+                        ]);
+                      });
+                    }
+                    SchedulerBinding.instance.addPostFrameCallback((_) {
+                      _rebuildEvents(
+                        context,
                         topics,
                         assignments,
                         periods,
-                        settings.getCalendarEvents(),
-                        selected,
+                        _selectedDay,
                       );
                     });
-                    _unselectEvent(topics, assignments, periods);
-                    _rebuildEvents(
-                      context,
-                      topics,
-                      assignments,
-                      periods,
-                      selected,
-                    );
                   },
-                  calendarFormat: _calendarFormat,
-                  onFormatChanged: (format) {
-                    setState(() {
-                      _underlyingCalendarFormat = format;
-                    });
-                  },
-                  onPageChanged: (focusedDay) {
-                    _previouslyFocusedDay = _focusedDay;
-                    _focusedDay = focusedDay;
-                  },
-                  eventLoader: (date) => _getEvents(
-                    topics,
-                    assignments,
-                    periods,
-                    settings.getCalendarEvents(),
-                    date,
-                  ),
-                  locale: context.currentLocale.toLanguageTag(),
-                  weekendDays: [
-                    if (emptyDays.contains(6)) DateTime.saturday,
-                    DateTime.sunday
-                  ],
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  // Invert the labels so that the button shows the current state
-                  availableCalendarFormats: _calendarFormatMap,
-                  formatAnimationCurve: Curves.easeInOut,
-                  formatAnimationDuration: Duration(milliseconds: 300),
-                  pageAnimationCurve: Curves.easeInOut,
-                  pageAnimationDuration: Duration(milliseconds: 300),
-                  calendarBuilders: CalendarBuilders(
-                    headerTitleBuilder: (context, day) {
-                      return Text(
-                        DateFormat.yMMMM(context.currentLocale.toLanguageTag())
-                            .format(day),
-                        style: TextStyle(
-                          fontFamily:
-                              Theme.of(context).textTheme.headline6!.fontFamily,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    },
-                    markerBuilder: (context, date, events) {
-                      final accent = Theme.of(context).colorScheme.secondary;
-                      // TODO: Fix this hot mess
-                      final filtered = events.where((e) {
-                        return e is GenericEventWidget &&
-                            (e.type == EventType.topic ||
-                                e.type == EventType.assignment);
-                      });
-                      // Casting with cast<T>() is required because the
-                      // usual cast with `as T` doesn't work for some reason
-                      final custom = events.where((e) {
-                        return e is GenericEventWidget &&
-                            e.type == EventType.custom;
-                      }).cast<CustomEventWidget>();
-                      if (filtered.length > 0) {
-                        print(custom.isEmpty ? null : custom.last.runtimeType);
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 2),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ...filtered.take(4).map(
-                                    (e) => CircleAvatar(
-                                      radius: 3,
-                                      backgroundColor: accent,
-                                    ).padding(right: 2, bottom: 2),
-                                  ),
-                              if (custom.isNotEmpty)
-                                ...0
-                                    .to(
-                                  min(
-                                    custom.length - 1,
-                                    max(0, 3 - filtered.length),
-                                  ),
-                                )
-                                    .map(
-                                  (i) {
-                                    return CircleAvatar(
-                                      radius: 3,
-                                      backgroundColor:
-                                          custom.toList()[i].data.color,
-                                    ).padding(right: 2, bottom: 2);
-                                  },
-                                ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    },
-                    dowBuilder: (context, dayOfWeek) {
-                      return Container(
-                        child: Text(
-                          DateFormat.E(context.currentLocale.toLanguageTag())
-                              .format(dayOfWeek),
-                          style: TextStyle(
-                            fontFamily: Theme.of(context)
-                                .textTheme
-                                .headline6!
-                                .fontFamily,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: emptyDays.contains(dayOfWeek.weekday) &&
-                                    dayOfWeek.weekday > 5
-                                ? Colors.red[Utils.getContrastShade(context)]
-                                : null,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                      );
-                    },
-                    todayBuilder: (context, date, focusedDay) {
-                      final bg = Theme.of(context)
-                          .primaryColor
-                          .lighten(date == focusedDay ? 0 : 0.2);
-                      return Container(
-                        child: CircleAvatar(
-                          backgroundColor: bg,
-                          foregroundColor: bg.contrastColor,
-                          child: Text(
-                            date.day.toString(),
-                            style: TextStyle(fontSize: 13),
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                      );
-                    },
-                    defaultBuilder: (context, date, focusedDay) {
-                      final fg = Theme.of(context).textTheme.bodyText1!.color!;
-                      final caption =
-                          Theme.of(context).textTheme.caption!.color!;
-                      return Container(
-                        child: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          foregroundColor:
-                              emptyDays.contains(date.weekday) ? caption : fg,
-                          child: Text(
-                            date.day.toString(),
-                            style: TextStyle(fontSize: 13),
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                      );
-                    },
-                    selectedBuilder: (context, date, focusedDay) {
-                      final bg = Theme.of(context).primaryColor;
-                      return Container(
-                        child: CircleAvatar(
-                          backgroundColor: bg,
-                          foregroundColor: bg.contrastColor,
-                          child: Text(
-                            date.day.toString(),
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: bg.contrastColor,
-                            ),
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                      );
-                    },
-                    outsideBuilder: (context, date, focusedDay) {
-                      return Container(
-                        child: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          foregroundColor: Theme.of(context).disabledColor,
-                          child: Text(
-                            date.day.toString(),
-                            style: TextStyle(
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                Divider(height: 0, indent: 8, endIndent: 8),
-                Expanded(
-                  child: PageTransitionSwitcher(
-                    reverse: _previouslyFocusedDay.isAfter(_focusedDay),
-                    transitionBuilder: (child, animation, secondaryAnimation) {
-                      if (kIsWeb) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      }
+                  child: Icon(Icons.add),
+                )
+              : null,
+        );
+      }),
+    );
+  }
 
-                      return SharedAxisTransition(
-                        child: child,
-                        animation: animation,
-                        secondaryAnimation: secondaryAnimation,
-                        transitionType: SharedAxisTransitionType.horizontal,
-                      );
-                    },
-                    child: ListView(
-                      key: ValueKey(_focusedDay),
-                      controller: _scrollController,
-                      children: [
-                        ..._events!.map(
-                          (e) {
-                            return MaxWidthContainer(child: e).center();
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            onPressed: () async {
-              CustomCalendarEvent? event =
-                  await Navigator.push<CustomCalendarEvent>(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CalendarEventEditorView(
-                    selectedDate: _focusedDay,
-                    firstDate: periods.first.startDate,
-                    lastDate: periods.last.endDate,
-                    selectableDayPredicate: (date) {
-                      // Ignore the days that fall outside period
-                      // boundaries (e.g. holidays)
-                      // Note that days that are not part of the
-                      // schoolyear are ignored by the
-                      // firstDate/lastDate properties above
-                      return periods.any((period) {
-                        return date.isAfter(period.startDate) &&
-                            date.isBefore(period.endDate);
-                      });
-                    },
-                  ),
-                ),
-              );
+  Widget _buildBody(
+    List<Period> periods,
+    List<Topic> topics,
+    List<Assignment> assignments,
+    Settings settings,
+    BuildContext context,
+    List<int> emptyDays,
+  ) {
+    if (!_isEnabled()) {
+      return EmptyUI(
+        icon: Icons.info_outline,
+        text: context.locale.calendar.emptyTitle,
+        subtitle: context.locale.calendar.emptyMessage,
+      );
+    }
 
-              if (event != null) {
-                setState(() {
-                  settings.setCalendarEvents([
-                    ...settings.getCalendarEvents(),
-                    event,
-                  ]);
-                });
-              }
-              SchedulerBinding.instance!.addPostFrameCallback((_) {
-                _rebuildEvents(
-                  context,
+    return Container(
+      child: Column(
+        children: <Widget>[
+          TableCalendar(
+            firstDay: periods.first.startDate,
+            lastDay: periods.last.endDate,
+            focusedDay: _focusedDay,
+            selectedDayPredicate: (DateTime date) =>
+                _selectedDay.isSameDay(date),
+            onDaySelected: (selected, focused) {
+              setState(() {
+                _previouslyFocusedDay = _focusedDay;
+                _focusedDay = focused;
+                _selectedDay = selected;
+                _events = _getEvents(
                   topics,
                   assignments,
                   periods,
-                  _selectedDay,
+                  settings.getCalendarEvents(),
+                  selected,
                 );
               });
+              _unselectEvent(topics, assignments, periods);
+              _rebuildEvents(
+                context,
+                topics,
+                assignments,
+                periods,
+                selected,
+              );
             },
-            child: Icon(Icons.add),
+            calendarFormat: _calendarFormat,
+            onFormatChanged: (format) {
+              setState(() {
+                _underlyingCalendarFormat = format;
+              });
+            },
+            onPageChanged: (focusedDay) {
+              _previouslyFocusedDay = _focusedDay;
+              _focusedDay = focusedDay;
+            },
+            eventLoader: (date) => _getEvents(
+              topics,
+              assignments,
+              periods,
+              settings.getCalendarEvents(),
+              date,
+            ),
+            locale: context.currentLocale.toLanguageTag(),
+            weekendDays: [
+              if (emptyDays.contains(6)) DateTime.saturday,
+              DateTime.sunday
+            ],
+            startingDayOfWeek: StartingDayOfWeek.monday,
+            // Invert the labels so that the button shows the current state
+            availableCalendarFormats: _calendarFormatMap,
+            formatAnimationCurve: Curves.easeInOut,
+            formatAnimationDuration: Duration(milliseconds: 300),
+            pageAnimationCurve: Curves.easeInOut,
+            pageAnimationDuration: Duration(milliseconds: 300),
+            calendarBuilders: CalendarBuilders(
+              headerTitleBuilder: (context, day) {
+                return Text(
+                  DateFormat.yMMMM(context.currentLocale.toLanguageTag())
+                      .format(day),
+                  style: TextStyle(
+                    fontFamily:
+                        Theme.of(context).textTheme.headline6!.fontFamily,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
+              markerBuilder: (context, date, events) {
+                final accent = Theme.of(context).colorScheme.secondary;
+                // TODO: Fix this hot mess
+                final filtered = events.where((e) {
+                  return e is GenericEventWidget &&
+                      (e.type == EventType.topic ||
+                          e.type == EventType.assignment);
+                });
+                // Casting with cast<T>() is required because the
+                // usual cast with `as T` doesn't work for some reason
+                final custom = events.where((e) {
+                  return e is GenericEventWidget && e.type == EventType.custom;
+                }).cast<CustomEventWidget>();
+                if (filtered.length > 0) {
+                  print(custom.isEmpty ? null : custom.last.runtimeType);
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ...filtered.take(4).map(
+                              (e) => CircleAvatar(
+                                radius: 3,
+                                backgroundColor: accent,
+                              ).padding(right: 2, bottom: 2),
+                            ),
+                        if (custom.isNotEmpty)
+                          ...0
+                              .to(
+                            min(
+                              custom.length - 1,
+                              max(0, 3 - filtered.length),
+                            ),
+                          )
+                              .map(
+                            (i) {
+                              return CircleAvatar(
+                                radius: 3,
+                                backgroundColor: custom.toList()[i].data.color,
+                              ).padding(right: 2, bottom: 2);
+                            },
+                          ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+              dowBuilder: (context, dayOfWeek) {
+                return Container(
+                  child: Text(
+                    DateFormat.E(context.currentLocale.toLanguageTag())
+                        .format(dayOfWeek),
+                    style: TextStyle(
+                      fontFamily:
+                          Theme.of(context).textTheme.headline6!.fontFamily,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: emptyDays.contains(dayOfWeek.weekday) &&
+                              dayOfWeek.weekday > 5
+                          ? Colors.red[Utils.getContrastShade(context)]
+                          : null,
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                );
+              },
+              todayBuilder: (context, date, focusedDay) {
+                final bg = Theme.of(context)
+                    .primaryColor
+                    .lighten(date == focusedDay ? 0 : 0.2);
+                return Container(
+                  child: CircleAvatar(
+                    backgroundColor: bg,
+                    foregroundColor: bg.contrastColor,
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                );
+              },
+              defaultBuilder: (context, date, focusedDay) {
+                final fg = Theme.of(context).textTheme.bodyText1!.color!;
+                final caption = Theme.of(context).textTheme.caption!.color!;
+                return Container(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor:
+                        emptyDays.contains(date.weekday) ? caption : fg,
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                );
+              },
+              selectedBuilder: (context, date, focusedDay) {
+                final bg = Theme.of(context).primaryColor;
+                return Container(
+                  child: CircleAvatar(
+                    backgroundColor: bg,
+                    foregroundColor: bg.contrastColor,
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: bg.contrastColor,
+                      ),
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                );
+              },
+              outsideBuilder: (context, date, focusedDay) {
+                return Container(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Theme.of(context).disabledColor,
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                );
+              },
+            ),
           ),
-        );
-      }),
+          const SizedBox(height: 16.0),
+          Divider(height: 0, indent: 8, endIndent: 8),
+          Expanded(
+            child: PageTransitionSwitcher(
+              reverse: _previouslyFocusedDay.isAfter(_focusedDay),
+              transitionBuilder: (child, animation, secondaryAnimation) {
+                if (kIsWeb) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                }
+
+                return SharedAxisTransition(
+                  child: child,
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                  transitionType: SharedAxisTransitionType.horizontal,
+                );
+              },
+              child: ListView(
+                key: ValueKey(_focusedDay),
+                controller: _scrollController,
+                children: [
+                  ..._events!.map(
+                    (e) {
+                      return MaxWidthContainer(child: e).center();
+                    },
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

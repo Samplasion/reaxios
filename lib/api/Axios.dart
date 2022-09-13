@@ -530,7 +530,7 @@ class Axios {
         .toList();
   }
 
-  Future<List<MaterialTeacherData>> getMaterials() async {
+  Future<List<MaterialTeacherData>> getMaterials([String? uuid]) async {
     final List<APIMaterials> res = await this
         ._makeAuthenticatedCall<dynamic>("GET_MATERIALE_MASTER", (raw) {
       return compute<List<dynamic>, List<APIMaterials>>(
@@ -541,7 +541,7 @@ class Axios {
       // return (raw as List).map((e) => APIMaterials.fromJson(e)).toList();
     });
     return res
-        .where((element) => element.idAlunno == student!.studentUUID)
+        .where((element) => element.idAlunno == (uuid ?? student!.studentUUID))
         .map((e) => e.docenti
           ..forEach((teacher) {
             teacher.folders.forEach((folder) {

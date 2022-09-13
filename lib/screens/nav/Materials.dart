@@ -61,11 +61,19 @@ class _MaterialsPaneState extends State<MaterialsPane> {
         return RefreshIndicator(
           onRefresh: _refresh,
           child: _materials.isEmpty
-              ? SingleChildScrollView(
-                  child: EmptyUI(
-                  icon: Icons.error_outline,
-                  text: context.locale.teachingMaterials.noData,
-                )).center()
+              ? LayoutBuilder(
+                  builder: (context, constraints) => ListView(
+                    children: [
+                      Container(
+                        height: constraints.maxHeight,
+                        child: EmptyUI(
+                          icon: Icons.error_outline,
+                          text: context.locale.teachingMaterials.noData,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               : ListView.builder(
                   itemCount: _materials.length,
                   itemBuilder: (context, index) {
@@ -102,7 +110,7 @@ class _MaterialsPaneState extends State<MaterialsPane> {
                     );
                   },
                 ),
-        ).center();
+        );
       },
     );
   }

@@ -27,6 +27,7 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
   String selectedPeriod = '';
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
+  final ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -44,6 +45,12 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
         });
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Future<void> _onRefresh() async {
@@ -82,6 +89,7 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
     List<Period> periods,
   ) {
     return SingleChildScrollView(
+      controller: _controller,
       child: Center(
         child: MaxWidthContainer(
           child: Padding(

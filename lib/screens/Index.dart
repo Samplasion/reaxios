@@ -198,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Builder(
-          builder: (_) => CalculatorPane(
+          builder: (context) => CalculatorPane(
             session: session,
             openMainDrawer: () => Scaffold.of(context).openDrawer(),
             period: cubit.currentPeriod,
@@ -386,12 +386,14 @@ class _HomeScreenState extends State<HomeScreen> {
           final s = _session.students[index];
           return ListTile(
             title: Text("${s.firstName} ${s.lastName}"),
-            selected: s.studentUUID == _session.student?.studentUUID,
+            selected:
+                s.studentUUID == context.read<AppCubit>().student?.studentUUID,
             onTap: () {
               if (!MaybeMasterDetail.of(context)!.isShowingMaster)
                 Navigator.pop(context);
               _session.student = s;
               context.read<AppCubit>().clearData();
+              context.read<AppCubit>().setStudent(s);
               _runCallback(0);
               setState(() {
                 _showUserDetails = false;
