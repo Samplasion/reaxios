@@ -348,6 +348,11 @@ class TestAxios implements Axios {
   Future<List<MeetingSchema>> getTeacherMeetings() async {
     return [];
   }
+
+  @override
+  Future<String> getWebVersionUrl() async {
+    return "";
+  }
 }
 
 gradeText(int round) {

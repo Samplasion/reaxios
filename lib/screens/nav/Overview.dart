@@ -86,7 +86,13 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
   }
 
   setState(VoidCallback cb) {
-    if (mounted) super.setState(cb);
+    // Avoid the error that sometimes appears
+    // "setState called during build"
+    try {
+      if (mounted) super.setState(cb);
+    } catch (e) {
+      // noop
+    }
   }
 
   initREData() async {

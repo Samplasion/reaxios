@@ -477,6 +477,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       // shrinkWrap: true,
                       children: [
                         ..._buildDrawerItems(),
+                        // ListTile(
+                        //   title: Text("context.locale.drawer.webVersion"),
+                        //   leading: Icon(Icons.public),
+                        //   onTap: () {
+                        //     _session.getWebVersionUrl().then(print);
+                        //   },
+                        // ),
                         Divider(),
                         ListTile(
                           title: Text(context.locale.drawer.settings),

@@ -32,7 +32,7 @@ Future<R> defaultCompute<Q, R>(ComputeCallback<Q, R> callback, Q message,
   return Future.microtask(() => callback(message));
 }
 
-const VENDOR_TOKEN = "a67ff23d-3277-4e2b-855d-f8fa52a6ba8e";
+const VENDOR_TOKEN = "5ed95c58-fbc2-4db8-92cb-7e1e73ba2065";
 const kMaxRequests = 5;
 
 List<APIAbsences> _absencesFromJSON(List<dynamic> json) {
@@ -161,6 +161,7 @@ class Axios {
     );
     final url = Axios._getURL("GET", "RetrieveAPPCustomerInformationByString",
         data: {"sSearch": query, "sVendorToken": VENDOR_TOKEN});
+    print(url);
     final res = await session._makeCall<dynamic>(url, model: (raw) {
       List<dynamic> list = raw;
       return list.map((e) => School.fromJson(e)).toList();
@@ -663,6 +664,8 @@ class Axios {
       "ExecuteCommand",
       {
         "idVoto": grade.id,
+        // "@i_vread_voto_id": int.parse(grade.id),
+        // "i_vread_voto_id": int.parse(grade.id),
         "idAlunno": student?.studentUUID,
         "pin": gradeBit == "1" ? "" : this._session?.pin
       },
@@ -730,5 +733,9 @@ class Axios {
       await this.markBulletinAsRead(bulletin);
     }
     return true;
+  }
+
+  Future<String> getWebVersionUrl() async {
+    return this._makeAuthenticatedCall("GET_URL_WEB", (json) => "$json");
   }
 }

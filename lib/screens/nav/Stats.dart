@@ -92,6 +92,7 @@ class _StatsPaneState extends State<StatsPane> {
         .toList();
     final gradesByGrade = currentGrades.toSet().toList()
       ..sort((a, b) => a.grade.compareTo(b.grade));
+    print(gradesByGrade.map((s) => "${s.subject}\t${s.grade}").join("\n"));
     final best = gradeAverage(
       averageMode,
       currentGrades

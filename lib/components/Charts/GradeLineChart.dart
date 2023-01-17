@@ -125,7 +125,7 @@ class _GradeLineChartState extends State<GradeLineChart> {
                     if (value >= usefulGrades.length) return _("");
                     final date = usefulGrades[value.toInt()].date;
 
-                    if (value == 0) {
+                    if (value.toInt() == 0) {
                       return _(context.dateToString(date, short: true));
                     } else {
                       final previous = usefulGrades[value.toInt() - 1].date;

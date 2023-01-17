@@ -39,10 +39,12 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
         cubit.loadStructural(),
         cubit.loadReportCards(),
       ]).then((_) {
-        setState(() {
-          if (selectedPeriod.isEmpty && cubit.structural != null)
-            selectedPeriod = cubit.periods.first.id;
-        });
+        if (mounted) {
+          setState(() {
+            if (selectedPeriod.isEmpty && cubit.structural != null)
+              selectedPeriod = cubit.periods.first.id;
+          });
+        }
       });
     });
   }

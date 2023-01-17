@@ -11,7 +11,8 @@ class Encrypter {
     return [...Encrypter.rc4Base];
   }
 
-  static var key = "ppepsflssc05102017";
+  // static var key = "ppepsflssc05102017";
+  static const key = "Cf4G8nepTqwyp2Y4suvQMdQJ";
 
   /// Ciphers and deciphers using RC4
   ///
@@ -19,32 +20,29 @@ class Encrypter {
   ///
   /// @param data stringa da codificare/decodificare
   /// Return la stringa codificata/decodificata
-  static _rc4(String data) {
-    var rc4 = Encrypter.getRC4();
-    var length = data.length;
-    int i = 0;
-    int j = 0;
-    int x;
-    List<String> c = new List.filled(length, "");
-    for (var y = 0; y < length; y++) {
-      i = (i + 1) % 256;
-      j = (j + rc4[i]) % 256;
-      x = rc4[i];
-      rc4[i] = rc4[j];
-      rc4[j] = x;
-      c[y] = String.fromCharCode(data.codeUnitAt(y) ^ rc4[(rc4[i] + rc4[j]) % 256]);
+  static _rc4(String str, [String key = key]) {
+    var s = List.generate(256, (_) => 0), j = 0, x, res = '';
+    for (var i = 0; i < 256; i++) {
+      s[i] = i;
     }
-    return c.join("");
+    for (var i = 0; i < 256; i++) {
+      j = ((j + s[i] + key.codeUnitAt(i % key.length)) % 256).toInt();
+      x = s[i];
+      s[i] = s[j];
+      s[j] = x;
+    }
+    var i = 0;
+    j = 0;
+    for (var y = 0; y < str.length; y++) {
+      i = (i + 1) % 256;
+      j = ((j + s[i]) % 256).toInt();
+      x = s[i];
+      s[i] = s[j];
+      s[j] = x;
+      res += String.fromCharCode(str.codeUnitAt(y) ^ s[(s[i] + s[j]) % 256]);
+    }
+    return res;
   }
-
-  // static _encodeURIComponent(str: string) {
-  //     return str.replaceAll("\\+", "%20")
-  //         .replaceAll("%21", "!")
-  //         .replaceAll("%27", "'")
-  //         .replaceAll("%28", "(")
-  //         .replaceAll("%29", ")")
-  //         .replaceAll("%7E", "~");
-  // }
 
   /// Base64 to ASCII
   static String _atob(String str) {
@@ -106,22 +104,22 @@ class Encrypter {
   ///
   /// decrypt(encrypt("ciao")) == "ciao"
   ///
-  static String decrypt(String input) {
+  static String decrypt(String input, [String key = key]) {
     final uriDecoded = Uri.decodeComponent(input.replaceAll('"', '')).replaceAll('\\/', '/');
     final ascii = Encrypter._atob(uriDecoded);
-    final rc4d = Encrypter._rc4(ascii);
+    final rc4d = Encrypter._rc4(ascii, key);
     return rc4d;
   }
 
   /// Cripta i dati per essere inviati ai server Axios
-  static String encrypt(String input) {
+  static String encrypt(String input, [String key = key]) {
     // if (!input)
     //     throw new Error("Must pass input to Encrypter.encrypt()")
-    return Uri.encodeComponent(Encrypter._btoa(Encrypter._rc4(input)));
+    return Uri.encodeComponent(Encrypter._btoa(Encrypter._rc4(input, key)));
   }
 
   /// Cripta i dati per essere inviati ai server Axios in POST
-  static String encryptPost(String input) {
-    return Encrypter._btoa(Encrypter._rc4(input));
+  static String encryptPost(String input, [String key = key]) {
+    return Encrypter._btoa(Encrypter._rc4(input, key));
   }
 }
