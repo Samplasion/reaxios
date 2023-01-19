@@ -15,7 +15,9 @@
     "downloadButtonLabel": "DOWNLOAD",
     "noDataForPeriod": "There is no data for the selected period.",
     "noPermission": "You don't have the permission to enter this section. Contact your school for more information.",
-    "didYouKnow": "You can change the style of grades from the settings.\nYou can change the colors from the settings.\nYou don't need a PIN to authorize absences."
+    "didYouKnow": "You can change the style of grades from the settings.\nYou can change the colors from the settings.\nYou don't need a PIN to authorize absences.",
+    "loading": "Loading...",
+    "webVersionError": "An error occurred."
   },
   "login": {
     "selectSchool": "Select school",
@@ -46,12 +48,14 @@
     "logOut": "Log out",
     "calculator": "Calculator",
     "timetable": "Timetable",
-    "teacherMeetings": "Meetings"
+    "teacherMeetings": "Meetings",
+    "webVersion": "Open online version"
   },
   "about": {
     "aboutApp": "About Registro",
     "synopsis": "A simple frontend for Axios.",
-    "longDescription": "Special thanks to ###, for the decryption codes, and for helping me comprehend the system."
+    "longDescription": "Special thanks to ###, for the decryption codes, and for helping me comprehend the system.",
+    "appName": "Registro"
   },
   "overview": {
     "latestGrades": "Latest grades",

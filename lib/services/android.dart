@@ -166,7 +166,7 @@ void bulletinBoardBackgroundService() async {
       "Nuova comunicazione",
       bulletin.desc,
       // id: int.tryParse(grade.id) ?? 0,
-      id: bulletin.id.floor(),
+      id: bulletin.id.hashCode,
       androidDetails: androidPlatformChannelSpecifics,
       // payload: 'grade:${grade.id}',
       payload: '',

@@ -140,14 +140,14 @@ class Axios {
 
   static const Map<String, String> defaultHeaders = {
     "Accept": "application/json, text/javascript, */*; q=0.01",
-    // "X-Requested-With": "com.axiositalia.re.family",
-    // "Host": "wssd.axioscloud.it",
+    "X-Requested-With": "com.axiositalia.re.family",
+    "Host": "wssd.axioscloud.it",
   };
   static const Map<String, String> defaultPOSTHeaders = {
     "Accept": "application/json, text/javascript, */*; q=0.01",
     "Content-Type": "application/json; charset=UTF-8",
-    // "Host": "wssd.axioscloud.it",
-    // "Origin": "file://"
+    "Host": "wssd.axioscloud.it",
+    "Origin": "file://"
   };
 
   Axios(this._account, {required this.compute});
@@ -205,10 +205,6 @@ class Axios {
             method: method,
           ),
           data: body);
-      //     req.url, {
-      //     ...req,
-      //     method: req.method
-      // });
 
       final text = res.toString();
       dynamic data = _RawAPIResponse(
@@ -224,13 +220,14 @@ class Axios {
             print(" └> Additionally, no last call was provided.");
           }
         }
+        print("Error [${data.errorcode}] - ${data.errormessage}");
         throw (data.errormessage);
       }
 
       return model(data.response);
-    } on DioError catch (e) {
+    } on DioError /* catch (e) */ {
       onError();
-      throw e;
+      rethrow;
     }
   }
 
@@ -405,8 +402,7 @@ class Axios {
         .reversed
         .expand((i) => i)
         .toList()
-        .reversed
-        .toList();
+      ..sort((a, b) => b.date.compareTo(a.date));
   }
 
   Future<Structural> getStructural() async {
@@ -489,8 +485,7 @@ class Axios {
         .map((e) => e.comunicazioni)
         .expand((i) => i)
         .toList()
-        .reversed
-        .toList();
+      ..sort((a, b) => b.date.compareTo(a.date));
   }
 
   Future<List<Note>> getNotes() async {
@@ -527,8 +522,7 @@ class Axios {
             .setKinds(structural)))
         .expand((i) => i)
         .toList()
-        .reversed
-        .toList();
+      ..sort((a, b) => b.date.compareTo(a.date));
   }
 
   Future<List<MaterialTeacherData>> getMaterials([String? uuid]) async {
@@ -663,11 +657,12 @@ class Axios {
       (_any) => "$_any",
       "ExecuteCommand",
       {
+        // "id": grade.id,
         "idVoto": grade.id,
         // "@i_vread_voto_id": int.parse(grade.id),
         // "i_vread_voto_id": int.parse(grade.id),
+        "pin": this._session?.pin ?? "",
         "idAlunno": student?.studentUUID,
-        "pin": gradeBit == "1" ? "" : this._session?.pin
       },
       "VOTO_VISTA",
     );
@@ -735,7 +730,7 @@ class Axios {
     return true;
   }
 
-  Future<String> getWebVersionUrl() async {
-    return this._makeAuthenticatedCall("GET_URL_WEB", (json) => "$json");
+  Future<Map<String, dynamic>> getWebVersionUrl() async {
+    return this._makeAuthenticatedCall("GET_URL_WEB", (json) => json);
   }
 }

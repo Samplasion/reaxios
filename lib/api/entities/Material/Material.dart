@@ -96,7 +96,7 @@ class MaterialData extends Equatable implements AbstractJson {
 @JsonSerializable()
 class MaterialFolderData extends Equatable implements AbstractJson {
   @JsonKey(name: 'idFolder')
-  int id;
+  String id;
   @JsonKey(name: 'descrizione')
   String description;
   @JsonKey(name: 'note')
@@ -148,7 +148,7 @@ class MaterialFolderData extends Equatable implements AbstractJson {
 
   static MaterialFolderData test() {
     return MaterialFolderData(
-      id: 1,
+      id: "1",
       description: 'test',
       // The string "test" in base64
       rawNote: 'dGVzdA==',
@@ -158,7 +158,7 @@ class MaterialFolderData extends Equatable implements AbstractJson {
 
   static MaterialFolderData empty() {
     return MaterialFolderData(
-      id: 0,
+      id: "0",
       description: '',
       rawNote: '',
       path: '',

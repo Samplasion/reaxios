@@ -121,6 +121,13 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                 title: Text(
                   context.locale.drawer.overview,
                 ),
+                leading: MaybeMasterDetail.of(context)!.isShowingMaster
+                    ? null
+                    : IconButton(
+                        icon: Icon(Icons.menu),
+                        onPressed: widget.openMainDrawer,
+                        tooltip: context.materialLocale.openAppDrawerTooltip,
+                      ),
               )
             : null,
         body: loading ? LoadingUI() : _buildBody(),
@@ -165,9 +172,9 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .toList()
       ..sort((a, b) => a.lessonHour.compareTo(b.lessonHour));
     final List<Grade> latestGrades = Set<Grade>.from(
-            grades.reversed.take(3).toList()
-              ..addAll(grades.where((g) => !g.seen)))
+            grades.take(3).toList()..addAll(grades.where((g) => !g.seen)))
         .toList();
+    // ..sort((a, b) => b.date.compareTo(a.date));
 
     final accent = Theme.of(context).accentColor;
 
@@ -421,19 +428,16 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
               bottom: 0.0,
               child: Opacity(
                 opacity: percent,
-                child: Transform.rotate(
-                  angle: (1 - percent) * 0.07,
-                  child: Transform.scale(
-                    scale: map(percent, 0, 1, 0.88, 1).toDouble(),
-                    child: MaxWidthContainer(
-                      child: UserCard(
-                        student: student,
-                        period: period,
-                        // store: store,
-                        switchToTab: switchToTab,
-                      ),
-                    ).center(),
-                  ),
+                child: Transform.scale(
+                  scale: map(percent, 0, 1, 0.88, 1).toDouble(),
+                  child: MaxWidthContainer(
+                    child: UserCard(
+                      student: student,
+                      period: period,
+                      // store: store,
+                      switchToTab: switchToTab,
+                    ),
+                  ).center(),
                 ),
               ),
             ),

@@ -130,6 +130,8 @@ class Localemain {
   String get noDataForPeriod => _data["noDataForPeriod"]!;
   String get noPermission => _data["noPermission"]!;
   String get didYouKnow => _data["didYouKnow"]!;
+  String get loading => _data["loading"]!;
+  String get webVersionError => _data["webVersionError"]!;
 }
 
 class Localelogin {
@@ -177,6 +179,7 @@ class Localedrawer {
   String get calculator => _data["calculator"]!;
   String get timetable => _data["timetable"]!;
   String get teacherMeetings => _data["teacherMeetings"]!;
+  String get webVersion => _data["webVersion"]!;
 }
 
 class Localeabout {
@@ -190,6 +193,7 @@ class Localeabout {
   String get aboutApp => _data["aboutApp"]!;
   String get synopsis => _data["synopsis"]!;
   String get longDescription => _data["longDescription"]!;
+  String get appName => _data["appName"]!;
 }
 
 class Localeoverview {

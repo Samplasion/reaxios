@@ -305,13 +305,22 @@ extension ContextUtils on BuildContext {
     String message, {
     TextStyle? style,
     Color? backgroundColor,
+    SnackBarAction? action,
   }) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         content: Text(message, style: style),
         backgroundColor: backgroundColor,
+        action: action,
+        behavior: SnackBarBehavior.floating,
       ),
     );
+  }
+
+  void hideCurrentSnackBar() {
+    try {
+      ScaffoldMessenger.maybeOf(this)?.clearSnackBars();
+    } catch (e) {}
   }
 
   String gradeToString(

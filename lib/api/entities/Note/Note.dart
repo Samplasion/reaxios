@@ -14,11 +14,15 @@ class Note extends Equatable implements AbstractJson {
   DateTime date;
   @JsonKey(name: "descNota")
   String content;
+  String get cleanContent {
+    return content.replaceFirst(RegExp(r"<.+>Comunicazione: </.+>"), "").trim();
+  }
+
   @JsonKey(name: "tipo")
   @NoteKindSerializer()
   NoteKind rawKind;
   NoteKind get kind {
-    if (content.startsWith("<i>Comunicazione: </i>"))
+    if (content.startsWith(RegExp(r"<.+>Comunicazione: </.+>")))
       return NoteKind.Note;
     else
       return NoteKind.Notice;

@@ -15,7 +15,9 @@
     "downloadButtonLabel": "",
     "noDataForPeriod": "",
     "noPermission": "",
-    "didYouKnow": "Split each string by newline"
+    "didYouKnow": "Split each string by newline",
+    "loading": "",
+    "webVersionError": ""
   },
   "login": {
     "selectSchool": "Shown on page 1 of the login stage",
@@ -46,12 +48,14 @@
     "logOut": "",
     "calculator": "",
     "timetable": "",
-    "teacherMeetings": ""
+    "teacherMeetings": "",
+    "webVersion": ""
   },
   "about": {
     "aboutApp": "\"About Registro\"",
     "synopsis": "",
-    "longDescription": ""
+    "longDescription": "",
+    "appName": ""
   },
   "overview": {
     "latestGrades": "",

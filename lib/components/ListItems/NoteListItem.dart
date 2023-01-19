@@ -6,7 +6,7 @@ import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/utils.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class NoteListItem extends StatelessWidget {
   NoteListItem(
@@ -41,11 +41,11 @@ class NoteListItem extends StatelessWidget {
       leading: leading,
       title: note.teacher,
       subtitle: SelectableLinkify(
-        text: note.content.replaceAll("<i>Comunicazione: </i>", "").trim(),
+        text: note.cleanContent.trim(),
         style: TextStyle(color: Theme.of(context).textTheme.caption?.color),
         onOpen: (link) async {
-          if (await canLaunch(link.url)) {
-            await launch(link.url);
+          if (await canLaunchUrlString(link.url)) {
+            await launchUrlString(link.url);
           } else {
             context.showSnackbar(context.locale.main.failedLinkOpen);
           }

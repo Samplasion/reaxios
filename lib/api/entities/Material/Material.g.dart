@@ -29,7 +29,7 @@ Map<String, dynamic> _$MaterialDataToJson(MaterialData instance) =>
 
 MaterialFolderData _$MaterialFolderDataFromJson(Map<String, dynamic> json) =>
     MaterialFolderData(
-      id: json['idFolder'] as int,
+      id: json['idFolder'] as String,
       description: json['descrizione'] as String,
       rawNote: json['note'] as String,
       path: json['path'] as String,

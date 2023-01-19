@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
+import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
+import 'package:reaxios/components/LowLevel/Loading.dart';
+import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../cubit/app_cubit.dart';
@@ -103,38 +106,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        body: Scaffold(
-          body: Stack(
-            children: [
-              AnimatedContainer(
-                duration: Duration(seconds: 2),
-                onEnd: () {
-                  setState(() {
-                    index = index + 1;
-                    // animate the color
-                    bottomColor = colorList[index % colorList.length];
-                    topColor = colorList[(index + 1) % colorList.length];
-
-                    // animate the alignment
-                    begin = alignmentList[index % alignmentList.length];
-                    end = alignmentList[(index + 2) % alignmentList.length];
-                  });
-                },
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: begin,
-                    end: end,
-                    colors: [bottomColor, topColor],
-                  ),
-                ),
-              ),
-              Positioned.fill(
-                child: SpinKitPumpingHeart(
-                  color: Colors.white,
-                ),
-              )
-            ],
-          ),
+        appBar: GradientAppBar(title: Text(context.locale.about.appName)),
+        body: LoadingUI(
+          showHints: true,
         ),
       ),
       onWillPop: () {

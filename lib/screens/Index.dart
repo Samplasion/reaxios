@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:animations/animations.dart';
 import 'package:dio/dio.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' hide compute;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/TestAxios.dart';
@@ -33,9 +35,11 @@ import 'package:reaxios/screens/nav/Overview.dart';
 import 'package:reaxios/screens/nav/Stats.dart';
 import 'package:reaxios/screens/nav/Topics.dart';
 import 'package:reaxios/services/compute.dart';
+import 'package:reaxios/storage.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../consts.dart';
 import '../system/AppInfoStore.dart';
@@ -104,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _initSession() async {
     final cubit = context.read<AppCubit>();
+    final storage = context.read<Storage>();
     if (!cubit.state.testMode) {
       final prefs = await SharedPreferences.getInstance();
       final school = prefs.getString("school")!;
@@ -137,6 +142,16 @@ class _HomeScreenState extends State<HomeScreen> {
       _login = await _session.login();
     }
     await _session.getStudents(true);
+    final lastStudentID = storage.getLastStudentID();
+    print(lastStudentID);
+    if (lastStudentID != null &&
+        _session.students
+            .any((element) => element.studentUUID == lastStudentID)) {
+      _session.student = _session.students.firstWhere(
+        (element) => element.studentUUID == lastStudentID,
+      );
+      cubit.setStudent(_session.student!);
+    }
 
     _initPanes(_session, _login);
 
@@ -360,6 +375,51 @@ class _HomeScreenState extends State<HomeScreen> {
     return _session.students.length > 0 ? _session.student : Student.empty();
   }
 
+  Future<void> launchWeb(BuildContext context) async {
+    context.showSnackbar(context.locale.main.loading);
+    try {
+      final res = await _session.getWebVersionUrl();
+
+      final html = """
+        <html>
+          <head></head>
+          <body>
+            <form id="loginForm" action="${res["url"]}" method="post">
+              <input type="hidden" name="parameters" value="${res["parameters"]}">
+              <input type="hidden" name="action" value="${res["action"]}">
+            </form>
+            <script type="text/javascript">document.getElementById("loginForm").submit();</script>
+          </body>
+        </html>""";
+      final url = "data:text/html;base64,${base64.encode(utf8.encode(html))}";
+      if (await canLaunchUrlString(url)) {
+        await launchUrlString(url);
+      } else {
+        context.hideCurrentSnackBar();
+        context.showSnackbar(
+          context.locale.main.failedLinkOpen,
+          backgroundColor: Colors.red,
+          style: TextStyle(color: Colors.red.contrastText),
+          action: SnackBarAction(
+            textColor: Colors.red.contrastText,
+            label: context.materialLocale.copyButtonLabel,
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: url));
+            },
+          ),
+        );
+      }
+    } catch (e) {
+      print(e);
+      context.hideCurrentSnackBar();
+      context.showSnackbar(
+        context.locale.main.webVersionError,
+        backgroundColor: Colors.red,
+        style: TextStyle(color: Colors.red.contrastText),
+      );
+    }
+  }
+
   List<ListTile> _buildDrawerItems() {
     // final width = MediaQuery.of(context).size.width;
     List<ListTile> items = [];
@@ -389,12 +449,14 @@ class _HomeScreenState extends State<HomeScreen> {
             selected:
                 s.studentUUID == context.read<AppCubit>().student?.studentUUID,
             onTap: () {
+              final storage = context.read<Storage>();
+              storage.setLastStudentID(s.studentUUID);
               if (!MaybeMasterDetail.of(context)!.isShowingMaster)
                 Navigator.pop(context);
               _session.student = s;
               context.read<AppCubit>().clearData();
               context.read<AppCubit>().setStudent(s);
-              _runCallback(0);
+              _runCallback(_selectedPane);
               setState(() {
                 _showUserDetails = false;
                 _initPanes(_session, _login);
@@ -477,13 +539,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       // shrinkWrap: true,
                       children: [
                         ..._buildDrawerItems(),
-                        // ListTile(
-                        //   title: Text("context.locale.drawer.webVersion"),
-                        //   leading: Icon(Icons.public),
-                        //   onTap: () {
-                        //     _session.getWebVersionUrl().then(print);
-                        //   },
-                        // ),
+                        Builder(
+                          builder: (context) => ListTile(
+                            title: Text(context.locale.drawer.webVersion),
+                            leading: Icon(Icons.public),
+                            onTap: () {
+                              launchWeb(context);
+                            },
+                          ),
+                        ),
                         Divider(),
                         ListTile(
                           title: Text(context.locale.drawer.settings),
@@ -541,7 +605,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   return Scaffold(
                     appBar: GradientAppBar(
-                      title: Text(kIsWeb ? "Registro" : app.appName),
+                      title: Text(
+                        kIsWeb ? context.locale.about.appName : app.appName,
+                      ),
                     ),
                     extendBodyBehindAppBar: true,
                     body: child,
@@ -612,7 +678,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         // drawerEnableOpenDragGesture:
                         //     !MaybeMasterDetail.of(context)!.isShowingMaster,
                         body: isLoading
-                            ? LoadingUI(colorful: true, showHints: true)
+                            ? Scaffold(
+                                appBar: GradientAppBar(
+                                  title: Text(context.locale.about.appName),
+                                ),
+                                body: LoadingUI(
+                                  showHints: true,
+                                ),
+                              )
                             : Builder(builder: (context) {
                                 return Actions(
                                   actions: {

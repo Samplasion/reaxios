@@ -7,7 +7,7 @@ part of 'Bulletin.dart';
 // **************************************************************************
 
 Bulletin _$BulletinFromJson(Map<String, dynamic> json) => Bulletin(
-      id: json['id'] as num,
+      id: json['id'] as String,
       date: const DateSerializer().fromJson(json['data'] as String),
       title: json['titolo'] as String,
       desc: json['desc'] as String,

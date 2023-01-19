@@ -350,8 +350,8 @@ class TestAxios implements Axios {
   }
 
   @override
-  Future<String> getWebVersionUrl() async {
-    return "";
+  Future<Map<String, dynamic>> getWebVersionUrl() async {
+    return Future.value(<String, dynamic>{});
   }
 }
 

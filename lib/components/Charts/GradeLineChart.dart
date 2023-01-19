@@ -114,7 +114,7 @@ class _GradeLineChartState extends State<GradeLineChart> {
                 sideTitles: SideTitles(
                   showTitles: true,
                   // margin: 8,
-                  getTitlesWidget: (double value, _) {
+                  getTitlesWidget: (double value, meta) {
                     final _ = (String s) => Text(
                           s,
                           style: Theme.of(context)
@@ -122,13 +122,16 @@ class _GradeLineChartState extends State<GradeLineChart> {
                               .caption!
                               .copyWith(fontWeight: FontWeight.w100),
                         );
-                    if (value >= usefulGrades.length) return _("");
-                    final date = usefulGrades[value.toInt()].date;
+                    if (value >= usefulGrades.length ||
+                        value != value.truncate()) return _("");
+                    final date = usefulGrades[value.truncate()].date;
 
-                    if (value.toInt() == 0) {
+                    print(value);
+
+                    if (value.truncate() == 0) {
                       return _(context.dateToString(date, short: true));
                     } else {
-                      final previous = usefulGrades[value.toInt() - 1].date;
+                      final previous = usefulGrades[value.truncate() - 1].date;
                       if (date.year == previous.year) {
                         if (date.month == previous.month &&
                             value.toInt() != usefulGrades.length - 1) {
@@ -163,9 +166,10 @@ class _GradeLineChartState extends State<GradeLineChart> {
                     showTitles: true,
                     // margin: 8,
                     reservedSize: 30,
+                    interval: 1,
                     getTitlesWidget: (double value, _) {
                       return Text(
-                        value.toInt().toString(),
+                        "   ${value.truncate().toString()}",
                         style: TextStyle(
                           color: tooltipColor(getGradeColor(value), 0.1, 0.2),
                           fontSize: 10,

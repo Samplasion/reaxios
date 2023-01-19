@@ -15,7 +15,9 @@
     "downloadButtonLabel": "SCARICA",
     "noDataForPeriod": "Non ci sono dati per questo periodo.",
     "noPermission": "Non hai il permesso di visualizzare questa sezione. Contatta la scuola per saperne di più.",
-    "didYouKnow": "Puoi cambiare lo stile dei voti dalle impostazioni.\nPuoi cambiare i colori dalle impostazioni.\nNon hai bisogno del PIN per giustificare le assenze."
+    "didYouKnow": "Puoi cambiare lo stile dei voti dalle impostazioni.\nPuoi cambiare i colori dalle impostazioni.\nNon hai bisogno del PIN per giustificare le assenze.",
+    "loading": "Caricamento...",
+    "webVersionError": "Si è verificato un errore."
   },
   "login": {
     "selectSchool": "Seleziona scuola",
@@ -46,12 +48,14 @@
     "logOut": "Esci",
     "calculator": "Calcolatrice",
     "timetable": "Orario",
-    "teacherMeetings": "Colloqui"
+    "teacherMeetings": "Colloqui",
+    "webVersion": "Apri versione web"
   },
   "about": {
     "aboutApp": "Informazioni su Registro",
     "synopsis": "Un semplice frontend per il Registro Elettronico Axios.",
-    "longDescription": "Un ringraziamento speciale per i codici di decifratura e di accesso, nonché per un aiuto sostanziale nella comprensione del sistema, va a ###."
+    "longDescription": "Un ringraziamento speciale per i codici di decifratura e di accesso, nonché per un aiuto sostanziale nella comprensione del sistema, va a ###.",
+    "appName": "Registro"
   },
   "overview": {
     "latestGrades": "Ultimi voti",

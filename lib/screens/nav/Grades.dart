@@ -206,7 +206,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
   Widget buildOk(
       BuildContext context, Period? currentPeriod, List<String> subjects) {
     final cubit = context.watch<AppCubit>();
-    final grades = cubit.grades.reversed.toList();
+    final grades = cubit.grades.toList();
     final pages = getPages(context, grades, currentPeriod, subjects);
 
     if (grades.isEmpty) {
@@ -285,7 +285,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
           ],
         ),
         body: GradeTimeAverageChart(
-          grades: periodGrades.reversed.toList(),
+          grades: periodGrades.toList(),
           dynamic: true,
         ),
       ).paddingDirectional(horizontal: 16);
@@ -308,7 +308,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
         ],
       ),
       body: GradeTimeAverageChart(
-        grades: grades.reversed.toList(),
+        grades: grades.toList(),
         dynamic: true,
       ),
     ).paddingDirectional(horizontal: 16);

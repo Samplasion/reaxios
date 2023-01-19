@@ -31,6 +31,7 @@ import 'change_notifier_provider.dart';
 import 'cubit/app_cubit.dart';
 import 'timetable/structures/Settings.dart' as timetable;
 import 'timetable/structures/Store.dart' as timetable;
+import 'storage.dart' as s;
 
 import 'enums/GradeDisplay.dart';
 
@@ -58,6 +59,9 @@ void main() async {
   final timetable.Settings settings = timetable.Settings();
   await settings.init();
 
+  final s.Storage applicationStorage = s.Storage();
+  await applicationStorage.init();
+
   HttpOverrides.global = MyHttpOverrides();
   await S.Settings.init();
 
@@ -78,6 +82,9 @@ void main() async {
             ChangeNotifierProvider(create: (_) => timetable.Store()),
             UndisposingChangeNotifierProvider<timetable.Settings>(
               create: (_) => settings,
+            ),
+            UndisposingChangeNotifierProvider<s.Storage>(
+              create: (_) => applicationStorage,
             ),
           ],
         ),

@@ -10,7 +10,7 @@ part 'Bulletin.g.dart';
 
 @JsonSerializable()
 class Bulletin extends Equatable implements AbstractJson {
-  final num id;
+  final String id;
   @JsonKey(name: "data")
   @DateSerializer()
   final DateTime date;
@@ -74,7 +74,7 @@ class Bulletin extends Equatable implements AbstractJson {
 
   static empty() {
     return Bulletin(
-      id: 0,
+      id: "0",
       date: DateTime.now(),
       title: "",
       desc: "",
@@ -90,8 +90,10 @@ class Bulletin extends Equatable implements AbstractJson {
     );
   }
 
-  factory Bulletin.fromJson(Map<String, dynamic> json) =>
-      _$BulletinFromJson(json);
+  factory Bulletin.fromJson(Map<String, dynamic> json) => _$BulletinFromJson({
+        ...json,
+        "desc": "${json["desc"]}".replaceAll("<p>", "").replaceAll("</p>", "")
+      });
 
   Map<String, dynamic> toJson() => _$BulletinToJson(this);
 
@@ -102,7 +104,7 @@ class Bulletin extends Equatable implements AbstractJson {
 
   static test() {
     return Bulletin(
-      id: 42,
+      id: "42",
       date: DateTime.now(),
       title: "Circolare n. 10",
       desc: "Regolamentazione uscite didattiche",
@@ -143,7 +145,7 @@ class Bulletin extends Equatable implements AbstractJson {
       ];
 
   copyWith({
-    num? id,
+    String? id,
     DateTime? date,
     String? title,
     String? desc,

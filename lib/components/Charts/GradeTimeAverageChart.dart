@@ -23,9 +23,10 @@ class GradeTimeAverageChart extends StatefulWidget {
 
   GradeTimeAverageChart({
     Key? key,
-    required this.grades,
+    required List<Grade> grades,
     this.dynamic = false,
-  }) : super(key: key);
+  })  : grades = grades..sort((a, b) => a.date.compareTo(b.date)),
+        super(key: key);
 
   @override
   _GradeTimeAverageChartState createState() => _GradeTimeAverageChartState();
