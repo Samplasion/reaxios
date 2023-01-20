@@ -20,33 +20,14 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   bool checked = false;
-  List<Color> colorList = [
-    Color(0xffc44040),
-    Colors.green,
-    Colors.yellow,
-    Colors.purple,
-    Colors.amber,
-    Colors.pink,
-  ];
-  List<Alignment> alignmentList = [
-    Alignment.bottomLeft,
-    Alignment.bottomRight,
-    Alignment.topRight,
-    Alignment.topLeft,
-  ];
-  int index = 0;
-  Color bottomColor = Colors.red;
-  Color topColor = Colors.blue;
-  Alignment begin = Alignment.bottomLeft;
-  Alignment end = Alignment.topRight;
 
   _checkLoginDetails(BuildContext context) {
     // if (checked) return;
     // setState(() {
     //   checked = true;
     // });
-    Future.delayed(Duration(milliseconds: 50), () {
-      SchedulerBinding.instance!.addPostFrameCallback((_) async {
+    Future.delayed(Duration(milliseconds: 0), () {
+      SchedulerBinding.instance.addPostFrameCallback((_) async {
         final cubit = context.read<AppCubit>();
         final prefs = await SharedPreferences.getInstance();
 
@@ -94,11 +75,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      setState(() {
-        bottomColor = Colors.blue;
-      });
-    });
     _checkLoginDetails(context);
   }
 
