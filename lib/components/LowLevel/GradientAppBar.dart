@@ -53,6 +53,12 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
           automaticallyImplyLeading: automaticallyImplyLeading,
           foregroundColor:
               foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
+          iconTheme: IconThemeData(
+            color: foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
+          ),
+          actionsIconTheme: IconThemeData(
+            color: foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
+          ),
           bottom: _buildBottom(context),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
