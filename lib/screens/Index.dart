@@ -548,6 +548,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           ),
                         ),
+                        if (kDebugMode) ...[
+                          ListTile(
+                            title: Text("[DEBUG] Show no Internet page"),
+                            leading: Icon(Icons.wifi_off),
+                            onTap: () {
+                              Navigator.pushReplacementNamed(
+                                  context, "nointernet");
+                            },
+                          ),
+                        ],
                         Divider(),
                         ListTile(
                           title: Text(context.locale.drawer.settings),

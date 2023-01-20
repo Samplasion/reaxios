@@ -370,5 +370,11 @@
     "seatsAvailable": "",
     "noSeatsAvailable": "",
     "unimplemented": ""
+  },
+  "noInternet": {
+    "body": "",
+    "cta": "",
+    "stillNoWifi": "",
+    "title": ""
   }
 }

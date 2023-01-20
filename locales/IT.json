@@ -370,5 +370,11 @@
     "seatsAvailable": "Posti liberi",
     "noSeatsAvailable": "Nessun posto libero",
     "unimplemented": "Non ancora implementato :)"
+  },
+  "noInternet": {
+    "body": "Assicurati di avere una connessione disponibile.",
+    "cta": "Prova a connetterti",
+    "stillNoWifi": "Non è ancora possibile connettersi.",
+    "title": "Nessuna connessione"
   }
 }

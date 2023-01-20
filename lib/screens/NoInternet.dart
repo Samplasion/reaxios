@@ -7,6 +7,10 @@ import 'package:flutter/scheduler.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
+import 'package:reaxios/screens/nav/Timetable.dart';
+import 'package:reaxios/utils.dart';
+
+import '../components/LowLevel/MaybeMasterDetail.dart';
 
 class NoInternetScreen extends StatefulWidget {
   NoInternetScreen({Key? key}) : super(key: key);
@@ -16,58 +20,163 @@ class NoInternetScreen extends StatefulWidget {
 }
 
 class _NoInternetScreenState extends State<NoInternetScreen> {
-  @override
-  void initState() {
-    super.initState();
+  bool loading = false;
+  int _selectedItem = 0;
 
-    _checkConnection(5000)();
-  }
+  Future<dynamic> _checkConnection() async {
+    // If we're connected through Web, then it's basically
+    // guaranteed that we're online
+    // FIXME: that's blatantly false
+    if (kIsWeb)
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        RestartWidget.restartApp(context);
+      });
 
-  FutureOr<dynamic> Function() _checkConnection(int delay) {
-    return () async {
-      // If we're connected through Web, then it's basically
-      // guaranteed that we're online
-      if (kIsWeb)
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
-          RestartWidget.restartApp(context);
-        });
+    if (!mounted) return;
 
-      if (!mounted) return;
+    print("[NOI] Checking...");
 
-      print("[NOI] Checking...");
-
-      try {
-        await Dio().get("https://1.1.1.1");
-      } catch (e) {
-        print(e);
-        print(!e.toString().contains("XMLHttpRequest error"));
-        if (e is! Error && (!e.toString().contains("XMLHttpRequest error"))) {
-          // print(e.stackTrace);
-          print("[NOI] Still no Internet.");
-          return Future.delayed(
-              Duration(milliseconds: delay), _checkConnection(delay));
-        }
+    try {
+      await Dio().get("https://1.1.1.1");
+    } catch (e) {
+      print(e);
+      print(!e.toString().contains("XMLHttpRequest error"));
+      if (e is! Error && (!e.toString().contains("XMLHttpRequest error"))) {
+        context.showSnackbar(
+          context.locale.noInternet.stillNoWifi,
+          backgroundColor: Colors.red,
+          style: TextStyle(
+            color: Colors.red.contrastText,
+          ),
+        );
+        // print(e.stackTrace);
+        print("[NOI] Still no Internet.");
+        // return Future.delayed(
+        //     Duration(milliseconds: delay), _checkConnection(delay));
       }
+    }
 
-      print("[NOI] Internet found!");
-      if (mounted) RestartWidget.restartApp(context);
-    };
+    print("[NOI] Internet found!");
+    if (mounted) RestartWidget.restartApp(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      child: Scaffold(
-        appBar: GradientAppBar(
-          automaticallyImplyLeading: false,
-          title: Text("Registro"),
-        ),
-        body: EmptyUI(
-          icon: Icons.wifi_off,
-          text: "Assicurati di avere una connessione disponibile.",
+      child: MaybeMasterDetail(
+        master: () {
+          // if (isLoading) return null;
+
+          final drawer = getDrawer(context);
+          // if (drawer == null) return null;
+
+          final child = drawer.child;
+
+          return Scaffold(
+            appBar: GradientAppBar(
+              title: Text(
+                context.locale.about.appName,
+              ),
+            ),
+            extendBodyBehindAppBar: true,
+            body: child,
+          );
+        }(),
+        detail: Scaffold(
+          appBar: _selectedItem == 1
+              ? null
+              : GradientAppBar(
+                  title: Text("Registro"),
+                  leading: Builder(builder: (context) {
+                    return MaybeMasterDetail.of(context)!.isShowingMaster
+                        ? Container()
+                        : Builder(builder: (context) {
+                            return IconButton(
+                              tooltip: MaterialLocalizations.of(context)
+                                  .openAppDrawerTooltip,
+                              onPressed: () {
+                                Scaffold.of(context).openDrawer();
+                              },
+                              icon: Icon(Icons.menu),
+                            );
+                          });
+                  }),
+                ),
+          drawer: getDrawer(context),
+          body: _selectedItem == 1
+              ? Builder(
+                  builder: (context) => TimetablePane(
+                    openMainDrawer: () => Scaffold.of(context).openDrawer(),
+                  ),
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      EmptyUI(
+                        icon: Icons.wifi_off,
+                        text: context.locale.noInternet.body,
+                      ),
+                      SizedBox(height: 16),
+                      OutlinedButton(
+                        onPressed: loading
+                            ? null
+                            : () {
+                                setState(() {
+                                  loading = true;
+                                });
+                                context
+                                    .showSnackbar(context.locale.main.loading);
+                                _checkConnection().then((_) {
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                });
+                              },
+                        child: Text(context.locale.noInternet.cta),
+                      ),
+                    ],
+                  ),
+                ),
         ),
       ),
       onWillPop: () => Future.value(false),
+    );
+  }
+
+  Drawer getDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          ListTile(
+            title: Text(context.locale.noInternet.title),
+            leading: Icon(Icons.wifi_off),
+            style: ListTileStyle.drawer,
+            selected: _selectedItem == 0,
+            onTap: () {
+              setState(() {
+                _selectedItem = 0;
+              });
+              if (!MaybeMasterDetail.shouldBeShowingMaster(context))
+                Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: Text(context.locale.drawer.timetable),
+            leading: Icon(Icons.access_time),
+            style: ListTileStyle.drawer,
+            selected: _selectedItem == 1,
+            onTap: () {
+              setState(() {
+                _selectedItem = 1;
+              });
+              if (!MaybeMasterDetail.shouldBeShowingMaster(context))
+                Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -370,5 +370,11 @@
     "seatsAvailable": "Seats available",
     "noSeatsAvailable": "No seat available",
     "unimplemented": "Not yet implemented :)"
+  },
+  "noInternet": {
+    "body": "Make sure you're connected.",
+    "cta": "Try connecting",
+    "stillNoWifi": "I'm still unable to connect.",
+    "title": "No Internet"
   }
 }

@@ -73,6 +73,8 @@ class LocaleBase {
   LocaleupdateSettings get updateSettings => _updateSettings;
   late LocaleteacherMeetings _teacherMeetings;
   LocaleteacherMeetings get teacherMeetings => _teacherMeetings;
+  late LocalenoInternet _noInternet;
+  LocalenoInternet get noInternet => _noInternet;
 
   void initAll() {
     _main = Localemain(Map<String, String>.from(_data['main']));
@@ -103,6 +105,7 @@ class LocaleBase {
     _errors = Localeerrors(Map<String, String>.from(_data['errors']));
     _updateSettings = LocaleupdateSettings(Map<String, String>.from(_data['updateSettings']));
     _teacherMeetings = LocaleteacherMeetings(Map<String, String>.from(_data['teacherMeetings']));
+    _noInternet = LocalenoInternet(Map<String, String>.from(_data['noInternet']));
   }
 }
 
@@ -700,5 +703,19 @@ class LocaleteacherMeetings {
   String get seatsAvailable => _data["seatsAvailable"]!;
   String get noSeatsAvailable => _data["noSeatsAvailable"]!;
   String get unimplemented => _data["unimplemented"]!;
+}
+
+class LocalenoInternet {
+  late final Map<String, String> _data;
+  LocalenoInternet(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get body => _data["body"]!;
+  String get cta => _data["cta"]!;
+  String get stillNoWifi => _data["stillNoWifi"]!;
+  String get title => _data["title"]!;
 }
 
