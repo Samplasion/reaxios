@@ -218,7 +218,7 @@ class TestAxios implements Axios {
               ],
             ),
         ],
-        dateRead: DateTime.now(),
+        dateRead: "****",
         canViewAbsences: true,
       )
     ];

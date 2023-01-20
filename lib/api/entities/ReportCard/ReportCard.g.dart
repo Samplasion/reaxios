@@ -19,8 +19,7 @@ ReportCard _$ReportCardFromJson(Map<String, dynamic> json) => ReportCard(
       subjects: (json['materie'] as List<dynamic>)
           .map((e) => ReportCardSubject.fromJson(e as Map<String, dynamic>))
           .toList(),
-      dateRead: const DateSerializer()
-          .fromJson(json['dataVisualizzazione'] as String),
+      dateRead: json['dataVisualizzazione'] as String,
       canViewAbsences: const BooleanSerializer()
           .fromJson(json['flagAssenzeVisibili'] as String),
       eduGrade: json['ordineScuola'] as String? ?? '',
@@ -39,7 +38,7 @@ Map<String, dynamic> _$ReportCardToJson(ReportCard instance) =>
       'letta': const BooleanSerializer().toJson(instance.read),
       'visibile': const BooleanSerializer().toJson(instance.visible),
       'materie': instance.subjects,
-      'dataVisualizzazione': const DateSerializer().toJson(instance.dateRead),
+      'dataVisualizzazione': instance.dateRead,
       'flagAssenzeVisibili':
           const BooleanSerializer().toJson(instance.canViewAbsences),
       'ordineScuola': instance.eduGrade,

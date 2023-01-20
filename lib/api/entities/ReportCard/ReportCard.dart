@@ -32,8 +32,16 @@ class ReportCard extends Equatable {
   @JsonKey(name: "materie")
   final List<ReportCardSubject> subjects;
   @JsonKey(name: "dataVisualizzazione")
-  @DateSerializer()
-  final DateTime dateRead;
+  // @DateSerializer()
+  final String dateReadRaw;
+  DateTime? get dateRead {
+    try {
+      return DateSerializer().fromJson(dateReadRaw);
+    } catch (_) {
+      return null;
+    }
+  }
+
   @JsonKey(name: "flagAssenzeVisibili")
   @BooleanSerializer()
   final bool canViewAbsences;
@@ -53,11 +61,11 @@ class ReportCard extends Equatable {
     required this.read,
     required this.visible,
     required this.subjects,
-    required this.dateRead,
+    required String dateRead,
     required this.canViewAbsences,
     this.eduGrade = "",
     this.cardKind = "",
-  });
+  }) : dateReadRaw = dateRead;
 
   factory ReportCard.fromJson(Map<String, dynamic> json) =>
       _$ReportCardFromJson(json);
@@ -75,7 +83,7 @@ class ReportCard extends Equatable {
         read: false,
         visible: false,
         subjects: [],
-        dateRead: DateTime.now(),
+        dateRead: "****",
         canViewAbsences: false,
         eduGrade: "",
         cardKind: "",
@@ -92,7 +100,7 @@ class ReportCard extends Equatable {
         read: true,
         visible: true,
         subjects: [],
-        dateRead: DateTime.now(),
+        dateRead: "****",
         canViewAbsences: true,
         eduGrade: "",
         cardKind: "",

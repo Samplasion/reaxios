@@ -40,11 +40,14 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
         children: [
           Alert(
             title: context.locale.reportCard.notAvailableTitle,
-            text: MarkdownBody(
-              data: context.locale.reportCard.notAvailableBody.mapFormat({
-                "day": context.dateToString(reportCard.dateRead),
-              }),
-            ),
+            textBuilder: reportCard.dateRead == null ? (_) => null : null,
+            text: reportCard.dateRead == null
+                ? null
+                : MarkdownBody(
+                    data: context.locale.reportCard.notAvailableBody.mapFormat({
+                      "day": context.dateToString(reportCard.dateRead!),
+                    }),
+                  ),
           )
         ],
       );
