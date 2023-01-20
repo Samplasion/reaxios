@@ -250,7 +250,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              useMaterial3: true,
+              useMaterial3: false,
             ),
             darkTheme: ThemeData(
               brightness: Brightness.dark,
@@ -275,7 +275,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              useMaterial3: true,
+              useMaterial3: false,
             ),
             themeMode: getThemeMode(themeMode),
             // home: MyHomePage(title: 'Flutter Demo Home Page'),
