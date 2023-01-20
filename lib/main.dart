@@ -160,7 +160,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
     final defaultTextThemeDark = ThemeData.dark().textTheme;
 
     final headerFont = GoogleFonts.outfit();
-    final bodyFont = GoogleFonts.montserrat();
+    final bodyFont = GoogleFonts.roboto();
     TextTheme getTextTheme(TextTheme defaultTheme) {
       return defaultTheme.copyWith(
         headline1: defaultTheme.headline1.copyWith(
@@ -181,27 +181,30 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
         headline6: defaultTheme.headline6.copyWith(
           fontFamily: headerFont.fontFamily,
         ),
-        subtitle1: defaultTheme.subtitle1.copyWith(
-          fontFamily: bodyFont.fontFamily,
-        ),
-        subtitle2: defaultTheme.subtitle2.copyWith(
-          fontFamily: bodyFont.fontFamily,
-        ),
-        bodyText1: defaultTheme.bodyText1.copyWith(
-          fontFamily: bodyFont.fontFamily,
-        ),
-        bodyText2: defaultTheme.bodyText2.copyWith(
-          fontFamily: bodyFont.fontFamily,
-        ),
-        button: defaultTheme.button.copyWith(
-          fontFamily: bodyFont.fontFamily,
-        ),
-        caption: defaultTheme.caption.copyWith(
-          fontFamily: bodyFont.fontFamily,
-        ),
-        overline: defaultTheme.overline.copyWith(
-          fontFamily: bodyFont.fontFamily,
-        ),
+        // subtitle1: defaultTheme.subtitle1.copyWith(
+        //   fontFamily: bodyFont.fontFamily,
+        // ),
+        // subtitle2: defaultTheme.subtitle2.copyWith(
+        //   fontFamily: bodyFont.fontFamily,
+        // ),
+        // bodyText1: defaultTheme.bodyText1.copyWith(
+        //   fontFamily: bodyFont.fontFamily,
+        //   // fontSize: 16,
+        // ),
+        // bodyText2: defaultTheme.bodyText2.copyWith(
+        //   fontFamily: bodyFont.fontFamily,
+        //   // fontSize: 16,
+        // ),
+        // button: defaultTheme.button.copyWith(
+        //   fontFamily: bodyFont.fontFamily,
+        // ),
+        // caption: defaultTheme.caption.copyWith(
+        //   fontFamily: bodyFont.fontFamily,
+        //   // fontSize: 14,
+        // ),
+        // overline: defaultTheme.overline.copyWith(
+        //   fontFamily: bodyFont.fontFamily,
+        // ),
       );
     }
 
