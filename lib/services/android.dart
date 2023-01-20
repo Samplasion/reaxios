@@ -57,6 +57,9 @@ Future<Axios?> getSession(Isolate current) async {
       compute: compute);
   try {
     await session.login();
+    await session.getStudents();
+    final userID = prefs.getString('selectedStudent');
+    if (userID != null) session.setStudentByID(userID);
   } catch (e) {
     debugPrint(e.toString());
     print(
@@ -95,6 +98,8 @@ void gradesBackgroundService() async {
 
   List<Grade> grades = await session.getGrades();
 
+  // TODO: add shown grades to shared preferences
+
   for (final grade in grades.where((grade) => !grade.seen)) {
     final AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
@@ -108,6 +113,11 @@ void gradesBackgroundService() async {
       color: cs.fromJson(
         S.Settings.getValue("primary-color", cs.toJson(defaultPrimary)),
       ),
+      styleInformation: BigTextStyleInformation(
+        grade.comment,
+        contentTitle: '${grade.subject}: ${grade.prettyGrade}',
+      ),
+      when: grade.date.millisecondsSinceEpoch,
     );
     await sendNotification(
       "Nuovo voto",
@@ -152,15 +162,16 @@ void bulletinBoardBackgroundService() async {
       importance: Importance.defaultImportance,
       priority: Priority.defaultPriority,
       ticker: 'Nuova comunicazione - ${bulletin.humanReadableKind}.',
-      styleInformation: InboxStyleInformation([
-        bulletin.humanReadableKind,
-        ...bulletin.desc.split("\n"),
-      ]),
+      styleInformation: BigTextStyleInformation(
+        bulletin.desc,
+        contentTitle: bulletin.humanReadableKind,
+      ),
       onlyAlertOnce: true,
       color: cs.fromJson(
         S.Settings.getValue("primary-color", cs.toJson(defaultPrimary)),
       ),
-      showWhen: false,
+      showWhen: true,
+      when: bulletin.date.millisecondsSinceEpoch,
     );
     await sendNotification(
       "Nuova comunicazione",

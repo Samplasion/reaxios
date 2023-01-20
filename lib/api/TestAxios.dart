@@ -263,6 +263,11 @@ class TestAxios implements Axios {
   }
 
   @override
+  void setStudentByID(String userID) {
+    // noop
+  }
+
+  @override
   Future<List<String>> getSubjects() async {
     return (await this.getGrades())
         .map((grade) => grade.subject)

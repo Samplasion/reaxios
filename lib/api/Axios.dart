@@ -363,6 +363,14 @@ class Axios {
     }
   }
 
+  void setStudentByID(String userID) {
+    if (students.any((element) => element.studentUUID == userID)) {
+      student = students.firstWhere(
+        (element) => element.studentUUID == userID,
+      );
+    }
+  }
+
   Future<List<Assignment>> getAssignments() async {
     final List<APIAssignments> res =
         await this._makeAuthenticatedCall<dynamic>("GET_COMPITI_MASTER", (raw) {
