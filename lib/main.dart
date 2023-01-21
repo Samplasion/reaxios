@@ -47,15 +47,6 @@ class MyHttpOverrides extends HttpOverrides {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  LicenseRegistry.addLicense(() async* {
-    try {
-      final license = await rootBundle.loadString('google_fonts/OFL.txt');
-      yield LicenseEntryWithLineBreaks(['google_fonts'], license);
-    } catch (e) {
-      print(e);
-    }
-  });
-
   final timetable.Settings settings = timetable.Settings();
   await settings.init();
 
@@ -159,64 +150,19 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
     final defaultTextThemeLight = ThemeData.light().textTheme;
     final defaultTextThemeDark = ThemeData.dark().textTheme;
 
-    final headerFont = GoogleFonts.outfit();
-    final bodyFont = GoogleFonts.roboto();
     TextTheme getTextTheme(TextTheme defaultTheme) {
-      return defaultTheme.copyWith(
-        headline1: defaultTheme.headline1.copyWith(
-          fontFamily: headerFont.fontFamily,
-        ),
-        headline2: defaultTheme.headline2.copyWith(
-          fontFamily: headerFont.fontFamily,
-        ),
-        headline3: defaultTheme.headline3.copyWith(
-          fontFamily: headerFont.fontFamily,
-        ),
-        headline4: defaultTheme.headline4.copyWith(
-          fontFamily: headerFont.fontFamily,
-        ),
-        headline5: defaultTheme.headline5.copyWith(
-          fontFamily: headerFont.fontFamily,
-        ),
-        headline6: defaultTheme.headline6.copyWith(
-          fontFamily: headerFont.fontFamily,
-        ),
-        // subtitle1: defaultTheme.subtitle1.copyWith(
-        //   fontFamily: bodyFont.fontFamily,
-        // ),
-        // subtitle2: defaultTheme.subtitle2.copyWith(
-        //   fontFamily: bodyFont.fontFamily,
-        // ),
-        // bodyText1: defaultTheme.bodyText1.copyWith(
-        //   fontFamily: bodyFont.fontFamily,
-        //   // fontSize: 16,
-        // ),
-        // bodyText2: defaultTheme.bodyText2.copyWith(
-        //   fontFamily: bodyFont.fontFamily,
-        //   // fontSize: 16,
-        // ),
-        // button: defaultTheme.button.copyWith(
-        //   fontFamily: bodyFont.fontFamily,
-        // ),
-        // caption: defaultTheme.caption.copyWith(
-        //   fontFamily: bodyFont.fontFamily,
-        //   // fontSize: 14,
-        // ),
-        // overline: defaultTheme.overline.copyWith(
-        //   fontFamily: bodyFont.fontFamily,
-        // ),
-      );
+      return defaultTheme;
     }
 
     final TabBarTheme tabBarTheme = TabBarTheme(
-      labelStyle: TextStyle(
-        fontFamily: bodyFont.fontFamily,
-        fontWeight: FontWeight.w900,
-      ),
-      unselectedLabelStyle: TextStyle(
-        fontFamily: bodyFont.fontFamily,
-        fontWeight: FontWeight.w400,
-      ),
+      // labelStyle: TextStyle(
+      //   fontFamily: bodyFont.fontFamily,
+      //   fontWeight: FontWeight.w900,
+      // ),
+      // unselectedLabelStyle: TextStyle(
+      //   fontFamily: bodyFont.fontFamily,
+      //   fontWeight: FontWeight.w400,
+      // ),
       indicatorSize: TabBarIndicatorSize.label,
       indicator: MaterialDesignIndicator(
         indicatorHeight: 4,

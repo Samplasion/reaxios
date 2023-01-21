@@ -105,9 +105,6 @@ flutter:
     - locales/EN_US.json
     - locales/IT.json
 
-    # Google Fonts
-    - google_fonts/
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
