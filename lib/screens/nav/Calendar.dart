@@ -473,7 +473,7 @@ class _CalendarPaneState extends State<CalendarPane> {
                 final custom = events.where((e) {
                   return e is GenericEventWidget && e.type == EventType.custom;
                 }).cast<CustomEventWidget>();
-                if (filtered.length > 0) {
+                if (filtered.length > 0 || custom.length > 0) {
                   print(custom.isEmpty ? null : custom.last.runtimeType);
                   return Padding(
                     padding: const EdgeInsets.only(left: 2),
