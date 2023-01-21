@@ -51,6 +51,8 @@ class Settings extends UndisposableChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
   }
 
+  SharedPreferences get prefs => _prefs;
+
   setEvents(List<Event> events) {
     _prefs.setString(
       "events",

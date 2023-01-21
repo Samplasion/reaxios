@@ -7,12 +7,17 @@ import 'package:reaxios/utils.dart';
 
 class LoadingUI extends StatefulWidget {
   final bool colorful, showHints;
+  final double? progress, outOf;
 
   LoadingUI({
     this.colorful = false,
     this.showHints = false,
+    this.progress,
+    this.outOf,
     Key? key,
-  }) : super(key: key);
+  })  : assert((progress == null) == (outOf == null),
+            "Either both 'progress' and 'outOf' must be null, or none"),
+        super(key: key);
 
   @override
   _LoadingUIState createState() => _LoadingUIState();

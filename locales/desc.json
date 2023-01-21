@@ -17,7 +17,8 @@
     "noPermission": "",
     "didYouKnow": "Split each string by newline",
     "loading": "",
-    "webVersionError": ""
+    "webVersionError": "",
+    "copied": ""
   },
   "login": {
     "selectSchool": "Shown on page 1 of the login stage",
@@ -49,7 +50,8 @@
     "calculator": "",
     "timetable": "",
     "teacherMeetings": "",
-    "webVersion": ""
+    "webVersion": "",
+    "info": ""
   },
   "about": {
     "aboutApp": "\"About Registro\"",
@@ -378,5 +380,19 @@
     "cta": "",
     "stillNoWifi": "",
     "title": ""
+  },
+  "infoPane": {
+    "authReason": "",
+    "schoolInfo": "",
+    "schoolName": "",
+    "schoolFID": "",
+    "userInfo": "",
+    "userName": "",
+    "userBirthday": "",
+    "userID": "",
+    "userPassword": "",
+    "userPIN": "",
+    "gender": "",
+    "userAge": ""
   }
 }

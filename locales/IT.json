@@ -17,7 +17,8 @@
     "noPermission": "Non hai il permesso di visualizzare questa sezione. Contatta la scuola per saperne di più.",
     "didYouKnow": "Puoi cambiare lo stile dei voti dalle impostazioni.\nPuoi cambiare i colori dalle impostazioni.\nNon hai bisogno del PIN per giustificare le assenze.",
     "loading": "Caricamento...",
-    "webVersionError": "Si è verificato un errore."
+    "webVersionError": "Si è verificato un errore.",
+    "copied": "Copiato!"
   },
   "login": {
     "selectSchool": "Seleziona scuola",
@@ -49,7 +50,8 @@
     "calculator": "Calcolatrice",
     "timetable": "Orario",
     "teacherMeetings": "Colloqui",
-    "webVersion": "Apri versione web"
+    "webVersion": "Apri versione web",
+    "info": "Informazioni sull'utente"
   },
   "about": {
     "aboutApp": "Informazioni su Registro",
@@ -378,5 +380,19 @@
     "cta": "Prova a connetterti",
     "stillNoWifi": "Non è ancora possibile connettersi.",
     "title": "Nessuna connessione"
+  },
+  "infoPane": {
+    "authReason": "Autenticati per accedere a questo dato.",
+    "schoolInfo": "Informazioni sull'istituto",
+    "schoolName": "Istituto",
+    "schoolFID": "Codice Fiscale dell'Istituto",
+    "userInfo": "Informazioni sull'utente",
+    "userName": "Nome",
+    "userBirthday": "Compleanno",
+    "userID": "ID",
+    "userPassword": "Password",
+    "userPIN": "PIN",
+    "gender": "Sesso",
+    "userAge": "Età"
   }
 }

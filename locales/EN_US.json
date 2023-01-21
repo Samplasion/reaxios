@@ -17,7 +17,8 @@
     "noPermission": "You don't have the permission to enter this section. Contact your school for more information.",
     "didYouKnow": "You can change the style of grades from the settings.\nYou can change the colors from the settings.\nYou don't need a PIN to authorize absences.",
     "loading": "Loading...",
-    "webVersionError": "An error occurred."
+    "webVersionError": "An error occurred.",
+    "copied": "Copied!"
   },
   "login": {
     "selectSchool": "Select school",
@@ -49,7 +50,8 @@
     "calculator": "Calculator",
     "timetable": "Timetable",
     "teacherMeetings": "Meetings",
-    "webVersion": "Open online version"
+    "webVersion": "Open online version",
+    "info": "User Info"
   },
   "about": {
     "aboutApp": "About Registro",
@@ -378,5 +380,19 @@
     "cta": "Try connecting",
     "stillNoWifi": "I'm still unable to connect.",
     "title": "No Internet"
+  },
+  "infoPane": {
+    "authReason": "Please authenticate to access this data.",
+    "schoolInfo": "School Info",
+    "schoolName": "School",
+    "schoolFID": "School Fiscal Code",
+    "userInfo": "User Info",
+    "userName": "Name",
+    "userBirthday": "Birthday",
+    "userID": "ID",
+    "userPassword": "Password",
+    "userPIN": "PIN",
+    "gender": "Gender",
+    "userAge": "Age"
   }
 }

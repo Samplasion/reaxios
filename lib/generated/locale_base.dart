@@ -75,6 +75,8 @@ class LocaleBase {
   LocaleteacherMeetings get teacherMeetings => _teacherMeetings;
   late LocalenoInternet _noInternet;
   LocalenoInternet get noInternet => _noInternet;
+  late LocaleinfoPane _infoPane;
+  LocaleinfoPane get infoPane => _infoPane;
 
   void initAll() {
     _main = Localemain(Map<String, String>.from(_data['main']));
@@ -106,6 +108,7 @@ class LocaleBase {
     _updateSettings = LocaleupdateSettings(Map<String, String>.from(_data['updateSettings']));
     _teacherMeetings = LocaleteacherMeetings(Map<String, String>.from(_data['teacherMeetings']));
     _noInternet = LocalenoInternet(Map<String, String>.from(_data['noInternet']));
+    _infoPane = LocaleinfoPane(Map<String, String>.from(_data['infoPane']));
   }
 }
 
@@ -135,6 +138,7 @@ class Localemain {
   String get didYouKnow => _data["didYouKnow"]!;
   String get loading => _data["loading"]!;
   String get webVersionError => _data["webVersionError"]!;
+  String get copied => _data["copied"]!;
 }
 
 class Localelogin {
@@ -183,6 +187,7 @@ class Localedrawer {
   String get timetable => _data["timetable"]!;
   String get teacherMeetings => _data["teacherMeetings"]!;
   String get webVersion => _data["webVersion"]!;
+  String get info => _data["info"]!;
 }
 
 class Localeabout {
@@ -719,5 +724,27 @@ class LocalenoInternet {
   String get cta => _data["cta"]!;
   String get stillNoWifi => _data["stillNoWifi"]!;
   String get title => _data["title"]!;
+}
+
+class LocaleinfoPane {
+  late final Map<String, String> _data;
+  LocaleinfoPane(this._data);
+
+  String getByKey(String key) {
+    return _data[key]!;
+  }
+
+  String get authReason => _data["authReason"]!;
+  String get schoolInfo => _data["schoolInfo"]!;
+  String get schoolName => _data["schoolName"]!;
+  String get schoolFID => _data["schoolFID"]!;
+  String get userInfo => _data["userInfo"]!;
+  String get userName => _data["userName"]!;
+  String get userBirthday => _data["userBirthday"]!;
+  String get userID => _data["userID"]!;
+  String get userPassword => _data["userPassword"]!;
+  String get userPIN => _data["userPIN"]!;
+  String get gender => _data["gender"]!;
+  String get userAge => _data["userAge"]!;
 }
 

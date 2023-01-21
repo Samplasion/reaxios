@@ -432,3 +432,10 @@ List<Color> getGradient(Color color, {double strength = 1}) {
     color.lighten(0.06 * strength),
   ];
 }
+
+extension StringExtension on String {
+  String or(String alternative) {
+    if (trim().isEmpty) return alternative;
+    return this;
+  }
+}

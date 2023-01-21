@@ -29,6 +29,7 @@ import 'package:reaxios/screens/nav/Assignments.dart';
 import 'package:reaxios/screens/nav/Authorizations.dart';
 import 'package:reaxios/screens/nav/Calendar.dart';
 import 'package:reaxios/screens/nav/Grades.dart';
+import 'package:reaxios/screens/nav/Info.dart';
 import 'package:reaxios/screens/nav/Materials.dart';
 import 'package:reaxios/screens/nav/Reports.dart';
 import 'package:reaxios/screens/nav/Overview.dart';
@@ -245,6 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
         MaterialsPane(session: session),
         StatsPane(session: session),
         ReportCardsPane(session: session),
+        InfoPane(login: _login),
       ];
       _drawerItems = [
         [
@@ -367,6 +369,14 @@ class _HomeScreenState extends State<HomeScreen> {
             cubit.loadStructural();
           }
         ],
+        [
+          Icon(Icons.person),
+          Text(context.locale.drawer.info),
+          true,
+          () {
+            cubit.loadStructural();
+          }
+        ]
       ];
     });
   }
