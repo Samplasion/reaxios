@@ -403,16 +403,13 @@ class _HomeScreenState extends State<HomeScreen> {
         </html>""";
       final url = "data:text/html;base64,${base64.encode(utf8.encode(html))}";
       try {
-        await launchUrlString(url);
+        throw "";
       } catch (e) {
         print(e);
         context.hideCurrentSnackBar();
-        context.showSnackbar(
+        context.showSnackbarError(
           context.locale.main.failedLinkOpen,
-          backgroundColor: Colors.red,
-          style: TextStyle(color: Colors.red.contrastText),
           action: SnackBarAction(
-            textColor: Colors.red.contrastText,
             label: context.materialLocale.copyButtonLabel,
             onPressed: () {
               Clipboard.setData(ClipboardData(text: url));

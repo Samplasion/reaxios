@@ -301,6 +301,29 @@ extension ContextUtils on BuildContext {
   MaterialLocalizations get materialLocale => MaterialLocalizations.of(this);
   Locale get currentLocale => Localizations.localeOf(this);
 
+  void showSnackbarError(
+    String message, {
+    SnackBarAction? action,
+  }) {
+    showSnackbar(
+      message,
+      backgroundColor: Theme.of(this).colorScheme.error,
+      style: TextStyle(color: Theme.of(this).colorScheme.onError),
+      action: () {
+        if (action != null) {
+          return SnackBarAction(
+            label: action.label,
+            onPressed: action.onPressed,
+            textColor: Theme.of(this).colorScheme.onError,
+            disabledTextColor:
+                action.disabledTextColor ?? Theme.of(this).disabledColor,
+            key: action.key,
+          );
+        }
+      }(),
+    );
+  }
+
   void showSnackbar(
     String message, {
     TextStyle? style,
