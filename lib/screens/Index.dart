@@ -402,9 +402,10 @@ class _HomeScreenState extends State<HomeScreen> {
           </body>
         </html>""";
       final url = "data:text/html;base64,${base64.encode(utf8.encode(html))}";
-      if (await canLaunchUrlString(url)) {
+      try {
         await launchUrlString(url);
-      } else {
+      } catch (e) {
+        print(e);
         context.hideCurrentSnackBar();
         context.showSnackbar(
           context.locale.main.failedLinkOpen,
