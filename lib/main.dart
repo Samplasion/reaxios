@@ -135,8 +135,6 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
     return ColorBuilder(
       builder: (light, dark) {
         final useMaterial3 = false;
-
-        print("$light, $dark");
         final primary = dark.primary, accent = dark.secondary;
 
         AppBarTheme appBarTheme = AppBarTheme(
@@ -145,6 +143,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
               bottom: Radius.circular(15),
             ),
           ),
+          backgroundColor: primary,
           foregroundColor: primary.contrastText,
           iconTheme: IconThemeData(color: primary.contrastText),
           systemOverlayStyle: SystemUiOverlayStyle(
@@ -187,7 +186,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
                   useMaterial3: useMaterial3,
                   primaryColor: primary,
                   accentColor: accent,
-                  // appBarTheme: appBarTheme,
+                  appBarTheme: appBarTheme,
                   textTheme: getTextTheme(defaultTextThemeLight),
                   tabBarTheme: tabBarTheme,
                   popupMenuTheme: PopupMenuThemeData(
@@ -207,7 +206,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
                   brightness: Brightness.dark,
                   primaryColor: primary,
                   accentColor: accent,
-                  // appBarTheme: appBarTheme,
+                  appBarTheme: appBarTheme,
                   textTheme: getTextTheme(defaultTextThemeDark),
                   tabBarTheme: tabBarTheme,
                   popupMenuTheme: PopupMenuThemeData(
