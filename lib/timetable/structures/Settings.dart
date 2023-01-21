@@ -216,6 +216,15 @@ class Settings extends UndisposableChangeNotifier {
     notifyListeners();
   }
 
+  bool getUseDynamicColor() {
+    return _prefs.getBool("useDynamicColor") ?? false;
+  }
+
+  void setUseDynamicColor(bool useDynamicColor) {
+    _prefs.setBool("useDynamicColor", useDynamicColor);
+    notifyListeners();
+  }
+
   // --------
 
   Future<String> get directory async {
@@ -322,6 +331,7 @@ class Settings extends UndisposableChangeNotifier {
             .map((key, value) => MapEntry(key, value.toJson())),
         "updateNagMode": getUpdateNagMode().serialized,
         "calendarEvents": getCalendarEvents().map((e) => e.toJson()).toList(),
+        "useDynamicColor": getUseDynamicColor(),
       };
 
   set json(Map<String, dynamic> obj) {
@@ -396,6 +406,9 @@ class Settings extends UndisposableChangeNotifier {
             .map((e) => CustomCalendarEvent.fromJson(e))
             .toList(),
       );
+    }
+    if (obj.containsKey("useDynamicColor") && obj["useDynamicColor"] is bool) {
+      setUseDynamicColor(obj["useDynamicColor"] as bool);
     }
 
     notifyListeners();

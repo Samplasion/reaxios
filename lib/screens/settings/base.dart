@@ -43,6 +43,38 @@ abstract class SettingsTile extends StatefulWidget {
   const SettingsTile({Key? key}) : super(key: key);
 }
 
+class SwitchSettingsTile extends SettingsTile {
+  @override
+  final Widget title;
+  final Widget? subtitle;
+  final OnChange<bool> onChange;
+  final bool value;
+
+  const SwitchSettingsTile({
+    required this.title,
+    this.subtitle,
+    required this.onChange,
+    required this.value,
+    super.key,
+  });
+
+  @override
+  State<SwitchSettingsTile> createState() => _SwitchSettingsTileState();
+}
+
+class _SwitchSettingsTileState extends State<SwitchSettingsTile> {
+  @override
+  Widget build(BuildContext context) {
+    return SwitchListTile(
+      title: widget.title,
+      subtitle: widget.subtitle,
+      activeColor: Theme.of(context).colorScheme.secondary,
+      value: widget.value,
+      onChanged: widget.onChange,
+    );
+  }
+}
+
 class SettingsHeader extends StatelessWidget {
   final String title;
   final String? subtitle;

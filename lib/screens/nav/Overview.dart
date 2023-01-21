@@ -471,11 +471,12 @@ class UserCard extends StatelessWidget {
   // final RegistroStore store;
   final void Function(int index) switchToTab;
 
-  bg(BuildContext context) => Theme.of(context).accentColor;
+  bg(BuildContext context) => Theme.of(context).colorScheme.secondary;
+  fg(BuildContext context) => Theme.of(context).colorScheme.onSecondary;
   get smallTextOpacity => 0.76;
 
   Widget _buildUserRow(BuildContext context) {
-    final fg = getContrastText(bg(context));
+    final fg = this.fg(context);
     return <Widget>[
       Icon(Icons.account_circle)
           .iconSize(50)
@@ -537,7 +538,7 @@ class UserCard extends StatelessWidget {
 
   Widget _buildUserStatsItem(BuildContext context, String value, String text,
       [int? index]) {
-    final fg = getContrastText(bg(context));
+    final fg = this.fg(context);
     return <Widget>[
       Text(value).fontSize(20).textColor(fg).padding(bottom: 5),
       Text(text).textColor(fg.withOpacity(smallTextOpacity)).fontSize(12),

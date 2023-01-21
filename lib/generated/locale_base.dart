@@ -629,6 +629,8 @@ class LocalegeneralSettings {
   String get averageModeSubtitle => _data["averageModeSubtitle"]!;
   String get averageModeAllGrades => _data["averageModeAllGrades"]!;
   String get averageModeAverageOfAverages => _data["averageModeAverageOfAverages"]!;
+  String get dynamicColor => _data["dynamicColor"]!;
+  String get dynamicColorExpl => _data["dynamicColorExpl"]!;
 }
 
 class LocaletimeSettings {

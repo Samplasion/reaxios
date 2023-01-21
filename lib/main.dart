@@ -15,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/components/LowLevel/md_indicator.dart';
+import 'package:reaxios/components/Utilities/color-builder.dart';
 import 'package:reaxios/components/Utilities/updates/config.dart' as upgrader;
 import 'package:reaxios/services/android.dart' as android_service;
 import 'package:reaxios/screens/Index.dart';
@@ -131,125 +132,121 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
     //   S.Settings.getValue("accent-color", cs.toJson(Colors.purple[400])),
     // );
 
-    final primary = settings.getPrimaryColor(),
-        accent = settings.getAccentColor();
+    return ColorBuilder(
+      builder: (light, dark) {
+        final useMaterial3 = false;
 
-    AppBarTheme appBarTheme = AppBarTheme(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(15),
-        ),
-      ),
-      foregroundColor: primary.contrastText,
-      iconTheme: IconThemeData(color: primary.contrastText),
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarBrightness: ThemeData.estimateBrightnessForColor(primary),
-      ),
-    );
+        print("$light, $dark");
+        final primary = dark.primary, accent = dark.secondary;
 
-    final defaultTextThemeLight = ThemeData.light().textTheme;
-    final defaultTextThemeDark = ThemeData.dark().textTheme;
-
-    TextTheme getTextTheme(TextTheme defaultTheme) {
-      return defaultTheme;
-    }
-
-    final TabBarTheme tabBarTheme = TabBarTheme(
-      // labelStyle: TextStyle(
-      //   fontFamily: bodyFont.fontFamily,
-      //   fontWeight: FontWeight.w900,
-      // ),
-      // unselectedLabelStyle: TextStyle(
-      //   fontFamily: bodyFont.fontFamily,
-      //   fontWeight: FontWeight.w400,
-      // ),
-      indicatorSize: TabBarIndicatorSize.label,
-      indicator: MaterialDesignIndicator(
-        indicatorHeight: 4,
-        indicatorColor: accent.contrastText,
-      ),
-    );
-
-    return Shortcuts(
-      shortcuts: shortcuts,
-      child: AnimatedBuilder(
-        animation: settings,
-        builder: (context, _) {
-          return MaterialApp(
-            title: 'Registro Axios',
-            theme: ThemeData(
-              primaryColor: primary,
-              accentColor: accent,
-              colorScheme: ColorScheme.light(
-                primary: primary,
-                onPrimary: primary.contrastText,
-                secondary: accent,
-                onSecondary: accent.contrastText,
-              ),
-              appBarTheme: appBarTheme,
-              textTheme: getTextTheme(defaultTextThemeLight),
-              tabBarTheme: tabBarTheme,
-              popupMenuTheme: PopupMenuThemeData(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              dialogTheme: DialogTheme(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              useMaterial3: false,
+        AppBarTheme appBarTheme = AppBarTheme(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(15),
             ),
-            darkTheme: ThemeData(
-              brightness: Brightness.dark,
-              primaryColor: primary,
-              accentColor: accent,
-              colorScheme: ColorScheme.dark(
-                primary: primary,
-                onPrimary: primary.contrastText,
-                secondary: accent,
-                onSecondary: accent.contrastText,
-              ),
-              appBarTheme: appBarTheme,
-              textTheme: getTextTheme(defaultTextThemeDark),
-              tabBarTheme: tabBarTheme,
-              popupMenuTheme: PopupMenuThemeData(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+          ),
+          foregroundColor: primary.contrastText,
+          iconTheme: IconThemeData(color: primary.contrastText),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarBrightness: ThemeData.estimateBrightnessForColor(primary),
+          ),
+        );
+
+        final defaultTextThemeLight = ThemeData.light().textTheme;
+        final defaultTextThemeDark = ThemeData.dark().textTheme;
+
+        TextTheme getTextTheme(TextTheme defaultTheme) {
+          return defaultTheme;
+        }
+
+        final TabBarTheme tabBarTheme = TabBarTheme(
+          // labelStyle: TextStyle(
+          //   fontFamily: bodyFont.fontFamily,
+          //   fontWeight: FontWeight.w900,
+          // ),
+          // unselectedLabelStyle: TextStyle(
+          //   fontFamily: bodyFont.fontFamily,
+          //   fontWeight: FontWeight.w400,
+          // ),
+          indicatorSize: TabBarIndicatorSize.label,
+          indicator: MaterialDesignIndicator(
+            indicatorHeight: 4,
+            indicatorColor: accent.contrastText,
+          ),
+        );
+
+        return Shortcuts(
+          shortcuts: shortcuts,
+          child: AnimatedBuilder(
+            animation: settings,
+            builder: (context, _) {
+              return MaterialApp(
+                title: 'Registro Axios',
+                theme: ThemeData(
+                  colorScheme: light,
+                  useMaterial3: useMaterial3,
+                  primaryColor: primary,
+                  accentColor: accent,
+                  // appBarTheme: appBarTheme,
+                  textTheme: getTextTheme(defaultTextThemeLight),
+                  tabBarTheme: tabBarTheme,
+                  popupMenuTheme: PopupMenuThemeData(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  dialogTheme: DialogTheme(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
                 ),
-              ),
-              dialogTheme: DialogTheme(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+                darkTheme: ThemeData(
+                  colorScheme: dark,
+                  useMaterial3: useMaterial3,
+                  brightness: Brightness.dark,
+                  primaryColor: primary,
+                  accentColor: accent,
+                  // appBarTheme: appBarTheme,
+                  textTheme: getTextTheme(defaultTextThemeDark),
+                  tabBarTheme: tabBarTheme,
+                  popupMenuTheme: PopupMenuThemeData(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  dialogTheme: DialogTheme(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
                 ),
-              ),
-              useMaterial3: false,
-            ),
-            themeMode: getThemeMode(themeMode),
-            // home: MyHomePage(title: 'Flutter Demo Home Page'),
-            initialRoute: "loading",
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: [
-              AxiosLocalizationDelegate(),
-              GlobalCupertinoLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            supportedLocales: [
-              const Locale('en'),
-              const Locale('it'),
-            ],
-            routes: {
-              "/": (_) => HomeScreen(),
-              "login": (_) => LoginScreen(),
-              "loading": (_) => LoadingScreen(),
-              "settings": (_) => SettingsScreen(),
-              "nointernet": (_) => NoInternetScreen(),
+                themeMode: getThemeMode(themeMode),
+                // home: MyHomePage(title: 'Flutter Demo Home Page'),
+                initialRoute: "loading",
+                debugShowCheckedModeBanner: false,
+                localizationsDelegates: [
+                  AxiosLocalizationDelegate(),
+                  GlobalCupertinoLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
+                supportedLocales: [
+                  const Locale('en'),
+                  const Locale('it'),
+                ],
+                routes: {
+                  "/": (_) => HomeScreen(),
+                  "login": (_) => LoginScreen(),
+                  "loading": (_) => LoadingScreen(),
+                  "settings": (_) => SettingsScreen(),
+                  "nointernet": (_) => NoInternetScreen(),
+                },
+              );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

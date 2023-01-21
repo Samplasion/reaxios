@@ -90,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             // Required to be able to show the dialog
             // after the pop up menu has been closed
-            WidgetsBinding.instance!.addPostFrameCallback((_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
               showDialog(
                 context: context,
                 builder: builder,

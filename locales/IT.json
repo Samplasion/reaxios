@@ -335,7 +335,9 @@
     "averageModeLabel": "Modalità di calcolo della media",
     "averageModeSubtitle": "Specifica se la media globale deve essere calcolata come la media di tutti i voti o la media delle medie delle materie (come fa l'app ufficiale). La Calcolatrice non fa distinzioni tra le materie.",
     "averageModeAllGrades": "Media di tutti i voti",
-    "averageModeAverageOfAverages": "Media delle medie delle materie"
+    "averageModeAverageOfAverages": "Media delle medie delle materie",
+    "dynamicColor": "Colore dinamico",
+    "dynamicColorExpl": "Usa il colore di sistema per tingere l'interfaccia, invece dei colori specificati sotto."
   },
   "timeSettings": {
     "defaultLessonDuration": "Durata delle lezioni",

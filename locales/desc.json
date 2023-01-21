@@ -335,7 +335,9 @@
     "averageModeLabel": "",
     "averageModeSubtitle": "",
     "averageModeAllGrades": "",
-    "averageModeAverageOfAverages": ""
+    "averageModeAverageOfAverages": "",
+    "dynamicColor": "",
+    "dynamicColorExpl": ""
   },
   "timeSettings": {
     "defaultLessonDuration": "",
