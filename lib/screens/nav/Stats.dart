@@ -90,7 +90,10 @@ class _StatsPaneState extends State<StatsPane> {
         .where((element) =>
             currentPeriod == null ? true : element.period == currentPeriod.desc)
         .toList();
-    final gradesByGrade = currentGrades.toSet().toList()
+    final gradesByGrade = currentGrades
+        .toSet()
+        .where((grade) => grade.weight > 0)
+        .toList()
       ..sort((a, b) => a.grade.compareTo(b.grade));
     print(gradesByGrade.map((s) => "${s.subject}\t${s.grade}").join("\n"));
     final best = gradeAverage(
