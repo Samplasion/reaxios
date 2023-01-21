@@ -186,7 +186,7 @@ class _InfoPaneState extends State<InfoPane> {
                   trailing: info.sensitive
                       ? IconButton(
                           onPressed: () {
-                            (info.sensitive
+                            (info.sensitive && !shouldBeShown
                                     ? _authenticate()
                                     : Future.value(true))
                                 .then((v) {
