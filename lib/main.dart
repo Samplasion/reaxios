@@ -15,7 +15,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/components/LowLevel/md_indicator.dart';
-import 'package:reaxios/components/Utilities/color-builder.dart';
+import 'package:reaxios/components/Utilities/color_builder.dart';
 import 'package:reaxios/components/Utilities/updates/config.dart' as upgrader;
 import 'package:reaxios/services/android.dart' as android_service;
 import 'package:reaxios/screens/Index.dart';
@@ -134,7 +134,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
 
     return ColorBuilder(
       builder: (light, dark) {
-        final useMaterial3 = false;
+        final useMaterial3 = true;
         final primary = dark.primary, accent = dark.secondary;
 
         AppBarTheme appBarTheme = AppBarTheme(
@@ -150,9 +150,6 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             statusBarBrightness: ThemeData.estimateBrightnessForColor(primary),
           ),
         );
-
-        final defaultTextThemeLight = ThemeData.light().textTheme;
-        final defaultTextThemeDark = ThemeData.dark().textTheme;
 
         TextTheme getTextTheme(TextTheme defaultTheme) {
           return defaultTheme;
@@ -174,6 +171,34 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
           ),
         );
 
+        ThemeData getThemeData(ColorScheme scheme) {
+          return ThemeData(
+            colorScheme: scheme,
+            useMaterial3: useMaterial3,
+            primaryColor: primary,
+            accentColor: accent,
+            appBarTheme: appBarTheme,
+            tabBarTheme: tabBarTheme,
+            scaffoldBackgroundColor: scheme.background,
+            canvasColor: scheme.background,
+            cardColor: scheme.surfaceVariant.withOpacity(0.5),
+            cardTheme: CardTheme(
+              color: scheme.surfaceVariant.withOpacity(0.5),
+              surfaceTintColor: scheme.surfaceTint,
+            ),
+            popupMenuTheme: PopupMenuThemeData(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+            dialogTheme: DialogTheme(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          );
+        }
+
         return Shortcuts(
           shortcuts: shortcuts,
           child: AnimatedBuilder(
@@ -181,45 +206,8 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             builder: (context, _) {
               return MaterialApp(
                 title: 'Registro Axios',
-                theme: ThemeData(
-                  colorScheme: light,
-                  useMaterial3: useMaterial3,
-                  primaryColor: primary,
-                  accentColor: accent,
-                  appBarTheme: appBarTheme,
-                  textTheme: getTextTheme(defaultTextThemeLight),
-                  tabBarTheme: tabBarTheme,
-                  popupMenuTheme: PopupMenuThemeData(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  dialogTheme: DialogTheme(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
-                darkTheme: ThemeData(
-                  colorScheme: dark,
-                  useMaterial3: useMaterial3,
-                  brightness: Brightness.dark,
-                  primaryColor: primary,
-                  accentColor: accent,
-                  appBarTheme: appBarTheme,
-                  textTheme: getTextTheme(defaultTextThemeDark),
-                  tabBarTheme: tabBarTheme,
-                  popupMenuTheme: PopupMenuThemeData(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  dialogTheme: DialogTheme(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
+                theme: getThemeData(light),
+                darkTheme: getThemeData(dark),
                 themeMode: getThemeMode(themeMode),
                 // home: MyHomePage(title: 'Flutter Demo Home Page'),
                 initialRoute: "loading",

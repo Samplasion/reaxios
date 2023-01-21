@@ -45,39 +45,49 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
       key: key,
       child: SizedBox(
         height: preferredSize.height + MediaQuery.of(context).padding.top,
-        child: AppBar(
-          title: title,
-          leading: leading,
-          actions: actions,
-          elevation: elevation,
-          automaticallyImplyLeading: automaticallyImplyLeading,
-          foregroundColor:
-              foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
-          iconTheme: IconThemeData(
-            color: foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
-          ),
-          actionsIconTheme: IconThemeData(
-            color: foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
-          ),
-          bottom: _buildBottom(context),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(radius),
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            appBarTheme: AppBarTheme(
+              iconTheme: IconThemeData(
+                  color: foregroundColor ??
+                      Theme.of(context).colorScheme.onPrimary),
             ),
+            useMaterial3: false,
           ),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
+          child: AppBar(
+            title: title,
+            leading: leading,
+            actions: actions,
+            elevation: elevation,
+            automaticallyImplyLeading: automaticallyImplyLeading,
+            foregroundColor:
+                foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
+            iconTheme: IconThemeData(
+              color: foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
+            ),
+            actionsIconTheme: IconThemeData(
+              color: foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
+            ),
+            bottom: _buildBottom(context),
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(radius),
               ),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: colors ??
-                    <Color>[
-                      Theme.of(context).colorScheme.primary.darken(0.1),
-                      Theme.of(context).colorScheme.primary.lighten(0.06),
-                    ],
+            ),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(radius),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: colors ??
+                      <Color>[
+                        Theme.of(context).colorScheme.primary.darken(0.1),
+                        Theme.of(context).colorScheme.primary.lighten(0.06),
+                      ],
+                ),
               ),
             ),
           ),

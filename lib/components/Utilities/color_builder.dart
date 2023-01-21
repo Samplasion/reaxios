@@ -57,6 +57,10 @@ class ColorBuilder extends StatelessWidget {
             onSecondary: accent.contrastText,
             brightness: Brightness.dark,
           );
+          Color(0xfffffbff);
+          Color(0xff201b16);
+          print(
+              "$primary, ${lightColorScheme.surface}, ${lightColorScheme.background}");
           // final darkColorScheme = ColorScheme.dark(
           //   primary: primary,
           //   onPrimary: primary.contrastText,

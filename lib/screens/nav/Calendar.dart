@@ -612,6 +612,7 @@ class _CalendarPaneState extends State<CalendarPane> {
                   animation: animation,
                   secondaryAnimation: secondaryAnimation,
                   transitionType: SharedAxisTransitionType.horizontal,
+                  fillColor: Theme.of(context).colorScheme.background,
                 );
               },
               child: ListView(

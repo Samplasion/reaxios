@@ -434,8 +434,8 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                     child: UserCard(
                       student: student,
                       period: period,
-                      // store: store,
                       switchToTab: switchToTab,
+                      elevationPercentage: percent,
                     ),
                   ).center(),
                 ),
@@ -464,12 +464,14 @@ class UserCard extends StatelessWidget {
     this.period,
     // required this.store,
     required this.switchToTab,
+    required this.elevationPercentage,
   });
 
   final Student student;
   final Period? period;
   // final RegistroStore store;
   final void Function(int index) switchToTab;
+  final double elevationPercentage;
 
   bg(BuildContext context) => Theme.of(context).colorScheme.secondary;
   fg(BuildContext context) => Theme.of(context).colorScheme.onSecondary;
@@ -533,7 +535,8 @@ class UserCard extends StatelessWidget {
           context.locale.overview.topics, 5),
     ]
         .toRow(mainAxisAlignment: MainAxisAlignment.spaceAround)
-        .padding(vertical: 10);
+        .padding(vertical: 10)
+        .parent(({required child}) => ClipRect(child: child));
   }
 
   Widget _buildUserStatsItem(BuildContext context, String value, String text,
@@ -562,13 +565,13 @@ class UserCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
         )
         .elevation(
-          5,
+          5 * elevationPercentage,
           shadowColor: bg,
           borderRadius: BorderRadius.circular(20),
         )
         .height(175)
         .alignment(Alignment.center)
-        .padding(top: 32, bottom: 16, horizontal: 16);
+        .padding(top: 32, horizontal: 16);
   }
 }
 

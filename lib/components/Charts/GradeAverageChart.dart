@@ -240,7 +240,6 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
           child: KeyedSubtree(
             key: ValueKey(_showAllYear),
             child: Container(
-              color: Theme.of(context).cardColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -281,7 +280,9 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
                         },
                       )
                   ] else
-                    LoadingUI(),
+                    LoadingUI()
+                        .backgroundColor(Colors.transparent)
+                        .padding(top: 16),
                 ],
               ),
             ),

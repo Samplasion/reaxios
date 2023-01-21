@@ -20,8 +20,8 @@ class RegistroAboutListItem extends StatelessWidget {
       icon: Icon(Icons.info),
       applicationName: kIsWeb ? "Registro" : app.appName,
       applicationIcon: Image(
-        width: 48,
-        height: 48,
+        width: 64,
+        height: 64,
         image: AssetImage("assets/icon.png"),
       ),
       applicationLegalese: "\u{a9} 2021 Francesco Arieti",

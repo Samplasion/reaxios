@@ -46,6 +46,10 @@ class _LoadingUIState extends State<LoadingUI> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircularProgressIndicator(
+                  value: () {
+                    if (widget.progress != null)
+                      return widget.progress! / widget.outOf!;
+                  }(),
                   color: widget.colorful
                       ? Colors.white
                       : Theme.of(context).colorScheme.primary,

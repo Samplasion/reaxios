@@ -21,18 +21,16 @@ class GeneralSettings extends BaseSettings {
         onChange: (value) => settings.setUseDynamicColor(value),
         value: settings.getUseDynamicColor(),
       ),
-      if (!settings.getUseDynamicColor()) ...[
-        ColorTile(
-          title: Text(context.locale.generalSettings.colorPrimary),
-          onChange: (color) => settings.setAccentColor(color),
-          value: settings.getAccentColor(),
-        ),
-        ColorTile(
-          title: Text(context.locale.generalSettings.colorSecondary),
-          onChange: (color) => settings.setPrimaryColor(color),
-          value: settings.getPrimaryColor(),
-        ),
-      ],
+      ColorTile(
+        title: Text(context.locale.generalSettings.colorSecondary),
+        onChange: (color) => settings.setPrimaryColor(color),
+        value: settings.getPrimaryColor(),
+      ),
+      ColorTile(
+        title: Text(context.locale.generalSettings.colorPrimary),
+        onChange: (color) => settings.setAccentColor(color),
+        value: settings.getAccentColor(),
+      ),
       RadioModalTile(
         title: Text(context.locale.generalSettings.colorTheme),
         values: {
