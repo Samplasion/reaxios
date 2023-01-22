@@ -190,6 +190,11 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
               surfaceTintColor: scheme.surfaceTint,
               elevation: 4,
             ),
+            dialogBackgroundColor: ElevationOverlay.applySurfaceTint(
+              scheme.surface,
+              scheme.surfaceTint,
+              6,
+            ),
             popupMenuTheme: PopupMenuThemeData(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
