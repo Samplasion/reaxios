@@ -1,0 +1,18 @@
+---
+date: 2023-01-22 03:51:00 +0100
+platforms:
+  - os: android
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.6.0/Registro-android-0.6.0+1674399147-release.apk
+  - os: macos
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.6.0/Registro-mac-0.6.0+1674399232-release.zip
+short_version_string: 0.6.0
+size: 28274164
+subtitle: "Material 3 update"
+title: "Version 0.6.0"
+version: 0.6.0
+---
+
+- Nuova interfaccia con Material 3 e colori dinamici (*su dispositivi supportati)
+- Il nuovo pannello Informazioni sull'utente mostra informazioni sulla sessione corrente
+- Puoi controllare gli orari anche da offline
+- Funziona con l'ultima versione di Axios
