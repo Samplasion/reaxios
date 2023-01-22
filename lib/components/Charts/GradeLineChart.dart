@@ -87,7 +87,7 @@ class _GradeLineChartState extends State<GradeLineChart> {
             lineTouchData: LineTouchData(
               touchTooltipData: LineTouchTooltipData(
                 tooltipBgColor:
-                    tooltipColor(Theme.of(context).cardColor, 0.1, 0.1)
+                    tooltipColor(Theme.of(context).cardTheme.color!, 0.1, 0.1)
                         .withAlpha((0.65 * 255).round()),
                 getTooltipItems: (List<LineBarSpot> touchedSpots) {
                   return touchedSpots.map((LineBarSpot touchedSpot) {
@@ -244,7 +244,7 @@ class _GradeLineChartState extends State<GradeLineChart> {
     return widget
         .padding(all: 24)
         .borderRadius(all: 15)
-        .backgroundColor(Theme.of(context).cardColor, animate: true)
+        .backgroundColor(Theme.of(context).cardTheme.color!, animate: true)
         .clipRRect(all: 15) // clip ripple
         .borderRadius(all: 15, animate: true)
         .elevation(

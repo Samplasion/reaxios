@@ -181,10 +181,14 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             tabBarTheme: tabBarTheme,
             scaffoldBackgroundColor: scheme.background,
             canvasColor: scheme.background,
-            cardColor: scheme.surfaceVariant.withOpacity(0.5),
             cardTheme: CardTheme(
-              color: scheme.surfaceVariant.withOpacity(0.5),
+              color: ElevationOverlay.applySurfaceTint(
+                scheme.surface,
+                scheme.surfaceTint,
+                4,
+              ),
               surfaceTintColor: scheme.surfaceTint,
+              elevation: 4,
             ),
             popupMenuTheme: PopupMenuThemeData(
               shape: RoundedRectangleBorder(

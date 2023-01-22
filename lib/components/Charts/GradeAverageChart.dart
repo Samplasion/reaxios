@@ -105,8 +105,9 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
         barTouchData: BarTouchData(
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: tooltipColor(Theme.of(context).cardColor, 0.1, 0.1)
-                .withAlpha((0.65 * 255).round()),
+            tooltipBgColor:
+                tooltipColor(Theme.of(context).cardTheme.color!, 0.1, 0.1)
+                    .withAlpha((0.65 * 255).round()),
             tooltipPadding: const EdgeInsets.all(8),
             // tooltipBottomMargin: 8,
             getTooltipItem: (
@@ -290,7 +291,7 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
         )
             .padding(horizontal: 16, bottom: 16)
             .borderRadius(all: 15)
-            .backgroundColor(Theme.of(context).cardColor, animate: true)
+            .backgroundColor(Theme.of(context).cardTheme.color!, animate: true)
             .clipRRect(all: 15) // clip ripple
             .borderRadius(all: 15, animate: true)
             .elevation(

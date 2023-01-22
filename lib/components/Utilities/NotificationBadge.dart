@@ -21,7 +21,7 @@ class NotificationBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = background ?? Theme.of(context).cardColor;
+    final bg = background ?? Theme.of(context).cardTheme.color!;
     return [
       child,
       if (showBadge)

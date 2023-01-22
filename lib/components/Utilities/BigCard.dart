@@ -62,12 +62,13 @@ class _BigCardState extends State<BigCard> {
           LinearGradient(
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
-            colors: getGradient(widget.color ?? theme.cardColor, strength: 0.9),
+            colors: getGradient(widget.color ?? theme.cardTheme.color!,
+                strength: 0.9),
           ),
           animate: true);
     } else {
-      item =
-          item.backgroundColor(widget.color ?? theme.cardColor, animate: true);
+      item = item.backgroundColor(widget.color ?? theme.cardTheme.color!,
+          animate: true);
     }
 
     return item

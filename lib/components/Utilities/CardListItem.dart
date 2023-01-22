@@ -35,7 +35,7 @@ class _CardListItemState extends State<CardListItem> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bg = theme.cardColor;
+    final bg = theme.cardTheme.color!;
 
     final settingsItem = ({Widget? child}) {
       var item = Styled.widget(

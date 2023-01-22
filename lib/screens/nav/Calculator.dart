@@ -393,7 +393,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
           borderRadius: BorderRadius.circular(18),
         ),
       ),
-      color: Theme.of(context).cardColor,
+      color: Theme.of(context).cardTheme.color!,
       child: ClipRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(

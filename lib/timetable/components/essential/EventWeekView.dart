@@ -53,10 +53,10 @@ class _EventWeekViewState extends State<EventWeekView>
             },
             textStyle: theme.textTheme.caption
                 ?.copyWith(overflow: TextOverflow.visible),
-            color: theme.cardColor,
+            color: theme.cardTheme.color!,
           ),
           hoursColumnStyle: HoursColumnStyle(
-              color: theme.cardColor,
+              color: theme.cardTheme.color!,
               textStyle: theme.textTheme.caption,
               width: widget.showHours ? 25 : 0,
               timeFormatter: (hm) {

@@ -488,7 +488,7 @@ class _HomeScreenState extends State<HomeScreen> {
           UserAccountsDrawerHeader(
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
+              color: Theme.of(context).cardTheme.color!,
             ),
             accountName: Text(
               "${_login.firstName} ${_login.lastName}",
@@ -733,7 +733,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(4.0),
                   decoration: BoxDecoration(
                     boxShadow: kElevationToShadow[4],
-                    color: Theme.of(context).cardColor,
+                    color: Theme.of(context).cardTheme.color!,
                     shape: BoxShape.circle,
                   ),
                   child: CupertinoActivityIndicator(),
