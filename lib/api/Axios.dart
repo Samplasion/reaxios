@@ -660,28 +660,34 @@ class Axios {
 
     if (gradeBit == "0") return;
 
-    String result = await this._makeAuthenticatedCall(
-      "APP_PROCESS_QUEUE",
-      (_any) => "$_any",
-      "ExecuteCommand",
-      {
-        // "id": grade.id,
-        "idVoto": grade.id,
-        // "@i_vread_voto_id": int.parse(grade.id),
-        // "i_vread_voto_id": int.parse(grade.id),
-        "pin": this._session?.pin ?? "",
-        "idAlunno": student?.studentUUID,
-      },
-      "VOTO_VISTA",
-    );
-
-    bool read = result.toString().contains("ok");
-
-    if (read) {
-      grade.seen = read;
-      grade.seenBy = "${this._session?.firstName} ${this._session?.lastName}";
-      grade.seenOn = DateTime.now();
+    // The official app doesn't care about the result
+    // of this operation. So we don't either
+    try {
+      await this._makeAuthenticatedCall(
+        "APP_PROCESS_QUEUE",
+        (_any) => "$_any",
+        "ExecuteCommand",
+        {
+          // "id": grade.id,
+          "idVoto": grade.id,
+          // "@i_vread_voto_id": int.parse(grade.id),
+          // "i_vread_voto_id": int.parse(grade.id),
+          "pin": this._session?.pin ?? "",
+          "idAlunno": student?.studentUUID,
+        },
+        "VOTO_VISTA",
+      );
+    } catch (e) {
+      // noop
     }
+
+    // bool read = result.toString().contains("ok");
+
+    // if (read) {
+    grade.seen = true;
+    grade.seenBy = "${this._session?.firstName} ${this._session?.lastName}";
+    grade.seenOn = DateTime.now();
+    // }
   }
 
   Future<bool> justifyAbsence(Absence absence) async {
