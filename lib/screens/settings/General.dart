@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/enums/AverageMode.dart';
@@ -15,12 +16,14 @@ class GeneralSettings extends BaseSettings {
       SettingsHeaderTile(
         title: Text(context.locale.generalSettings.groupsColorsTitle),
       ),
-      SwitchSettingsTile(
-        title: Text(context.locale.generalSettings.dynamicColor),
-        subtitle: Text(context.locale.generalSettings.dynamicColorExpl),
-        onChange: (value) => settings.setUseDynamicColor(value),
-        value: settings.getUseDynamicColor(),
-      ),
+      if (!kIsWeb) ...[
+        SwitchSettingsTile(
+          title: Text(context.locale.generalSettings.dynamicColor),
+          subtitle: Text(context.locale.generalSettings.dynamicColorExpl),
+          onChange: (value) => settings.setUseDynamicColor(value),
+          value: settings.getUseDynamicColor(),
+        ),
+      ],
       ColorTile(
         title: Text(context.locale.generalSettings.colorSecondary),
         onChange: (color) => settings.setPrimaryColor(color),
