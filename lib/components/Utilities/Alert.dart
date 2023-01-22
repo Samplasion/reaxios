@@ -31,31 +31,36 @@ class Alert extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.all(8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(right: 16, left: 8, top: 8, bottom: 8),
-                child: Icon(
-                  Icons.info_outline,
-                  color: color[dark ? 600 : 300],
-                ),
-              ),
-              Expanded(
-                child: Theme(
-                  data: ThemeData(
-                    textTheme: Theme.of(context).textTheme.copyWith(
-                          bodyText2:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
+          child: Builder(
+            builder: (context) {
+              final txt = text ?? textBuilder!(context);
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: txt == null
+                    ? CrossAxisAlignment.center
+                    : CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsets.only(right: 16, left: 8, top: 8, bottom: 8),
+                    child: Icon(
+                      Icons.info_outline,
+                      color: color[dark ? 600 : 300],
+                    ),
+                  ),
+                  Expanded(
+                    child: Theme(
+                      data: ThemeData(
+                        textTheme: Theme.of(context).textTheme.copyWith(
+                              bodyText2: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(
                                     color: color[dark ? 200 : 900],
                                   ),
-                        ),
-                  ),
-                  child: Builder(
-                    builder: (context) {
-                      final txt = text ?? textBuilder!(context);
-                      return Column(
+                            ),
+                      ),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -102,12 +107,12 @@ class Alert extends StatelessWidget {
                               txt,
                           ],
                         ],
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
+                      ),
+                    ),
+                  )
+                ],
+              );
+            },
           ),
         ),
       ),
