@@ -37,7 +37,7 @@ class AuthorizationListItem extends StatelessWidget {
         colors["Other"]!; // sTheme.of(context).accentColor;
     final leading = NotificationBadge(
       child: GradientCircleAvatar(
-        child: Icon(Icons.edit),
+        child: Text(authorization.rawKind.characters.first),
         color: bg,
       ),
       showBadge: !authorization.justified,

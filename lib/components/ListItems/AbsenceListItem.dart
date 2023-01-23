@@ -34,7 +34,7 @@ class AbsenceListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final bg = colors[absence.kind] ?? colors["Other"]!;
     final av = GradientCircleAvatar(
-      child: Icon(Icons.no_accounts),
+      child: Text(absence.kind.characters.first.toString()),
       color: bg,
     );
 
