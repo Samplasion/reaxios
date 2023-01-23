@@ -206,7 +206,7 @@ class _InfoPaneState extends State<InfoPane> {
                       print(v);
                       if (v) {
                         Clipboard.setData(ClipboardData(text: info.text));
-                        context.showSnackbar('context.locale.main.copied');
+                        context.showSnackbar(context.locale.main.copied);
                       }
                     });
                   },
