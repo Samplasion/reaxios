@@ -383,85 +383,79 @@ class _CalculatorPaneState extends State<CalculatorPane>
     }).toList();
 
     return BottomAppBar(
-      shape: AutomaticNotchedShape(
-        BeveledRectangleBorder(
-          borderRadius: BorderRadius.circular(0),
-        ),
-        RoundedRectangleBorder(
-          // As the outer circle is bigger, its radius
-          // must be as well. 18 looks nice enough.
-          borderRadius: BorderRadius.circular(18),
-        ),
-      ),
-      color: Theme.of(context).cardTheme.color!,
+      color: Theme.of(context).cardTheme.color!.withOpacity(0.7),
       child: ClipRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: 16,
             sigmaY: 16,
           ),
-          child: Container(
-            height: 1.5 * kToolbarHeight,
-            padding: EdgeInsets.only(
-                bottom: 8 + (_grades.length >= 2 ? 8 : 0), top: 16),
-            child: Row(
-              children: [
-                if (_grades.length < 1) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      context.locale.calculator.selectAtLeast1,
-                      style: Theme.of(context).textTheme.caption,
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              height: 1.5 * kToolbarHeight,
+              padding: EdgeInsets.only(
+                  bottom: 8 + (_grades.length >= 2 ? 8 : 0), top: 16),
+              child: Row(
+                children: [
+                  if (_grades.length < 1) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        context.locale.calculator.selectAtLeast1,
+                        style: Theme.of(context).textTheme.caption,
+                      ),
                     ),
-                  ),
-                ] else ...[
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (_grades.length >= 2)
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              child: RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: context.locale.calculator.average,
-                                      style:
-                                          Theme.of(context).textTheme.caption,
-                                    ),
-                                    GradeText(context, grade: average),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        if (viableTargets.isNotEmpty)
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: Text.rich(
-                                    TextSpan(children: withIndicesAndWidgets),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context).textTheme.caption,
+                  ] else ...[
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (_grades.length >= 2)
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: context.locale.calculator.average,
+                                        style:
+                                            Theme.of(context).textTheme.caption,
+                                      ),
+                                      GradeText(context, grade: average),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                      ],
+                          if (viableTargets.isNotEmpty)
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Text.rich(
+                                      TextSpan(children: withIndicesAndWidgets),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style:
+                                          Theme.of(context).textTheme.caption,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
