@@ -21,6 +21,7 @@ import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
+import 'package:reaxios/components/LowLevel/lifecycle_reactor.dart';
 import 'package:reaxios/components/Utilities/updates/update_scope.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
@@ -72,6 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ScrollController _drawerController = ScrollController();
 
+  bool appIsActive = true;
+
   @override
   void initState() {
     super.initState();
@@ -86,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
   FutureOr<dynamic> Function() _checkConnection(int delay) {
     return () async {
       if (kIsWeb) return;
-
+      if (!appIsActive) return;
       if (!mounted) return;
 
       // print("[NOI] Checking...");
@@ -606,39 +609,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _initPanes(_session, _login);
 
-    return BlocBuilder<AppCubit, AppState>(
-      bloc: cubit,
-      builder: (context, state) {
-        final isLoading = _loading || state.isEmpty;
-        return UpdateScope(
-          child: Container(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0),
-              child: MaybeMasterDetail(
-                master: () {
-                  if (isLoading) return null;
+    return LifecycleReactor(
+      onChange: (state) => setState(() {
+        appIsActive = state == AppLifecycleState.resumed;
+      }),
+      child: BlocBuilder<AppCubit, AppState>(
+        bloc: cubit,
+        builder: (context, state) {
+          final isLoading = _loading || state.isEmpty;
+          return UpdateScope(
+            child: Container(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0),
+                child: MaybeMasterDetail(
+                  master: () {
+                    if (isLoading) return null;
 
-                  final drawer = _getDrawer(isLoading);
-                  if (drawer == null) return null;
+                    final drawer = _getDrawer(isLoading);
+                    if (drawer == null) return null;
 
-                  final child = drawer.child;
+                    final child = drawer.child;
 
-                  return Scaffold(
-                    appBar: GradientAppBar(
-                      title: Text(
-                        kIsWeb ? context.locale.about.appName : app.appName,
+                    return Scaffold(
+                      appBar: GradientAppBar(
+                        title: Text(
+                          kIsWeb ? context.locale.about.appName : app.appName,
+                        ),
                       ),
-                    ),
-                    extendBodyBehindAppBar: true,
-                    body: child,
-                  );
-                }(),
-                detail: _buildDetailView(state),
+                      extendBodyBehindAppBar: true,
+                      body: child,
+                    );
+                  }(),
+                  detail: _buildDetailView(state),
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
