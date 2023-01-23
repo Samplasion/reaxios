@@ -36,7 +36,10 @@ class _BulletinsPaneState extends ReloadableState<BulletinsPane> {
         bloc: context.watch<AppCubit>(),
         builder: (BuildContext context, state) {
           if (state.bulletins != null)
-            return buildOk(context, state.bulletins!.reversed.toList());
+            return buildOk(
+                context,
+                state.bulletins!.toList()
+                  ..sort((a, b) => b.date.compareTo(a.date)));
 
           return LoadingUI();
         },
