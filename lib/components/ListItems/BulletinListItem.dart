@@ -40,7 +40,7 @@ class BulletinListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = colors[bulletin.kind]!; // Theme.of(context).accentColor;
+    final bg = context.harmonize(color: colors[bulletin.kind]!);
     final downloadBg = Theme.of(context).primaryColor;
     final av = GradientCircleAvatar(
       child: Icon(Icons.mail),

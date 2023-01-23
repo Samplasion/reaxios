@@ -31,7 +31,7 @@ class NoteListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = colors[note.kind]!;
+    final bg = context.harmonize(color: colors[note.kind]!);
     final leading = GradientCircleAvatar(
       child: Icon(icons[note.kind]!),
       color: bg,

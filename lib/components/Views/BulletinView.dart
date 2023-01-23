@@ -93,6 +93,15 @@ class BulletinView extends StatelessWidget {
           child: Text(context.locale.bulletins.markAsRead),
         ),
       if (bulletin.read) Text(context.locale.bulletins.alreadyRead),
+      if (kDebugMode) ...[
+        Divider(),
+        ElevatedButton(
+          child: Text("[DEBUG] Print JSON"),
+          onPressed: () {
+            print(bulletin.toJson());
+          },
+        ),
+      ]
     ];
   }
 

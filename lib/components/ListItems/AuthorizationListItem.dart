@@ -33,8 +33,9 @@ class AuthorizationListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = colors[authorization.rawKind] ??
-        colors["Other"]!; // sTheme.of(context).accentColor;
+    final bg = context.harmonize(
+        color: colors[authorization.rawKind] ??
+            colors["Other"]!); // sTheme.of(context).accentColor;
     final leading = NotificationBadge(
       child: GradientCircleAvatar(
         child: Text(authorization.rawKind.characters.first),

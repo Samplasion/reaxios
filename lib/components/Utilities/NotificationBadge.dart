@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reaxios/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class NotificationBadge extends StatelessWidget {
@@ -37,7 +38,7 @@ class NotificationBadge extends StatelessWidget {
             width: 9,
             height: 9,
             child: CircleAvatar(
-              backgroundColor: foreground,
+              backgroundColor: context.harmonize(color: foreground),
             ),
           ),
         ]

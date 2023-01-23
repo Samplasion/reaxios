@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
@@ -422,6 +423,10 @@ extension ContextUtils on BuildContext {
     } else {
       showSnackbarError(locale.main.failedLinkOpen);
     }
+  }
+
+  Color harmonize({required Color color}) {
+    return color.harmonizeWith(Theme.of(this).colorScheme.primary);
   }
 }
 
