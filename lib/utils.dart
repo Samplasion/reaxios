@@ -420,7 +420,7 @@ extension ContextUtils on BuildContext {
     if (await canLaunch(link.url)) {
       await launch(link.url);
     } else {
-      showSnackbar(locale.main.failedLinkOpen);
+      showSnackbarError(locale.main.failedLinkOpen);
     }
   }
 }
