@@ -534,7 +534,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
                 .toList(),
           ),
-          Flexible(
+          Expanded(
             child: SingleChildScrollView(
               controller: _drawerController,
               child: ListTileTheme(
@@ -625,19 +625,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   master: () {
                     if (isLoading) return null;
 
-                    final drawer = _getDrawer(isLoading);
-                    if (drawer == null) return null;
+                    final drawer = _getDrawer(isLoading)?.child;
 
-                    final child = drawer.child;
-
-                    return Scaffold(
+                    return Material(
+                      child: Column(
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                color: Theme.of(context).cardTheme.color,
+                                height: kToolbarHeight,
+                                width: MediaQuery.of(context).size.width,
+                              ),
+                              GradientAppBar(
+                                title: Text(
+                                  kIsWeb
+                                      ? context.locale.about.appName
+                                      : app.appName,
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (drawer != null) Expanded(child: drawer),
+                        ],
+                      ),
+                    );
+                    Scaffold(
                       appBar: GradientAppBar(
                         title: Text(
                           kIsWeb ? context.locale.about.appName : app.appName,
                         ),
                       ),
                       extendBodyBehindAppBar: true,
-                      body: child,
+                      body: _getDrawer(isLoading)?.child,
                     );
                   }(),
                   detail: _buildDetailView(state),
