@@ -10,6 +10,7 @@ on:
 jobs:
   build_mac:
     name: Build macOS app
+    continue-on-error: true
     runs-on: macos-11
     steps:
       - name: Checkout
@@ -44,8 +45,44 @@ jobs:
         with:
           name: Registro macOS app
           path: out/macos/Registro-*
+  build_ios:
+    name: Build iOS app
+    continue-on-error: true
+    runs-on: macos-11
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.3.10"
+          channel: "stable"
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Install Homebrew
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+      - name: Install bash 5
+        run: brew install bash
+      - name: Export brew path
+        run: echo "/usr/local/bin" >> $GITHUB_PATH
+      - name: Build
+        run: |
+          tools/build_ios.sh
+      - name: Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: out/ios/Registro-*
+          generate_release_notes: true
+      - name: Upload artifacts
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v2
+        with:
+          name: Registro iOS app
+          path: out/ios/Registro-*
   build_web:
     name: Build web app
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -75,6 +112,7 @@ jobs:
           path: out/web/Registro-*
   build_android:
     name: Build Android app [${{ matrix.flag }}]
+    continue-on-error: true
     runs-on: ubuntu-latest
     strategy:
       matrix:
