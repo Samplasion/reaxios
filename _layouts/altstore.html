@@ -23,10 +23,9 @@ layout: null
           "localizedDescription": "{{ post.title }}",
           "downloadURL": "{{ enclosure_url[0].enclosure }}",
           "size": {{ enclosure_url[0].size | default: 0 }}
-        },
+        }
       {% endif %}
       {% endfor %}
-        {}
       ],
       
       {% assign enclosure_url = total.platforms | where: "os", page.os %}
