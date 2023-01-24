@@ -427,7 +427,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
         ..sort((a, b) => b.date.compareTo(a.date));
       final average = gradeAverage(averageMode, subjectGrades);
       final isEmpty = isNaN(average) || average == 0 || grades.isEmpty;
-      final color = getGradeColor(isEmpty ? double.nan : average);
+      final color = getGradeColor(context, isEmpty ? double.nan : average);
       children.add(
         CardListItem(
           leading: NotificationBadge(

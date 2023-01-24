@@ -16,16 +16,16 @@ class GradeAvatar extends StatelessWidget {
   final bool showIconIfNaN;
   final double radius;
 
-  Color getColor() {
+  Color getColor(BuildContext context) {
     if (grade.weight == 0)
-      return Colors.blue;
+      return context.harmonize(color: Colors.blue);
     else
-      return getGradeColor(grade.grade);
+      return getGradeColor(context, grade.grade);
   }
 
   @override
   Widget build(BuildContext context) {
-    final bg = getColor();
+    final bg = getColor(context);
 
     final text = grade.getPrettyGrade(context).trim();
     final child = text.isEmpty

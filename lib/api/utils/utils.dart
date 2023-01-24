@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
+import 'package:reaxios/utils.dart';
 
 String dateToString(
   DateTime date, {
@@ -153,14 +154,15 @@ double gradeAverage(List<Grade> grades) {
   return double.parse((sum / weights).toStringAsFixed(2));
 }
 
-Color getGradeColor(double grade, [int shade = 500, int suff = 6]) {
+Color getGradeColor(BuildContext context, double grade,
+    [int shade = 500, int suff = 6]) {
   if (isNaN(grade)) return Colors.blue[shade]!;
   if (grade < suff)
-    return Colors.red[shade]!;
+    return context.harmonize(color: Colors.red[shade]!);
   else if (grade < suff + 0.5)
-    return Colors.orange[shade]!;
+    return context.harmonize(color: Colors.orange[shade]!);
   else
-    return Colors.green[shade]!;
+    return context.harmonize(color: Colors.green[shade]!);
 }
 
 Color? getColorIfNonZero(num num) {

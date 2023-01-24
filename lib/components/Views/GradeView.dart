@@ -78,12 +78,12 @@ class _GradeViewState extends State<GradeView> {
                     rebuild: () {},
                   ),
                 ),
-                if (gradeIsValid) Divider(),
-                if (gradeIsValid)
+                if (gradeIsValid) ...[
+                  Divider(),
                   CardListItem(
                     leading: NotificationBadge(
                       child: GradientCircleAvatar(
-                        color: Colors.indigo,
+                        color: context.harmonize(color: Colors.indigo),
                         child: Icon(Icons.linear_scale),
                       ),
                       showBadge: false,
@@ -97,12 +97,13 @@ class _GradeViewState extends State<GradeView> {
                     details: Text(context.locale.grades.weight
                         .format([(grade.weight * 100).toInt()])),
                   ),
+                ],
                 Divider(),
                 if (grade.seen)
                   CardListItem(
                     leading: NotificationBadge(
                       child: GradientCircleAvatar(
-                        color: Colors.orange,
+                        color: context.harmonize(color: Colors.orange),
                         child: Text(grade.seenBy?[0] ?? ""),
                       ),
                       showBadge: false,

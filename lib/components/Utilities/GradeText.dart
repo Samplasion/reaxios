@@ -21,7 +21,7 @@ class GradeText extends TextSpan {
                   : context.gradeToString(grade, round: precise))
               : label,
           style: TextStyle(
-            color: getGradeColor(grade, shade),
+            color: getGradeColor(context, grade, shade),
             fontWeight: FontWeight.bold,
           ),
         );

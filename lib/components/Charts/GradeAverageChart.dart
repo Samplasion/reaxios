@@ -22,8 +22,8 @@ class _GradeChartEntry {
   final String name;
   final double avg;
 
-  Color get color {
-    return getGradeColor(avg);
+  Color getColor(BuildContext context) {
+    return getGradeColor(context, avg);
   }
 }
 
@@ -172,9 +172,9 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
                 width: 16,
                 gradient: LinearGradient(
                   colors: [
-                    g.color.darken(0.22),
-                    g.color,
-                    g.color.lighten(0.15)
+                    g.getColor(context).darken(0.22),
+                    g.getColor(context),
+                    g.getColor(context).lighten(0.15)
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,

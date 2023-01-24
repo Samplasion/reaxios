@@ -95,7 +95,7 @@ class _GradeLineChartState extends State<GradeLineChart> {
                       "${context.gradeToString(touchedSpot.y)}",
                       TextStyle(
                         color: tooltipColor(
-                            getGradeColor(touchedSpot.y), 0.2, 0.1),
+                            getGradeColor(context, touchedSpot.y), 0.2, 0.1),
                         fontWeight: FontWeight.bold,
                       ),
                     );
@@ -171,7 +171,8 @@ class _GradeLineChartState extends State<GradeLineChart> {
                       return Text(
                         "   ${value.truncate().toString()}",
                         style: TextStyle(
-                          color: tooltipColor(getGradeColor(value), 0.1, 0.2),
+                          color: tooltipColor(
+                              getGradeColor(context, value), 0.1, 0.2),
                           fontSize: 10,
                         ),
                       );
@@ -186,7 +187,8 @@ class _GradeLineChartState extends State<GradeLineChart> {
                 HorizontalLine(
                   y: gradeAverage(averageMode, usefulGrades),
                   color: tooltipColor(
-                    getGradeColor(gradeAverage(averageMode, usefulGrades)),
+                    getGradeColor(
+                        context, gradeAverage(averageMode, usefulGrades)),
                     0.1,
                     0.2,
                   ),
@@ -209,7 +211,7 @@ class _GradeLineChartState extends State<GradeLineChart> {
                 isCurved: true,
                 gradient: LinearGradient(
                   colors: usefulGrades.map((Grade grade) {
-                    return getGradeColor(grade.grade);
+                    return getGradeColor(context, grade.grade);
                   }).toList(),
                 ),
                 barWidth: 4,
@@ -221,7 +223,8 @@ class _GradeLineChartState extends State<GradeLineChart> {
                   show: true,
                   gradient: LinearGradient(
                     colors: usefulGrades.map((Grade grade) {
-                      return getGradeColor(grade.grade).withOpacity(0.2);
+                      return getGradeColor(context, grade.grade)
+                          .withOpacity(0.2);
                     }).toList(),
                   ),
                   spotsLine: BarAreaSpotsLine(

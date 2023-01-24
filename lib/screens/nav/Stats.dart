@@ -192,7 +192,7 @@ class _StatsPaneState extends State<StatsPane> {
       CardListItem(
         leading: GradientCircleAvatar(
           child: Icon(Icons.star),
-          color: getGradeColor(10),
+          color: getGradeColor(context, 10),
         ),
         title: context.locale.stats.passedSubjects,
         subtitle: Text(
@@ -202,7 +202,7 @@ class _StatsPaneState extends State<StatsPane> {
       CardListItem(
         leading: GradientCircleAvatar(
           child: Icon(Icons.star_half),
-          color: getGradeColor(5),
+          color: getGradeColor(context, 5),
         ),
         title: context.locale.stats.failedSubjects,
         subtitle: Text(
