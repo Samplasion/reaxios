@@ -1,0 +1,41 @@
+---
+layout: null
+---
+
+{
+  "name": "{{ page.custom_feed_title }}",
+  "identifier": "{{ page.identifier }}",
+  "apps": [
+    {
+      "name": "{{ page.custom_feed_title }}",
+      "bundleIdentifier": "org.js.samplasion.reaxios",
+      "developerName": "Samplasion",
+      "subtitle": "{{ page.custom_feed_description }}",
+      "versions": [
+      {% for post in site.posts %}
+      {% assign oses = post.platforms | map: "os" %}
+      {% if page.os and oses contains page.os %}
+      {% assign enclosure_url = post.platforms | where: "os", page.os %}
+      {% assign enclosure_size = post.platforms | where: "os", page.os %}
+        {
+          "version": "{{ post.short_version_string }}",
+          "date": "{{ post.date | date_to_rfc822 }}",
+          "localizedDescription": "{{ post.title }}",
+          "downloadURL": "{{ enclosure_url[0].enclosure }}",
+          "size": {{ enclosure_url[0].size | default: 0 }}
+        }{% unless forloop.last %},{% endunless -%}
+      {% endif %}
+      {% endfor %}
+      ],
+      "localizedDescription": "Registro",
+      "iconURL": "https://axios.samplasion.js.org/favicon.png",
+      "tintColor": "FF9800",
+      "permissions": [
+        {
+          "type": "faceid",
+          "usageDescription": "Mostra PIN e password"
+        }
+      ],
+    }
+  ]
+}

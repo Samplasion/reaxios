@@ -5,6 +5,9 @@ platforms:
     enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.6.0/Registro-android-0.6.0+1674399147-release.apk
   - os: macos
     enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.6.0/Registro-mac-0.6.0+1674399232-release.zip
+  - os: ios
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.6.0/Registro-ios-0.6.0+1674508243-release.ipa
+    size: 14649813
 short_version_string: 0.6.0
 size: 28274164
 subtitle: "Material 3 update"
