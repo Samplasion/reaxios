@@ -15,8 +15,8 @@ layout: null
       {% for post in site.posts %}
       {% assign oses = post.platforms | map: "os" %}
       {% if page.os and oses contains page.os %}
+      {% assign total = post %}
       {% assign enclosure_url = post.platforms | where: "os", page.os %}
-      {% assign enclosure_size = post.platforms | where: "os", page.os %}
         {
           "version": "{{ post.short_version_string }}",
           "date": "{{ post.date | date_to_rfc822 }}",
@@ -27,7 +27,12 @@ layout: null
       {% endif %}
       {% endfor %}
       ],
-      "version": "1.0",
+      
+      {% assign enclosure_url = total.platforms | where: "os", page.os %}
+      "version": "{{ total.short_version_string }}",
+      "versionDate": "{{ total.date | date_to_rfc822 }}",
+      "downloadURL": "{{ enclosure_url[0].enclosure }}",
+      "size": {{ enclosure_url[0].size | default: 0 }},
       "localizedDescription": "Registro",
       "iconURL": "https://axios.samplasion.js.org/favicon.png",
       "tintColor": "FF9800",
