@@ -339,7 +339,9 @@
     "averageModeAllGrades": "",
     "averageModeAverageOfAverages": "",
     "dynamicColor": "",
-    "dynamicColorExpl": ""
+    "dynamicColorExpl": "",
+    "harmonizeColors": "",
+    "harmonizeColorsExpl": ""
   },
   "timeSettings": {
     "defaultLessonDuration": "",

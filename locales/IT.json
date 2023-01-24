@@ -339,7 +339,9 @@
     "averageModeAllGrades": "Media di tutti i voti",
     "averageModeAverageOfAverages": "Media delle medie delle materie",
     "dynamicColor": "Colore dinamico",
-    "dynamicColorExpl": "Usa il colore di sistema per tingere l'interfaccia, invece dei colori specificati sotto."
+    "dynamicColorExpl": "Usa il colore di sistema per tingere l'interfaccia, invece dei colori specificati sotto.",
+    "harmonizeColors": "Armonizzazione dei colori",
+    "harmonizeColorsExpl": "Modifica leggermente tutti i colori verso il tuo colore di tinta."
   },
   "timeSettings": {
     "defaultLessonDuration": "Durata delle lezioni",

@@ -426,6 +426,7 @@ extension ContextUtils on BuildContext {
   }
 
   Color harmonize({required Color color}) {
+    if (!this.read<Settings>().getHarmonizeColors()) return color;
     return color.harmonizeWith(Theme.of(this).colorScheme.primary);
   }
 }

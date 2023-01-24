@@ -636,6 +636,8 @@ class LocalegeneralSettings {
   String get averageModeAverageOfAverages => _data["averageModeAverageOfAverages"]!;
   String get dynamicColor => _data["dynamicColor"]!;
   String get dynamicColorExpl => _data["dynamicColorExpl"]!;
+  String get harmonizeColors => _data["harmonizeColors"]!;
+  String get harmonizeColorsExpl => _data["harmonizeColorsExpl"]!;
 }
 
 class LocaletimeSettings {

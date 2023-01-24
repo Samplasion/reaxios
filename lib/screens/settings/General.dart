@@ -34,6 +34,13 @@ class GeneralSettings extends BaseSettings {
         onChange: (color) => settings.setAccentColor(color),
         value: settings.getAccentColor(),
       ),
+      SwitchSettingsTile(
+        title: Text(context.locale.generalSettings.harmonizeColors),
+        subtitle: Text(context.locale.generalSettings.harmonizeColorsExpl),
+        onChange: (harmonizeColors) =>
+            settings.setHarmonizeColors(harmonizeColors),
+        value: settings.getHarmonizeColors(),
+      ),
       RadioModalTile(
         title: Text(context.locale.generalSettings.colorTheme),
         values: {

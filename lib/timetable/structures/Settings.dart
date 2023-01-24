@@ -227,6 +227,15 @@ class Settings extends UndisposableChangeNotifier {
     notifyListeners();
   }
 
+  bool getHarmonizeColors() {
+    return _prefs.getBool("harmonizeColors") ?? true;
+  }
+
+  void setHarmonizeColors(bool harmonizeColors) {
+    _prefs.setBool("harmonizeColors", harmonizeColors);
+    notifyListeners();
+  }
+
   // --------
 
   Future<String> get directory async {
@@ -334,6 +343,7 @@ class Settings extends UndisposableChangeNotifier {
         "updateNagMode": getUpdateNagMode().serialized,
         "calendarEvents": getCalendarEvents().map((e) => e.toJson()).toList(),
         "useDynamicColor": getUseDynamicColor(),
+        "harmonizeColors": getHarmonizeColors(),
       };
 
   set json(Map<String, dynamic> obj) {
@@ -411,6 +421,9 @@ class Settings extends UndisposableChangeNotifier {
     }
     if (obj.containsKey("useDynamicColor") && obj["useDynamicColor"] is bool) {
       setUseDynamicColor(obj["useDynamicColor"] as bool);
+    }
+    if (obj.containsKey("harmonizeColors") && obj["harmonizeColors"] is bool) {
+      setUseDynamicColor(obj["harmonizeColors"] as bool);
     }
 
     notifyListeners();
