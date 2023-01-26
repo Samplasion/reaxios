@@ -1,6 +1,6 @@
 {
   "main": {
-    "logoutTitle": "Esci da {0} {1}",
+    "logoutTitle": "Esci",
     "logoutBody": "Se esci, dovrai inserire nuovamente l'ID utente e la password.",
     "lessonHour": "{0}ª ora",
     "genderM": "M",

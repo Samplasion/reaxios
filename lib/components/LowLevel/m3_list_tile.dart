@@ -17,29 +17,43 @@ class M3DrawerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Container(
           decoration: ShapeDecoration(
             shape: StadiumBorder(),
             color: selected
-                ? Theme.of(context).colorScheme.primaryContainer
+                ? Theme.of(context).colorScheme.secondaryContainer
                 : null,
           ),
           clipBehavior: Clip.hardEdge,
           child: Material(
             color: Colors.transparent,
             child: InkWell(
+              mouseCursor: SystemMouseCursors.click,
               customBorder: StadiumBorder(),
               onTap: onTap,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: ListTile(
-                  leading: leading,
-                  title: title,
-                  selected: selected,
-                  style: ListTileStyle.drawer,
+              child: Container(
+                height: 56,
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0),
+                  child: ListTileTheme(
+                    selectedColor:
+                        Theme.of(context).colorScheme.onSecondaryContainer,
+                    child: ListTile(
+                      mouseCursor: SystemMouseCursors.click,
+                      leading: leading,
+                      title: DefaultTextStyle.merge(
+                        child: title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      selected: selected,
+                      style: ListTileStyle.drawer,
+                    ),
+                  ),
                 ),
               ),
             ),

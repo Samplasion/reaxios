@@ -11,6 +11,7 @@ import 'package:reaxios/screens/nav/Timetable.dart';
 import 'package:reaxios/utils.dart';
 
 import '../components/LowLevel/MaybeMasterDetail.dart';
+import '../components/LowLevel/m3_list_tile.dart';
 
 class NoInternetScreen extends StatefulWidget {
   NoInternetScreen({Key? key}) : super(key: key);
@@ -149,10 +150,10 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
     return Drawer(
       child: ListView(
         children: [
-          ListTile(
+          SizedBox(height: 16),
+          M3DrawerListTile(
             title: Text(context.locale.noInternet.title),
             leading: Icon(Icons.wifi_off),
-            style: ListTileStyle.drawer,
             selected: _selectedItem == 0,
             onTap: () {
               setState(() {
@@ -162,10 +163,9 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
                 Navigator.pop(context);
             },
           ),
-          ListTile(
+          M3DrawerListTile(
             title: Text(context.locale.drawer.timetable),
             leading: Icon(Icons.access_time),
-            style: ListTileStyle.drawer,
             selected: _selectedItem == 1,
             onTap: () {
               setState(() {
@@ -175,6 +175,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
                 Navigator.pop(context);
             },
           ),
+          ...showEndOfDrawerItems(context),
         ],
       ),
     );

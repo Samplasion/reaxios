@@ -452,6 +452,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildUserDetail() {
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: ListView.builder(
         shrinkWrap: true,
         itemBuilder: (context, index) {
@@ -560,51 +561,32 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? CrossFadeState.showSecond
                         : CrossFadeState.showFirst,
                     secondChild: _buildUserDetail(),
-                    firstChild: Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Column(
-                        // shrinkWrap: true,
-                        children: [
-                          ..._buildDrawerItems(),
-                          Builder(
-                            builder: (context) => M3DrawerListTile(
-                              title: Text(context.locale.drawer.webVersion),
-                              leading: Icon(Icons.public),
-                              onTap: () {
-                                launchWeb(context);
-                              },
-                            ),
-                          ),
-                          if (kDebugMode) ...[
-                            M3DrawerListTile(
-                              title: Text("[DEBUG] Show no Internet page"),
-                              leading: Icon(Icons.wifi_off),
-                              onTap: () {
-                                Navigator.pushReplacementNamed(
-                                    context, "nointernet");
-                              },
-                            ),
-                          ],
-                          Divider(),
-                          M3DrawerListTile(
-                            title: Text(context.locale.drawer.settings),
-                            leading: Icon(Icons.settings),
+                    firstChild: Column(
+                      // shrinkWrap: true,
+                      children: [
+                        SizedBox(height: 16),
+                        ..._buildDrawerItems(),
+                        Builder(
+                          builder: (context) => M3DrawerListTile(
+                            title: Text(context.locale.drawer.webVersion),
+                            leading: Icon(Icons.public),
                             onTap: () {
-                              if (!MaybeMasterDetail.shouldBeShowingMaster(
-                                  context)) Navigator.pop(context);
-                              Navigator.pushNamed(context, "settings");
+                              launchWeb(context);
                             },
                           ),
-                          RegistroAboutListItem(),
+                        ),
+                        if (kDebugMode) ...[
                           M3DrawerListTile(
-                            title: Text(context.locale.drawer.logOut),
-                            leading: Icon(Icons.exit_to_app),
+                            title: Text("[DEBUG] Show no Internet page"),
+                            leading: Icon(Icons.wifi_off),
                             onTap: () {
-                              _showExitDialog(context);
+                              Navigator.pushReplacementNamed(
+                                  context, "nointernet");
                             },
                           ),
                         ],
-                      ),
+                        ...showEndOfDrawerItems(context),
+                      ],
                     ),
                   ),
                 ),
@@ -665,15 +647,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (drawer != null) Expanded(child: drawer),
                         ],
                       ),
-                    );
-                    Scaffold(
-                      appBar: GradientAppBar(
-                        title: Text(
-                          kIsWeb ? context.locale.about.appName : app.appName,
-                        ),
-                      ),
-                      extendBodyBehindAppBar: true,
-                      body: _getDrawer(isLoading)?.child,
                     );
                   }(),
                   detail: _buildDetailView(state),
@@ -799,48 +772,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         alignment: Alignment.bottomLeft,
       ),
-    );
-  }
-
-  _showExitDialog(BuildContext context) {
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text(formatString(context.locale.main.logoutTitle,
-          [_login.schoolTitle, _login.schoolName])),
-      content: Text(context.locale.main.logoutBody),
-      actions: [
-        TextButton(
-          child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
-          onPressed: () async {
-            Navigator.pop(context);
-          },
-        ),
-        TextButton(
-          child: Text(MaterialLocalizations.of(context).okButtonLabel),
-          onPressed: () async {
-            // Refresh store
-            context.read<AppCubit>().logout();
-
-            final prefs = await SharedPreferences.getInstance();
-
-            prefs.remove("school");
-            prefs.remove("user");
-            prefs.remove("pass");
-
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pushReplacementNamed(context, "login");
-          },
-        )
-      ],
-    );
-
-    // show the dialog
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
     );
   }
 

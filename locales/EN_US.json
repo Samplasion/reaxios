@@ -1,6 +1,6 @@
 {
   "main": {
-    "logoutTitle": "Log out of {0} {1}",
+    "logoutTitle": "Log out",
     "logoutBody": "If you log out, you'll have to type your user ID and password again.",
     "lessonHour": "{0}h",
     "genderM": "M",

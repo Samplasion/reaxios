@@ -4,6 +4,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
+import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/utils/utils.dart' as axios_utils;
 import 'package:reaxios/generated/locale_base.dart';
 
@@ -11,12 +12,17 @@ import 'package:reaxios/generated/locale_base.dart';
 import 'dart:math';
 
 import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 
+import 'components/ListItems/RegistroAboutListItem.dart';
+import 'components/LowLevel/MaybeMasterDetail.dart';
+import 'components/LowLevel/m3_list_tile.dart';
 import 'cubit/app_cubit.dart';
 import 'enums/AverageMode.dart';
 import 'enums/GradeDisplay.dart';
+import 'format.dart';
 
 extension StringUtils on String {
   repeat(int times) {
@@ -42,6 +48,11 @@ final _max = max;
 extension NumListUtilities<T extends num> on List<T> {
   T? get min => (this.isEmpty ? null : this.reduce((a, b) => _min(a, b)));
   T? get max => (this.isEmpty ? null : this.reduce((a, b) => _max(a, b)));
+}
+
+extension StringExtensions on String {
+  String get sentenceCase =>
+      this[0].toUpperCase() + this.substring(1).toLowerCase();
 }
 
 class Utils {
@@ -467,4 +478,75 @@ extension StringExtension on String {
     if (trim().isEmpty) return alternative;
     return this;
   }
+}
+
+_showExitDialog(BuildContext context) {
+  final alert = AlertDialog(
+    icon: Icon(Icons.exit_to_app),
+    title: Text(context.locale.main.logoutTitle),
+    content: Text(
+      context.locale.main.logoutBody,
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+    ),
+    actions: [
+      TextButton(
+        child: Text(
+            MaterialLocalizations.of(context).cancelButtonLabel.sentenceCase),
+        onPressed: () async {
+          Navigator.pop(context);
+        },
+      ),
+      TextButton(
+        child: Text(MaterialLocalizations.of(context).okButtonLabel),
+        onPressed: () async {
+          // Refresh store
+          context.read<AppCubit>().logout();
+
+          final prefs = await SharedPreferences.getInstance();
+
+          prefs.remove("school");
+          prefs.remove("user");
+          prefs.remove("pass");
+
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, "login");
+        },
+      ),
+    ],
+  );
+
+  // show the dialog
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+List<Widget> showEndOfDrawerItems(BuildContext context) {
+  return [
+    Divider(),
+    M3DrawerListTile(
+      title: Text(context.locale.drawer.settings),
+      leading: Icon(Icons.settings),
+      onTap: () {
+        if (!MaybeMasterDetail.shouldBeShowingMaster(context))
+          Navigator.pop(context);
+        Navigator.pushNamed(context, "settings");
+      },
+    ),
+    RegistroAboutListItem(),
+    M3DrawerListTile(
+      title: Text(context.locale.drawer.logOut),
+      leading: Icon(Icons.exit_to_app),
+      onTap: () {
+        _showExitDialog(context);
+      },
+    ),
+    SizedBox(height: 16),
+  ];
 }
