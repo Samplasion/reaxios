@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/components/ListItems/MeetingListItem.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils.dart';
 
@@ -19,7 +18,7 @@ class _BookMeetingViewState extends State<BookMeetingView> {
     final meetings = cubit
         .meetings; //.map((e) => e.meetings).fold<List>([], (previousValue, element) => [...previousValue, element]);
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(context.locale.teacherMeetings.bookMeeting),
       ),
       body: ListView.builder(

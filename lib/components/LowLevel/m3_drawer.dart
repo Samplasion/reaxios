@@ -1,5 +1,25 @@
 import 'package:flutter/material.dart';
 
+class M3DrawerHeading extends StatelessWidget {
+  final String data;
+
+  const M3DrawerHeading(this.data, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28),
+      child: Text(
+        data,
+        style: theme.textTheme.titleSmall!.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+      ),
+    );
+  }
+}
+
 class M3DrawerListTile extends StatelessWidget {
   final Widget leading;
   final Widget title;

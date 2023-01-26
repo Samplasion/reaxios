@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
@@ -49,7 +48,7 @@ class _GradeViewState extends State<GradeView> {
         : context.locale.grades.commentInSubject.format([grade.subject]);
     // print(grade.toJson());
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(title),
       ),
       body: _buildBody(context),

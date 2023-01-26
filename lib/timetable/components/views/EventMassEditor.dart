@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/timetable/components/essential/ColorField.dart';
-import 'package:reaxios/timetable/components/essential/GradientAppBar.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/utils.dart';
@@ -45,7 +44,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
   Widget build(BuildContext context) {
     final items = widget.events.map((s) => s.name).toSet().toList();
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(context.locale.timetable.editMultiple),
       ),
       body: SingleChildScrollView(

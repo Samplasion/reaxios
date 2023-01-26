@@ -5,13 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/screens/nav/Timetable.dart';
 import 'package:reaxios/utils.dart';
 
 import '../components/LowLevel/MaybeMasterDetail.dart';
-import '../components/LowLevel/m3_list_tile.dart';
+import '../components/LowLevel/m3_drawer.dart';
 
 class NoInternetScreen extends StatefulWidget {
   NoInternetScreen({Key? key}) : super(key: key);
@@ -74,7 +73,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
           final child = drawer.child;
 
           return Scaffold(
-            appBar: GradientAppBar(
+            appBar: AppBar(
               title: Text(
                 context.locale.about.appName,
               ),
@@ -86,7 +85,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
         detail: Scaffold(
           appBar: _selectedItem == 1
               ? null
-              : GradientAppBar(
+              : AppBar(
                   title: Text("Registro"),
                   leading: Builder(builder: (context) {
                     return MaybeMasterDetail.of(context)!.isShowingMaster

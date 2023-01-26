@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/settings/base.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -42,7 +41,7 @@ class _SubjectObjectivesManagerViewState
         return sort;
       });
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(context.locale.objectives.managerTitle),
       ),
       body: CustomScrollView(

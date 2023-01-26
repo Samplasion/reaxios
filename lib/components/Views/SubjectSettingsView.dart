@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/settings/base.dart';
 import 'package:reaxios/structs/SubjectObjective.dart';
@@ -23,7 +22,7 @@ class SubjectSettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(context.locale.grades.settingsTitle.format([subject])),
       ),
       body: ListView(

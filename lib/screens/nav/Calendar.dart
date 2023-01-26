@@ -14,7 +14,6 @@ import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/components/ListItems/AssignmentListItem.dart';
 import 'package:reaxios/components/ListItems/TopicListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
@@ -156,12 +155,12 @@ class _CalendarPaneState extends State<CalendarPane> {
     }
   }
 
-  GradientAppBar getDefaultAppBar(BuildContext context, List<Topic> topics,
+  AppBar getDefaultAppBar(BuildContext context, List<Topic> topics,
       List<Assignment> assignments, List<Period> periods,
       [bool showMenu = true]) {
     final settings = Provider.of<Settings>(context, listen: false);
     final isShowingMaster = MaybeMasterDetail.of(context)!.isShowingMaster;
-    return GradientAppBar(
+    return AppBar(
       title: Text(
         context.locale.drawer.calendar,
       ),
@@ -181,13 +180,13 @@ class _CalendarPaneState extends State<CalendarPane> {
     );
   }
 
-  GradientAppBar getEditingAppBar(
+  AppBar getEditingAppBar(
       List<Topic> topics, List<Assignment> assignments, List<Period> periods) {
-    return GradientAppBar(
+    return AppBar(
       title: Text(
         context.locale.drawer.calendar,
       ),
-      colors: Colors.black.toSlightGradient(),
+      backgroundColor: Colors.black,
       leading: IconButton(
         icon: Icon(Icons.check),
         onPressed: () => _unselectEvent(topics, assignments, periods),

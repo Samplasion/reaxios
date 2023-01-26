@@ -68,15 +68,6 @@ class _MaybeMasterDetailState extends State<MaybeMasterDetail> {
             width: widget.masterWidth,
             child: widget.master!,
           ),
-          ConditionalChild(
-            child: Material(
-              child: VerticalDivider(
-                thickness: 1,
-                width: 1,
-              ),
-            ),
-            show: MediaQuery.of(context).size.width >= kTabBreakpoint,
-          ),
         ],
         Builder(builder: (context) {
           return Expanded(

@@ -18,7 +18,7 @@ import 'package:reaxios/timetable/structures/Settings.dart';
 
 import 'components/ListItems/RegistroAboutListItem.dart';
 import 'components/LowLevel/MaybeMasterDetail.dart';
-import 'components/LowLevel/m3_list_tile.dart';
+import 'components/LowLevel/m3_drawer.dart';
 import 'cubit/app_cubit.dart';
 import 'enums/AverageMode.dart';
 import 'enums/GradeDisplay.dart';
@@ -529,7 +529,11 @@ _showExitDialog(BuildContext context) {
 
 List<Widget> showEndOfDrawerItems(BuildContext context) {
   return [
-    Divider(),
+    Divider(
+      height: 33,
+      indent: 28,
+      endIndent: 28,
+    ),
     M3DrawerListTile(
       title: Text(context.locale.drawer.settings),
       leading: Icon(Icons.settings),

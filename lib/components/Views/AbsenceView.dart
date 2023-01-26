@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/components/ListItems/AbsenceListItem.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils.dart';
 
@@ -24,7 +23,7 @@ class AbsenceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(context.locale.absences.getByKey("type${absence.kind}")),
       ),
       body: SingleChildScrollView(

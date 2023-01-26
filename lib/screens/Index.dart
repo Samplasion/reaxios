@@ -17,12 +17,11 @@ import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/LowLevel/lifecycle_reactor.dart';
-import 'package:reaxios/components/LowLevel/m3_list_tile.dart';
+import 'package:reaxios/components/LowLevel/m3_drawer.dart';
 import 'package:reaxios/components/Utilities/updates/update_scope.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
@@ -486,6 +485,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Drawer? _getDrawer(bool loading) {
     if (loading) return null;
 
+    final appInfo = context.watch<AppInfoStore>();
+    final app = appInfo.packageInfo;
+
     return Drawer(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.horizontal(right: Radius.circular(16)),
@@ -495,104 +497,60 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.only(topRight: Radius.circular(16)),
         ),
         clipBehavior: Clip.hardEdge,
-        child: Column(
-          // physics: NeverScrollableScrollPhysics(),
-          // padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              margin: EdgeInsets.zero,
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardTheme.color!,
+        child: ListView(
+          // shrinkWrap: true,
+          children: [
+            SizedBox(height: 16),
+            M3DrawerHeading(
+                kIsWeb ? context.locale.about.appName : app.appName),
+            SizedBox(height: 16),
+            for (final s in _session.students)
+              M3DrawerListTile(
+                leading: Icon(Icons.person),
+                title: Text("${s.firstName} ${s.lastName}"),
+                selected: s.studentUUID ==
+                    context.read<AppCubit>().student?.studentUUID,
+                onTap: () {
+                  final storage = context.read<Storage>();
+                  storage.setLastStudentID(s.studentUUID);
+                  if (!MaybeMasterDetail.of(context)!.isShowingMaster)
+                    Navigator.pop(context);
+                  _session.student = s;
+                  context.read<AppCubit>().clearData();
+                  context.read<AppCubit>().setStudent(s);
+                  _runCallback(_selectedPane);
+                  setState(() {
+                    _showUserDetails = false;
+                    _initPanes(_session, _login);
+                  });
+                },
               ),
-              accountName: Text(
-                "${_login.firstName} ${_login.lastName}",
-                style: Theme.of(context).textTheme.bodyText1?.merge(
-                      TextStyle(fontWeight: FontWeight.bold),
-                    ),
-              ),
-              accountEmail: Text(
-                _session.student == null
-                    ? "Null student! Please report"
-                    : "${_session.student!.firstName} ${_session.student!.lastName}",
-                style: Theme.of(context).textTheme.caption,
-              ),
-              arrowColor: Theme.of(context).textTheme.bodyText1!.color!,
-              currentAccountPicture: GradientCircleAvatar(
-                child: Text(
-                  "${_login.firstName} ${_login.lastName}.".trim()[0],
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontSize: 28,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                ),
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              onDetailsPressed: () {
-                setState(() {
-                  _showUserDetails = !_showUserDetails;
-                });
-              },
-              otherAccountsPictures: _session.students
-                  .map(
-                    (s) => GradientCircleAvatar(
-                        child: Text(
-                          "${s.firstName} ${s.lastName}".trim()[0],
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.onSecondary,
-                              ),
-                        ),
-                        color: Theme.of(context).colorScheme.secondary),
-                  )
-                  .toList(),
+            Divider(
+              height: 33,
+              indent: 28,
+              endIndent: 28,
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                controller: _drawerController,
-                child: ListTileTheme(
-                  selectedColor: Theme.of(context).colorScheme.secondary,
-                  style: ListTileStyle.drawer,
-                  child: AnimatedCrossFade(
-                    duration: Duration(milliseconds: 125),
-                    crossFadeState: _showUserDetails
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
-                    secondChild: _buildUserDetail(),
-                    firstChild: Column(
-                      // shrinkWrap: true,
-                      children: [
-                        SizedBox(height: 16),
-                        ..._buildDrawerItems(),
-                        Builder(
-                          builder: (context) => M3DrawerListTile(
-                            title: Text(context.locale.drawer.webVersion),
-                            leading: Icon(Icons.public),
-                            onTap: () {
-                              launchWeb(context);
-                            },
-                          ),
-                        ),
-                        if (kDebugMode) ...[
-                          M3DrawerListTile(
-                            title: Text("[DEBUG] Show no Internet page"),
-                            leading: Icon(Icons.wifi_off),
-                            onTap: () {
-                              Navigator.pushReplacementNamed(
-                                  context, "nointernet");
-                            },
-                          ),
-                        ],
-                        ...showEndOfDrawerItems(context),
-                      ],
-                    ),
-                  ),
-                ),
+            ..._buildDrawerItems(),
+            Builder(
+              builder: (context) => M3DrawerListTile(
+                title: Text(context.locale.drawer.webVersion),
+                leading: Icon(Icons.public),
+                onTap: () {
+                  launchWeb(context);
+                },
               ),
             ),
-          ] /* ..addAll(buildDrawerItems()) */,
+            if (kDebugMode) ...[
+              M3DrawerListTile(
+                title: Text("[DEBUG] Show no Internet page"),
+                leading: Icon(Icons.wifi_off),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, "nointernet");
+                },
+              ),
+            ],
+            ...showEndOfDrawerItems(context),
+          ],
         ),
       ),
     );
@@ -626,27 +584,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         (_getDrawer(isLoading)?.child! as Container).child;
 
                     return Material(
-                      child: Column(
-                        children: [
-                          Stack(
-                            children: [
-                              Container(
-                                color: Theme.of(context).cardTheme.color,
-                                height: kToolbarHeight,
-                                width: MediaQuery.of(context).size.width,
-                              ),
-                              GradientAppBar(
-                                title: Text(
-                                  kIsWeb
-                                      ? context.locale.about.appName
-                                      : app.appName,
-                                ),
-                              ),
-                            ],
-                          ),
-                          if (drawer != null) Expanded(child: drawer),
-                        ],
-                      ),
+                      child: isLoading ? null : drawer,
                     );
                   }(),
                   detail: _buildDetailView(state),
@@ -692,7 +630,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       final showingMaster = state.data ?? false;
                       return Scaffold(
                         appBar: _drawerItems[_selectedPane][2]
-                            ? GradientAppBar(
+                            ? AppBar(
                                 title: _drawerItems[_selectedPane][1],
                                 leading: MaybeMasterDetail.of(context)!
                                         .isShowingMaster
@@ -716,7 +654,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         //     !MaybeMasterDetail.of(context)!.isShowingMaster,
                         body: isLoading
                             ? Scaffold(
-                                appBar: GradientAppBar(
+                                appBar: AppBar(
                                   title: Text(context.locale.about.appName),
                                 ),
                                 body: LoadingUI(

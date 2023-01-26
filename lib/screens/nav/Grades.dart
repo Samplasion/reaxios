@@ -9,7 +9,6 @@ import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
@@ -70,7 +69,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
     if (widget.session.student?.securityBits[SecurityBits.hideGrades] == "1") {
       return Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: GradientAppBar(
+        appBar: AppBar(
           title: Text(context.locale.drawer.grades),
           leading: MaybeMasterDetail.of(context)!.isShowingMaster
               ? null
@@ -212,7 +211,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
     if (grades.isEmpty) {
       return Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: GradientAppBar(
+        appBar: AppBar(
           title: Text(context.locale.drawer.grades),
           leading: MaybeMasterDetail.of(context)!.isShowingMaster
               ? null
@@ -236,7 +235,8 @@ class _GradesPaneState extends ReloadableState<GradesPane>
       length: pages.length,
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: GradientAppBar(
+        appBar: AppBar(
+          notificationPredicate: (notification) => notification.depth == 1,
           title: Text(context.locale.drawer.grades),
           leading: MaybeMasterDetail.of(context)!.isShowingMaster
               ? null

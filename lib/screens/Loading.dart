@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -82,7 +81,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        appBar: GradientAppBar(title: Text(context.locale.about.appName)),
+        appBar: AppBar(title: Text(context.locale.about.appName)),
         body: LoadingUI(
           showHints: true,
         ),

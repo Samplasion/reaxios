@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:reaxios/api/entities/Material/Material.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
@@ -21,7 +20,7 @@ class MaterialTeacherView extends StatelessWidget {
   Widget build(BuildContext context) {
     final accent = Theme.of(context).accentColor;
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(teacher.name),
       ),
       body: _buildBody(context, accent),

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart' as Foundation;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/screens/settings/Data.dart';
 import 'package:reaxios/screens/settings/Time.dart';
@@ -115,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       MaterialPageRoute(
         builder: (context) => StatefulBuilder(
           builder: (context, setState) => Scaffold(
-            appBar: GradientAppBar(
+            appBar: AppBar(
               title: Text(fragment.title),
             ),
             body: fragment.body,
@@ -132,15 +131,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverPersistentHeader(
-            pinned: true,
-            floating: false,
-            delegate: CustomSliverDelegate(
-              hideTitleWhenExpanded: true,
-              expandedHeight: MediaQuery.of(context).padding.top + 185,
-              collapsedHeight:
-                  MediaQuery.of(context).padding.top + toolbarHeight,
-            ),
+          SliverAppBar.large(
+            title: Text(context.locale.drawer.settings),
+            centerTitle: true,
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -160,73 +153,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
-  }
-}
-
-class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
-  final double collapsedHeight;
-  final double expandedHeight;
-  final bool hideTitleWhenExpanded;
-
-  CustomSliverDelegate({
-    required this.collapsedHeight,
-    required this.expandedHeight,
-    this.hideTitleWhenExpanded = true,
-  });
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    final appBarSize = (expandedHeight - shrinkOffset);
-    final proportion = 2 - (expandedHeight / appBarSize);
-    final percent = proportion < 0 || proportion > 1 ? 0.0 : proportion;
-    return SizedBox(
-      height: expandedHeight + expandedHeight / 2,
-      // height: appBarSize,
-      child: Stack(
-        children: [
-          SizedBox(
-            height: appBarSize < collapsedHeight ? collapsedHeight : appBarSize,
-            child: GradientAppBar(
-              elevation: map(percent, 0, 1, 4, 0).toDouble(),
-              title: Opacity(
-                opacity: hideTitleWhenExpanded ? 1.0 - percent : 1.0,
-                child: Text(context.locale.drawer.settings),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 0.0,
-            right: 0.0,
-            bottom: 16,
-            child: Opacity(
-              opacity: percent,
-              child: Text(
-                context.locale.drawer.settings,
-                style: Theme.of(context).textTheme.headline5!.copyWith(
-                      color: Theme.of(context).colorScheme.primary.contrastText,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  // double get maxExtent => expandedHeight + expandedHeight / 2;
-  double get maxExtent => expandedHeight;
-
-  @override
-  double get minExtent => collapsedHeight;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }

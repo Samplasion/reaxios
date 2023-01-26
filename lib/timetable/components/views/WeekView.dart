@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/timetable/components/essential/DayViewText.dart';
-import 'package:reaxios/timetable/components/essential/GradientAppBar.dart';
 import 'package:reaxios/timetable/components/essential/EventWeekView.dart';
 import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -146,9 +145,12 @@ class _WeekViewState extends State<WeekView>
             }).toList(),
           )
         : null;
-    final defaultAppBar = GradientAppBar(
+    final defaultAppBar = AppBar(
       title: Text(context.locale.timetable.weekView),
       bottom: tabBar,
+      notificationPredicate: (notification) {
+        return notification.depth == 1;
+      },
       leading: MaybeMasterDetail.of(context)!.isShowingMaster
           ? null
           : IconButton(
@@ -160,9 +162,12 @@ class _WeekViewState extends State<WeekView>
       child: Material(
         child: AnimatedCrossFade(
           firstChild: defaultAppBar,
-          secondChild: GradientAppBar(
+          secondChild: AppBar(
             title: Text(editing?.name ?? ""),
-            colors: Colors.black.toSlightGradient(),
+            notificationPredicate: (notification) {
+              return notification.depth == 1;
+            },
+            backgroundColor: Colors.black,
             foregroundColor: Colors.white,
             leading: IconButton(
               tooltip: context.materialLocale.okButtonLabel,

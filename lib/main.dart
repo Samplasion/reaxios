@@ -137,39 +137,9 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
         final useMaterial3 = true;
         final primary = dark.primary, accent = dark.secondary;
 
-        AppBarTheme appBarTheme = AppBarTheme(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(15),
-            ),
-          ),
-          backgroundColor: primary,
-          foregroundColor: primary.contrastText,
-          iconTheme: IconThemeData(color: primary.contrastText),
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: ThemeData.estimateBrightnessForColor(primary),
-          ),
-        );
-
         TextTheme getTextTheme(TextTheme defaultTheme) {
           return defaultTheme;
         }
-
-        final TabBarTheme tabBarTheme = TabBarTheme(
-          // labelStyle: TextStyle(
-          //   fontFamily: bodyFont.fontFamily,
-          //   fontWeight: FontWeight.w900,
-          // ),
-          // unselectedLabelStyle: TextStyle(
-          //   fontFamily: bodyFont.fontFamily,
-          //   fontWeight: FontWeight.w400,
-          // ),
-          indicatorSize: TabBarIndicatorSize.label,
-          indicator: MaterialDesignIndicator(
-            indicatorHeight: 4,
-            indicatorColor: accent.contrastText,
-          ),
-        );
 
         ThemeData getThemeData(ColorScheme scheme) {
           return ThemeData(
@@ -177,8 +147,14 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             useMaterial3: useMaterial3,
             primaryColor: primary,
             accentColor: accent,
-            appBarTheme: appBarTheme,
-            tabBarTheme: tabBarTheme,
+            tabBarTheme: TabBarTheme(
+              indicatorSize: TabBarIndicatorSize.label,
+              indicator: MaterialDesignIndicator(
+                indicatorHeight: 4,
+                indicatorColor: scheme.onSurface,
+              ),
+              labelColor: scheme.onSurface,
+            ),
             scaffoldBackgroundColor: scheme.background,
             canvasColor: scheme.background,
             cardTheme: CardTheme(

@@ -5,7 +5,6 @@ import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/ListItems/TopicListItem.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
@@ -67,7 +66,7 @@ class _TopicsPaneState extends State<TopicsPane> {
       builder: (BuildContext context, state) {
         return Scaffold(
           extendBodyBehindAppBar: true,
-          appBar: GradientAppBar(
+          appBar: AppBar(
             title: Text(context.locale.drawer.topics),
             leading: MaybeMasterDetail.of(context)!.isShowingMaster
                 ? null

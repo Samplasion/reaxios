@@ -5,7 +5,6 @@ import 'package:reaxios/components/LowLevel/ConditionalChild.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/consts.dart';
 import 'package:reaxios/format.dart';
-import 'package:reaxios/timetable/components/essential/GradientAppBar.dart';
 import 'package:reaxios/timetable/components/views/DayViewBase.dart';
 import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -101,7 +100,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
           onTap: () async {
             // Required to be able to show the dialog
             // after the pop up menu has been closed
-            WidgetsBinding.instance!.addPostFrameCallback((_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
               widget.massEdit();
             });
           },
@@ -146,12 +145,14 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
       builder: (context, _) => Builder(builder: (context) {
         final settings = Provider.of<Settings>(context);
         return Scaffold(
-          appBar: GradientAppBar(
+          appBar: AppBar(
+            notificationPredicate: (notification) {
+              return notification.depth == 1;
+            },
             title: Text(context.locale.timetable.dayView),
             bottom: TabBar(
               isScrollable: true,
               controller: controller,
-              indicatorColor: Theme.of(context).colorScheme.onPrimary,
               tabs: (settings.getEnabledDays() * settings.getWeeks())
                   .entries
                   .entries

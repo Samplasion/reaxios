@@ -3,7 +3,6 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/timetable/components/essential/ColorField.dart';
-import 'package:reaxios/timetable/components/essential/GradientAppBar.dart';
 import 'package:reaxios/timetable/components/essential/GradientCircleAvatar.dart';
 import 'package:reaxios/timetable/components/essential/TimeField.dart';
 import 'package:reaxios/timetable/extensions.dart';
@@ -92,7 +91,7 @@ class _EventEditorState extends State<EventEditor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(

@@ -18,7 +18,6 @@ import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/ListItems/AssignmentListItem.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/BigCard.dart';
@@ -117,7 +116,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     return Builder(builder: (context) {
       return Scaffold(
         appBar: loading
-            ? GradientAppBar(
+            ? AppBar(
                 title: Text(
                   context.locale.drawer.overview,
                 ),
@@ -394,7 +393,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    // final RegistroStore store = context.watch<RegistroStore>();
+    final scheme = Theme.of(context).colorScheme;
     final appBarSize = (expandedHeight - shrinkOffset);
     final cardTopPosition = (expandedHeight / 2 - shrinkOffset) / 2; // / 10;
     final proportion = 2 - (expandedHeight / appBarSize);
@@ -405,7 +404,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
         children: [
           SizedBox(
             height: appBarSize < collapsedHeight ? collapsedHeight : appBarSize,
-            child: GradientAppBar(
+            child: AppBar(
               leading: MaybeMasterDetail.of(context)!.isShowingMaster
                   ? null
                   : IconButton(
@@ -413,7 +412,12 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                       onPressed: openMenu,
                       tooltip: context.materialLocale.openAppDrawerTooltip,
                     ),
-              elevation: map(percent, 0, 1, 4, 0).toDouble(),
+              backgroundColor: ElevationOverlay.applySurfaceTint(
+                scheme.surface,
+                scheme.surfaceTint,
+                2,
+              ),
+              notificationPredicate: (_) => false,
               title: Opacity(
                 opacity: hideTitleWhenExpanded ? 1.0 - percent : 1.0,
                 child: Text(context.locale.drawer.overview),

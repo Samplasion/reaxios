@@ -14,7 +14,6 @@ import '../../api/Axios.dart';
 import '../../api/entities/Grade/Grade.dart';
 import '../../api/entities/Structural/Structural.dart';
 import '../../components/LowLevel/Empty.dart';
-import '../../components/LowLevel/GradientAppBar.dart';
 import '../../components/LowLevel/Loading.dart';
 import '../../components/LowLevel/MaybeMasterDetail.dart';
 import '../../components/Utilities/AlertBottomSheet.dart';
@@ -64,7 +63,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
       bloc: cubit,
       builder: (BuildContext context, AppState state) {
         return Scaffold(
-          appBar: GradientAppBar(
+          appBar: AppBar(
             title: Text(context.locale.drawer.calculator),
             leading: MaybeMasterDetail.of(context)!.isShowingMaster
                 ? null

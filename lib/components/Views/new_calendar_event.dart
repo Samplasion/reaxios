@@ -5,8 +5,6 @@ import 'package:reaxios/structs/calendar_event.dart';
 import 'package:reaxios/timetable/components/essential/ColorField.dart';
 import 'package:reaxios/utils.dart';
 
-import '../LowLevel/GradientAppBar.dart';
-
 class _SmallTitle extends StatelessWidget {
   final String text;
   const _SmallTitle(this.text, {Key? key}) : super(key: key);
@@ -78,7 +76,7 @@ class _CalendarEventEditorViewState extends State<CalendarEventEditorView> {
   Widget build(BuildContext context) {
     _selectedColor ??= Theme.of(context).colorScheme.primary;
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(context.locale.calendar.eventEditorTitle),
       ),
       body: Form(

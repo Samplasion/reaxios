@@ -5,7 +5,6 @@ import 'package:reaxios/api/entities/Assignment/Assignment.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/components/ListItems/AssignmentListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
@@ -69,7 +68,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(context.locale.drawer.assignments),
         leading: MaybeMasterDetail.of(context)!.isShowingMaster
             ? null

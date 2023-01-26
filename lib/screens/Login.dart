@@ -7,7 +7,6 @@ import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/entities/School/School.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/SchoolListItem.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils.dart';
@@ -431,7 +430,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     screens = useScreens(_onPrev, _onNext, _onDone);
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(context.locale.login.title),
         actions: [
           if (kDebugMode)

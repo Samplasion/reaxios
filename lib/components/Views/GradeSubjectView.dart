@@ -7,7 +7,6 @@ import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/average.dart';
 import 'package:reaxios/components/Charts/GradeLineChart.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
-import 'package:reaxios/components/LowLevel/GradientAppBar.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';
 import 'package:reaxios/components/Utilities/Alert.dart';
@@ -57,7 +56,7 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GradientAppBar(
+      appBar: AppBar(
         title: Text(subject),
         actions: [
           PopupMenuButton<String>(
