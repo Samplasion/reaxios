@@ -619,9 +619,7 @@ class TodaysEvents extends StatelessWidget {
         leading: Icon(icon),
       ),
       body: Container(
-        child: ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+        child: Column(
           children: events
               .map((event) => EventView(
                     event,
