@@ -95,7 +95,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
   }
 
   initREData() async {
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       final cubit = context.read<AppCubit>();
       if (cubit.structural != null) {
         setState(() {

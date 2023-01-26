@@ -261,7 +261,7 @@ class _CalendarPaneState extends State<CalendarPane> {
       _editing = false;
       _selectedEvent = null;
     });
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       _rebuildEvents(
         context,
         topics,
@@ -678,7 +678,7 @@ class _CalendarPaneState extends State<CalendarPane> {
                 _selectedEvent = e;
                 _editing = true;
               });
-              SchedulerBinding.instance!.addPostFrameCallback((_) {
+              SchedulerBinding.instance.addPostFrameCallback((_) {
                 _rebuildEvents(
                   context,
                   topics,

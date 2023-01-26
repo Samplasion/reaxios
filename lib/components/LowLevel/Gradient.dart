@@ -26,7 +26,7 @@ class _GradientState extends State<Gradient> {
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       setState(() {
         topColor = widget.colors[1];
       });

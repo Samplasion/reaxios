@@ -34,7 +34,7 @@ class _MeetingsPaneState extends State<MeetingsPane> {
   void initState() {
     super.initState();
 
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _onRefresh();
     });
   }

@@ -605,7 +605,7 @@ class _NewGradeDialogState extends State<NewGradeDialog> {
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
     });
   }
