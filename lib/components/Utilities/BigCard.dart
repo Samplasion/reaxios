@@ -74,11 +74,6 @@ class _BigCardState extends State<BigCard> {
     return item
         .clipRRect(all: widget.radius) // clip ripple
         .borderRadius(all: widget.radius, animate: true)
-        .elevation(
-          pressed ? widget.elevation / 2 : widget.elevation,
-          borderRadius: BorderRadius.circular(widget.radius),
-          shadowColor: theme.shadowColor,
-        ) // shadow borderRadius
         .constrained(minHeight: 80)
         .padding(vertical: 12) // margin
         .scale(all: pressed ? 0.98 : 1.0, animate: true)

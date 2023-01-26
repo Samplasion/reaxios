@@ -61,11 +61,6 @@ class _CardListItemState extends State<CardListItem> {
           .backgroundColor(bg, animate: true)
           .clipRRect(all: widget.radius) // clip ripple
           .borderRadius(all: widget.radius, animate: true)
-          .elevation(
-            pressed ? 0 : widget.elevation,
-            borderRadius: BorderRadius.circular(widget.radius),
-            shadowColor: theme.shadowColor,
-          ) // shadow borderRadius
           .constrained(minHeight: 80)
           .padding(vertical: 12) // margin
           .scale(all: pressed ? 0.95 : 1.0, animate: true)
@@ -100,23 +95,26 @@ class _CardListItemState extends State<CardListItem> {
     }
 
     return settingsItem(
-      child: ListTile(
-        leading: leading.parent(
-            ({Widget? child}) => Container(child: child).width(50).height(50)),
-        title: title,
-        subtitle: <Widget>[
-          description.padding(
-              bottom: widget.details == null ||
-                      (description is Container && description.child == null)
-                  ? 0
-                  : 8),
-          if (widget.details != null) widget.details!,
-        ].toColumn(crossAxisAlignment: CrossAxisAlignment.start),
-        enabled: true,
-        dense: true,
-        mouseCursor: widget.onClick == null ? null : SystemMouseCursors.click,
-        // onTap: () {},
-      ).padding(all: 8),
+      child: Material(
+        color: Colors.transparent,
+        child: ListTile(
+          leading: leading.parent(({Widget? child}) =>
+              Container(child: child).width(50).height(50)),
+          title: title,
+          subtitle: <Widget>[
+            description.padding(
+                bottom: widget.details == null ||
+                        (description is Container && description.child == null)
+                    ? 0
+                    : 8),
+            if (widget.details != null) widget.details!,
+          ].toColumn(crossAxisAlignment: CrossAxisAlignment.start),
+          enabled: true,
+          dense: true,
+          mouseCursor: widget.onClick == null ? null : SystemMouseCursors.click,
+          // onTap: () {},
+        ).padding(all: 8),
+      ),
     );
   }
 }
