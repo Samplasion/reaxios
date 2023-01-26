@@ -142,6 +142,15 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
         }
 
         ThemeData getThemeData(ColorScheme scheme) {
+          final cardTheme = CardTheme(
+            color: ElevationOverlay.applySurfaceTint(
+              scheme.surface,
+              scheme.surfaceTint,
+              4,
+            ),
+            surfaceTintColor: scheme.surfaceTint,
+            elevation: 4,
+          );
           return ThemeData(
             colorScheme: scheme,
             useMaterial3: useMaterial3,
@@ -157,15 +166,8 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             ),
             scaffoldBackgroundColor: scheme.background,
             canvasColor: scheme.background,
-            cardTheme: CardTheme(
-              color: ElevationOverlay.applySurfaceTint(
-                scheme.surface,
-                scheme.surfaceTint,
-                4,
-              ),
-              surfaceTintColor: scheme.surfaceTint,
-              elevation: 4,
-            ),
+            cardTheme: cardTheme,
+            cardColor: cardTheme.color,
             dialogBackgroundColor: ElevationOverlay.applySurfaceTint(
               scheme.surface,
               scheme.surfaceTint,
