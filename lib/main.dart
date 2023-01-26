@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -27,14 +26,11 @@ import 'package:reaxios/services/notifications.dart';
 import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
-import 'package:reaxios/utils.dart';
 import 'change_notifier_provider.dart';
 import 'cubit/app_cubit.dart';
 import 'timetable/structures/Settings.dart' as timetable;
 import 'timetable/structures/Store.dart' as timetable;
 import 'storage.dart' as s;
-
-import 'enums/GradeDisplay.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -124,22 +120,10 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
   Widget build(BuildContext context) {
     final settings = Provider.of<timetable.Settings>(context);
     final themeMode = settings.getThemeMode();
-
-    // final primary = cs.fromJson(
-    //   S.Settings.getValue("primary-color", cs.toJson(Colors.orange[400])),
-    // );
-    // final accent = cs.fromJson(
-    //   S.Settings.getValue("accent-color", cs.toJson(Colors.purple[400])),
-    // );
-
     return ColorBuilder(
       builder: (light, dark) {
         final useMaterial3 = true;
         final primary = dark.primary, accent = dark.secondary;
-
-        TextTheme getTextTheme(TextTheme defaultTheme) {
-          return defaultTheme;
-        }
 
         ThemeData getThemeData(ColorScheme scheme) {
           final cardTheme = CardTheme(
