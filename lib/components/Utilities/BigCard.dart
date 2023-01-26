@@ -57,19 +57,8 @@ class _BigCardState extends State<BigCard> {
           );
     }
 
-    if (widget.gradient) {
-      item = item.backgroundGradient(
-          LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            colors: getGradient(widget.color ?? theme.cardTheme.color!,
-                strength: 0.9),
-          ),
-          animate: true);
-    } else {
-      item = item.backgroundColor(widget.color ?? theme.cardTheme.color!,
-          animate: true);
-    }
+    item = item.backgroundColor(widget.color ?? theme.cardTheme.color!,
+        animate: true);
 
     return item
         .clipRRect(all: widget.radius) // clip ripple

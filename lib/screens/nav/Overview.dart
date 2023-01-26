@@ -175,7 +175,8 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .toList();
     // ..sort((a, b) => b.date.compareTo(a.date));
 
-    final accent = Theme.of(context).accentColor;
+    final accent = Theme.of(context).colorScheme.secondary;
+    final scheme = Theme.of(context).colorScheme;
 
     final topicCards = [
       if (screenBorders > 0)
@@ -189,15 +190,15 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                 .clamp(350, 500),
           ),
           child: BigCard(
-            color: accent,
+            color: scheme.secondaryContainer,
             gradient: true,
             leading: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GradientCircleAvatar(
-                  color: accent.contrastText,
-                  foregroundColor: accent,
+                CircleAvatar(
+                  backgroundColor: scheme.onSecondaryContainer,
+                  foregroundColor: scheme.secondaryContainer,
                   child: Icon(Utils.getBestIconForSubject(
                       e.subject, Icons.calendar_today)),
                 ),
@@ -206,9 +207,9 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                     label: Text(
                       formatString(context.locale.main.lessonHour,
                           [e.lessonHour.toString()]),
-                      style: TextStyle(color: accent.contrastText),
+                      style: TextStyle(color: scheme.onSecondaryContainer),
                     ),
-                    backgroundColor: accent.lighten(0.1),
+                    backgroundColor: scheme.secondaryContainer.lighten(0.1),
                     visualDensity: VisualDensity.compact,
                   ),
               ],
@@ -220,14 +221,14 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                   e.subject,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: accent.contrastText,
+                    color: scheme.onSecondaryContainer,
                   ),
                 ).padding(bottom: 8),
                 SelectableText(
                   e.topic,
                   style: TextStyle(
                     fontSize: 14,
-                    color: accent.contrastText.withOpacity(0.75),
+                    color: scheme.onSecondaryContainer.withOpacity(0.75),
                   ),
                   minLines: 1,
                   maxLines: 3,
@@ -237,7 +238,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                 Text(
                   context.dateToString(e.date),
                   style: Theme.of(context).textTheme.caption!.copyWith(
-                        color: accent.contrastText.withOpacity(0.75),
+                        color: scheme.onSecondaryContainer.withOpacity(0.75),
                       ),
                 ),
               ],
