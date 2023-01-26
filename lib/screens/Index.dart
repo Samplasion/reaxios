@@ -530,6 +530,8 @@ class _HomeScreenState extends State<HomeScreen> {
               indent: 28,
               endIndent: 28,
             ),
+            M3DrawerHeading(context.locale.drawer.destinations),
+            SizedBox(height: 16),
             ..._buildDrawerItems(),
             Builder(
               builder: (context) => M3DrawerListTile(

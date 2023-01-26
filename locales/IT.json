@@ -51,7 +51,8 @@
     "timetable": "Orario",
     "teacherMeetings": "Colloqui",
     "webVersion": "Apri versione web",
-    "info": "Informazioni sull'utente"
+    "info": "Informazioni sull'utente",
+    "destinations": "Destinazioni"
   },
   "about": {
     "aboutApp": "Informazioni su Registro",

@@ -51,7 +51,8 @@
     "timetable": "",
     "teacherMeetings": "",
     "webVersion": "",
-    "info": ""
+    "info": "",
+    "destinations": ""
   },
   "about": {
     "aboutApp": "\"About Registro\"",

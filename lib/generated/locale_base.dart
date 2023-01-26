@@ -188,6 +188,7 @@ class Localedrawer {
   String get teacherMeetings => _data["teacherMeetings"]!;
   String get webVersion => _data["webVersion"]!;
   String get info => _data["info"]!;
+  String get destinations => _data["destinations"]!;
 }
 
 class Localeabout {
