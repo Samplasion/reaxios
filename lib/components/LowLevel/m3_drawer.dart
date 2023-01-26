@@ -36,6 +36,7 @@ class M3DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12),
       child: MouseRegion(
@@ -43,25 +44,29 @@ class M3DrawerListTile extends StatelessWidget {
         child: Container(
           decoration: ShapeDecoration(
             shape: StadiumBorder(),
-            color: selected
-                ? Theme.of(context).colorScheme.secondaryContainer
-                : null,
+            color: selected ? scheme.secondaryContainer : null,
           ),
           clipBehavior: Clip.hardEdge,
           child: Material(
-            color: Colors.transparent,
+            type: MaterialType.transparency,
             child: InkWell(
               mouseCursor: SystemMouseCursors.click,
               customBorder: StadiumBorder(),
               onTap: onTap,
+              hoverColor: selected
+                  ? ElevationOverlay.applySurfaceTint(
+                      scheme.secondaryContainer,
+                      scheme.onSecondaryContainer,
+                      3, // level 3 is 8% opacity, as required by the spec
+                    )
+                  : null,
               child: Container(
                 height: 56,
                 alignment: Alignment.center,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 0),
                   child: ListTileTheme(
-                    selectedColor:
-                        Theme.of(context).colorScheme.onSecondaryContainer,
+                    selectedColor: scheme.onSecondaryContainer,
                     child: ListTile(
                       mouseCursor: SystemMouseCursors.click,
                       leading: leading,
