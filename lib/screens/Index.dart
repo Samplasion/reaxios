@@ -22,6 +22,7 @@ import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/LowLevel/lifecycle_reactor.dart';
+import 'package:reaxios/components/LowLevel/m3_list_tile.dart';
 import 'package:reaxios/components/Utilities/updates/update_scope.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
@@ -431,11 +432,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  List<ListTile> _buildDrawerItems() {
+  List<Widget> _buildDrawerItems() {
     // final width = MediaQuery.of(context).size.width;
-    List<ListTile> items = [];
+    List<Widget> items = [];
     for (var index = 0; index < _drawerItems.length; index++) {
-      items.add(ListTile(
+      items.add(M3DrawerListTile(
         leading: _drawerItems[index][0],
         title: _drawerItems[index][1],
         selected: index == _selectedPane,
@@ -455,7 +456,8 @@ class _HomeScreenState extends State<HomeScreen> {
         shrinkWrap: true,
         itemBuilder: (context, index) {
           final s = _session.students[index];
-          return ListTile(
+          return M3DrawerListTile(
+            leading: Icon(Icons.person),
             title: Text("${s.firstName} ${s.lastName}"),
             selected:
                 s.studentUUID == context.read<AppCubit>().student?.studentUUID,
@@ -484,119 +486,132 @@ class _HomeScreenState extends State<HomeScreen> {
     if (loading) return null;
 
     return Drawer(
-      child: Column(
-        // physics: NeverScrollableScrollPhysics(),
-        // padding: EdgeInsets.zero,
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardTheme.color!,
-            ),
-            accountName: Text(
-              "${_login.firstName} ${_login.lastName}",
-              style: Theme.of(context).textTheme.bodyText1?.merge(
-                    TextStyle(fontWeight: FontWeight.bold),
-                  ),
-            ),
-            accountEmail: Text(
-              _session.student == null
-                  ? "Null student! Please report"
-                  : "${_session.student!.firstName} ${_session.student!.lastName}",
-              style: Theme.of(context).textTheme.caption,
-            ),
-            arrowColor: Theme.of(context).textTheme.bodyText1!.color!,
-            currentAccountPicture: GradientCircleAvatar(
-              child: Text(
-                "${_login.firstName} ${_login.lastName}.".trim()[0],
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      fontSize: 28,
-                      color: Theme.of(context).colorScheme.onPrimary,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.horizontal(right: Radius.circular(16)),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(topRight: Radius.circular(16)),
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: Column(
+          // physics: NeverScrollableScrollPhysics(),
+          // padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardTheme.color!,
+              ),
+              accountName: Text(
+                "${_login.firstName} ${_login.lastName}",
+                style: Theme.of(context).textTheme.bodyText1?.merge(
+                      TextStyle(fontWeight: FontWeight.bold),
                     ),
               ),
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            onDetailsPressed: () {
-              setState(() {
-                _showUserDetails = !_showUserDetails;
-              });
-            },
-            otherAccountsPictures: _session.students
-                .map(
-                  (s) => GradientCircleAvatar(
-                      child: Text(
-                        "${s.firstName} ${s.lastName}".trim()[0],
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                              color: Theme.of(context).colorScheme.onSecondary,
-                            ),
+              accountEmail: Text(
+                _session.student == null
+                    ? "Null student! Please report"
+                    : "${_session.student!.firstName} ${_session.student!.lastName}",
+                style: Theme.of(context).textTheme.caption,
+              ),
+              arrowColor: Theme.of(context).textTheme.bodyText1!.color!,
+              currentAccountPicture: GradientCircleAvatar(
+                child: Text(
+                  "${_login.firstName} ${_login.lastName}.".trim()[0],
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        fontSize: 28,
+                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
-                      color: Theme.of(context).colorScheme.secondary),
-                )
-                .toList(),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              controller: _drawerController,
-              child: ListTileTheme(
-                selectedColor: Theme.of(context).colorScheme.secondary,
-                style: ListTileStyle.drawer,
-                child: AnimatedCrossFade(
-                  duration: Duration(milliseconds: 125),
-                  crossFadeState: _showUserDetails
-                      ? CrossFadeState.showSecond
-                      : CrossFadeState.showFirst,
-                  secondChild: _buildUserDetail(),
-                  firstChild: Padding(
-                    padding: EdgeInsets.only(top: 8),
-                    child: Column(
-                      // shrinkWrap: true,
-                      children: [
-                        ..._buildDrawerItems(),
-                        Builder(
-                          builder: (context) => ListTile(
-                            title: Text(context.locale.drawer.webVersion),
-                            leading: Icon(Icons.public),
+                ),
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              onDetailsPressed: () {
+                setState(() {
+                  _showUserDetails = !_showUserDetails;
+                });
+              },
+              otherAccountsPictures: _session.students
+                  .map(
+                    (s) => GradientCircleAvatar(
+                        child: Text(
+                          "${s.firstName} ${s.lastName}".trim()[0],
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
+                              ),
+                        ),
+                        color: Theme.of(context).colorScheme.secondary),
+                  )
+                  .toList(),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _drawerController,
+                child: ListTileTheme(
+                  selectedColor: Theme.of(context).colorScheme.secondary,
+                  style: ListTileStyle.drawer,
+                  child: AnimatedCrossFade(
+                    duration: Duration(milliseconds: 125),
+                    crossFadeState: _showUserDetails
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                    secondChild: _buildUserDetail(),
+                    firstChild: Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Column(
+                        // shrinkWrap: true,
+                        children: [
+                          ..._buildDrawerItems(),
+                          Builder(
+                            builder: (context) => M3DrawerListTile(
+                              title: Text(context.locale.drawer.webVersion),
+                              leading: Icon(Icons.public),
+                              onTap: () {
+                                launchWeb(context);
+                              },
+                            ),
+                          ),
+                          if (kDebugMode) ...[
+                            M3DrawerListTile(
+                              title: Text("[DEBUG] Show no Internet page"),
+                              leading: Icon(Icons.wifi_off),
+                              onTap: () {
+                                Navigator.pushReplacementNamed(
+                                    context, "nointernet");
+                              },
+                            ),
+                          ],
+                          Divider(),
+                          M3DrawerListTile(
+                            title: Text(context.locale.drawer.settings),
+                            leading: Icon(Icons.settings),
                             onTap: () {
-                              launchWeb(context);
+                              if (!MaybeMasterDetail.shouldBeShowingMaster(
+                                  context)) Navigator.pop(context);
+                              Navigator.pushNamed(context, "settings");
                             },
                           ),
-                        ),
-                        if (kDebugMode) ...[
-                          ListTile(
-                            title: Text("[DEBUG] Show no Internet page"),
-                            leading: Icon(Icons.wifi_off),
+                          RegistroAboutListItem(),
+                          M3DrawerListTile(
+                            title: Text(context.locale.drawer.logOut),
+                            leading: Icon(Icons.exit_to_app),
                             onTap: () {
-                              Navigator.pushReplacementNamed(
-                                  context, "nointernet");
+                              _showExitDialog(context);
                             },
                           ),
                         ],
-                        Divider(),
-                        ListTile(
-                          title: Text(context.locale.drawer.settings),
-                          leading: Icon(Icons.settings),
-                          onTap: () {
-                            if (!MaybeMasterDetail.shouldBeShowingMaster(
-                                context)) Navigator.pop(context);
-                            Navigator.pushNamed(context, "settings");
-                          },
-                        ),
-                        RegistroAboutListItem(),
-                        ListTile(
-                          title: Text(context.locale.drawer.logOut),
-                          leading: Icon(Icons.exit_to_app),
-                          onTap: () {
-                            _showExitDialog(context);
-                          },
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ] /* ..addAll(buildDrawerItems()) */,
+          ] /* ..addAll(buildDrawerItems()) */,
+        ),
       ),
     );
   }
@@ -625,7 +640,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   master: () {
                     if (isLoading) return null;
 
-                    final drawer = _getDrawer(isLoading)?.child;
+                    final drawer =
+                        (_getDrawer(isLoading)?.child! as Container).child;
 
                     return Material(
                       child: Column(
