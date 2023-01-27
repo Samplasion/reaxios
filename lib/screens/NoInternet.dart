@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/screens/nav/Timetable.dart';
@@ -11,6 +12,7 @@ import 'package:reaxios/utils.dart';
 
 import '../components/LowLevel/MaybeMasterDetail.dart';
 import '../components/LowLevel/m3_drawer.dart';
+import '../system/AppInfoStore.dart';
 
 class NoInternetScreen extends StatefulWidget {
   NoInternetScreen({Key? key}) : super(key: key);
@@ -64,24 +66,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: MaybeMasterDetail(
-        master: () {
-          // if (isLoading) return null;
-
-          final drawer = getDrawer(context);
-          // if (drawer == null) return null;
-
-          final child = drawer.child;
-
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                context.locale.about.appName,
-              ),
-            ),
-            extendBodyBehindAppBar: true,
-            body: child,
-          );
-        }(),
+        master: getDrawer(context),
         detail: Scaffold(
           appBar: _selectedItem == 1
               ? null
@@ -146,9 +131,14 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
   }
 
   Drawer getDrawer(BuildContext context) {
+    final appInfo = context.watch<AppInfoStore>();
+    final app = appInfo.packageInfo;
+
     return Drawer(
       child: ListView(
         children: [
+          SizedBox(height: 16),
+          M3DrawerHeading(kIsWeb ? context.locale.about.appName : app.appName),
           SizedBox(height: 16),
           M3DrawerListTile(
             title: Text(context.locale.noInternet.title),
