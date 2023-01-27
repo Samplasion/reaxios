@@ -46,7 +46,7 @@ class _ColorFieldState extends State<ColorField> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: color.toSlightGradient(),
+            colors: color.toSlightGradient(context),
           ),
           borderRadius: BorderRadius.circular(4),
         ),

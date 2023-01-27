@@ -41,6 +41,12 @@ class GeneralSettings extends BaseSettings {
             settings.setHarmonizeColors(harmonizeColors),
         value: settings.getHarmonizeColors(),
       ),
+      SwitchSettingsTile(
+        title: Text(context.locale.generalSettings.useGradients),
+        subtitle: Text(context.locale.generalSettings.useGradientsExpl),
+        onChange: (useGradients) => settings.setUseGradients(useGradients),
+        value: settings.getUseGradients(),
+      ),
       RadioModalTile(
         title: Text(context.locale.generalSettings.colorTheme),
         values: {

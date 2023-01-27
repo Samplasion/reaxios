@@ -85,7 +85,7 @@ class _EventViewState extends State<EventView> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: bg.toSlightGradient(),
+              colors: bg.toSlightGradient(context),
             ),
             borderRadius: BorderRadius.circular(radius),
           ),

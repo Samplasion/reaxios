@@ -236,6 +236,15 @@ class Settings extends UndisposableChangeNotifier {
     notifyListeners();
   }
 
+  bool getUseGradients() {
+    return _prefs.getBool("useGradients") ?? false;
+  }
+
+  void setUseGradients(bool useGradients) {
+    _prefs.setBool("useGradients", useGradients);
+    notifyListeners();
+  }
+
   // --------
 
   Future<String> get directory async {
@@ -292,14 +301,6 @@ class Settings extends UndisposableChangeNotifier {
       }
     } else {
       download("settings.json", encoded.codeUnits);
-      // await launch(
-      //   "data:application/octet-stream;base64,${base64Encode(encoded.codeUnits)}",
-      //   headers: {
-      //     "Content-Disposition": "attachment",
-      //     "filename": "settings.json",
-      //     "Content-Type": "application/json",
-      //   },
-      // );
     }
 
     // await file.delete();
@@ -344,6 +345,7 @@ class Settings extends UndisposableChangeNotifier {
         "calendarEvents": getCalendarEvents().map((e) => e.toJson()).toList(),
         "useDynamicColor": getUseDynamicColor(),
         "harmonizeColors": getHarmonizeColors(),
+        "useGradients": getUseGradients(),
       };
 
   set json(Map<String, dynamic> obj) {
@@ -423,7 +425,10 @@ class Settings extends UndisposableChangeNotifier {
       setUseDynamicColor(obj["useDynamicColor"] as bool);
     }
     if (obj.containsKey("harmonizeColors") && obj["harmonizeColors"] is bool) {
-      setUseDynamicColor(obj["harmonizeColors"] as bool);
+      setHarmonizeColors(obj["harmonizeColors"] as bool);
+    }
+    if (obj.containsKey("useGradients") && obj["useGradients"] is bool) {
+      setUseGradients(obj["useGradients"] as bool);
     }
 
     notifyListeners();

@@ -563,17 +563,13 @@ class UserCard extends StatelessWidget {
         .padding(horizontal: 20, vertical: 10)
         .decorated(
           gradient: LinearGradient(
-            colors: getGradient(bg),
+            colors: getGradient(context, bg),
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
           ),
           borderRadius: BorderRadius.circular(20),
         )
-        .elevation(
-          5 * elevationPercentage,
-          shadowColor: bg,
-          borderRadius: BorderRadius.circular(20),
-        )
+        .elevation(0)
         .height(175)
         .alignment(Alignment.center)
         .padding(top: 32, horizontal: 16);

@@ -639,6 +639,8 @@ class LocalegeneralSettings {
   String get dynamicColorExpl => _data["dynamicColorExpl"]!;
   String get harmonizeColors => _data["harmonizeColors"]!;
   String get harmonizeColorsExpl => _data["harmonizeColorsExpl"]!;
+  String get useGradients => _data["useGradients"]!;
+  String get useGradientsExpl => _data["useGradientsExpl"]!;
 }
 
 class LocaletimeSettings {

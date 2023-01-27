@@ -173,11 +173,8 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
                   toY: g.avg,
                   width: 16,
                   gradient: LinearGradient(
-                    colors: [
-                      g.getColor(context).darken(0.22),
-                      g.getColor(context),
-                      g.getColor(context).lighten(0.15)
-                    ],
+                    colors:
+                        getGradient(context, g.getColor(context), strength: 2),
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                   ),

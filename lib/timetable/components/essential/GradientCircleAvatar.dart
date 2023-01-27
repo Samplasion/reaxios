@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import '../../extensions.dart';
 
 class GradientCircleAvatar extends StatelessWidget {
-  final List<Color> colors;
+  final Color? color;
+  final List<Color>? colors;
   final double radius;
 
   GradientCircleAvatar({
     this.radius = 20,
-    List<Color>? colors,
-    Color? color,
+    this.colors,
+    this.color,
     Key? key,
   })  : assert(color != null || colors != null && colors.isNotEmpty),
-        colors = colors ?? color!.toSlightGradient(),
         super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class GradientCircleAvatar extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: colors,
+              colors: colors ?? color!.toSlightGradient(context),
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,
             ),

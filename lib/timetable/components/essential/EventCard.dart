@@ -47,7 +47,10 @@ class _EventCardState extends State<EventCard> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: Theme.of(context).cardTheme.color!.toSlightGradient(),
+                  colors: Theme.of(context)
+                      .cardTheme
+                      .color!
+                      .toSlightGradient(context),
                 ),
               ),
             ),
@@ -85,7 +88,7 @@ class _EventCardState extends State<EventCard> {
               gradient: LinearGradient(
                 end: Alignment.topCenter,
                 begin: Alignment.bottomCenter,
-                colors: widget.event!.color.toSlightGradient(),
+                colors: widget.event!.color.toSlightGradient(context),
               ),
             ),
           ),

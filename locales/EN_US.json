@@ -342,7 +342,9 @@
     "dynamicColor": "Dynamic color",
     "dynamicColorExpl": "Use the system-defined color to tint the interface, instead of the colors defined below.",
     "harmonizeColors": "Color harmonization",
-    "harmonizeColorsExpl": "Slightly modifies all colors toward your chosen tint color."
+    "harmonizeColorsExpl": "Slightly modifies all colors toward your chosen tint color.",
+    "useGradients": "Use gradients",
+    "useGradientsExpl": "Use color gradients with various shades of the same color, instead of a flat color, in various places"
   },
   "timeSettings": {
     "defaultLessonDuration": "Default lesson duration",

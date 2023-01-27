@@ -30,7 +30,7 @@ class GradientCircleAvatar extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
-            colors: getGradient(color, strength: strength),
+            colors: getGradient(context, color, strength: strength),
           ),
         ),
         child: Center(

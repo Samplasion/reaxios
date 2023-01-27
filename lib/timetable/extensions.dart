@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:reaxios/utils.dart';
 import 'structures/Event.dart';
 
 extension RangeExtension on int {
@@ -12,10 +13,8 @@ extension ColorExtension on Color {
   Color lighten(double amount) => Color.lerp(this, Colors.white, amount)!;
   Color darken(double amount) => Color.lerp(this, Colors.black, amount)!;
 
-  List<Color> toSlightGradient() => [
-        darken(0.2),
-        lighten(0.12),
-      ];
+  List<Color> toSlightGradient(BuildContext context) =>
+      getGradient(context, this, strength: 2);
 
   Color get contrastColor => (0.299 * red + 0.587 * green + 0.114 * blue) < 186
       ? Colors.white

@@ -342,7 +342,9 @@
     "dynamicColor": "",
     "dynamicColorExpl": "",
     "harmonizeColors": "",
-    "harmonizeColorsExpl": ""
+    "harmonizeColorsExpl": "",
+    "useGradients": "",
+    "useGradientsExpl": ""
   },
   "timeSettings": {
     "defaultLessonDuration": "",
