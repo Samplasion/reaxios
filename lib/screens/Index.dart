@@ -36,6 +36,7 @@ import 'package:reaxios/screens/nav/Reports.dart';
 import 'package:reaxios/screens/nav/Overview.dart';
 import 'package:reaxios/screens/nav/Stats.dart';
 import 'package:reaxios/screens/nav/Topics.dart';
+import 'package:reaxios/screens/nav/colors.dart';
 import 'package:reaxios/services/compute.dart';
 import 'package:reaxios/storage.dart';
 import 'package:reaxios/system/intents.dart';
@@ -250,6 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
         StatsPane(session: session),
         ReportCardsPane(session: session),
         InfoPane(login: _login),
+        if (kDebugMode) ColorsPane(),
       ];
       _drawerItems = [
         [
@@ -379,7 +381,14 @@ class _HomeScreenState extends State<HomeScreen> {
           () {
             cubit.loadStructural();
           }
-        ]
+        ],
+        if (kDebugMode)
+          [
+            Icon(Icons.color_lens),
+            Text("[DEBUG] Show colors"),
+            true,
+            () {},
+          ],
       ];
     });
   }

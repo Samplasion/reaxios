@@ -42,6 +42,10 @@ extension StringUtils on String {
   }
 }
 
+extension WidgetUtils on Widget {
+  Route get route => MaterialPageRoute(builder: (_) => this);
+}
+
 final _min = min;
 final _max = max;
 
