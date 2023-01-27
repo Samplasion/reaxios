@@ -505,26 +505,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 kIsWeb ? context.locale.about.appName : app.appName),
             SizedBox(height: 16),
             for (final s in _session.students)
-              M3DrawerListTile(
-                leading: Icon(Icons.person),
-                title: Text("${s.firstName} ${s.lastName}"),
-                selected: s.studentUUID ==
-                    context.read<AppCubit>().student?.studentUUID,
-                onTap: () {
-                  final storage = context.read<Storage>();
-                  storage.setLastStudentID(s.studentUUID);
-                  if (!MaybeMasterDetail.of(context)!.isShowingMaster)
-                    Navigator.pop(context);
-                  _session.student = s;
-                  context.read<AppCubit>().clearData();
-                  context.read<AppCubit>().setStudent(s);
-                  _runCallback(_selectedPane);
-                  setState(() {
-                    _showUserDetails = false;
-                    _initPanes(_session, _login);
-                  });
-                },
-              ),
+              Builder(builder: (context) {
+                return M3DrawerListTile(
+                  leading: Icon(Icons.person),
+                  title: Text("${s.firstName} ${s.lastName}"),
+                  selected: s.studentUUID ==
+                      context.read<AppCubit>().student?.studentUUID,
+                  onTap: () {
+                    if (!MaybeMasterDetail.of(context)!.isShowingMaster)
+                      Navigator.pop(context);
+                    if (s.studentUUID ==
+                        context.read<AppCubit>().student?.studentUUID) return;
+                    final storage = context.read<Storage>();
+                    storage.setLastStudentID(s.studentUUID);
+                    _session.student = s;
+                    context.read<AppCubit>().clearData();
+                    context.read<AppCubit>().setStudent(s);
+                    setState(() {
+                      _showUserDetails = false;
+                      _initPanes(_session, _login);
+                    });
+                    _runCallback(_selectedPane);
+                  },
+                );
+              }),
             Divider(
               height: 33,
               indent: 28,
