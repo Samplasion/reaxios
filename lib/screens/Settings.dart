@@ -29,17 +29,17 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   List<_Fragment> get _fragments => [
         _Fragment(
-          context.locale.settings.general,
+          context.loc.translate("settings.general"),
           GeneralSettings(),
           Icon(Icons.settings),
         ),
         _Fragment(
-          context.locale.settings.time,
+          context.loc.translate("settings.time"),
           TimeSettings(),
           Icon(Icons.access_time),
         ),
         _Fragment(
-          context.locale.settings.data,
+          context.loc.translate("settings.data"),
           DataSettings(),
           Icon(Icons.data_usage),
         ),
@@ -47,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         // alert the user about updates.
         if (!Foundation.kIsWeb)
           _Fragment(
-            context.locale.settings.update,
+            context.loc.translate("settings.update"),
             UpdateSettings(),
             Icon(Icons.update),
           ),
@@ -132,7 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar.large(
-            title: Text(context.locale.drawer.settings),
+            title: Text(context.loc.translate("drawer.settings")),
             centerTitle: true,
           ),
           SliverList(

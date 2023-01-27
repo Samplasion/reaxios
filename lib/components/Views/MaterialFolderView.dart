@@ -39,7 +39,7 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
             if (index >= _materials.length)
               return EmptyUI(
                 icon: Icons.folder,
-                text: context.locale.teachingMaterials.emptyFolder,
+                text: context.loc.translate("teachingMaterials.emptyFolder"),
               );
             return _buildCard(_materials[index], index);
           },
@@ -62,13 +62,13 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
     final title = material.description;
     final subtitle = material.text.isEmpty
         ? Text(
-            context.locale.teachingMaterials.noMaterialDescription,
+            context.loc.translate("teachingMaterials.noMaterialDescription"),
             style: TextStyle(fontStyle: FontStyle.italic),
           )
         : Text(material.text);
     final name = material.isLink
         ? Uri.tryParse(material.url)?.host.replaceFirst("://www.", "://") ??
-            context.locale.teachingMaterials.noHost
+            context.loc.translate("teachingMaterials.noHost")
         : material.fileName;
 
     return Center(
@@ -94,28 +94,30 @@ class _MaterialFolderViewState extends State<MaterialFolderView> {
       if (await canLaunch(material.url)) {
         launch(material.url);
       } else {
-        context.showSnackbar(context.locale.main.failedLinkOpen);
+        context.showSnackbar(context.loc.translate("main.failedLinkOpen"));
       }
     } else {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(context.locale.teachingMaterials.downloadAlertTitle),
-          content: Text(context.locale.teachingMaterials.downloadAlertBody
-              .format([material.fileName])),
+          title: Text(
+              context.loc.translate("teachingMaterials.downloadAlertTitle")),
+          content: Text(context.loc.translate(
+              "teachingMaterials.downloadAlertBody", {"0": material.fileName})),
           actions: <Widget>[
             TextButton(
               child: Text(context.materialLocale.cancelButtonLabel),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: Text(context.locale.main.downloadButtonLabel),
+              child: Text(context.loc.translate("main.downloadButtonLabel")),
               onPressed: () async {
                 Navigator.of(context).pop();
                 if (await canLaunch(material.fileUrl)) {
                   launch(material.fileUrl);
                 } else {
-                  context.showSnackbar(context.locale.main.failedFileDownload);
+                  context.showSnackbar(
+                      context.loc.translate("main.failedFileDownload"));
                 }
               },
             ),

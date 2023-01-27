@@ -140,13 +140,15 @@ class _WeekViewState extends State<WeekView>
             indicatorColor: Theme.of(context).colorScheme.onPrimary,
             tabs: 1.to(settings.getWeeks()).map((week) {
               return Tab(
-                text: context.locale.timetable.weekViewWeek.format([week]),
+                text: context.loc
+                    .translate("timetable.weekViewWeek")
+                    .format([week]),
               );
             }).toList(),
           )
         : null;
     final defaultAppBar = AppBar(
-      title: Text(context.locale.timetable.weekView),
+      title: Text(context.loc.translate("timetable.weekView")),
       bottom: tabBar,
       notificationPredicate: (notification) {
         return notification.depth == 1;
@@ -181,7 +183,7 @@ class _WeekViewState extends State<WeekView>
             ),
             actions: [
               IconButton(
-                tooltip: context.locale.timetable.actionsEdit,
+                tooltip: context.loc.translate("timetable.actionsEdit"),
                 onPressed: () {
                   widget.actions["Edit"]!(editing!);
                   // Quit editing mode after opening the editor

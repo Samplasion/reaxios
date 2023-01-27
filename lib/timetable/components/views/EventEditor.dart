@@ -110,7 +110,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 8.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editName,
+                    context.loc.translate("timetable.editName"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -123,7 +123,7 @@ class _EventEditorState extends State<EventEditor> {
                   textFieldConfiguration: TextFieldConfiguration(
                     controller: name,
                     decoration: InputDecoration(
-                      hintText: context.locale.timetable.editNameHint,
+                      hintText: context.loc.translate("timetable.editNameHint"),
                       border: OutlineInputBorder(),
                     ),
                     onChanged: (val) {
@@ -138,7 +138,7 @@ class _EventEditorState extends State<EventEditor> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return context.locale.timetable.editNameError;
+                      return context.loc.translate("timetable.editNameError");
                     }
 
                     return null;
@@ -179,7 +179,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editAbbreviation,
+                    context.loc.translate("timetable.editAbbreviation"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -210,7 +210,8 @@ class _EventEditorState extends State<EventEditor> {
                         (value.isNotEmpty && value.length != 3)) {
                       // return "Enter a valid 3-character abbreviation, or leave "
                       //     "empty to auto-generate it.";
-                      return context.locale.timetable.editAbbreviationError;
+                      return context.loc
+                          .translate("timetable.editAbbreviationError");
                     }
 
                     return null;
@@ -223,7 +224,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editTime,
+                    context.loc.translate("timetable.editTime"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -246,10 +247,12 @@ class _EventEditorState extends State<EventEditor> {
                         validator: (dt) {
                           if (end.inMinutes < dt.inMinutes)
                             // return "Select a time sooner than the ending time.";
-                            return context.locale.timetable.editStartError;
+                            return context.loc
+                                .translate("timetable.editStartError");
                         },
                         decoration: InputDecoration(
-                          labelText: context.locale.timetable.editStartLabel,
+                          labelText:
+                              context.loc.translate("timetable.editStartLabel"),
                           errorMaxLines: 5,
                         ),
                       ),
@@ -267,10 +270,12 @@ class _EventEditorState extends State<EventEditor> {
                         validator: (dt) {
                           if (dt.inMinutes < start.inMinutes)
                             // return "Select a time later than the starting time.";
-                            return context.locale.timetable.editEndError;
+                            return context.loc
+                                .translate("timetable.editEndError");
                         },
                         decoration: InputDecoration(
-                          labelText: context.locale.timetable.editEndLabel,
+                          labelText:
+                              context.loc.translate("timetable.editEndLabel"),
                           errorMaxLines: 5,
                         ),
                       ),
@@ -284,7 +289,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editWeek,
+                    context.loc.translate("timetable.editWeek"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -301,7 +306,9 @@ class _EventEditorState extends State<EventEditor> {
                           value: e,
                           // child: Text("Week $e"),
                           child: Text(
-                            context.locale.timetable.editWeekLabel.format([e]),
+                            context.loc
+                                .translate("timetable.editWeekLabel")
+                                .format([e]),
                           ),
                         ),
                       )
@@ -327,7 +334,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editWeekday,
+                    context.loc.translate("timetable.editWeekday"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -366,7 +373,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editColor,
+                    context.loc.translate("timetable.editColor"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -391,7 +398,7 @@ class _EventEditorState extends State<EventEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editDescription,
+                    context.loc.translate("timetable.editDescription"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -406,7 +413,8 @@ class _EventEditorState extends State<EventEditor> {
                   maxLines: null,
                   decoration: InputDecoration(
                     // hintText: "Additional notes go here...",
-                    hintText: context.locale.timetable.editDescriptionHint,
+                    hintText:
+                        context.loc.translate("timetable.editDescriptionHint"),
                     border: OutlineInputBorder(),
                   ),
                 ),

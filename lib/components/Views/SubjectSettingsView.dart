@@ -23,19 +23,21 @@ class SubjectSettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.locale.grades.settingsTitle.format([subject])),
+        title: Text(
+            context.loc.translate("grades.settingsTitle").format([subject])),
       ),
       body: ListView(
         children: [
-          SettingsHeaderTile(title: Text(context.locale.grades.objective)),
+          SettingsHeaderTile(
+              title: Text(context.loc.translate("grades.objective"))),
           TextFormFieldModalTile(
-            title: Text(context.locale.grades.customObjective),
+            title: Text(context.loc.translate("grades.customObjective")),
             subtitle: Text(getSubtitle(context)),
             value: value?.objective.toString() ?? "",
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               errorMaxLines: 10,
-              helperText: context.locale.grades.customObjectiveHelper,
+              helperText: context.loc.translate("grades.customObjectiveHelper"),
               helperMaxLines: 10,
             ),
             validator: (String? val) {
@@ -43,10 +45,10 @@ class SubjectSettingsView extends StatelessWidget {
                 final unlocalized = val.replaceAll(",", ".");
                 final doubled = double.tryParse(unlocalized);
                 if (doubled == null) {
-                  return context.locale.grades.invalidObjective;
+                  return context.loc.translate("grades.invalidObjective");
                 }
                 if (doubled <= 0.0 || doubled > 10) {
-                  return context.locale.grades.invalidObjective;
+                  return context.loc.translate("grades.invalidObjective");
                 }
               }
             },
@@ -82,7 +84,7 @@ class SubjectSettingsView extends StatelessWidget {
 
   String getSubtitle(BuildContext context) {
     if (value == null) {
-      return context.locale.grades.noObjective;
+      return context.loc.translate("grades.noObjective");
     }
     return context.gradeToString(
       value!.objective,

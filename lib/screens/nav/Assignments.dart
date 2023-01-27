@@ -59,7 +59,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
     if (widget.session.student?.securityBits[SecurityBits.hideAssignments] ==
         "1") {
       return EmptyUI(
-        text: context.locale.main.noPermission,
+        text: context.loc.translate("main.noPermission"),
         icon: Icons.lock,
       ).padding(horizontal: 16);
     }
@@ -69,7 +69,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(context.locale.drawer.assignments),
+        title: Text(context.loc.translate("drawer.assignments")),
         leading: MaybeMasterDetail.of(context)!.isShowingMaster
             ? null
             : Builder(builder: (context) {
@@ -134,7 +134,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
                   Icons.all_out_outlined,
                 ),
               ),
-              title: Text(context.locale.assignments.allSubjects),
+              title: Text(context.loc.translate("assignments.allSubjects")),
               onTap: () {
                 Navigator.pop(context);
                 setState(() {
@@ -200,7 +200,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
     if (assignments.isEmpty) {
       return EmptyUI(
         icon: Icons.book_outlined,
-        text: context.locale.assignments.empty,
+        text: context.loc.translate("assignments.empty"),
       );
     }
 

@@ -26,8 +26,8 @@ class AuthorizationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.locale.authorizations
-            .getByKey("type${authorization.rawKind}")),
+        title: Text(context.loc
+            .translate("authorizations.type${authorization.rawKind}")),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -62,7 +62,7 @@ class AuthorizationView extends StatelessWidget {
             child: Icon(Icons.person),
             color: Theme.of(context).primaryColor,
           ),
-          title: context.locale.authorizations.justifiedBy,
+          title: context.loc.translate("authorizations.justifiedBy"),
           subtitle: Text(authorization.authorizedBy),
           details: Text(context.dateToString(authorization.authorizedDate)),
         ),
@@ -89,19 +89,21 @@ class AuthorizationView extends StatelessWidget {
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content: Text(
-                          context.locale.authorizations.justifiedSnackbar)),
+                      content: Text(context.loc
+                          .translate("authorizations.justifiedSnackbar"))),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(context.locale.authorizations.errorSnackbar),
+                    content: Text(
+                        context.loc.translate("authorizations.errorSnackbar")),
                   ),
                 );
               }
             });
           },
-          child: Text(context.locale.authorizations.justifyButtonLabel),
+          child:
+              Text(context.loc.translate("authorizations.justifyButtonLabel")),
         ),
     ];
 

@@ -31,8 +31,9 @@ class MaterialTeacherView extends StatelessWidget {
     if (teacher.folders.isEmpty) {
       return Center(
         child: EmptyUI(
-          text: context.locale.teachingMaterials.teacherNoDataTitle,
-          subtitle: context.locale.teachingMaterials.teacherNoDataText,
+          text: context.loc.translate("teachingMaterials.teacherNoDataTitle"),
+          subtitle:
+              context.loc.translate("teachingMaterials.teacherNoDataText"),
           icon: Icons.folder,
         ),
       );
@@ -58,7 +59,7 @@ class MaterialTeacherView extends StatelessWidget {
               title: teacher.folders[index].description,
               subtitle: Text(
                 text.isEmpty
-                    ? context.locale.teachingMaterials.noDescription
+                    ? context.loc.translate("teachingMaterials.noDescription")
                     : text,
                 style: text.isNotEmpty
                     ? null

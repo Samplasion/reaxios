@@ -48,7 +48,7 @@ class _AbsencesPaneState extends State<AbsencesPane> {
     if (widget.session.student?.securityBits[SecurityBits.hideAbsences] ==
         "1") {
       return EmptyUI(
-        text: context.locale.absences.noPermission,
+        text: context.loc.translate("absences.noPermission"),
         icon: Icons.lock,
       ).padding(horizontal: 16);
     }
@@ -64,7 +64,7 @@ class _AbsencesPaneState extends State<AbsencesPane> {
     if (absences.isEmpty) {
       return EmptyUI(
         icon: Icons.no_accounts_outlined,
-        text: context.locale.absences.empty,
+        text: context.loc.translate("absences.empty"),
       );
     }
 
@@ -76,10 +76,10 @@ class _AbsencesPaneState extends State<AbsencesPane> {
         child: Center(
           child: MaxWidthContainer(
             child: Alert(
-              title: context.locale.absences.sectionAlertTitle,
+              title: context.loc.translate("absences.sectionAlertTitle"),
               color: Colors.orange,
-              text:
-                  MarkdownBody(data: context.locale.absences.sectionAlertBody),
+              text: MarkdownBody(
+                  data: context.loc.translate("absences.sectionAlertBody")),
             ),
           ),
         ).padding(horizontal: 16, top: 16),

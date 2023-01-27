@@ -41,11 +41,13 @@ class _GradeViewState extends State<GradeView> {
   @override
   Widget build(BuildContext context) {
     final title = gradeIsValid
-        ? context.locale.grades.gradeInSubject.format([
+        ? context.loc.translate("grades.gradeInSubject").format([
             grade.getPrettyGrade(context),
             grade.subject,
           ])
-        : context.locale.grades.commentInSubject.format([grade.subject]);
+        : context.loc
+            .translate("grades.commentInSubject")
+            .format([grade.subject]);
     // print(grade.toJson());
     return Scaffold(
       appBar: AppBar(
@@ -87,14 +89,14 @@ class _GradeViewState extends State<GradeView> {
                       ),
                       showBadge: false,
                     ),
-                    title: context.locale.grades.value,
+                    title: context.loc.translate("grades.value"),
                     subtitle: Text.rich(GradeText(
                       context,
                       grade: grade.grade,
                       showNumericValue: true,
                     )),
-                    details: Text(context.locale.grades.weight
-                        .format([(grade.weight * 100).toInt()])),
+                    details: Text(context.loc.translate("grades.weight",
+                        {"0": (grade.weight * 100).toInt().toString()})),
                   ),
                 ],
                 Divider(),
@@ -107,7 +109,7 @@ class _GradeViewState extends State<GradeView> {
                       ),
                       showBadge: false,
                     ),
-                    title: context.locale.grades.seen,
+                    title: context.loc.translate("grades.seen"),
                     subtitle: Text(grade.seenBy ?? ""),
                     details: Text(context.dateToString(
                       grade.seenOn,
@@ -127,15 +129,16 @@ class _GradeViewState extends State<GradeView> {
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(context.locale.grades.seenSnackbar),
+                            content: Text(
+                                context.loc.translate("grades.seenSnackbar")),
                           ),
                         );
                       }).onError((_, __) {
-                        context
-                            .showSnackbar(context.locale.grades.errorSnackbar);
+                        context.showSnackbar(
+                            context.loc.translate("grades.errorSnackbar"));
                       });
                     },
-                    child: Text(context.locale.grades.markAsSeen),
+                    child: Text(context.loc.translate("grades.markAsSeen")),
                   ),
               ],
             ),

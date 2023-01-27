@@ -46,7 +46,7 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
     if (widget.session.student?.securityBits[SecurityBits.hideAuthorizations] ==
         "1") {
       return EmptyUI(
-        text: context.locale.main.noPermission,
+        text: context.loc.translate("main.noPermission"),
         icon: Icons.lock,
       ).padding(horizontal: 16);
     }
@@ -66,7 +66,7 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
     if (authorizations.isEmpty) {
       return EmptyUI(
         icon: Icons.no_accounts_outlined,
-        text: context.locale.authorizations.empty,
+        text: context.loc.translate("authorizations.empty"),
       );
     }
 

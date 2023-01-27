@@ -27,7 +27,7 @@ class _LoadingUIState extends State<LoadingUI> {
   int randomIndex = Random().nextInt(100);
 
   List<String> getDidYouKnow(BuildContext context) =>
-      context.locale.main.didYouKnow.split("\n");
+      context.loc.translate("main.didYouKnow").split("\n");
 
   @override
   Widget build(BuildContext context) {

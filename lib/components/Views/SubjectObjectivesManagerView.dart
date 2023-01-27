@@ -42,15 +42,15 @@ class _SubjectObjectivesManagerViewState
       });
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.locale.objectives.managerTitle),
+        title: Text(context.loc.translate("objectives.managerTitle")),
       ),
       body: CustomScrollView(
         controller: _controller,
         slivers: [
           SliverToBoxAdapter(
             child: SettingsHeader(
-              title: context.locale.objectives.managerHeading,
-              subtitle: context.locale.objectives.managerSubheading,
+              title: context.loc.translate("objectives.managerHeading"),
+              subtitle: context.loc.translate("objectives.managerSubheading"),
             ),
           ),
           SliverList(
@@ -80,8 +80,8 @@ class _SubjectObjectivesManagerViewState
                     title: Text(item.subjectName),
                     subtitle: Text.rich(
                       TextSpan(
-                        children: context
-                            .locale.objectives.managerItemDescription
+                        children: context.loc
+                            .translate("objectives.managerItemDescription")
                             .mapFormatToSpans({
                           "year": TextSpan(text: item.year.toString()),
                           "objective": TextSpan(

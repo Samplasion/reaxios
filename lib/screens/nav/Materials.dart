@@ -41,12 +41,21 @@ class _MaterialsPaneState extends State<MaterialsPane> {
   String getCount(int count) {
     return Intl.plural(
       count,
-      zero: context.locale.teachingMaterials.foldersZero.format([count]),
-      one: context.locale.teachingMaterials.foldersOne.format([count]),
-      two: context.locale.teachingMaterials.foldersTwo.format([count]),
-      few: context.locale.teachingMaterials.foldersFew.format([count]),
-      many: context.locale.teachingMaterials.foldersMany.format([count]),
-      other: context.locale.teachingMaterials.foldersOther.format([count]),
+      zero: context.loc
+          .translate("teachingMaterials.foldersZero")
+          .format([count]),
+      one:
+          context.loc.translate("teachingMaterials.foldersOne").format([count]),
+      two:
+          context.loc.translate("teachingMaterials.foldersTwo").format([count]),
+      few:
+          context.loc.translate("teachingMaterials.foldersFew").format([count]),
+      many: context.loc
+          .translate("teachingMaterials.foldersMany")
+          .format([count]),
+      other: context.loc
+          .translate("teachingMaterials.foldersOther")
+          .format([count]),
     );
   }
 
@@ -68,7 +77,8 @@ class _MaterialsPaneState extends State<MaterialsPane> {
                         height: constraints.maxHeight,
                         child: EmptyUI(
                           icon: Icons.error_outline,
-                          text: context.locale.teachingMaterials.noData,
+                          text:
+                              context.loc.translate("teachingMaterials.noData"),
                         ),
                       ),
                     ],

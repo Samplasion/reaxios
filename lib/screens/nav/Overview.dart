@@ -118,7 +118,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         appBar: loading
             ? AppBar(
                 title: Text(
-                  context.locale.drawer.overview,
+                  context.loc.translate("drawer.overview"),
                 ),
                 leading: MaybeMasterDetail.of(context)!.isShowingMaster
                     ? null
@@ -205,7 +205,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                 if (e.lessonHour.isNotEmpty)
                   Chip(
                     label: Text(
-                      formatString(context.locale.main.lessonHour,
+                      formatString(context.loc.translate("main.lessonHour"),
                           [e.lessonHour.toString()]),
                       style: TextStyle(color: scheme.onSecondaryContainer),
                     ),
@@ -276,7 +276,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       if (gradeCards.isNotEmpty)
         ...[
           Text(
-            context.locale.overview.latestGrades,
+            context.loc.translate("overview.latestGrades"),
             style: Theme.of(context).textTheme.headline6,
           ).padding(horizontal: 16, top: 8),
           ...gradeCards,
@@ -287,7 +287,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       if (tmrAssignments.isNotEmpty)
         ...[
           Text(
-            context.locale.overview.homeworkForTomorrow,
+            context.loc.translate("overview.homeworkForTomorrow"),
             style: Theme.of(context).textTheme.headline6,
           ).padding(horizontal: 16, top: 8),
           _getAssignmentTimeline(tmrAssignments),
@@ -296,7 +296,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       if (topicCards.isNotEmpty) ...[
         MaxWidthContainer(
           child: Text(
-            context.locale.overview.latestLessons,
+            context.loc.translate("overview.latestLessons"),
             style: Theme.of(context).textTheme.headline6,
           ).padding(horizontal: 16, top: 8),
         ).center(),
@@ -421,7 +421,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
               notificationPredicate: (_) => false,
               title: Opacity(
                 opacity: hideTitleWhenExpanded ? 1.0 - percent : 1.0,
-                child: Text(context.locale.drawer.overview),
+                child: Text(context.loc.translate("drawer.overview")),
               ),
             ),
           ),
@@ -502,7 +502,7 @@ class UserCard extends StatelessWidget {
           overflow: TextOverflow.fade,
         ).padding(bottom: 5),
         Text(
-          "${context.dateToString(student.birthday)} [${calculateAge(student.birthday)}] - ${context.locale.main.getByKey("gender${describeEnum(student.gender)[0]}")}",
+          "${context.dateToString(student.birthday)} [${calculateAge(student.birthday)}] - ${context.loc.translate("main.gender${describeEnum(student.gender)[0]}")}",
           style: TextStyle(
             color: fg.withOpacity(smallTextOpacity),
             fontSize: 12,
@@ -527,17 +527,17 @@ class UserCard extends StatelessWidget {
           return _buildUserStatsItem(
             context,
             gradeAverage(averageMode, relevantGrades).toString(),
-            context.locale.overview.average,
+            context.loc.translate("overview.average"),
             3,
           );
         },
       ),
       _buildUserStatsItem(context, cubit.grades.length.toString(),
-          context.locale.overview.grades, 3),
+          context.loc.translate("overview.grades"), 3),
       _buildUserStatsItem(context, cubit.assignments.length.toString(),
-          context.locale.overview.assignments, 2),
+          context.loc.translate("overview.assignments"), 2),
       _buildUserStatsItem(context, cubit.topics.length.toString(),
-          context.locale.overview.topics, 5),
+          context.loc.translate("overview.topics"), 5),
     ]
         .toRow(mainAxisAlignment: MainAxisAlignment.spaceAround)
         .padding(vertical: 10)
@@ -593,15 +593,15 @@ class TodaysEvents extends StatelessWidget {
               if (events.getTodayEvents().isNotEmpty)
                 buildCard(
                   events.getTodayEvents(),
-                  context.locale.overview.todaysEventsTitle,
-                  context.locale.overview.todaysEventsSubtitle,
+                  context.loc.translate("overview.todaysEventsTitle"),
+                  context.loc.translate("overview.todaysEventsSubtitle"),
                   Icons.access_time,
                 ),
               if (events.getTomorrowEvents().isNotEmpty)
                 buildCard(
                   events.getTomorrowEvents(),
-                  context.locale.overview.tomorrowsEventsTitle,
-                  context.locale.overview.tomorrowsEventsSubtitle,
+                  context.loc.translate("overview.tomorrowsEventsTitle"),
+                  context.loc.translate("overview.tomorrowsEventsSubtitle"),
                   Icons.calendar_today,
                 ),
             ],

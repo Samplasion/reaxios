@@ -13,18 +13,21 @@ class DataSettings extends BaseSettings {
   List<SettingsTile> getTiles(BuildContext context, Settings settings) {
     return [
       SettingsTileGroup(
-        title: SettingsHeader(title: context.locale.settings.data),
+        title: SettingsHeader(title: context.loc.translate("settings.data")),
         children: [
           SubscreenListTile(
-            title: Text(context.locale.dataSettings.objectivesTitle),
+            title: Text(context.loc.translate("dataSettings.objectivesTitle")),
             subtitle: Text(Intl.plural(
               settings.getSubjectObjectives().length,
-              zero: context.locale.dataSettings.objectivesSubtitleZero,
-              one: context.locale.dataSettings.objectivesSubtitleOne,
-              two: context.locale.dataSettings.objectivesSubtitleTwo,
-              few: context.locale.dataSettings.objectivesSubtitleFew,
-              many: context.locale.dataSettings.objectivesSubtitleMany,
-              other: context.locale.dataSettings.objectivesSubtitleOther,
+              zero:
+                  context.loc.translate("dataSettings.objectivesSubtitleZero"),
+              one: context.loc.translate("dataSettings.objectivesSubtitleOne"),
+              two: context.loc.translate("dataSettings.objectivesSubtitleTwo"),
+              few: context.loc.translate("dataSettings.objectivesSubtitleFew"),
+              many:
+                  context.loc.translate("dataSettings.objectivesSubtitleMany"),
+              other:
+                  context.loc.translate("dataSettings.objectivesSubtitleOther"),
               locale: context.currentLocale.languageCode,
             ).format([settings.getSubjectObjectives().length])),
             shouldShowInDescription: true,

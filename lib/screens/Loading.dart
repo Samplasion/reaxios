@@ -81,7 +81,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        appBar: AppBar(title: Text(context.locale.about.appName)),
+        appBar: AppBar(title: Text(context.loc.translate("about.appName"))),
         body: LoadingUI(
           showHints: true,
         ),

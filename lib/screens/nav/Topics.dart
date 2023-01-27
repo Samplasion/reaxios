@@ -56,7 +56,7 @@ class _TopicsPaneState extends State<TopicsPane> {
   Widget build(BuildContext context) {
     if (widget.session.student?.securityBits[SecurityBits.hideTopics] == "1") {
       return EmptyUI(
-        text: context.locale.main.noPermission,
+        text: context.loc.translate("main.noPermission"),
         icon: Icons.lock,
       ).padding(horizontal: 16);
     }
@@ -67,7 +67,7 @@ class _TopicsPaneState extends State<TopicsPane> {
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
-            title: Text(context.locale.drawer.topics),
+            title: Text(context.loc.translate("drawer.topics")),
             leading: MaybeMasterDetail.of(context)!.isShowingMaster
                 ? null
                 : Builder(builder: (context) {
@@ -132,7 +132,7 @@ class _TopicsPaneState extends State<TopicsPane> {
                   Icons.all_out_outlined,
                 ),
               ),
-              title: Text(context.locale.topics.allSubjects),
+              title: Text(context.loc.translate("topics.allSubjects")),
               onTap: () {
                 Navigator.pop(context);
                 setState(() {
@@ -198,7 +198,7 @@ class _TopicsPaneState extends State<TopicsPane> {
     if (topics.isEmpty) {
       return EmptyUI(
         icon: Icons.calendar_today_outlined,
-        text: context.locale.topics.empty,
+        text: context.loc.translate("topics.empty"),
       );
     }
 

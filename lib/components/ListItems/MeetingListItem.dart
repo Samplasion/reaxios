@@ -62,7 +62,8 @@ class MeetingListItem extends StatelessWidget {
           ? () {
               // TODO: Open meeting time picker
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(context.locale.teacherMeetings.unimplemented),
+                content: Text(
+                    context.loc.translate("teacherMeetings.unimplemented")),
               ));
             }
           : null,
@@ -82,7 +83,7 @@ class MeetingListItem extends StatelessWidget {
             // There's no stadium border, so this'll do
             borderRadius: BorderRadius.circular(9999),
             badgeContent: Text(
-              context.locale.teacherMeetings.seatsAvailable,
+              context.loc.translate("teacherMeetings.seatsAvailable"),
               style: TextStyle(
                 color: Colors.black,
                 fontSize: Theme.of(context).textTheme.caption!.fontSize,
@@ -96,7 +97,7 @@ class MeetingListItem extends StatelessWidget {
             badgeColor: Colors.red,
             borderRadius: BorderRadius.circular(9999),
             badgeContent: Text(
-              context.locale.teacherMeetings.noSeatsAvailable,
+              context.loc.translate("teacherMeetings.noSeatsAvailable"),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: Theme.of(context).textTheme.caption!.fontSize,

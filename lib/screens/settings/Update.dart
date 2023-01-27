@@ -15,17 +15,17 @@ class UpdateSettings extends BaseSettings {
   List<SettingsTile> getTiles(BuildContext context, Settings settings) {
     return [
       SettingsTileGroup(
-        title: SettingsHeader(title: context.locale.settings.update),
+        title: SettingsHeader(title: context.loc.translate("settings.update")),
         children: [
           RadioModalTile<UpdateNagMode>(
-            title: Text(context.locale.updateSettings.updateNagMode),
+            title: Text(context.loc.translate("updateSettings.updateNagMode")),
             values: {
               UpdateNagMode.alert:
-                  context.locale.updateSettings.updateNagModeAlert,
+                  context.loc.translate("updateSettings.updateNagModeAlert"),
               UpdateNagMode.banner:
-                  context.locale.updateSettings.updateNagModeBanner,
+                  context.loc.translate("updateSettings.updateNagModeBanner"),
               UpdateNagMode.none:
-                  context.locale.updateSettings.updateNagModeNone,
+                  context.loc.translate("updateSettings.updateNagModeNone"),
             },
             selectedValue: settings.getUpdateNagMode(),
             onChange: (value) {

@@ -42,9 +42,9 @@ class _GradeLineChartState extends State<GradeLineChart> {
   Widget _getHeader() {
     return NiceHeader(
       leading: Icon(Icons.auto_graph),
-      title: context.locale.charts.trend,
+      title: context.loc.translate("charts.trend"),
       subtitle: widget.period == null
-          ? context.locale.charts.scopeAllYear
+          ? context.loc.translate("charts.scopeAllYear")
           : widget.period!,
     );
   }
@@ -59,8 +59,8 @@ class _GradeLineChartState extends State<GradeLineChart> {
           _getHeader(),
           EmptyUI(
             icon: Icons.error_outline,
-            text: context.locale.charts.noData,
-            subtitle: context.locale.charts.fewGradesText,
+            text: context.loc.translate("charts.noData"),
+            subtitle: context.loc.translate("charts.fewGradesText"),
           )
         ],
       );

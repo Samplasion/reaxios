@@ -35,7 +35,7 @@ class BulletinListItem extends StatelessWidget {
   };
 
   String getSender(BuildContext context, BulletinKind apiSender) {
-    return context.locale.bulletins.getByKey("type${describeEnum(apiSender)}");
+    return context.loc.translate("bulletins.type${describeEnum(apiSender)}");
   }
 
   @override
@@ -87,7 +87,8 @@ class BulletinListItem extends StatelessWidget {
                 if (await canLaunch(link.url)) {
                   await launch(link.url);
                 } else {
-                  context.showSnackbar(context.locale.main.failedLinkOpen);
+                  context.showSnackbar(
+                      context.loc.translate("main.failedLinkOpen"));
                 }
               },
             ),

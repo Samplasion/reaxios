@@ -87,7 +87,7 @@ class _CalendarPaneState extends State<CalendarPane> {
           settings.share(["calendarEvents"], "customEvents.json");
         },
         // child: Text("Export"),
-        child: Text(context.locale.timetable.export),
+        child: Text(context.loc.translate("timetable.export")),
       ),
       PopupMenuItem<String>(
         onTap: () async {
@@ -99,7 +99,7 @@ class _CalendarPaneState extends State<CalendarPane> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  context.locale.timetable.importFailed,
+                  context.loc.translate("timetable.importFailed"),
                   style: TextStyle(color: Colors.white),
                 ),
                 backgroundColor: Colors.red,
@@ -107,7 +107,7 @@ class _CalendarPaneState extends State<CalendarPane> {
             );
           }
         },
-        child: Text(context.locale.timetable.import),
+        child: Text(context.loc.translate("timetable.import")),
       ),
     ];
   }
@@ -144,13 +144,13 @@ class _CalendarPaneState extends State<CalendarPane> {
 
     if (orientation == Orientation.landscape) {
       return {
-        CalendarFormat.twoWeeks: context.locale.calendar.formatWeek,
-        CalendarFormat.week: context.locale.calendar.formatTwoWeeks,
+        CalendarFormat.twoWeeks: context.loc.translate("calendar.formatWeek"),
+        CalendarFormat.week: context.loc.translate("calendar.formatTwoWeeks"),
       };
     } else {
       return {
-        CalendarFormat.month: context.locale.calendar.formatTwoWeeks,
-        CalendarFormat.twoWeeks: context.locale.calendar.formatMonth,
+        CalendarFormat.month: context.loc.translate("calendar.formatTwoWeeks"),
+        CalendarFormat.twoWeeks: context.loc.translate("calendar.formatMonth"),
       };
     }
   }
@@ -162,7 +162,7 @@ class _CalendarPaneState extends State<CalendarPane> {
     final isShowingMaster = MaybeMasterDetail.of(context)!.isShowingMaster;
     return AppBar(
       title: Text(
-        context.locale.drawer.calendar,
+        context.loc.translate("drawer.calendar"),
       ),
       leading: isShowingMaster
           ? null
@@ -184,13 +184,13 @@ class _CalendarPaneState extends State<CalendarPane> {
       List<Topic> topics, List<Assignment> assignments, List<Period> periods) {
     return AppBar(
       title: Text(
-        context.locale.drawer.calendar,
+        context.loc.translate("drawer.calendar"),
       ),
       backgroundColor: Colors.black,
       leading: IconButton(
         icon: Icon(Icons.check),
         onPressed: () => _unselectEvent(topics, assignments, periods),
-        tooltip: context.locale.calendar.done,
+        tooltip: context.loc.translate("calendar.done"),
       ),
       actions: [
         IconButton(
@@ -233,7 +233,7 @@ class _CalendarPaneState extends State<CalendarPane> {
               _unselectEvent(topics, assignments, periods);
             }
           },
-          tooltip: context.locale.calendar.edit,
+          tooltip: context.loc.translate("calendar.edit"),
         ),
         IconButton(
           icon: Icon(Icons.delete),
@@ -381,8 +381,8 @@ class _CalendarPaneState extends State<CalendarPane> {
     if (!_isEnabled()) {
       return EmptyUI(
         icon: Icons.info_outline,
-        text: context.locale.calendar.emptyTitle,
-        subtitle: context.locale.calendar.emptyMessage,
+        text: context.loc.translate("calendar.emptyTitle"),
+        subtitle: context.loc.translate("calendar.emptyMessage"),
       );
     }
 
@@ -653,7 +653,7 @@ class _CalendarPaneState extends State<CalendarPane> {
     if (todaysCalendarEvents.isNotEmpty) {
       events.add(
         Text(
-          context.locale.calendar.customEvents,
+          context.loc.translate("calendar.customEvents"),
           style: TextStyle(
             fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
             fontSize: 20,
@@ -697,7 +697,7 @@ class _CalendarPaneState extends State<CalendarPane> {
     if (todaysAssignments.isNotEmpty) {
       events.add(
         Text(
-          context.locale.calendar.homework,
+          context.loc.translate("calendar.homework"),
           style: TextStyle(
             fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
             fontSize: 20,
@@ -713,7 +713,7 @@ class _CalendarPaneState extends State<CalendarPane> {
     if (todaysTopics.isNotEmpty) {
       events.add(
         Text(
-          context.locale.calendar.topics,
+          context.loc.translate("calendar.topics"),
           style: TextStyle(
             fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
             fontSize: 20,
@@ -729,7 +729,7 @@ class _CalendarPaneState extends State<CalendarPane> {
     if (events.isEmpty) {
       events.add(
         EmptyUI(
-          text: context.locale.calendar.noEvents,
+          text: context.loc.translate("calendar.noEvents"),
           icon: Icons.event_note,
         ),
       );

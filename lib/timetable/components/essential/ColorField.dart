@@ -71,7 +71,7 @@ class _ColorFieldState extends State<ColorField> {
                 builder: (context) {
                   return AlertDialog(
                     title: Text(
-                      context.locale.timetable.colorPicker,
+                      context.loc.translate("timetable.colorPicker"),
                     ),
                     content: SingleChildScrollView(
                       child: MaterialColorPicker(
@@ -110,7 +110,7 @@ class _ColorFieldState extends State<ColorField> {
               padding: EdgeInsets.all(16),
               // duration: Duration(milliseconds: 300),
               child: Text(
-                context.locale.timetable.colorPicker,
+                context.loc.translate("timetable.colorPicker"),
                 style: baseStyle,
               ),
             ),

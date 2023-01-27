@@ -72,7 +72,7 @@ class _EventControllerState extends State<EventController> {
               rail: navigationRail,
             ),
           ),
-          title: context.locale.timetable.dayView,
+          title: context.loc.translate("timetable.dayView"),
           icon: Icon(Icons.calendar_view_day),
         ),
         _Page(
@@ -86,7 +86,7 @@ class _EventControllerState extends State<EventController> {
               rail: navigationRail,
             ),
           ),
-          title: context.locale.timetable.weekView,
+          title: context.loc.translate("timetable.weekView"),
           icon: Icon(Icons.calendar_view_week),
         ),
       ];
@@ -228,7 +228,7 @@ class _EventControllerState extends State<EventController> {
             context,
             MaterialPageRoute(
               builder: (_) => EventEditor(
-                title: context.locale.timetable.actionsClone,
+                title: context.loc.translate("timetable.actionsClone"),
                 base: event,
                 onSubmit: _addEvent,
               ),
@@ -240,7 +240,7 @@ class _EventControllerState extends State<EventController> {
             context,
             MaterialPageRoute(
               builder: (_) => EventEditor(
-                title: context.locale.timetable.actionsEdit,
+                title: context.loc.translate("timetable.actionsEdit"),
                 base: event,
                 onSubmit: (s) {
                   _removeEvent(event);
@@ -260,7 +260,7 @@ class _EventControllerState extends State<EventController> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      tooltip: context.locale.timetable.actionsAdd,
+      tooltip: context.loc.translate("timetable.actionsAdd"),
       child: Icon(Icons.add),
       onPressed: () {
         Navigator.push(
@@ -268,7 +268,7 @@ class _EventControllerState extends State<EventController> {
           MaterialPageRoute(
             builder: (_) => Builder(
               builder: (context) => EventEditor(
-                title: context.locale.timetable.addEvent,
+                title: context.loc.translate("timetable.addEvent"),
                 onSubmit: _addEvent,
               ),
             ),

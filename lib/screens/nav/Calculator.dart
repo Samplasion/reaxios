@@ -64,7 +64,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
       builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(context.locale.drawer.calculator),
+            title: Text(context.loc.translate("drawer.calculator")),
             leading: MaybeMasterDetail.of(context)!.isShowingMaster
                 ? null
                 : Builder(builder: (context) {
@@ -114,25 +114,27 @@ class _CalculatorPaneState extends State<CalculatorPane>
           enableDrag: true,
           animationController: _animationController,
           scrollable: true,
-          title: Text(context.locale.calculator.addGrade),
+          title: Text(context.loc.translate("calculator.addGrade")),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (subjects.isNotEmpty)
                   ListTile(
-                    title: Text(context.locale.calculator.addFromSubject),
+                    title: Text(
+                        context.loc.translate("calculator.addFromSubject")),
                     onTap: () async {
                       Navigator.pop(context);
                       await _showSubjectDialog(grades, subjects);
                     },
                   ),
                 ListTile(
-                  title: Text(context.locale.calculator.addFromScratch),
+                  title:
+                      Text(context.loc.translate("calculator.addFromScratch")),
                   onTap: _showNewGradeDialog,
                 ),
                 ListTile(
-                  title: Text(context.locale.calculator.addAllGrades),
+                  title: Text(context.loc.translate("calculator.addAllGrades")),
                   onTap: () {
                     Navigator.pop(context);
                     setState(() {
@@ -168,8 +170,8 @@ class _CalculatorPaneState extends State<CalculatorPane>
     if (_grades.isEmpty) {
       return EmptyUI(
         icon: Icons.info_outline,
-        text: context.locale.calculator.infoTitle,
-        subtitle: context.locale.calculator.infoMessage,
+        text: context.loc.translate("calculator.infoTitle"),
+        subtitle: context.loc.translate("calculator.infoMessage"),
       );
     }
     return GridView.builder(
@@ -230,7 +232,8 @@ class _CalculatorPaneState extends State<CalculatorPane>
                       )
                     else
                       BoldText(
-                        text: context.locale.calculator.unknownSubject,
+                        text:
+                            context.loc.translate("calculator.unknownSubject"),
                       ).asText(
                         textAlign: TextAlign.center,
                         maxLines: 2,
@@ -246,7 +249,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
                       )
                     else
                       Text(
-                        context.locale.calculator.unknownPeriod,
+                        context.loc.translate("calculator.unknownPeriod"),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.caption,
                         maxLines: 1,
@@ -370,7 +373,8 @@ class _CalculatorPaneState extends State<CalculatorPane>
       ),
     ];
 
-    final bottomText = context.locale.calculator.gradeCalculatorBottom;
+    final bottomText =
+        context.loc.translate("calculator.gradeCalculatorBottom");
     final withIndices = bottomText.split(RegExp(r'[{}]'));
     final withIndicesAndWidgets = withIndices.map((text) {
       final num = int.tryParse(text);
@@ -401,7 +405,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        context.locale.calculator.selectAtLeast1,
+                        context.loc.translate("calculator.selectAtLeast1"),
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
@@ -419,7 +423,8 @@ class _CalculatorPaneState extends State<CalculatorPane>
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: context.locale.calculator.average,
+                                        text: context.loc
+                                            .translate("calculator.average"),
                                         style:
                                             Theme.of(context).textTheme.caption,
                                       ),
@@ -503,7 +508,7 @@ class _SubjectSelectorBottomSheetState
         .toList()
       ..sort((a, b) => b.date.compareTo(a.date));
     return AlertBottomSheet(
-      title: Text(context.locale.calculator.addFromSubject),
+      title: Text(context.loc.translate("calculator.addFromSubject")),
       enableDrag: false,
       onClosing: () {},
       scrollable: true,
@@ -564,7 +569,7 @@ class _SubjectSelectorBottomSheetState
             })
           else ...[
             Text(
-              context.locale.calculator.noGrades,
+              context.loc.translate("calculator.noGrades"),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.caption,
             ),
@@ -614,8 +619,8 @@ class _NewGradeDialogState extends State<NewGradeDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(widget.edit
-          ? context.locale.calculator.editGrade
-          : context.locale.calculator.addGrade),
+          ? context.loc.translate("calculator.editGrade")
+          : context.loc.translate("calculator.addGrade")),
       content: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -627,8 +632,8 @@ class _NewGradeDialogState extends State<NewGradeDialog> {
               focusNode: _focusNode,
               decoration: InputDecoration(
                 labelText: widget.edit
-                    ? context.locale.calculator.editGrade
-                    : context.locale.calculator.addGrade,
+                    ? context.loc.translate("calculator.editGrade")
+                    : context.loc.translate("calculator.addGrade"),
                 border: OutlineInputBorder(),
                 errorMaxLines: 2,
               ),
@@ -642,14 +647,14 @@ class _NewGradeDialogState extends State<NewGradeDialog> {
               },
               validator: (s) {
                 if (s == null || s.isEmpty) {
-                  return context.locale.calculator.gradeOutOfRange;
+                  return context.loc.translate("calculator.gradeOutOfRange");
                 }
                 final grade = double.tryParse(s);
                 if (grade == null || grade.isNaN) {
-                  return context.locale.calculator.gradeOutOfRange;
+                  return context.loc.translate("calculator.gradeOutOfRange");
                 }
                 if (grade < 1 || grade > 10) {
-                  return context.locale.calculator.gradeOutOfRange;
+                  return context.loc.translate("calculator.gradeOutOfRange");
                 }
               },
             ),

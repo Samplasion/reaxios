@@ -16,6 +16,7 @@ import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/components/LowLevel/md_indicator.dart';
 import 'package:reaxios/components/Utilities/color_builder.dart';
 import 'package:reaxios/components/Utilities/updates/config.dart' as upgrader;
+import 'package:reaxios/i18n/delegate.dart';
 import 'package:reaxios/services/android.dart' as android_service;
 import 'package:reaxios/screens/Index.dart';
 import 'package:reaxios/screens/Loading.dart';
@@ -23,7 +24,6 @@ import 'package:reaxios/screens/Login.dart';
 import 'package:reaxios/screens/NoInternet.dart';
 import 'package:reaxios/screens/Settings.dart';
 import 'package:reaxios/services/notifications.dart';
-import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
 import 'change_notifier_provider.dart';
@@ -181,7 +181,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
                 initialRoute: "loading",
                 debugShowCheckedModeBanner: false,
                 localizationsDelegates: [
-                  AxiosLocalizationDelegate(),
+                  AppLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,

@@ -47,7 +47,7 @@ class NoteListItem extends StatelessWidget {
           if (await canLaunchUrlString(link.url)) {
             await launchUrlString(link.url);
           } else {
-            context.showSnackbar(context.locale.main.failedLinkOpen);
+            context.showSnackbar(context.loc.translate("main.failedLinkOpen"));
           }
         },
       ),

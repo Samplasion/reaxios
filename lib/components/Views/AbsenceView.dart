@@ -24,7 +24,7 @@ class AbsenceView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.locale.absences.getByKey("type${absence.kind}")),
+        title: Text(context.loc.translate("absences.type${absence.kind}")),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -65,21 +65,23 @@ class AbsenceView extends StatelessWidget {
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content: Text(context.locale.absences.justifiedSnackbar)),
+                      content: Text(
+                          context.loc.translate("absences.justifiedSnackbar"))),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(context.locale.absences.errorSnackbar),
+                    content:
+                        Text(context.loc.translate("absences.errorSnackbar")),
                   ),
                 );
               }
             });
           },
-          child: Text(context.locale.absences.justifyButtonLabel),
+          child: Text(context.loc.translate("absences.justifyButtonLabel")),
         ),
       if (absence.isJustifiable && absence.isJustified)
-        Text(context.locale.absences.alreadyJustified)
+        Text(context.loc.translate("absences.alreadyJustified"))
     ];
   }
 }

@@ -257,9 +257,11 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8),
                                 child: NiceHeader(
-                                  title: context.locale.charts.averages,
+                                  title:
+                                      context.loc.translate("charts.averages"),
                                   subtitle: period == null
-                                      ? context.locale.charts.scopeAllYear
+                                      ? context.loc
+                                          .translate("charts.scopeAllYear")
                                       : period.desc,
                                   leading: Icon(Icons.av_timer),
                                 ),
@@ -280,7 +282,8 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
                               ),
                               child: EmptyUI(
                                 icon: Icons.error_outline,
-                                text: context.locale.main.noDataForPeriod,
+                                text: context.loc
+                                    .translate("main.noDataForPeriod"),
                               ),
                             )
                           else

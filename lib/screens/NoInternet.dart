@@ -45,7 +45,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
       print(!e.toString().contains("XMLHttpRequest error"));
       if (e is! Error && (!e.toString().contains("XMLHttpRequest error"))) {
         context.showSnackbar(
-          context.locale.noInternet.stillNoWifi,
+          context.loc.translate("noInternet.stillNoWifi"),
           backgroundColor: Colors.red,
           style: TextStyle(
             color: Colors.red.contrastText,
@@ -101,7 +101,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
                     children: [
                       EmptyUI(
                         icon: Icons.wifi_off,
-                        text: context.locale.noInternet.body,
+                        text: context.loc.translate("noInternet.body"),
                       ),
                       SizedBox(height: 16),
                       OutlinedButton(
@@ -111,15 +111,15 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
                                 setState(() {
                                   loading = true;
                                 });
-                                context
-                                    .showSnackbar(context.locale.main.loading);
+                                context.showSnackbar(
+                                    context.loc.translate("main.loading"));
                                 _checkConnection().then((_) {
                                   setState(() {
                                     loading = true;
                                   });
                                 });
                               },
-                        child: Text(context.locale.noInternet.cta),
+                        child: Text(context.loc.translate("noInternet.cta")),
                       ),
                     ],
                   ),
@@ -152,10 +152,10 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
           children: [
             SizedBox(height: 16),
             M3DrawerHeading(
-                kIsWeb ? context.locale.about.appName : app.appName),
+                kIsWeb ? context.loc.translate("about.appName") : app.appName),
             SizedBox(height: 16),
             M3DrawerListTile(
-              title: Text(context.locale.noInternet.title),
+              title: Text(context.loc.translate("noInternet.title")),
               leading: Icon(Icons.wifi_off),
               selected: _selectedItem == 0,
               onTap: () {
@@ -167,7 +167,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
               },
             ),
             M3DrawerListTile(
-              title: Text(context.locale.drawer.timetable),
+              title: Text(context.loc.translate("drawer.timetable")),
               leading: Icon(Icons.access_time),
               selected: _selectedItem == 1,
               onTap: () {

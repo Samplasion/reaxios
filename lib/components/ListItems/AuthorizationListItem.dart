@@ -49,24 +49,28 @@ class AuthorizationListItem extends StatelessWidget {
             authorization.authorizedDate.millisecondsSinceEpoch >
                 DateTime(2000).millisecondsSinceEpoch
         ? "\n" +
-            context.locale.authorizations.justifiedSubtitle
-                .format([context.dateToString(authorization.authorizedDate)])
+            context.loc.translate(
+              "authorizations.justifiedSubtitle",
+              {"0": context.dateToString(authorization.authorizedDate)},
+            )
         : "";
 
     final concursText = authorization.concurs
-        ? "\n" + context.locale.authorizations.calculated
-        : "\n" + context.locale.authorizations.notCalculated;
+        ? "\n" + context.loc.translate("authorizations.calculated")
+        : "\n" + context.loc.translate("authorizations.notCalculated");
 
     final lessonHour = authorization.lessonHour == null
         ? ""
         : " — " +
-            context.locale.main.lessonHour
-                .format([authorization.lessonHour.toString()]);
+            context.loc.translate(
+              "main.lessonHour",
+              {"0": authorization.lessonHour.toString()},
+            );
 
     final tile = CardListItem(
       leading: leading,
-      title: context.locale.authorizations
-          .getByKey("type${authorization.rawKind}"),
+      title:
+          context.loc.translate("authorizations.type${authorization.rawKind}"),
       subtitle: MarkdownBody(
         data: "**${authorization.insertedBy}**\n$concursText  $justifiedText",
         styleSheet: MarkdownStyleSheet(

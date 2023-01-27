@@ -70,7 +70,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
       return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          title: Text(context.locale.drawer.grades),
+          title: Text(context.loc.translate("drawer.grades")),
           leading: MaybeMasterDetail.of(context)!.isShowingMaster
               ? null
               : Builder(builder: (context) {
@@ -83,7 +83,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
                 }),
         ),
         body: EmptyUI(
-          text: context.locale.main.noPermission,
+          text: context.loc.translate("main.noPermission"),
           icon: Icons.lock,
         ).padding(horizontal: 16),
       );
@@ -137,7 +137,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
   ) =>
       [
         _Page(
-          context.locale.grades.subjects,
+          context.loc.translate("grades.subjects"),
           SafeArea(
             bottom: false,
             left: false,
@@ -190,7 +190,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
                 ))
             .toList(),
         _Page(
-          context.locale.grades.grades,
+          context.loc.translate("grades.grades"),
           SafeArea(
             bottom: false,
             left: false,
@@ -212,7 +212,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
       return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          title: Text(context.locale.drawer.grades),
+          title: Text(context.loc.translate("drawer.grades")),
           leading: MaybeMasterDetail.of(context)!.isShowingMaster
               ? null
               : Builder(builder: (context) {
@@ -225,7 +225,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
                 }),
         ),
         body: EmptyUI(
-          text: context.locale.grades.noGrades,
+          text: context.loc.translate("grades.noGrades"),
           icon: Icons.star_border,
         ).padding(horizontal: 16),
       );
@@ -237,7 +237,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           notificationPredicate: (notification) => notification.depth == 1,
-          title: Text(context.locale.drawer.grades),
+          title: Text(context.loc.translate("drawer.grades")),
           leading: MaybeMasterDetail.of(context)!.isShowingMaster
               ? null
               : Builder(builder: (context) {
@@ -274,7 +274,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             NiceHeader(
-              title: context.locale.charts.average,
+              title: context.loc.translate("charts.average"),
               subtitle: period,
             ).padding(bottom: 8),
             GradeAvatar(
@@ -297,8 +297,8 @@ class _GradesPaneState extends ReloadableState<GradesPane>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           NiceHeader(
-            title: context.locale.charts.average,
-            subtitle: context.locale.charts.scopeAllYear,
+            title: context.loc.translate("charts.average"),
+            subtitle: context.loc.translate("charts.scopeAllYear"),
           ).padding(bottom: 8),
           GradeAvatar(
             grade: Grade.fakeFromDouble(
@@ -443,18 +443,21 @@ class _GradesPaneState extends ReloadableState<GradesPane>
               style: Theme.of(context).textTheme.caption,
               children: [
                 if (!isEmpty) ...[
-                  TextSpan(text: context.locale.grades.mainPageAverage),
+                  TextSpan(
+                      text: context.loc.translate("grades.mainPageAverage")),
                   GradeText(context, grade: average),
                 ] else
-                  TextSpan(text: context.locale.grades.noGrades),
+                  TextSpan(text: context.loc.translate("grades.noGrades")),
               ],
             ),
           ),
           details: isEmpty
               ? null
               : Text(
-                  context.locale.grades.latestGrade
-                      .format([context.dateToString(subjectGrades.first.date)]),
+                  context.loc.translate(
+                    "grades.latestGrade",
+                    {"0": context.dateToString(subjectGrades.first.date)},
+                  ),
                 ),
           onClick: isEmpty
               ? null

@@ -33,10 +33,10 @@ class BulletinView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          context.locale.bulletins.title.format([
-            context.locale.bulletins
-                .getByKey("type${describeEnum(bulletin.kind)}"),
-          ]),
+          context.loc.translate("bulletins.title", {
+            "0": context.loc
+                .translate("bulletins.type${describeEnum(bulletin.kind)}"),
+          }),
         ),
       ),
       body: SingleChildScrollView(
@@ -79,19 +79,20 @@ class BulletinView extends StatelessWidget {
 
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                    content: Text(context.locale.bulletins.markedSuccessfully)),
+                    content: Text(
+                        context.loc.translate("bulletins.markedSuccessfully"))),
               );
             }).catchError((_) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(context.locale.bulletins.markedError),
+                  content: Text(context.loc.translate("bulletins.markedError")),
                 ),
               );
             });
           },
-          child: Text(context.locale.bulletins.markAsRead),
+          child: Text(context.loc.translate("bulletins.markAsRead")),
         ),
-      if (bulletin.read) Text(context.locale.bulletins.alreadyRead),
+      if (bulletin.read) Text(context.loc.translate("bulletins.alreadyRead")),
       if (kDebugMode) ...[
         Divider(),
         ElevatedButton(
@@ -129,8 +130,8 @@ class BulletinView extends StatelessWidget {
                 return title;
               }(),
               subtitle: Text(e.kind == BulletinAttachmentKind.File
-                  ? context.locale.bulletins.download
-                  : context.locale.bulletins.openLink),
+                  ? context.loc.translate("bulletins.download")
+                  : context.loc.translate("bulletins.openLink")),
               onClick: () async {
                 print(jsonEncode(e.toJson()));
                 if (await canLaunch(e.url)) {
@@ -138,9 +139,12 @@ class BulletinView extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text(context.locale.bulletins.download),
-                        content: Text(context.locale.bulletins.downloadBody
-                            .format([e.sourceName])),
+                        title:
+                            Text(context.loc.translate("bulletins.download")),
+                        content: Text(
+                          context.loc.translate("bulletins.downloadBody",
+                              {"0": e.sourceName.toString()}),
+                        ),
                         actions: [
                           TextButton(
                             child:
@@ -148,8 +152,8 @@ class BulletinView extends StatelessWidget {
                             onPressed: () => Navigator.pop(context),
                           ),
                           TextButton(
-                            child:
-                                Text(context.locale.main.downloadButtonLabel),
+                            child: Text(context.loc
+                                .translate("main.downloadButtonLabel")),
                             onPressed: () {
                               Navigator.pop(context);
                               launch(e.url);
@@ -163,10 +167,11 @@ class BulletinView extends StatelessWidget {
                   }
                 } else {
                   if (e.kind == BulletinAttachmentKind.File) {
-                    context
-                        .showSnackbar(context.locale.main.failedFileDownload);
+                    context.showSnackbar(
+                        context.loc.translate("main.failedFileDownload"));
                   } else {
-                    context.showSnackbar(context.locale.main.failedLinkOpen);
+                    context.showSnackbar(
+                        context.loc.translate("main.failedLinkOpen"));
                   }
                 }
               },

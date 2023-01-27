@@ -15,46 +15,54 @@ class GeneralSettings extends BaseSettings {
     return [
       SettingsTileGroup(
         title: SettingsHeaderTile(
-          title: Text(context.locale.generalSettings.groupsColorsTitle),
+          title:
+              Text(context.loc.translate("generalSettings.groupsColorsTitle")),
         ),
         children: [
           if (!kIsWeb) ...[
             SwitchSettingsTile(
-              title: Text(context.locale.generalSettings.dynamicColor),
-              subtitle: Text(context.locale.generalSettings.dynamicColorExpl),
+              title:
+                  Text(context.loc.translate("generalSettings.dynamicColor")),
+              subtitle: Text(
+                  context.loc.translate("generalSettings.dynamicColorExpl")),
               onChange: (value) => settings.setUseDynamicColor(value),
               value: settings.getUseDynamicColor(),
             ),
           ],
           ColorTile(
-            title: Text(context.locale.generalSettings.colorSecondary),
+            title:
+                Text(context.loc.translate("generalSettings.colorSecondary")),
             onChange: (color) => settings.setPrimaryColor(color),
             value: settings.getPrimaryColor(),
           ),
           ColorTile(
-            title: Text(context.locale.generalSettings.colorPrimary),
+            title: Text(context.loc.translate("generalSettings.colorPrimary")),
             onChange: (color) => settings.setAccentColor(color),
             value: settings.getAccentColor(),
           ),
           SwitchSettingsTile(
-            title: Text(context.locale.generalSettings.harmonizeColors),
-            subtitle: Text(context.locale.generalSettings.harmonizeColorsExpl),
+            title:
+                Text(context.loc.translate("generalSettings.harmonizeColors")),
+            subtitle: Text(
+                context.loc.translate("generalSettings.harmonizeColorsExpl")),
             onChange: (harmonizeColors) =>
                 settings.setHarmonizeColors(harmonizeColors),
             value: settings.getHarmonizeColors(),
           ),
           SwitchSettingsTile(
-            title: Text(context.locale.generalSettings.useGradients),
-            subtitle: Text(context.locale.generalSettings.useGradientsExpl),
+            title: Text(context.loc.translate("generalSettings.useGradients")),
+            subtitle:
+                Text(context.loc.translate("generalSettings.useGradientsExpl")),
             onChange: (useGradients) => settings.setUseGradients(useGradients),
             value: settings.getUseGradients(),
           ),
           RadioModalTile(
-            title: Text(context.locale.generalSettings.colorTheme),
+            title: Text(context.loc.translate("generalSettings.colorTheme")),
             values: {
-              "light": context.locale.generalSettings.colorThemeLight,
-              "dark": context.locale.generalSettings.colorThemeDark,
-              "dynamic": context.locale.generalSettings.colorThemeDynamic,
+              "light": context.loc.translate("generalSettings.colorThemeLight"),
+              "dark": context.loc.translate("generalSettings.colorThemeDark"),
+              "dynamic":
+                  context.loc.translate("generalSettings.colorThemeDynamic"),
             },
             selectedValue: settings.getThemeMode(),
             onChange: (value) {
@@ -67,20 +75,22 @@ class GeneralSettings extends BaseSettings {
       ),
       SettingsTileGroup(
         title: SettingsHeaderTile(
-          title: Text(context.locale.generalSettings.groupsBehaviorTitle),
+          title: Text(
+              context.loc.translate("generalSettings.groupsBehaviorTitle")),
         ),
         children: [
           RadioModalTile(
-            title: Text(context.locale.generalSettings.gradeDisplayLabel),
+            title: Text(
+                context.loc.translate("generalSettings.gradeDisplayLabel")),
             values: {
               GradeDisplay.decimal.serialized:
-                  context.locale.generalSettings.gradeDisplayDecimal,
+                  context.loc.translate("generalSettings.gradeDisplayDecimal"),
               GradeDisplay.letter.serialized:
-                  context.locale.generalSettings.gradeDisplayLetter,
-              GradeDisplay.percentage.serialized:
-                  context.locale.generalSettings.gradeDisplayPercentage,
+                  context.loc.translate("generalSettings.gradeDisplayLetter"),
+              GradeDisplay.percentage.serialized: context.loc
+                  .translate("generalSettings.gradeDisplayPercentage"),
               GradeDisplay.precise.serialized:
-                  context.locale.generalSettings.gradeDisplayPrecise,
+                  context.loc.translate("generalSettings.gradeDisplayPrecise"),
             },
             selectedValue: settings.getGradeDisplay().serialized,
             onChange: (dynamic value) {
@@ -89,13 +99,15 @@ class GeneralSettings extends BaseSettings {
             },
           ),
           RadioModalTile(
-            title: Text(context.locale.generalSettings.averageModeLabel),
-            subtitle: Text(context.locale.generalSettings.averageModeSubtitle),
+            title:
+                Text(context.loc.translate("generalSettings.averageModeLabel")),
+            subtitle: Text(
+                context.loc.translate("generalSettings.averageModeSubtitle")),
             values: {
               AverageMode.allGradesAverage.serialized:
-                  context.locale.generalSettings.averageModeAllGrades,
-              AverageMode.averageOfAverages.serialized:
-                  context.locale.generalSettings.averageModeAverageOfAverages,
+                  context.loc.translate("generalSettings.averageModeAllGrades"),
+              AverageMode.averageOfAverages.serialized: context.loc
+                  .translate("generalSettings.averageModeAverageOfAverages"),
             },
             selectedValue: settings.getAverageMode().serialized,
             onChange: (dynamic value) {
@@ -104,7 +116,7 @@ class GeneralSettings extends BaseSettings {
             },
           ),
           TextFormFieldModalTile(
-            title: Text(context.locale.generalSettings.ignoredWords),
+            title: Text(context.loc.translate("generalSettings.ignoredWords")),
             value: settings.getIgnoreList().join(" "),
             onChange: (ignored) => settings.setIgnoreList(ignored),
           ),
@@ -112,12 +124,15 @@ class GeneralSettings extends BaseSettings {
       ),
       SettingsTileGroup(
         title: SettingsHeaderTile(
-          title: Text(context.locale.generalSettings.groupsAdvancedTitle),
+          title: Text(
+              context.loc.translate("generalSettings.groupsAdvancedTitle")),
         ),
         children: [
           SettingsListTile(
-            title: Text(context.locale.generalSettings.restartAppTitle),
-            subtitle: Text(context.locale.generalSettings.restartAppSubtitle),
+            title:
+                Text(context.loc.translate("generalSettings.restartAppTitle")),
+            subtitle: Text(
+                context.loc.translate("generalSettings.restartAppSubtitle")),
             onTap: () async {
               RestartWidget.restartApp(context);
             },

@@ -47,7 +47,7 @@ class _MeetingsPaneState extends State<MeetingsPane> {
           ? SingleChildScrollView(
               child: EmptyUI(
               icon: Icons.error_outline,
-              text: context.locale.teacherMeetings.noData,
+              text: context.loc.translate("teacherMeetings.noData"),
             )).center()
           : _buildBody(),
     );
@@ -87,7 +87,7 @@ class _MeetingsPaneState extends State<MeetingsPane> {
         children: [
           EmptyUI(
             icon: Icons.event,
-            text: context.locale.teacherMeetings.noBookedMeetings,
+            text: context.loc.translate("teacherMeetings.noBookedMeetings"),
           ),
           SizedBox(height: 20),
           newMeetingButton,
@@ -106,7 +106,7 @@ class _MeetingsPaneState extends State<MeetingsPane> {
           );
         }));
       },
-      child: Text(context.locale.teacherMeetings.bookMeeting),
+      child: Text(context.loc.translate("teacherMeetings.bookMeeting")),
     );
   }
 

@@ -77,7 +77,7 @@ class _CalendarEventEditorViewState extends State<CalendarEventEditorView> {
     _selectedColor ??= Theme.of(context).colorScheme.primary;
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.locale.calendar.eventEditorTitle),
+        title: Text(context.loc.translate("calendar.eventEditorTitle")),
       ),
       body: Form(
         key: _formKey,
@@ -85,7 +85,7 @@ class _CalendarEventEditorViewState extends State<CalendarEventEditorView> {
         child: ListView(
           children: <Widget>[
             Container(),
-            _SmallTitle(context.locale.calendar.eventEditorSubject),
+            _SmallTitle(context.loc.translate("calendar.eventEditorSubject")),
             TextFormField(
               controller: _titleController,
               decoration: InputDecoration(
@@ -93,12 +93,13 @@ class _CalendarEventEditorViewState extends State<CalendarEventEditorView> {
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return context.locale.calendar.eventEditorTextError;
+                  return context.loc.translate("calendar.eventEditorTextError");
                 }
                 return null;
               },
             ),
-            _SmallTitle(context.locale.calendar.eventEditorDescription),
+            _SmallTitle(
+                context.loc.translate("calendar.eventEditorDescription")),
             TextFormField(
               controller: _descriptionController,
               decoration: InputDecoration(
@@ -108,12 +109,12 @@ class _CalendarEventEditorViewState extends State<CalendarEventEditorView> {
               maxLines: null,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return context.locale.calendar.eventEditorTextError;
+                  return context.loc.translate("calendar.eventEditorTextError");
                 }
                 return null;
               },
             ),
-            _SmallTitle(context.locale.calendar.eventEditorDate),
+            _SmallTitle(context.loc.translate("calendar.eventEditorDate")),
             DateField(
               date: _selectedDate,
               onSelect: (date) {
@@ -125,7 +126,7 @@ class _CalendarEventEditorViewState extends State<CalendarEventEditorView> {
               lastDate: widget.lastDate,
               selectableDayPredicate: widget.selectableDayPredicate,
             ),
-            _SmallTitle(context.locale.calendar.eventEditorColor),
+            _SmallTitle(context.loc.translate("calendar.eventEditorColor")),
             ColorField(_selectedColor!, onChange: (c) {
               setState(() {
                 _selectedColor = c;

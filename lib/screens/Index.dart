@@ -256,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _drawerItems = [
         [
           Icon(Icons.home),
-          Text(context.locale.drawer.overview),
+          Text(context.loc.translate("drawer.overview")),
           false,
           () async {
             cubit.loadAssignments();
@@ -266,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.calendar_today),
-          Text(context.locale.drawer.calendar),
+          Text(context.loc.translate("drawer.calendar")),
           false,
           () {
             cubit.loadAssignments();
@@ -276,13 +276,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.book),
-          Text(context.locale.drawer.assignments),
+          Text(context.loc.translate("drawer.assignments")),
           false,
           () => cubit.loadAssignments(),
         ],
         [
           Icon(Icons.star),
-          Text(context.locale.drawer.grades),
+          Text(context.loc.translate("drawer.grades")),
           false,
           () {
             cubit.loadGrades();
@@ -292,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.calculate),
-          Text(context.locale.drawer.calculator),
+          Text(context.loc.translate("drawer.calculator")),
           false,
           () {
             cubit.loadGrades();
@@ -302,61 +302,61 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.topic),
-          Text(context.locale.drawer.topics),
+          Text(context.loc.translate("drawer.topics")),
           false,
           () => cubit.loadTopics(),
         ],
         [
           Icon(Icons.access_time),
-          Text(context.locale.drawer.timetable),
+          Text(context.loc.translate("drawer.timetable")),
           false,
           () {},
         ],
         [
           Icon(Icons.mail),
-          Text(context.locale.drawer.secretary),
+          Text(context.loc.translate("drawer.secretary")),
           true,
           () => cubit.loadBulletins(),
         ],
         [
           Icon(Icons.contact_mail),
-          Text(context.locale.drawer.teacherNotes),
+          Text(context.loc.translate("drawer.teacherNotes")),
           true,
           () => cubit.loadNotes(),
         ],
         [
           Icon(Icons.perm_contact_cal),
-          Text(context.locale.drawer.notices),
+          Text(context.loc.translate("drawer.notices")),
           true,
           () => cubit.loadNotes(),
         ],
         [
           Icon(Icons.no_accounts),
-          Text(context.locale.drawer.absences),
+          Text(context.loc.translate("drawer.absences")),
           true,
           () => cubit.loadAbsences()
         ],
         [
           Icon(Icons.edit),
-          Text(context.locale.drawer.authorizations),
+          Text(context.loc.translate("drawer.authorizations")),
           true,
           () => cubit.loadAuthorizations()
         ],
         [
           Icon(Icons.terrain),
-          Text(context.locale.drawer.teacherMeetings),
+          Text(context.loc.translate("drawer.teacherMeetings")),
           true,
           () => cubit.loadMeetings()
         ],
         [
           Icon(Icons.badge),
-          Text(context.locale.drawer.teachingMaterials),
+          Text(context.loc.translate("drawer.teachingMaterials")),
           true,
           () => cubit.loadMaterials()
         ],
         [
           Icon(Icons.star_outline),
-          Text(context.locale.drawer.stats),
+          Text(context.loc.translate("drawer.stats")),
           true,
           () {
             cubit.loadAbsences();
@@ -367,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.gradient),
-          Text(context.locale.drawer.reportCards),
+          Text(context.loc.translate("drawer.reportCards")),
           true,
           () {
             cubit.loadReportCards();
@@ -376,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         [
           Icon(Icons.person),
-          Text(context.locale.drawer.info),
+          Text(context.loc.translate("drawer.info")),
           true,
           () {
             cubit.loadStructural();
@@ -398,7 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> launchWeb(BuildContext context) async {
-    context.showSnackbar(context.locale.main.loading);
+    context.showSnackbar(context.loc.translate("main.loading"));
     try {
       final res = await _session.getWebVersionUrl();
 
@@ -420,7 +420,7 @@ class _HomeScreenState extends State<HomeScreen> {
         print(e);
         context.hideCurrentSnackBar();
         context.showSnackbarError(
-          context.locale.main.failedLinkOpen,
+          context.loc.translate("main.failedLinkOpen"),
           action: SnackBarAction(
             label: context.materialLocale.copyButtonLabel,
             onPressed: () {
@@ -433,7 +433,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print(e);
       context.hideCurrentSnackBar();
       context.showSnackbar(
-        context.locale.main.webVersionError,
+        context.loc.translate("main.webVersionError"),
         backgroundColor: Colors.red,
         style: TextStyle(color: Colors.red.contrastText),
       );
@@ -511,7 +511,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             SizedBox(height: 16),
             M3DrawerHeading(
-                kIsWeb ? context.locale.about.appName : app.appName),
+                kIsWeb ? context.loc.translate("about.appName") : app.appName),
             SizedBox(height: 16),
             for (final s in _session.students)
               Builder(builder: (context) {
@@ -543,12 +543,12 @@ class _HomeScreenState extends State<HomeScreen> {
               indent: 28,
               endIndent: 28,
             ),
-            M3DrawerHeading(context.locale.drawer.destinations),
+            M3DrawerHeading(context.loc.translate("drawer.destinations")),
             SizedBox(height: 16),
             ..._buildDrawerItems(),
             Builder(
               builder: (context) => M3DrawerListTile(
-                title: Text(context.locale.drawer.webVersion),
+                title: Text(context.loc.translate("drawer.webVersion")),
                 leading: Icon(Icons.public),
                 onTap: () {
                   launchWeb(context);
@@ -670,7 +670,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         body: isLoading
                             ? Scaffold(
                                 appBar: AppBar(
-                                  title: Text(context.locale.about.appName),
+                                  title: Text(
+                                      context.loc.translate("about.appName")),
                                 ),
                                 body: LoadingUI(
                                   showHints: true,

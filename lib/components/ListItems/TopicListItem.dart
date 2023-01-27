@@ -25,7 +25,8 @@ class TopicListItem extends StatelessWidget {
     // \u00aa = ª
     final hr = topic.lessonHour.isEmpty
         ? ""
-        : context.locale.main.lessonHour.format([topic.lessonHour]) + " - ";
+        : context.loc.translate("main.lessonHour").format([topic.lessonHour]) +
+            " - ";
 
     return CardListItem(
       leading: GradientCircleAvatar(
@@ -41,7 +42,7 @@ class TopicListItem extends StatelessWidget {
           if (await canLaunch(link.url)) {
             await launch(link.url);
           } else {
-            context.showSnackbar(context.locale.main.failedLinkOpen);
+            context.showSnackbar(context.loc.translate("main.failedLinkOpen"));
           }
         },
       ),

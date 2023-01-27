@@ -72,7 +72,7 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
                       padding: EdgeInsets.only(bottom: 8),
                     ),
                     Text(
-                      context.locale.login.selectSchool,
+                      context.loc.translate("login.selectSchool"),
                       style: Theme.of(context).textTheme.headline5,
                       textAlign: TextAlign.center,
                     ),
@@ -97,8 +97,8 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
                                   controller: _query,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
-                                    labelText: context
-                                        .locale.login.searchBarPlaceholder,
+                                    labelText: context.loc.translate(
+                                        "login.searchBarPlaceholder"),
                                   ),
                                   onSubmitted: (q) async {
                                     FocusScope.of(context).unfocus();
@@ -156,7 +156,7 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
                           widget.onNext();
                         }
                       : null,
-                  child: Text(context.locale.login.next),
+                  child: Text(context.loc.translate("login.next")),
                 ),
               ),
             ],
@@ -179,7 +179,7 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
     } catch (e) {
       print(e);
       context.showSnackbar(
-        context.locale.errors.request,
+        context.loc.translate("errors.request"),
         style: TextStyle(color: Colors.white),
         backgroundColor: Colors.red,
       );
@@ -240,7 +240,8 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                       padding: EdgeInsets.only(bottom: 8),
                     ),
                     Text(
-                      formatString(context.locale.login.loginPhaseTwoTitle, [
+                      formatString(
+                          context.loc.translate("login.loginPhaseTwoTitle"), [
                         cubit.school?.title ?? "",
                         cubit.school?.name ?? ""
                       ]),
@@ -270,8 +271,8 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                                 }),
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
-                                  labelText:
-                                      context.locale.login.userIDPlaceholder,
+                                  labelText: context.loc
+                                      .translate("login.userIDPlaceholder"),
                                 ),
                                 autofillHints: [AutofillHints.username],
                                 textInputAction: TextInputAction.next,
@@ -295,8 +296,8 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                                     TextInput.finishAutofillContext(),
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
-                                  labelText:
-                                      context.locale.login.passwordPlaceholder,
+                                  labelText: context.loc
+                                      .translate("login.passwordPlaceholder"),
                                 ),
                               ),
                             ),
@@ -316,13 +317,14 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                       onPressed: () {
                         widget.onPrev();
                       },
-                      child: Text(context.locale.login.back),
+                      child: Text(context.loc.translate("login.back")),
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 8),
                       child: ElevatedButton(
                         onPressed: _inputValid() && !loading ? _login : null,
-                        child: Text(context.locale.login.loginButtonText),
+                        child: Text(
+                            context.loc.translate("login.loginButtonText")),
                       ),
                     ),
                   ],
@@ -353,13 +355,13 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
       print(e);
       if (e.toString().toLowerCase().contains("controllare codice utente")) {
         context.showSnackbar(
-          context.locale.errors.authentication,
+          context.loc.translate("errors.authentication"),
           style: TextStyle(color: Colors.white),
           backgroundColor: Colors.red,
         );
       } else {
         context.showSnackbar(
-          context.locale.errors.request,
+          context.loc.translate("errors.request"),
           style: TextStyle(color: Colors.white),
           backgroundColor: Colors.red,
         );
@@ -384,7 +386,7 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
     } catch (e) {
       print(e);
       context.showSnackbar(
-        context.locale.errors.request,
+        context.loc.translate("errors.request"),
         style: TextStyle(color: Colors.white),
         backgroundColor: Colors.red,
       );
@@ -431,7 +433,7 @@ class _LoginScreenState extends State<LoginScreen> {
     screens = useScreens(_onPrev, _onNext, _onDone);
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.locale.login.title),
+        title: Text(context.loc.translate("login.title")),
         actions: [
           if (kDebugMode)
             IconButton(

@@ -17,7 +17,8 @@ class RegistroAboutListItem extends StatelessWidget {
     final appInfo = context.watch<AppInfoStore>();
     final app = appInfo.packageInfo;
 
-    final appName = kIsWeb ? context.locale.about.appName : app.appName;
+    final appName =
+        kIsWeb ? context.loc.translate("about.appName") : app.appName;
 
     return M3DrawerListTile(
       leading: Icon(Icons.info),
@@ -39,19 +40,22 @@ class RegistroAboutListItem extends StatelessWidget {
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(
-                      style: textStyle, text: context.locale.about.synopsis),
+                      style: textStyle,
+                      text: context.loc.translate("about.synopsis")),
                   TextSpan(text: "\n\n"),
                   TextSpan(
                       style: textStyle,
-                      text:
-                          context.locale.about.longDescription.split("###")[0]),
+                      text: context.loc
+                          .translate("about.longDescription")
+                          .split("###")[0]),
                   TextSpan(
                       style: textStyle.copyWith(fontWeight: FontWeight.bold),
                       text: "Simoman3"),
                   TextSpan(
                       style: textStyle,
-                      text:
-                          context.locale.about.longDescription.split("###")[1]),
+                      text: context.loc
+                          .translate("about.longDescription")
+                          .split("###")[1]),
                 ],
               ),
             ),

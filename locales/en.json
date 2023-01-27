@@ -351,7 +351,18 @@
     "enabledDays": "Enabled days",
     "numberOfWeeks": "Number of weeks",
     "resetCurrentWeek": "Reset current week",
-    "resetCurrentWeekSubtitle": "Current week: week {0}"
+    "resetCurrentWeekSubtitle": "Current week: week {0}",
+    "lessonDurations": {
+      "1hour": "1 hour",
+      "50minutes": "50 minutes",
+      "40minutes": "40 minutes",
+      "30minutes": "30 minutes",
+      "20minutes": "20 minutes",
+      "15minutes": "15 minutes",
+      "10minutes": "10 minutes",
+      "5minutes": "5 minutes",
+      "1minute": "1 minute"
+    }
   },
   "dataSettings": {
     "objectivesTitle": "Objectives",

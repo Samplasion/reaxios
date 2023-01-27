@@ -45,7 +45,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
     final items = widget.events.map((s) => s.name).toSet().toList();
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.locale.timetable.editMultiple),
+        title: Text(context.loc.translate("timetable.editMultiple")),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -63,7 +63,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editMultipleSelect,
+                    context.loc.translate("timetable.editMultipleSelect"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -101,7 +101,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
                     top: 8.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editName,
+                    context.loc.translate("timetable.editName"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -114,7 +114,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
                   controller: name,
                   decoration: InputDecoration(
                     // hintText: "Event name",
-                    hintText: context.locale.timetable.editNameHint,
+                    hintText: context.loc.translate("timetable.editNameHint"),
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (val) {
@@ -129,7 +129,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       // return "Enter a valid name.";
-                      return context.locale.timetable.editNameError;
+                      return context.loc.translate("timetable.editNameError");
                     }
 
                     return null;
@@ -142,7 +142,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editAbbreviation,
+                    context.loc.translate("timetable.editAbbreviation"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
@@ -173,7 +173,8 @@ class _EventMassEditorState extends State<EventMassEditor> {
                         (value.isNotEmpty && value.length != 3)) {
                       // return "Enter a valid 3-character abbreviation, or leave "
                       //     "empty to auto-generate it.";
-                      return context.locale.timetable.editAbbreviationError;
+                      return context.loc
+                          .translate("timetable.editAbbreviationError");
                     }
 
                     return null;
@@ -186,7 +187,7 @@ class _EventMassEditorState extends State<EventMassEditor> {
                     top: 16.0,
                   ),
                   child: Text(
-                    context.locale.timetable.editColor,
+                    context.loc.translate("timetable.editColor"),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,

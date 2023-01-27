@@ -18,7 +18,7 @@ class _BookMeetingViewState extends State<BookMeetingView> {
     final meetings = cubit.meetings;
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.locale.teacherMeetings.bookMeeting),
+        title: Text(context.loc.translate("teacherMeetings.bookMeeting")),
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {

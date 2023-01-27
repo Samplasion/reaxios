@@ -65,7 +65,7 @@ class _EventViewState extends State<EventView> {
     String weekText = "";
     if (settings.getWeeks() > 1) {
       // weekText = " - week ${event.weekday.week}";
-      weekText = context.locale.timetable.eventViewWeek.format([
+      weekText = context.loc.translate("timetable.eventViewWeek").format([
         event.weekday.week,
       ]);
     }
@@ -119,7 +119,7 @@ class _EventViewState extends State<EventView> {
                               : bigText.fontSize),
                     ),
                     Text(
-                      context.locale.timetable.eventViewTime.format([
+                      context.loc.translate("timetable.eventViewTime").format([
                         event.start.format(context),
                         event.end.format(context),
                         weekText,
@@ -195,8 +195,7 @@ class _EventViewState extends State<EventView> {
         Divider(),
         ...widget.actions.entries.map((entry) {
           return OutlinedButton(
-            child:
-                Text(context.locale.timetable.getByKey("actions${entry.key}")),
+            child: Text(context.loc.translate("timetable.actions${entry.key}")),
             onPressed: () {
               entry.value(widget.event);
             },

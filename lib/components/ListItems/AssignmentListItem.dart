@@ -37,7 +37,8 @@ class AssignmentListItem extends StatelessWidget {
                 if (await canLaunch(link.url)) {
                   await launch(link.url);
                 } else {
-                  context.showSnackbar(context.locale.main.failedLinkOpen);
+                  context.showSnackbar(
+                      context.loc.translate("main.failedLinkOpen"));
                 }
               },
             ),

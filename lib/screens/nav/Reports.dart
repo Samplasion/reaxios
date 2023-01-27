@@ -65,7 +65,7 @@ class _NotesPaneState extends State<NotesPane> {
     if (notices.isEmpty) {
       return EmptyUI(
         icon: Icons.perm_contact_calendar_outlined,
-        text: context.locale.disciplinaryNotices.empty,
+        text: context.loc.translate("disciplinaryNotices.empty"),
       );
     }
 

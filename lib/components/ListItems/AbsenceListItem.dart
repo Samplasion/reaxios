@@ -44,7 +44,7 @@ class AbsenceListItem extends StatelessWidget {
             ({Widget? child}) => Container(child: child).width(50).height(50));
 
     final justifiedText = absence.isJustified
-        ? context.locale.absences.justifiedSubtitle.format([
+        ? context.loc.translate("absences.justifiedSubtitle").format([
             context.dateToString(absence.dateJustified),
             absence.kindJustified,
           ])
@@ -52,7 +52,7 @@ class AbsenceListItem extends StatelessWidget {
 
     final tile = CardListItem(
       leading: leading,
-      title: context.locale.absences.getByKey("type${absence.kind}"),
+      title: context.loc.translate("absences.type${absence.kind}"),
       subtitle: justifiedText != null && justifiedText.isNotEmpty
           ? MarkdownBody(
               data: justifiedText,

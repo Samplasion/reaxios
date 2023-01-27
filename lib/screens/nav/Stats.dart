@@ -143,7 +143,7 @@ class _StatsPaneState extends State<StatsPane> {
             child: Icon(Icons.grade),
             color: primary,
           ),
-          title: context.locale.stats.overallAverage,
+          title: context.loc.translate("stats.overallAverage"),
           subtitle: RichText(
             text: GradeText(
               context,
@@ -158,13 +158,13 @@ class _StatsPaneState extends State<StatsPane> {
                 gradesByGrade.last.subject, Icons.book)),
             color: primary,
           ),
-          title: context.locale.stats.bestSubject,
+          title: context.loc.translate("stats.bestSubject"),
           subtitle: Text(gradesByGrade.last.subject),
           details: RichText(
             text: TextSpan(
               style: Theme.of(context).textTheme.caption,
               children: [
-                TextSpan(text: context.locale.stats.average),
+                TextSpan(text: context.loc.translate("stats.average")),
                 GradeText(context, grade: best),
               ],
             ),
@@ -176,13 +176,13 @@ class _StatsPaneState extends State<StatsPane> {
                 gradesByGrade.first.subject, Icons.book)),
             color: accent,
           ),
-          title: context.locale.stats.worstSubject,
+          title: context.loc.translate("stats.worstSubject"),
           subtitle: Text(gradesByGrade.first.subject),
           details: RichText(
             text: TextSpan(
               style: Theme.of(context).textTheme.caption,
               children: [
-                TextSpan(text: context.locale.stats.average),
+                TextSpan(text: context.loc.translate("stats.average")),
                 GradeText(context, grade: worst),
               ],
             ),
@@ -194,7 +194,7 @@ class _StatsPaneState extends State<StatsPane> {
           child: Icon(Icons.star),
           color: getGradeColor(context, 10),
         ),
-        title: context.locale.stats.passedSubjects,
+        title: context.loc.translate("stats.passedSubjects"),
         subtitle: Text(
           over6.length.toString(),
         ),
@@ -204,7 +204,7 @@ class _StatsPaneState extends State<StatsPane> {
           child: Icon(Icons.star_half),
           color: getGradeColor(context, 5),
         ),
-        title: context.locale.stats.failedSubjects,
+        title: context.loc.translate("stats.failedSubjects"),
         subtitle: Text(
           under6.length.toString(),
         ),
@@ -212,9 +212,9 @@ class _StatsPaneState extends State<StatsPane> {
       if (currentGrades.isNotEmpty)
         BigCard(
           leading: NiceHeader(
-            title: context.locale.stats.trendHistory,
+            title: context.loc.translate("stats.trendHistory"),
             subtitle: currentPeriod == null
-                ? context.locale.charts.scopeAllYear
+                ? context.loc.translate("charts.scopeAllYear")
                 : currentPeriod.desc,
             leading: Icon(Icons.auto_graph).iconSize(40).padding(right: 16),
           ),

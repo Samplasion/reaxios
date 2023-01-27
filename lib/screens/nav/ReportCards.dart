@@ -113,7 +113,7 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: context.locale.reportCard.period,
+                    labelText: context.loc.translate("reportCard.period"),
                   ),
                   items: periods
                       .toSet()

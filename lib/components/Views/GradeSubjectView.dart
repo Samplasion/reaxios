@@ -62,7 +62,7 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
           PopupMenuButton<String>(
             itemBuilder: (BuildContext context) => [
               PopupMenuItem(
-                child: Text(context.locale.grades.settings),
+                child: Text(context.loc.translate("grades.settings")),
                 value: "settings",
               ),
             ],
@@ -128,12 +128,12 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
     final primary = Theme.of(context).primaryColor;
     final title = Intl.plural(
       teachers.length,
-      zero: context.locale.plurals.teachersZero,
-      one: context.locale.plurals.teachersOne,
-      two: context.locale.plurals.teachersTwo,
-      few: context.locale.plurals.teachersFew,
-      many: context.locale.plurals.teachersMany,
-      other: context.locale.plurals.teachersOther,
+      zero: context.loc.translate("plurals.teachersZero"),
+      one: context.loc.translate("plurals.teachersOne"),
+      two: context.loc.translate("plurals.teachersTwo"),
+      few: context.loc.translate("plurals.teachersFew"),
+      many: context.loc.translate("plurals.teachersMany"),
+      other: context.loc.translate("plurals.teachersOther"),
     );
     final icon = teachers.length != 1 ? Icons.people : Icons.person;
     return CardListItem(
@@ -162,12 +162,12 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
           subtitle: Text(
             Intl.plural(
               gradeNumber,
-              zero: context.locale.plurals.gradesZero,
-              one: context.locale.plurals.gradesOne,
-              two: context.locale.plurals.gradesTwo,
-              few: context.locale.plurals.gradesFew,
-              many: context.locale.plurals.gradesMany,
-              other: context.locale.plurals.gradesOther,
+              zero: context.loc.translate("plurals.gradesZero"),
+              one: context.loc.translate("plurals.gradesOne"),
+              two: context.loc.translate("plurals.gradesTwo"),
+              few: context.loc.translate("plurals.gradesFew"),
+              many: context.loc.translate("plurals.gradesMany"),
+              other: context.loc.translate("plurals.gradesOther"),
             ).format([gradeNumber]),
           ),
         ).padding(horizontal: 16);
@@ -178,7 +178,7 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
   Widget _buildTarget(BuildContext context, List<Grade> grades) {
     return BigCard(
       leading: NiceHeader(
-        title: context.locale.grades.objective,
+        title: context.loc.translate("grades.objective"),
         subtitle: period!,
         leading: Icon(Icons.assessment),
       ),
@@ -204,12 +204,12 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
     if (thisSubjectObjective != null) {
       if (periodAvg < thisSubjectObjective.objective) {
         return Alert(
-          title: context.locale.objectives.customTitle.format([
+          title: context.loc.translate("objectives.customTitle").format([
             context.gradeToString(thisSubjectObjective.objective, round: false),
           ]),
           color: Colors.lime,
           text: MarkdownBody(
-            data: context.locale.objectives.customText.format([
+            data: context.loc.translate("objectives.customText").format([
               context.gradeToString(
                 to(thisSubjectObjective.objective).toDouble(),
                 round: false,
@@ -223,23 +223,24 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
         );
       } else {
         return Alert(
-          title: context.locale.objectives.customTitleReached.format([
+          title: context.loc.translate("objectives.customTitleReached").format([
             context.gradeToString(periodAvg.floor(), round: false),
           ]),
           color: Colors.green,
-          text: MarkdownBody(data: context.locale.objectives.customTextReached),
+          text: MarkdownBody(
+              data: context.loc.translate("objectives.customTextReached")),
         );
       }
     }
 
     if (periodAvg < bounds.underFailure) {
       return Alert(
-        title: context.locale.objectives.lt5Title.format([
+        title: context.loc.translate("objectives.lt5Title").format([
           context.gradeToString(periodAvg.floor(), round: false),
         ]),
         color: Colors.red,
         text: MarkdownBody(
-          data: context.locale.objectives.lt5Text.format([
+          data: context.loc.translate("objectives.lt5Text").format([
             context.gradeToString(periodAvg.floor(), round: false),
             context.gradeToString(to(bounds.borderline).toDouble(),
                 round: false),
@@ -250,12 +251,12 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
       );
     } else if (periodAvg < bounds.borderline) {
       return Alert(
-        title: context.locale.objectives.lt6Title.format([
+        title: context.loc.translate("objectives.lt6Title").format([
           context.gradeToString(periodAvg.floor(), round: false),
         ]),
         color: Colors.orange,
         text: MarkdownBody(
-          data: context.locale.objectives.lt6Text.format([
+          data: context.loc.translate("objectives.lt6Text").format([
             context.gradeToString(to(bounds.borderline).toDouble(),
                 round: false),
             context.gradeToString(to(bounds.borderline, 2).toDouble(),
@@ -265,12 +266,12 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
       );
     } else if (periodAvg < bounds.successBoundary) {
       return Alert(
-        title: context.locale.objectives.lt7Title.format([
+        title: context.loc.translate("objectives.lt7Title").format([
           context.gradeToString(bounds.borderline, round: false),
         ]),
         color: Colors.green,
         text: MarkdownBody(
-          data: context.locale.objectives.lt7Text.format([
+          data: context.loc.translate("objectives.lt7Text").format([
             context.gradeToString(to(bounds.successBoundary).toDouble(),
                 round: false),
             context.gradeToString(bounds.successBoundary, round: false),
@@ -279,12 +280,12 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
       );
     } else if (periodAvg < bounds.overSuccess) {
       return Alert(
-        title: context.locale.objectives.lt8Title.format([
+        title: context.loc.translate("objectives.lt8Title").format([
           context.gradeToString(bounds.successBoundary, round: false),
         ]),
         color: Colors.green,
         text: MarkdownBody(
-          data: context.locale.objectives.lt8Text.format([
+          data: context.loc.translate("objectives.lt8Text").format([
             context.gradeToString(to(bounds.overSuccess).toDouble(),
                 round: false),
             context.gradeToString(bounds.overSuccess, round: false),
@@ -293,11 +294,11 @@ class _GradeSubjectViewState extends ReloadableState<GradeSubjectView> {
       );
     } else {
       return Alert(
-        title: context.locale.objectives.otherTitle.format([
+        title: context.loc.translate("objectives.otherTitle").format([
           context.gradeToString(periodAvg.floor(), round: false),
         ]),
         color: Colors.green,
-        text: MarkdownBody(data: context.locale.objectives.otherText),
+        text: MarkdownBody(data: context.loc.translate("objectives.otherText")),
       );
     }
   }

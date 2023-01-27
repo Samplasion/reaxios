@@ -105,7 +105,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
             });
           },
           // child: Text("Edit multiple events"),
-          child: Text(context.locale.timetable.editMultiple),
+          child: Text(context.loc.translate("timetable.editMultiple")),
         ),
         PopupMenuDivider(),
       ],
@@ -114,7 +114,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
           settings.share(["events"]);
         },
         // child: Text("Export"),
-        child: Text(context.locale.timetable.export),
+        child: Text(context.loc.translate("timetable.export")),
       ),
       PopupMenuItem<String>(
         onTap: () async {
@@ -125,7 +125,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  context.locale.timetable.importFailed,
+                  context.loc.translate("timetable.importFailed"),
                   style: TextStyle(color: Colors.white),
                 ),
                 backgroundColor: Colors.red,
@@ -133,7 +133,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
             );
           }
         },
-        child: Text(context.locale.timetable.import),
+        child: Text(context.loc.translate("timetable.import")),
       ),
     ];
   }
@@ -149,7 +149,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
             notificationPredicate: (notification) {
               return notification.depth == 1;
             },
-            title: Text(context.locale.timetable.dayView),
+            title: Text(context.loc.translate("timetable.dayView")),
             bottom: TabBar(
               isScrollable: true,
               controller: controller,
@@ -161,7 +161,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
                     .toLongString(context.currentLocale.languageCode);
                 String week = "";
                 if (settings.getWeeks() > 1) {
-                  week = context.locale.timetable.dayViewWeek.format([
+                  week = context.loc.translate("timetable.dayViewWeek").format([
                     ((entry.key + 2) / 7).floor() + 1,
                   ]);
                 }
@@ -254,7 +254,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
               color: Theme.of(context).textTheme.caption!.color,
             ),
           ),
-          Text(context.locale.timetable.emptyDay,
+          Text(context.loc.translate("timetable.emptyDay"),
               style: Theme.of(context).textTheme.caption),
         ],
       ),

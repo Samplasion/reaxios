@@ -6,12 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/utils/utils.dart' as axios_utils;
-import 'package:reaxios/generated/locale_base.dart';
 
 // Matches before a capital letter that is not also at beginning of string.
 import 'dart:math';
 
-import 'package:reaxios/system/AxiosLocalizationDelegate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
@@ -23,6 +21,7 @@ import 'cubit/app_cubit.dart';
 import 'enums/AverageMode.dart';
 import 'enums/GradeDisplay.dart';
 import 'format.dart';
+import 'i18n/delegate.dart';
 
 extension StringUtils on String {
   repeat(int times) {
@@ -313,7 +312,13 @@ extension PrettyGrade on Grade {
 }
 
 extension ContextUtils on BuildContext {
-  LocaleBase get locale => AxiosLocalizationDelegate.of(this)!;
+  String localizeDate(DateTime date) {
+    String locale = Localizations.localeOf(this).languageCode;
+    return DateFormat.yMMMMd(locale).format(date);
+  }
+
+  AppLocalizations get loc => AppLocalizations.of(this);
+
   MaterialLocalizations get materialLocale => MaterialLocalizations.of(this);
   Locale get currentLocale => Localizations.localeOf(this);
 
@@ -436,7 +441,7 @@ extension ContextUtils on BuildContext {
     if (await canLaunch(link.url)) {
       await launch(link.url);
     } else {
-      showSnackbarError(locale.main.failedLinkOpen);
+      showSnackbarError(loc.translate("main.failedLinkOpen"));
     }
   }
 
@@ -492,9 +497,9 @@ extension StringExtension on String {
 _showExitDialog(BuildContext context) {
   final alert = AlertDialog(
     icon: Icon(Icons.exit_to_app),
-    title: Text(context.locale.main.logoutTitle),
+    title: Text(context.loc.translate("main.logoutTitle")),
     content: Text(
-      context.locale.main.logoutBody,
+      context.loc.translate("main.logoutBody"),
       style: TextStyle(
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
@@ -544,7 +549,7 @@ List<Widget> showEndOfDrawerItems(BuildContext context) {
       endIndent: 28,
     ),
     M3DrawerListTile(
-      title: Text(context.locale.drawer.settings),
+      title: Text(context.loc.translate("drawer.settings")),
       leading: Icon(Icons.settings),
       onTap: () {
         if (!MaybeMasterDetail.shouldBeShowingMaster(context))
@@ -554,7 +559,7 @@ List<Widget> showEndOfDrawerItems(BuildContext context) {
     ),
     RegistroAboutListItem(),
     M3DrawerListTile(
-      title: Text(context.locale.drawer.logOut),
+      title: Text(context.loc.translate("drawer.logOut")),
       leading: Icon(Icons.exit_to_app),
       onTap: () {
         _showExitDialog(context);

@@ -39,12 +39,12 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
       return Column(
         children: [
           Alert(
-            title: context.locale.reportCard.notAvailableTitle,
+            title: context.loc.translate("reportCard.notAvailableTitle"),
             textBuilder: reportCard.dateRead == null ? (_) => null : null,
             text: reportCard.dateRead == null
                 ? null
                 : MarkdownBody(
-                    data: context.locale.reportCard.notAvailableBody.mapFormat({
+                    data: context.loc.translate("reportCard.notAvailableBody", {
                       "day": context.dateToString(reportCard.dateRead!),
                     }),
                   ),
@@ -56,12 +56,12 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Alert(
-          title: context.locale.reportCard.overview,
+          title: context.loc.translate("reportCard.overview"),
           textBuilder: (context) => [
             RichText(
               text: TextSpan(
                 children: [
-                  TextSpan(text: context.locale.reportCard.average),
+                  TextSpan(text: context.loc.translate("reportCard.average")),
                   GradeText(
                     context,
                     grade: simpleAverage(reportCard.subjects
@@ -78,10 +78,11 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
             ),
             MarkdownBody(data: () {
               String res = "";
-              res += "${context.locale.reportCard.absences}  \n";
-              res += "${context.locale.reportCard.failedSubjects}  \n";
+              res += "${context.loc.translate("reportCard.absences")}  \n";
+              res +=
+                  "${context.loc.translate("reportCard.failedSubjects")}  \n";
               if (reportCard.result.trim().isNotEmpty)
-                res += "${context.locale.reportCard.outcome}  \n";
+                res += "${context.loc.translate("reportCard.outcome")}  \n";
               return res.mapFormat({
                 "absences": reportCard.subjects
                     .fold<int>(
@@ -97,7 +98,7 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
           ].toColumn(crossAxisAlignment: CrossAxisAlignment.start),
         ),
         Alert(
-          title: context.locale.reportCard.judgment,
+          title: context.loc.translate("reportCard.judgment"),
           text: RichText(
             text: TextSpan(text: reportCard.rating),
           ),
@@ -119,7 +120,8 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                   trailing: RichText(
                     text: TextSpan(
                       children: [
-                        TextSpan(text: context.locale.reportCard.grade),
+                        TextSpan(
+                            text: context.loc.translate("reportCard.grade")),
                         e.details[0].grade == 0
                             ? TextSpan(text: "-")
                             : GradeText(context,
@@ -142,18 +144,20 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                           ...(reportCard.canViewAbsences
                               ? [
                                   DataRow(
-                                    context.locale.reportCard.subjAbsences,
+                                    context.loc
+                                        .translate("reportCard.subjAbsences"),
                                     e.absences.toInt().toString(),
                                   ),
                                   Divider(),
                                 ]
                               : []),
                           if (e.details.length > 0) ...[
-                            DataRow(context.locale.reportCard.subjKind,
+                            DataRow(
+                                context.loc.translate("reportCard.subjKind"),
                                 e.details[0].label),
                             if (e.details[0].grade > 0)
                               DataRow(
-                                context.locale.reportCard.subjGrade,
+                                context.loc.translate("reportCard.subjGrade"),
                                 RichText(
                                   text: GradeText(
                                     context,
