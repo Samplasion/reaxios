@@ -35,6 +35,8 @@ class _BigCardState extends State<BigCard> {
   }
 
   Widget _buildCard(BuildContext context, {Widget? child}) {
+    final theme = Theme.of(context);
+    final cardTheme = theme.cardTheme;
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16),
       constraints: BoxConstraints(
@@ -51,7 +53,7 @@ class _BigCardState extends State<BigCard> {
           child: child,
         ),
         color: widget.color ?? Card().color,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: widget.color == null ? null : Colors.transparent,
       ),
     );
   }

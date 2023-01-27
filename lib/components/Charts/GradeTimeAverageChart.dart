@@ -117,7 +117,6 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
               spots: averagesXY.map((e) => FlSpot(e.x, e.y)).toList(),
               isCurved: true,
               preventCurveOverShooting: true,
-              // colors: averages.map((e) => getGradeColor(e)).toList(),
               color: Theme.of(context).primaryColor,
               barWidth: 2,
               isStrokeCapRound: false,
