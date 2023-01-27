@@ -9,7 +9,6 @@ class BigCard extends StatefulWidget {
   final Color? color;
   final double elevation;
   final double radius;
-  final Function()? onTap;
   final bool gradient;
   final double innerPadding;
 
@@ -19,7 +18,6 @@ class BigCard extends StatefulWidget {
     this.color,
     this.elevation = 8.0,
     this.radius = 15.0,
-    this.onTap,
     this.gradient = false,
     this.innerPadding = 32,
   });
@@ -33,40 +31,29 @@ class _BigCardState extends State<BigCard> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildCard(context, child: _buildContent(context))
-        .padding(vertical: 8);
+    return _buildCard(context, child: _buildContent(context));
   }
 
   Widget _buildCard(BuildContext context, {Widget? child}) {
-    ThemeData theme = Theme.of(context);
-    var item = Styled.widget(
-      child: Theme(
-        data: theme.copyWith(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-        ),
-        child: (child ?? Container()).padding(all: widget.innerPadding),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 16),
+      constraints: BoxConstraints(
+        minHeight: 80,
       ),
-    ).borderRadius(all: widget.radius);
-
-    if (widget.onTap != null) {
-      item = item.ripple().gestures(
-            onTapChange: (tapStatus) => setState(() => pressed = tapStatus),
-            onTap: widget.onTap,
-          );
-    }
-
-    item = item.backgroundColor(widget.color ?? theme.cardTheme.color!,
-        animate: true);
-
-    return item
-        .clipRRect(all: widget.radius) // clip ripple
-        .borderRadius(all: widget.radius, animate: true)
-        .constrained(minHeight: 80)
-        .padding(vertical: 12) // margin
-        .scale(all: pressed ? 0.98 : 1.0, animate: true)
-        .animate(Duration(milliseconds: 150), Curves.easeOut);
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(widget.radius),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: EdgeInsets.all(widget.innerPadding),
+          child: child,
+        ),
+        color: widget.color ?? Card().color,
+        surfaceTintColor: Colors.transparent,
+      ),
+    );
   }
 
   Widget _buildContent(BuildContext context) {

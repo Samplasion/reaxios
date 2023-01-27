@@ -15,8 +15,7 @@ class _BookMeetingViewState extends State<BookMeetingView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<AppCubit>();
-    final meetings = cubit
-        .meetings; //.map((e) => e.meetings).fold<List>([], (previousValue, element) => [...previousValue, element]);
+    final meetings = cubit.meetings;
     return Scaffold(
       appBar: AppBar(
         title: Text(context.locale.teacherMeetings.bookMeeting),

@@ -11,7 +11,6 @@ import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 class GradeLineChart extends StatefulWidget {
   // final List<charts.Series> seriesList;
@@ -55,14 +54,16 @@ class _GradeLineChartState extends State<GradeLineChart> {
     late Widget widget;
     final averageMode = Provider.of<Settings>(context).getAverageMode();
     if (usefulGrades.length < 2) {
-      widget = [
-        _getHeader(),
-        EmptyUI(
-          icon: Icons.error_outline,
-          text: context.locale.charts.noData,
-          subtitle: context.locale.charts.fewGradesText,
-        )
-      ].toColumn();
+      widget = Column(
+        children: [
+          _getHeader(),
+          EmptyUI(
+            icon: Icons.error_outline,
+            text: context.locale.charts.noData,
+            subtitle: context.locale.charts.fewGradesText,
+          )
+        ],
+      );
     } else {
       final brightness = Theme.of(context).brightness;
       final tooltipColor =
@@ -80,183 +81,189 @@ class _GradeLineChartState extends State<GradeLineChart> {
           ((usefulGrades.map((g) => g.grade).toList().max ?? 0) + 2)
               .floorToDouble());
 
-      widget = <Widget>[
-        _getHeader(),
-        LineChart(
-          LineChartData(
-            lineTouchData: LineTouchData(
-              touchTooltipData: LineTouchTooltipData(
-                tooltipBgColor:
-                    tooltipColor(Theme.of(context).cardTheme.color!, 0.1, 0.1)
+      widget = Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _getHeader(),
+          SizedBox(height: 24),
+          SizedBox(
+            height: (maxY - minY) * 38,
+            child: LineChart(
+              LineChartData(
+                lineTouchData: LineTouchData(
+                  touchTooltipData: LineTouchTooltipData(
+                    tooltipBgColor: tooltipColor(
+                            Theme.of(context).cardTheme.color!, 0.1, 0.1)
                         .withAlpha((0.65 * 255).round()),
-                getTooltipItems: (List<LineBarSpot> touchedSpots) {
-                  return touchedSpots.map((LineBarSpot touchedSpot) {
-                    return LineTooltipItem(
-                      "${context.gradeToString(touchedSpot.y)}",
-                      TextStyle(
-                        color: tooltipColor(
-                            getGradeColor(context, touchedSpot.y), 0.2, 0.1),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
-                  }).toList();
-                },
-              ),
-            ),
-            titlesData: FlTitlesData(
-              show: true,
-              topTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: false,
-                ),
-              ),
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  // margin: 8,
-                  getTitlesWidget: (double value, meta) {
-                    final _ = (String s) => Text(
-                          s,
-                          style: Theme.of(context)
-                              .textTheme
-                              .caption!
-                              .copyWith(fontWeight: FontWeight.w100),
+                    getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                      return touchedSpots.map((LineBarSpot touchedSpot) {
+                        return LineTooltipItem(
+                          "${context.gradeToString(touchedSpot.y)}",
+                          TextStyle(
+                            color: tooltipColor(
+                                getGradeColor(context, touchedSpot.y),
+                                0.2,
+                                0.1),
+                            fontWeight: FontWeight.bold,
+                          ),
                         );
-                    if (value >= usefulGrades.length ||
-                        value != value.truncate()) return _("");
-                    final date = usefulGrades[value.truncate()].date;
-
-                    print(value);
-
-                    if (value.truncate() == 0) {
-                      return _(context.dateToString(date, short: true));
-                    } else {
-                      final previous = usefulGrades[value.truncate() - 1].date;
-                      if (date.year == previous.year) {
-                        if (date.month == previous.month &&
-                            value.toInt() != usefulGrades.length - 1) {
-                          return _(context.dateToString(
-                            date,
-                            short: true,
-                          ));
-                        } else {
-                          return _(context.dateToString(
-                            date,
-                            short: true,
-                          ));
-                        }
-                      } else {
-                        return _(context.dateToString(date, short: true));
-                      }
-                    }
-                  },
-                ),
-              ),
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 30,
-                  getTitlesWidget: (double value, _) {
-                    return Text("");
-                  },
-                ),
-              ),
-              rightTitles: AxisTitles(
-                sideTitles: SideTitles(
-                    showTitles: true,
-                    // margin: 8,
-                    reservedSize: 30,
-                    interval: 1,
-                    getTitlesWidget: (double value, _) {
-                      return Text(
-                        "   ${value.truncate().toString()}",
-                        style: TextStyle(
-                          color: tooltipColor(
-                              getGradeColor(context, value), 0.1, 0.2),
-                          fontSize: 10,
-                        ),
-                      );
-                    }),
-              ),
-            ),
-            borderData: FlBorderData(
-              show: false,
-            ),
-            extraLinesData: ExtraLinesData(
-              horizontalLines: [
-                HorizontalLine(
-                  y: gradeAverage(averageMode, usefulGrades),
-                  color: tooltipColor(
-                    getGradeColor(
-                        context, gradeAverage(averageMode, usefulGrades)),
-                    0.1,
-                    0.2,
+                      }).toList();
+                    },
                   ),
-                  // strokeWidth: 2,
                 ),
-              ],
-            ),
-            minX: 0,
-            maxX: usefulGrades.length - 1,
-            minY: minY.toDouble(),
-            maxY: maxY.toDouble(),
-            lineBarsData: [
-              LineChartBarData(
-                spots: usefulGrades.map((Grade grade) {
-                  return FlSpot(
-                    usefulGrades.indexOf(grade).toDouble(),
-                    grade.grade,
-                  );
-                }).toList(),
-                isCurved: true,
-                gradient: LinearGradient(
-                  colors: usefulGrades.map((Grade grade) {
-                    return getGradeColor(context, grade.grade);
-                  }).toList(),
-                ),
-                barWidth: 4,
-                isStrokeCapRound: true,
-                dotData: FlDotData(
-                  show: false,
-                ),
-                belowBarData: BarAreaData(
+                titlesData: FlTitlesData(
                   show: true,
-                  gradient: LinearGradient(
-                    colors: usefulGrades.map((Grade grade) {
-                      return getGradeColor(context, grade.grade)
-                          .withOpacity(0.2);
-                    }).toList(),
-                  ),
-                  spotsLine: BarAreaSpotsLine(
-                    show: true,
-                    flLineStyle: FlLine(
-                      color: Colors.blueGrey,
-                      strokeWidth: 1,
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: false,
                     ),
                   ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      // margin: 8,
+                      getTitlesWidget: (double value, meta) {
+                        final _ = (String s) => Text(
+                              s,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .caption!
+                                  .copyWith(fontWeight: FontWeight.w100),
+                            );
+                        if (value >= usefulGrades.length ||
+                            value != value.truncate()) return _("");
+                        final date = usefulGrades[value.truncate()].date;
+
+                        print(value);
+
+                        if (value.truncate() == 0) {
+                          return _(context.dateToString(date, short: true));
+                        } else {
+                          final previous =
+                              usefulGrades[value.truncate() - 1].date;
+                          if (date.year == previous.year) {
+                            if (date.month == previous.month &&
+                                value.toInt() != usefulGrades.length - 1) {
+                              return _(context.dateToString(
+                                date,
+                                short: true,
+                              ));
+                            } else {
+                              return _(context.dateToString(
+                                date,
+                                short: true,
+                              ));
+                            }
+                          } else {
+                            return _(context.dateToString(date, short: true));
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 30,
+                      getTitlesWidget: (double value, _) {
+                        return Text("");
+                      },
+                    ),
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                        showTitles: true,
+                        // margin: 8,
+                        reservedSize: 30,
+                        interval: 1,
+                        getTitlesWidget: (double value, _) {
+                          return Text(
+                            "   ${value.truncate().toString()}",
+                            style: TextStyle(
+                              color: tooltipColor(
+                                  getGradeColor(context, value), 0.1, 0.2),
+                              fontSize: 10,
+                            ),
+                          );
+                        }),
+                  ),
                 ),
+                borderData: FlBorderData(
+                  show: false,
+                ),
+                extraLinesData: ExtraLinesData(
+                  horizontalLines: [
+                    HorizontalLine(
+                      y: gradeAverage(averageMode, usefulGrades),
+                      color: tooltipColor(
+                        getGradeColor(
+                            context, gradeAverage(averageMode, usefulGrades)),
+                        0.1,
+                        0.2,
+                      ),
+                      // strokeWidth: 2,
+                    ),
+                  ],
+                ),
+                minX: 0,
+                maxX: usefulGrades.length - 1,
+                minY: minY.toDouble(),
+                maxY: maxY.toDouble(),
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: usefulGrades.map((Grade grade) {
+                      return FlSpot(
+                        usefulGrades.indexOf(grade).toDouble(),
+                        grade.grade,
+                      );
+                    }).toList(),
+                    isCurved: true,
+                    gradient: LinearGradient(
+                      colors: usefulGrades.map((Grade grade) {
+                        return getGradeColor(context, grade.grade);
+                      }).toList(),
+                    ),
+                    barWidth: 4,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(
+                      show: false,
+                    ),
+                    belowBarData: BarAreaData(
+                      show: true,
+                      gradient: LinearGradient(
+                        colors: usefulGrades.map((Grade grade) {
+                          return getGradeColor(context, grade.grade)
+                              .withOpacity(0.2);
+                        }).toList(),
+                      ),
+                      spotsLine: BarAreaSpotsLine(
+                        show: true,
+                        flLineStyle: FlLine(
+                          color: Colors.blueGrey,
+                          strokeWidth: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ).height((maxY - minY) * 38),
-      ].toColumn(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start);
+        ],
+      );
     }
 
-    return widget
-        .padding(all: 24)
-        .borderRadius(all: 15)
-        .backgroundColor(Theme.of(context).cardTheme.color!, animate: true)
-        .clipRRect(all: 15) // clip ripple
-        .borderRadius(all: 15, animate: true)
-        .elevation(
-          Theme.of(context).cardTheme.elevation ?? 8,
-          borderRadius: BorderRadius.circular(15),
-          shadowColor: Theme.of(context).shadowColor,
-        )
-        .padding(all: 16)
-        .animate(Duration(milliseconds: 150), Curves.easeOut);
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: widget,
+        ),
+      ),
+    );
   }
 
   List<Grade> get usefulGrades => grades

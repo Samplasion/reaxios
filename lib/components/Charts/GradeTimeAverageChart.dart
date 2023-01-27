@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 class _XY {
   final double x;
@@ -57,6 +56,7 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
     }
 
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       height: height,
       child: LineChart(
         LineChartData(
@@ -144,7 +144,7 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
           ),
         ),
       ),
-    ).paddingDirectional(horizontal: 8);
+    );
   }
 
   List<double> get averages {

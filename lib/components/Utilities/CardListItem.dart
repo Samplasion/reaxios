@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 class CardListItem extends StatefulWidget {
   CardListItem({
@@ -35,85 +34,72 @@ class _CardListItemState extends State<CardListItem> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bg = theme.cardTheme.color!;
-
-    final settingsItem = ({Widget? child}) {
-      var item = Styled.widget(
-              child: Theme(
-                  data: theme.copyWith(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                  ),
-                  child: child ?? Container()))
-          .alignment(Alignment.center)
-          .borderRadius(all: widget.radius);
-
-      if (widget.onClick != null) {
-        item = item.ripple().gestures(
-              onTapChange: (tapStatus) => setState(() => pressed = tapStatus),
-              onTap: widget.onClick,
-              onLongPress: widget.onLongPress,
-            );
-      }
-
-      return item
-          .backgroundColor(bg, animate: true)
-          .clipRRect(all: widget.radius) // clip ripple
-          .borderRadius(all: widget.radius, animate: true)
-          .constrained(minHeight: 80)
-          .padding(vertical: 12) // margin
-          .scale(all: pressed ? 0.95 : 1.0, animate: true)
-          .animate(Duration(milliseconds: 150), Curves.easeOut);
-    };
-
-    final Widget icon = widget.leading;
-    // .padding(all: 12)
-    // .decorated(
-    //   color: theme.accentColor,
-    //   borderRadius: BorderRadius.circular(50),
-    // )
-    // .padding(left: 15, right: 10);
-
-    final Widget title = Text(
-      widget.title,
-      style: TextStyle(
-        fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-      ).merge(widget.titleStyle),
-    ).padding(bottom: 5);
+    final Widget title = Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Text(
+        widget.title,
+        style: TextStyle(
+          fontFamily: theme.textTheme.headline6!.fontFamily,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ).merge(widget.titleStyle),
+      ),
+    );
 
     final Widget description = widget.subtitle;
 
-    Widget leading = icon;
+    Widget leading = widget.leading;
     if (leading is! NotificationBadge) {
       leading = NotificationBadge(
-        child: icon,
+        child: widget.leading,
         showBadge: false,
       );
     }
 
-    return settingsItem(
-      child: Material(
-        color: Colors.transparent,
-        child: ListTile(
-          leading: leading.parent(({Widget? child}) =>
-              Container(child: child).width(50).height(50)),
-          title: title,
-          subtitle: <Widget>[
-            description.padding(
-                bottom: widget.details == null ||
-                        (description is Container && description.child == null)
-                    ? 0
-                    : 8),
-            if (widget.details != null) widget.details!,
-          ].toColumn(crossAxisAlignment: CrossAxisAlignment.start),
-          enabled: true,
-          dense: true,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Card(
+        margin: EdgeInsets.zero,
+        surfaceTintColor: theme.cardTheme.surfaceTintColor,
+        shadowColor: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(13),
+          onTap: widget.onClick,
+          onLongPress: widget.onLongPress,
           mouseCursor: widget.onClick == null ? null : SystemMouseCursors.click,
-          // onTap: () {},
-        ).padding(all: 8),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: ListTile(
+              leading: Container(
+                child: leading,
+                width: 50,
+                height: 50,
+              ),
+              title: title,
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom: widget.details == null ||
+                              (description is Container &&
+                                  description.child == null)
+                          ? 0
+                          : 8,
+                    ),
+                    child: description,
+                  ),
+                  if (widget.details != null) widget.details!,
+                ],
+              ),
+              enabled: true,
+              dense: true,
+              mouseCursor:
+                  widget.onClick == null ? null : SystemMouseCursors.click,
+              // onTap: () {},
+            ),
+          ),
+        ),
       ),
     );
   }

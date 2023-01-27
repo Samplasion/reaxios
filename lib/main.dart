@@ -127,12 +127,9 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
 
         ThemeData getThemeData(ColorScheme scheme) {
           final cardTheme = CardTheme(
-            color: ElevationOverlay.applySurfaceTint(
-              scheme.surface,
-              scheme.surfaceTint,
-              4,
-            ),
+            color: scheme.surface,
             surfaceTintColor: scheme.surfaceTint,
+            shadowColor: Colors.transparent,
             elevation: 4,
           );
           return ThemeData(
