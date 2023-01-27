@@ -66,7 +66,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: MaybeMasterDetail(
-        master: getDrawer(context),
+        master: getDrawer(context, false),
         detail: Scaffold(
           appBar: _selectedItem == 1
               ? null
@@ -87,7 +87,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
                           });
                   }),
                 ),
-          drawer: getDrawer(context),
+          drawer: getDrawer(context, true),
           body: _selectedItem == 1
               ? Builder(
                   builder: (context) => TimetablePane(
@@ -130,42 +130,57 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
     );
   }
 
-  Drawer getDrawer(BuildContext context) {
+  Drawer getDrawer(BuildContext context, bool scrim) {
     final appInfo = context.watch<AppInfoStore>();
     final app = appInfo.packageInfo;
 
     return Drawer(
-      child: ListView(
-        children: [
-          SizedBox(height: 16),
-          M3DrawerHeading(kIsWeb ? context.locale.about.appName : app.appName),
-          SizedBox(height: 16),
-          M3DrawerListTile(
-            title: Text(context.locale.noInternet.title),
-            leading: Icon(Icons.wifi_off),
-            selected: _selectedItem == 0,
-            onTap: () {
-              setState(() {
-                _selectedItem = 0;
-              });
-              if (!MaybeMasterDetail.shouldBeShowingMaster(context))
-                Navigator.pop(context);
-            },
-          ),
-          M3DrawerListTile(
-            title: Text(context.locale.drawer.timetable),
-            leading: Icon(Icons.access_time),
-            selected: _selectedItem == 1,
-            onTap: () {
-              setState(() {
-                _selectedItem = 1;
-              });
-              if (!MaybeMasterDetail.shouldBeShowingMaster(context))
-                Navigator.pop(context);
-            },
-          ),
-          ...showEndOfDrawerItems(context),
-        ],
+      shape: scrim
+          ? RoundedRectangleBorder(
+              borderRadius: BorderRadius.horizontal(right: Radius.circular(16)),
+            )
+          : null,
+      child: Container(
+        decoration: scrim
+            ? BoxDecoration(
+                borderRadius:
+                    BorderRadius.horizontal(right: Radius.circular(16)),
+              )
+            : null,
+        clipBehavior: scrim ? Clip.hardEdge : Clip.none,
+        child: ListView(
+          children: [
+            SizedBox(height: 16),
+            M3DrawerHeading(
+                kIsWeb ? context.locale.about.appName : app.appName),
+            SizedBox(height: 16),
+            M3DrawerListTile(
+              title: Text(context.locale.noInternet.title),
+              leading: Icon(Icons.wifi_off),
+              selected: _selectedItem == 0,
+              onTap: () {
+                setState(() {
+                  _selectedItem = 0;
+                });
+                if (!MaybeMasterDetail.shouldBeShowingMaster(context))
+                  Navigator.pop(context);
+              },
+            ),
+            M3DrawerListTile(
+              title: Text(context.locale.drawer.timetable),
+              leading: Icon(Icons.access_time),
+              selected: _selectedItem == 1,
+              onTap: () {
+                setState(() {
+                  _selectedItem = 1;
+                });
+                if (!MaybeMasterDetail.shouldBeShowingMaster(context))
+                  Navigator.pop(context);
+              },
+            ),
+            ...showEndOfDrawerItems(context),
+          ],
+        ),
       ),
     );
   }

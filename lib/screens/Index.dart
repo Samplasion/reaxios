@@ -494,7 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(topRight: Radius.circular(16)),
+          borderRadius: BorderRadius.horizontal(right: Radius.circular(16)),
         ),
         clipBehavior: Clip.hardEdge,
         child: ListView(
