@@ -13,104 +13,116 @@ class GeneralSettings extends BaseSettings {
   @override
   List<SettingsTile> getTiles(BuildContext context, Settings settings) {
     return [
-      SettingsHeaderTile(
-        title: Text(context.locale.generalSettings.groupsColorsTitle),
-      ),
-      if (!kIsWeb) ...[
-        SwitchSettingsTile(
-          title: Text(context.locale.generalSettings.dynamicColor),
-          subtitle: Text(context.locale.generalSettings.dynamicColorExpl),
-          onChange: (value) => settings.setUseDynamicColor(value),
-          value: settings.getUseDynamicColor(),
+      SettingsTileGroup(
+        title: SettingsHeaderTile(
+          title: Text(context.locale.generalSettings.groupsColorsTitle),
         ),
-      ],
-      ColorTile(
-        title: Text(context.locale.generalSettings.colorSecondary),
-        onChange: (color) => settings.setPrimaryColor(color),
-        value: settings.getPrimaryColor(),
+        children: [
+          if (!kIsWeb) ...[
+            SwitchSettingsTile(
+              title: Text(context.locale.generalSettings.dynamicColor),
+              subtitle: Text(context.locale.generalSettings.dynamicColorExpl),
+              onChange: (value) => settings.setUseDynamicColor(value),
+              value: settings.getUseDynamicColor(),
+            ),
+          ],
+          ColorTile(
+            title: Text(context.locale.generalSettings.colorSecondary),
+            onChange: (color) => settings.setPrimaryColor(color),
+            value: settings.getPrimaryColor(),
+          ),
+          ColorTile(
+            title: Text(context.locale.generalSettings.colorPrimary),
+            onChange: (color) => settings.setAccentColor(color),
+            value: settings.getAccentColor(),
+          ),
+          SwitchSettingsTile(
+            title: Text(context.locale.generalSettings.harmonizeColors),
+            subtitle: Text(context.locale.generalSettings.harmonizeColorsExpl),
+            onChange: (harmonizeColors) =>
+                settings.setHarmonizeColors(harmonizeColors),
+            value: settings.getHarmonizeColors(),
+          ),
+          SwitchSettingsTile(
+            title: Text(context.locale.generalSettings.useGradients),
+            subtitle: Text(context.locale.generalSettings.useGradientsExpl),
+            onChange: (useGradients) => settings.setUseGradients(useGradients),
+            value: settings.getUseGradients(),
+          ),
+          RadioModalTile(
+            title: Text(context.locale.generalSettings.colorTheme),
+            values: {
+              "light": context.locale.generalSettings.colorThemeLight,
+              "dark": context.locale.generalSettings.colorThemeDark,
+              "dynamic": context.locale.generalSettings.colorThemeDynamic,
+            },
+            selectedValue: settings.getThemeMode(),
+            onChange: (value) {
+              if (value is String) {
+                settings.setThemeMode(value);
+              }
+            },
+          ),
+        ],
       ),
-      ColorTile(
-        title: Text(context.locale.generalSettings.colorPrimary),
-        onChange: (color) => settings.setAccentColor(color),
-        value: settings.getAccentColor(),
+      SettingsTileGroup(
+        title: SettingsHeaderTile(
+          title: Text(context.locale.generalSettings.groupsBehaviorTitle),
+        ),
+        children: [
+          RadioModalTile(
+            title: Text(context.locale.generalSettings.gradeDisplayLabel),
+            values: {
+              GradeDisplay.decimal.serialized:
+                  context.locale.generalSettings.gradeDisplayDecimal,
+              GradeDisplay.letter.serialized:
+                  context.locale.generalSettings.gradeDisplayLetter,
+              GradeDisplay.percentage.serialized:
+                  context.locale.generalSettings.gradeDisplayPercentage,
+              GradeDisplay.precise.serialized:
+                  context.locale.generalSettings.gradeDisplayPrecise,
+            },
+            selectedValue: settings.getGradeDisplay().serialized,
+            onChange: (dynamic value) {
+              print("Value changed: $value");
+              settings.setGradeDisplay(deserializeGradeDisplay(value));
+            },
+          ),
+          RadioModalTile(
+            title: Text(context.locale.generalSettings.averageModeLabel),
+            subtitle: Text(context.locale.generalSettings.averageModeSubtitle),
+            values: {
+              AverageMode.allGradesAverage.serialized:
+                  context.locale.generalSettings.averageModeAllGrades,
+              AverageMode.averageOfAverages.serialized:
+                  context.locale.generalSettings.averageModeAverageOfAverages,
+            },
+            selectedValue: settings.getAverageMode().serialized,
+            onChange: (dynamic value) {
+              print("Value changed: $value");
+              settings.setAverageMode(deserializeAverageMode(value));
+            },
+          ),
+          TextFormFieldModalTile(
+            title: Text(context.locale.generalSettings.ignoredWords),
+            value: settings.getIgnoreList().join(" "),
+            onChange: (ignored) => settings.setIgnoreList(ignored),
+          ),
+        ],
       ),
-      SwitchSettingsTile(
-        title: Text(context.locale.generalSettings.harmonizeColors),
-        subtitle: Text(context.locale.generalSettings.harmonizeColorsExpl),
-        onChange: (harmonizeColors) =>
-            settings.setHarmonizeColors(harmonizeColors),
-        value: settings.getHarmonizeColors(),
-      ),
-      SwitchSettingsTile(
-        title: Text(context.locale.generalSettings.useGradients),
-        subtitle: Text(context.locale.generalSettings.useGradientsExpl),
-        onChange: (useGradients) => settings.setUseGradients(useGradients),
-        value: settings.getUseGradients(),
-      ),
-      RadioModalTile(
-        title: Text(context.locale.generalSettings.colorTheme),
-        values: {
-          "light": context.locale.generalSettings.colorThemeLight,
-          "dark": context.locale.generalSettings.colorThemeDark,
-          "dynamic": context.locale.generalSettings.colorThemeDynamic,
-        },
-        selectedValue: settings.getThemeMode(),
-        onChange: (value) {
-          if (value is String) {
-            settings.setThemeMode(value);
-          }
-        },
-      ),
-      SettingsHeaderTile(
-        title: Text(context.locale.generalSettings.groupsBehaviorTitle),
-      ),
-      RadioModalTile(
-        title: Text(context.locale.generalSettings.gradeDisplayLabel),
-        values: {
-          GradeDisplay.decimal.serialized:
-              context.locale.generalSettings.gradeDisplayDecimal,
-          GradeDisplay.letter.serialized:
-              context.locale.generalSettings.gradeDisplayLetter,
-          GradeDisplay.percentage.serialized:
-              context.locale.generalSettings.gradeDisplayPercentage,
-          GradeDisplay.precise.serialized:
-              context.locale.generalSettings.gradeDisplayPrecise,
-        },
-        selectedValue: settings.getGradeDisplay().serialized,
-        onChange: (dynamic value) {
-          print("Value changed: $value");
-          settings.setGradeDisplay(deserializeGradeDisplay(value));
-        },
-      ),
-      RadioModalTile(
-        title: Text(context.locale.generalSettings.averageModeLabel),
-        subtitle: Text(context.locale.generalSettings.averageModeSubtitle),
-        values: {
-          AverageMode.allGradesAverage.serialized:
-              context.locale.generalSettings.averageModeAllGrades,
-          AverageMode.averageOfAverages.serialized:
-              context.locale.generalSettings.averageModeAverageOfAverages,
-        },
-        selectedValue: settings.getAverageMode().serialized,
-        onChange: (dynamic value) {
-          print("Value changed: $value");
-          settings.setAverageMode(deserializeAverageMode(value));
-        },
-      ),
-      TextFormFieldModalTile(
-        title: Text(context.locale.generalSettings.ignoredWords),
-        value: settings.getIgnoreList().join(" "),
-        onChange: (ignored) => settings.setIgnoreList(ignored),
-      ),
-      SettingsHeaderTile(
-        title: Text(context.locale.generalSettings.groupsAdvancedTitle),
-      ),
-      SettingsListTile(
-        title: Text(context.locale.generalSettings.restartAppTitle),
-        subtitle: Text(context.locale.generalSettings.restartAppSubtitle),
-        onTap: () async {
-          RestartWidget.restartApp(context);
-        },
+      SettingsTileGroup(
+        title: SettingsHeaderTile(
+          title: Text(context.locale.generalSettings.groupsAdvancedTitle),
+        ),
+        children: [
+          SettingsListTile(
+            title: Text(context.locale.generalSettings.restartAppTitle),
+            subtitle: Text(context.locale.generalSettings.restartAppSubtitle),
+            onTap: () async {
+              RestartWidget.restartApp(context);
+            },
+          ),
+        ],
       ),
     ];
   }

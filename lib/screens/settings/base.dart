@@ -21,7 +21,7 @@ abstract class BaseSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<Settings>(
       builder: (context, settings, child) => ListView(
-        children: getTiles(context, settings),
+        children: [...getTiles(context, settings), SizedBox(height: 16)],
       ),
     );
   }
@@ -30,7 +30,13 @@ abstract class BaseSettings extends StatelessWidget {
     Settings settings = Provider.of<Settings>(context, listen: false);
     return getTiles(context, settings)
         .where((element) => element.shouldShowInDescription)
-        .map((e) => (e.title as Text).data)
+        .map((e) {
+          if (e is SettingsTileGroup) {
+            return e.getDescription(context);
+          }
+          return (e.title as Text).data;
+        })
+        .where((element) => element?.trim().isNotEmpty ?? false)
         .join(', ');
   }
 }
@@ -41,6 +47,112 @@ abstract class SettingsTile extends StatefulWidget {
   bool get shouldShowInDescription => true;
 
   const SettingsTile({Key? key}) : super(key: key);
+}
+
+class _EmptySentinel extends StatelessWidget {
+  const _EmptySentinel();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class SettingsTileGroup extends SettingsTile {
+  @override
+  final Widget title;
+  final List<SettingsTile> children;
+
+  const SettingsTileGroup({
+    this.title = const _EmptySentinel(),
+    required this.children,
+    super.key,
+  });
+
+  @override
+  State<SettingsTileGroup> createState() => _SettingsTileGroupState();
+
+  String getDescription(BuildContext context) {
+    return children
+        .where((element) => element.shouldShowInDescription)
+        .map((e) => (e.title as Text).data)
+        .join(', ');
+  }
+}
+
+class _SettingsTileGroupState extends State<SettingsTileGroup> {
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> mappedWidgets = [];
+
+    for (int i = 0; i < widget.children.length; i++) {
+      mappedWidgets.add(
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 1.5),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(
+                top: i == 0 ? Radius.circular(30) : Radius.circular(4),
+                bottom: i == widget.children.length - 1
+                    ? Radius.circular(30)
+                    : Radius.circular(4),
+              ),
+              color: Theme.of(context).colorScheme.secondaryContainer,
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Container(
+              alignment: Alignment.center,
+              child: Material(
+                type: MaterialType.transparency,
+                child: widget.children[i],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.title is! _EmptySentinel)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: widget.title,
+          ),
+        ...mappedWidgets,
+      ],
+    );
+  }
+}
+
+class _SettingsTileGroupTile extends StatelessWidget {
+  final Widget? title;
+  final Widget? subtitle;
+  final Widget? leading;
+  final Widget? trailing;
+  final void Function()? onTap;
+
+  const _SettingsTileGroupTile({
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.trailing,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      minVerticalPadding: 16,
+      title: title,
+      subtitle: subtitle,
+      leading: leading,
+      trailing: trailing,
+      onTap: onTap,
+    );
+  }
 }
 
 class SwitchSettingsTile extends SettingsTile {
@@ -65,12 +177,15 @@ class SwitchSettingsTile extends SettingsTile {
 class _SwitchSettingsTileState extends State<SwitchSettingsTile> {
   @override
   Widget build(BuildContext context) {
-    return SwitchListTile(
+    return _SettingsTileGroupTile(
       title: widget.title,
       subtitle: widget.subtitle,
-      activeColor: Theme.of(context).colorScheme.secondary,
-      value: widget.value,
-      onChanged: widget.onChange,
+      trailing: Switch(
+        value: widget.value,
+        onChanged: widget.onChange,
+        activeColor: Theme.of(context).colorScheme.tertiary,
+      ),
+      onTap: () => widget.onChange(!widget.value),
     );
   }
 }
@@ -180,7 +295,7 @@ class _RadioModalTileState<T> extends State<RadioModalTile<T>>
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return _SettingsTileGroupTile(
       title: widget.title,
       subtitle: widget.subtitle ?? Text(subtitle),
       trailing: Icon(Icons.arrow_right_rounded),
@@ -294,7 +409,7 @@ class ListSettingsTile extends SettingsTile {
 class _ListSettingsTileState extends State<ListSettingsTile> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return _SettingsTileGroupTile(
       title: widget.title,
       subtitle: widget.subtitle,
       leading: widget.leading,
@@ -355,7 +470,7 @@ class _CheckboxModalTileState<T> extends State<CheckboxModalTile<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return _SettingsTileGroupTile(
       title: widget.title,
       subtitle: widget.subtitle ??
           Text(
@@ -534,7 +649,7 @@ class _TextFormFieldModalTileState extends State<TextFormFieldModalTile> {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return _SettingsTileGroupTile(
       title: widget.title,
       subtitle: widget.subtitle ?? Text(_value),
       trailing: Icon(Icons.arrow_right_rounded),
@@ -645,7 +760,7 @@ class _ColorTileState extends State<ColorTile> {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return _SettingsTileGroupTile(
       title: widget.title,
       subtitle: widget.subtitle ?? Text(ColorSerializer().toJson(_color)),
       trailing: GradientCircleAvatar(color: _color),
@@ -753,7 +868,7 @@ class SettingsListTile extends SettingsTile {
 class _SettingsListTileState extends State<SettingsListTile> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return _SettingsTileGroupTile(
       title: widget.title,
       onTap: widget.onTap,
       subtitle: widget.subtitle,
@@ -791,11 +906,11 @@ class SubscreenListTile extends SettingsTile {
 class _SubscreenListTileState extends State<SubscreenListTile> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return _SettingsTileGroupTile(
       title: widget.title,
       subtitle: widget.subtitle,
       leading: widget.leading,
-      trailing: widget.trailing,
+      trailing: widget.trailing ?? Icon(Icons.arrow_right_rounded),
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(

@@ -12,22 +12,27 @@ class DataSettings extends BaseSettings {
   @override
   List<SettingsTile> getTiles(BuildContext context, Settings settings) {
     return [
-      SubscreenListTile(
-        title: Text(context.locale.dataSettings.objectivesTitle),
-        subtitle: Text(Intl.plural(
-          settings.getSubjectObjectives().length,
-          zero: context.locale.dataSettings.objectivesSubtitleZero,
-          one: context.locale.dataSettings.objectivesSubtitleOne,
-          two: context.locale.dataSettings.objectivesSubtitleTwo,
-          few: context.locale.dataSettings.objectivesSubtitleFew,
-          many: context.locale.dataSettings.objectivesSubtitleMany,
-          other: context.locale.dataSettings.objectivesSubtitleOther,
-          locale: context.currentLocale.languageCode,
-        ).format([settings.getSubjectObjectives().length])),
-        shouldShowInDescription: true,
-        builder: (context) {
-          return SubjectObjectivesManagerView();
-        },
+      SettingsTileGroup(
+        title: SettingsHeader(title: context.locale.settings.data),
+        children: [
+          SubscreenListTile(
+            title: Text(context.locale.dataSettings.objectivesTitle),
+            subtitle: Text(Intl.plural(
+              settings.getSubjectObjectives().length,
+              zero: context.locale.dataSettings.objectivesSubtitleZero,
+              one: context.locale.dataSettings.objectivesSubtitleOne,
+              two: context.locale.dataSettings.objectivesSubtitleTwo,
+              few: context.locale.dataSettings.objectivesSubtitleFew,
+              many: context.locale.dataSettings.objectivesSubtitleMany,
+              other: context.locale.dataSettings.objectivesSubtitleOther,
+              locale: context.currentLocale.languageCode,
+            ).format([settings.getSubjectObjectives().length])),
+            shouldShowInDescription: true,
+            builder: (context) {
+              return SubjectObjectivesManagerView();
+            },
+          ),
+        ],
       ),
     ];
   }
