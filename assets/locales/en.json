@@ -52,7 +52,8 @@
     "teacherMeetings": "Meetings",
     "webVersion": "Open online version",
     "info": "User Info",
-    "destinations": "Destinations"
+    "destinations": "Destinations",
+    "curriculum": "Curriculum"
   },
   "about": {
     "aboutApp": "About Registro",
@@ -410,5 +411,15 @@
     "userPIN": "PIN",
     "gender": "Gender",
     "userAge": "Age"
+  },
+  "curriculum": {
+    "noOutcome": "No outcome description was provided by the school",
+    "outcomes": {
+      "admitted": "Admitted with {credits} credit(s)",
+      "suspended": "Suspended",
+      "heldBack": "Held back",
+      "noData": "No data"
+    },
+    "schoolYear": "School year {year}"
   }
 }

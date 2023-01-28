@@ -6,10 +6,11 @@ part of 'AppInfoStore.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AppInfoStore on _AppInfoStoreBase, Store {
-  final _$packageInfoAtom = Atom(name: '_AppInfoStoreBase.packageInfo');
+  late final _$packageInfoAtom =
+      Atom(name: '_AppInfoStoreBase.packageInfo', context: context);
 
   @override
   PackageInfo get packageInfo {
@@ -24,8 +25,8 @@ mixin _$AppInfoStore on _AppInfoStoreBase, Store {
     });
   }
 
-  final _$getPackageInfoAsyncAction =
-      AsyncAction('_AppInfoStoreBase.getPackageInfo');
+  late final _$getPackageInfoAsyncAction =
+      AsyncAction('_AppInfoStoreBase.getPackageInfo', context: context);
 
   @override
   Future<void> getPackageInfo() {

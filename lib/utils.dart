@@ -303,6 +303,18 @@ extension ColorUtils on Color {
   }
 }
 
+extension HarmonizedMaterialColor on MaterialColor {
+  harmonizeWith(BuildContext context) {
+    return MaterialColor(
+      context.harmonize(color: this.shade500).value,
+      {
+        for (int i = 50; i <= 900; i += i < 100 ? 50 : 100)
+          i: context.harmonize(color: this[i]!),
+      },
+    );
+  }
+}
+
 extension PrettyGrade on Grade {
   String getPrettyGrade(BuildContext context) {
     if (this.grade == 0 || axios_utils.isNaN(this.grade))

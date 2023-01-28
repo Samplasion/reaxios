@@ -15,6 +15,7 @@ import 'package:reaxios/api/entities/Structural/Structural.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 
 import 'entities/Bulletin/Bulletin.dart';
+import 'entities/Curriculum/curriculum.dart';
 import 'entities/Student/Student.dart';
 import 'entities/Login/Login.dart';
 import 'entities/Account.dart';
@@ -586,6 +587,25 @@ class Axios {
         "idFolder": folderUUID,
       },
       null,
+      "GET",
+    );
+    return res;
+  }
+
+  Future<List<Curriculum>> getCurriculum() async {
+    final List<Curriculum> res = await this._makeAuthenticatedCall<dynamic>(
+      "GET_CURRICULUM_MASTER",
+      (raw) {
+        return compute<List<dynamic>, List<Curriculum>>(
+          curriculaFromJSON,
+          [raw, this.student!.studentUUID],
+        );
+      },
+      "RetrieveDataInformation",
+      {
+        "alunnoId": student!.studentUUID,
+      },
+      "FAM",
       "GET",
     );
     return res;

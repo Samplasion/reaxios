@@ -2,18 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:reaxios/utils.dart';
 
-extension HarmonizedMaterialColor on MaterialColor {
-  harmonizeWith(BuildContext context) {
-    return MaterialColor(
-      context.harmonize(color: this.shade500).value,
-      {
-        for (int i = 50; i <= 900; i += i < 100 ? 50 : 100)
-          i: context.harmonize(color: this[i]!),
-      },
-    );
-  }
-}
-
 class AlertColor {
   Color foreground;
   Color background;

@@ -20,6 +20,7 @@ class AppState extends Equatable {
   final List<Authorization>? authorizations;
   final List<MaterialTeacherData>? materials;
   final List<MeetingSchema>? meetings;
+  final List<Curriculum>? curricula;
   final Structural? structural;
   final Student? student;
 
@@ -34,6 +35,7 @@ class AppState extends Equatable {
       authorizations == null &&
       materials == null &&
       meetings == null &&
+      curricula == null &&
       structural == null &&
       student == null;
 
@@ -51,6 +53,7 @@ class AppState extends Equatable {
     this.authorizations,
     this.materials,
     this.meetings,
+    this.curricula,
     this.structural,
     this.student,
   });
@@ -71,6 +74,7 @@ class AppState extends Equatable {
         authorizations,
         materials,
         meetings,
+        curricula,
         structural,
         student,
       ];
@@ -109,6 +113,7 @@ class AppState extends Equatable {
     List<Authorization>? authorizations,
     List<MaterialTeacherData>? materials,
     List<MeetingSchema>? meetings,
+    List<Curriculum>? curricula,
     Structural? structural,
     Student? student,
   }) {
@@ -126,6 +131,7 @@ class AppState extends Equatable {
       authorizations: authorizations ?? this.authorizations,
       materials: materials ?? this.materials,
       meetings: meetings ?? this.meetings,
+      curricula: curricula ?? this.curricula,
       structural: structural ?? this.structural,
       student: student ?? this.student,
     );

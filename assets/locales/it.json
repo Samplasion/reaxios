@@ -52,7 +52,8 @@
     "teacherMeetings": "Colloqui",
     "webVersion": "Apri versione web",
     "info": "Informazioni sull'utente",
-    "destinations": "Destinazioni"
+    "destinations": "Destinazioni",
+    "curriculum": "Curriculum"
   },
   "about": {
     "aboutApp": "Informazioni su Registro",
@@ -410,5 +411,15 @@
     "userPIN": "PIN",
     "gender": "Sesso",
     "userAge": "Età"
+  },
+  "curriculum": {
+    "noOutcome": "La scuola non ha inserito alcun esito",
+    "outcomes": {
+      "admitted": "Ammesso con crediti: {credits}",
+      "suspended": "Sospeso",
+      "heldBack": "Non ammesso",
+      "noData": "Nessun dato"
+    },
+    "schoolYear": "Anno scolastico {year}"
   }
 }

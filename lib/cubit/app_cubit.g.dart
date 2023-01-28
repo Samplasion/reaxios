@@ -8,8 +8,8 @@ part of 'app_cubit.dart';
 
 AppState _$AppStateFromJson(Map<String, dynamic> json) => AppState(
       testMode: json['testMode'] as bool,
-      axios: const AxiosConverter()
-          .fromJson(json['axios'] as Map<String, dynamic>),
+      axios: _$JsonConverterFromJson<Map<String, dynamic>, Axios?>(
+          json['axios'], const AxiosConverter().fromJson),
       school: json['school'] == null
           ? null
           : School.fromJson(json['school'] as Map<String, dynamic>),
@@ -40,9 +40,18 @@ AppState _$AppStateFromJson(Map<String, dynamic> json) => AppState(
       materials: (json['materials'] as List<dynamic>?)
           ?.map((e) => MaterialTeacherData.fromJson(e as Map<String, dynamic>))
           .toList(),
+      meetings: (json['meetings'] as List<dynamic>?)
+          ?.map((e) => MeetingSchema.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      curricula: (json['curricula'] as List<dynamic>?)
+          ?.map((e) => Curriculum.fromJson(e as Map<String, dynamic>))
+          .toList(),
       structural: json['structural'] == null
           ? null
           : Structural.fromJson(json['structural'] as Map<String, dynamic>),
+      student: json['student'] == null
+          ? null
+          : Student.fromJson(json['student'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AppStateToJson(AppState instance) => <String, dynamic>{
@@ -58,5 +67,14 @@ Map<String, dynamic> _$AppStateToJson(AppState instance) => <String, dynamic>{
       'absences': instance.absences,
       'authorizations': instance.authorizations,
       'materials': instance.materials,
+      'meetings': instance.meetings,
+      'curricula': instance.curricula,
       'structural': instance.structural,
+      'student': instance.student,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);

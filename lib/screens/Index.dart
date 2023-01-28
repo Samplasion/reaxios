@@ -46,6 +46,7 @@ import 'nav/Calculator.dart';
 import 'nav/Meetings.dart';
 import 'nav/ReportCards.dart';
 import 'nav/Timetable.dart';
+import 'nav/curriculum.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -243,6 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
         MaterialsPane(session: session),
         StatsPane(session: session),
         ReportCardsPane(session: session),
+        CurriculumPane(),
         InfoPane(login: _login),
         if (kDebugMode) ColorsPane(),
       ];
@@ -365,6 +367,14 @@ class _HomeScreenState extends State<HomeScreen> {
           () {
             cubit.loadReportCards();
             cubit.loadStructural();
+          }
+        ],
+        [
+          Icon(Icons.school),
+          Text(context.loc.translate("drawer.curriculum")),
+          true,
+          () {
+            cubit.loadCurricula();
           }
         ],
         [

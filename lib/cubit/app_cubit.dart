@@ -21,6 +21,8 @@ import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/services/compute.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../api/entities/Curriculum/curriculum.dart';
+
 part 'app_cubit.g.dart';
 part 'app_state.dart';
 
@@ -66,6 +68,7 @@ class AppCubit extends HydratedCubit<AppState> {
   List<Authorization> get authorizations => state.authorizations ?? [];
   List<MaterialTeacherData> get materials => state.materials ?? [];
   List<MeetingSchema> get meetings => state.meetings ?? [];
+  List<Curriculum> get curricula => state.curricula ?? [];
 
   Structural? get structural => state.structural;
   List<Period> get periods => structural?.periods[0].periods ?? [];
@@ -198,6 +201,14 @@ class AppCubit extends HydratedCubit<AppState> {
       await loadObject(() async {
         final structural = await state.axios!.getStructural();
         emit(state.copyWith(structural: structural));
+      });
+  }
+
+  Future<void> loadCurricula({bool force = false}) async {
+    if (force || this.state.curricula == null)
+      await loadObject(() async {
+        final curricula = await state.axios!.getCurriculum();
+        emit(state.copyWith(curricula: curricula));
       });
   }
 

@@ -358,6 +358,12 @@ class TestAxios implements Axios {
   Future<Map<String, dynamic>> getWebVersionUrl() async {
     return Future.value(<String, dynamic>{});
   }
+
+  @override
+  noSuchMethod(Invocation invocation) {
+    // TODO: implement noSuchMethod
+    return super.noSuchMethod(invocation);
+  }
 }
 
 gradeText(int round) {
