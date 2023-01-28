@@ -445,16 +445,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return items;
   }
 
-  Drawer? _getDrawer(bool loading) {
+  Drawer? _getDrawer(bool loading, bool scrim) {
     if (loading) return null;
 
     final appInfo = context.watch<AppInfoStore>();
     final app = appInfo.packageInfo;
 
     return Drawer(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.horizontal(right: Radius.circular(16)),
-      ),
+      elevation: scrim ? Drawer().elevation : 0,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.horizontal(right: Radius.circular(16)),
@@ -551,7 +549,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (isLoading) return null;
 
                     final drawer =
-                        (_getDrawer(isLoading)?.child! as Container).child;
+                        (_getDrawer(isLoading, false)?.child! as Container)
+                            .child;
 
                     return Material(
                       child: isLoading ? null : drawer,
@@ -593,7 +592,6 @@ class _HomeScreenState extends State<HomeScreen> {
             key: ValueKey(_selectedPane),
             child: Builder(
               builder: (BuildContext context) {
-                final drawer = _getDrawer(false);
                 return StreamBuilder(
                     stream: MaybeMasterDetail.getShowingStream(context),
                     builder: (context, AsyncSnapshot<bool> state) {
@@ -611,7 +609,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               MaterialLocalizations.of(context)
                                                   .openAppDrawerTooltip,
                                           onPressed: () {
-                                            print(drawer);
                                             Scaffold.of(context).openDrawer();
                                           },
                                           icon: Icon(Icons.menu),
@@ -619,7 +616,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       }),
                               )
                             : null,
-                        drawer: showingMaster ? null : drawer,
+                        drawer: showingMaster ? null : _getDrawer(false, true),
                         // drawerEnableOpenDragGesture:
                         //     !MaybeMasterDetail.of(context)!.isShowingMaster,
                         body: isLoading

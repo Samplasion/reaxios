@@ -143,18 +143,20 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
     final app = appInfo.packageInfo;
 
     return Drawer(
+      elevation: scrim ? null : 0,
       shape: scrim
           ? RoundedRectangleBorder(
               borderRadius: BorderRadius.horizontal(right: Radius.circular(16)),
             )
-          : null,
+          : RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0),
+            ),
       child: Container(
-        decoration: scrim
-            ? BoxDecoration(
-                borderRadius:
-                    BorderRadius.horizontal(right: Radius.circular(16)),
-              )
-            : null,
+        decoration: BoxDecoration(
+          borderRadius: scrim
+              ? BorderRadius.horizontal(right: Radius.circular(16))
+              : BorderRadius.circular(0),
+        ),
         clipBehavior: scrim ? Clip.hardEdge : Clip.none,
         child: ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
