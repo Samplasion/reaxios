@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:reaxios/components/LowLevel/selectable_animated.dart';
 
 class M3DrawerHeading extends StatelessWidget {
   final String data;
@@ -36,7 +38,10 @@ class M3DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    timeDilation = 5.0;
     final scheme = Theme.of(context).colorScheme;
+    final NavigationDrawerThemeData navigationDrawerTheme =
+        NavigationDrawerTheme.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12),
       child: MouseRegion(
@@ -44,45 +49,68 @@ class M3DrawerListTile extends StatelessWidget {
         child: Container(
           decoration: ShapeDecoration(
             shape: StadiumBorder(),
-            color: selected ? scheme.secondaryContainer : null,
+            // color: selected ? scheme.secondaryContainer : null,
           ),
-          clipBehavior: Clip.hardEdge,
-          child: Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              mouseCursor: SystemMouseCursors.click,
-              customBorder: StadiumBorder(),
-              onTap: onTap,
-              hoverColor: selected
-                  ? ElevationOverlay.applySurfaceTint(
-                      scheme.secondaryContainer,
-                      scheme.onSecondaryContainer,
-                      3, // level 3 is 8% opacity, as required by the spec
-                    )
-                  : null,
-              child: Container(
-                height: 56,
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0),
-                  child: ListTileTheme(
-                    selectedColor: scheme.onSecondaryContainer,
-                    child: ListTile(
-                      mouseCursor: SystemMouseCursors.click,
-                      leading: leading,
-                      title: DefaultTextStyle.merge(
-                        child: title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+          clipBehavior: Clip.antiAlias,
+          child: SelectableAnimatedBuilder(
+              isSelected: selected,
+              builder: (context, animation) {
+                return Stack(
+                  children: [
+                    LayoutBuilder(builder: (context, constraints) {
+                      return NavigationIndicator(
+                        animation: animation,
+                        color: scheme.secondaryContainer,
+                        shape: StadiumBorder(),
+                        width: constraints.maxWidth,
+                        height: 56,
+                      );
+                    }),
+                    Material(
+                      type: MaterialType.transparency,
+                      child: InkWell(
+                        mouseCursor: SystemMouseCursors.click,
+                        customBorder: StadiumBorder(),
+                        onTap: onTap,
+                        hoverColor: selected
+                            ? ElevationOverlay.applySurfaceTint(
+                                scheme.secondaryContainer,
+                                scheme.onSecondaryContainer,
+                                3, // level 3 is 8% opacity, as required by the spec
+                              )
+                            : null,
+                        child: Container(
+                          height: 56,
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 0),
+                            child: ListTileTheme(
+                              iconColor: selected
+                                  ? scheme.onSecondaryContainer
+                                  : scheme.onSurfaceVariant,
+                              textColor: selected
+                                  ? scheme.onSecondaryContainer
+                                  : scheme.onSurfaceVariant,
+                              selectedColor: scheme.onSecondaryContainer,
+                              child: ListTile(
+                                mouseCursor: SystemMouseCursors.click,
+                                leading: leading,
+                                title: DefaultTextStyle.merge(
+                                  child: title,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                selected: selected,
+                                style: ListTileStyle.drawer,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      selected: selected,
-                      style: ListTileStyle.drawer,
                     ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+                  ],
+                );
+              }),
         ),
       ),
     );

@@ -148,6 +148,8 @@ class _WeekViewState extends State<WeekView>
           )
         : null;
     final defaultAppBar = AppBar(
+      elevation: 0,
+      shadowColor: Colors.transparent,
       title: Text(context.loc.translate("timetable.weekView")),
       bottom: tabBar,
       notificationPredicate: (notification) {
@@ -165,6 +167,8 @@ class _WeekViewState extends State<WeekView>
         child: AnimatedCrossFade(
           firstChild: defaultAppBar,
           secondChild: AppBar(
+            elevation: 0,
+            shadowColor: Colors.transparent,
             title: Text(editing?.name ?? ""),
             notificationPredicate: (notification) {
               return notification.depth == 1;
@@ -203,7 +207,7 @@ class _WeekViewState extends State<WeekView>
           duration: Duration(milliseconds: 300),
           sizeCurve: Curves.easeInOut,
         ),
-        elevation: 4,
+        elevation: 0,
       ),
       preferredSize: defaultAppBar.preferredSize,
     );

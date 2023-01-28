@@ -149,16 +149,15 @@ class _EventControllerState extends State<EventController> {
 
   Widget? get bottomNavigationBar {
     if (!isSmall) return null;
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      onTap: (index) {
+    return NavigationBar(
+      selectedIndex: _currentIndex,
+      onDestinationSelected: (index) {
         goToTab(index);
       },
-      items: _getPages(context)
-          .map((e) => BottomNavigationBarItem(
+      destinations: _getPages(context)
+          .map((e) => NavigationDestination(
                 icon: e.icon,
                 label: e.title,
-                backgroundColor: Theme.of(context).colorScheme.secondary,
               ))
           .toList(),
     );

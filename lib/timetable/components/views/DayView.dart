@@ -167,6 +167,7 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
                 }
                 return Tab(text: "$day$week");
               }).toList(),
+              dividerColor: Colors.transparent,
             ),
             leading: MaybeMasterDetail.of(context)!.isShowingMaster
                 ? null

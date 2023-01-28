@@ -209,6 +209,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                           [e.lessonHour.toString()]),
                       style: TextStyle(color: scheme.onSecondaryContainer),
                     ),
+                    side: BorderSide.none,
                     backgroundColor: scheme.secondaryContainer.lighten(0.1),
                     visualDensity: VisualDensity.compact,
                   ),
@@ -224,16 +225,15 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                     color: scheme.onSecondaryContainer,
                   ),
                 ).padding(bottom: 8),
-                SelectableText(
+                Text(
                   e.topic,
                   style: TextStyle(
                     fontSize: 14,
                     color: scheme.onSecondaryContainer.withOpacity(0.75),
                   ),
-                  minLines: 1,
                   maxLines: 3,
-                  // overflow: TextOverflow.ellipsis,
-                  scrollPhysics: NeverScrollableScrollPhysics(),
+                  overflow: TextOverflow.ellipsis,
+                  // scrollPhysics: NeverScrollableScrollPhysics(),
                 ).padding(bottom: 8),
                 Text(
                   context.dateToString(e.date),
@@ -372,8 +372,6 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       ).center(),
     ];
 
-    final toolbarHeight = AppBar().toolbarHeight ?? kToolbarHeight;
-
     return RefreshIndicator(
       onRefresh: () async {
         final cubit = context.read<AppCubit>();
@@ -395,26 +393,31 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
           });
         });
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(context.loc.translate("drawer.overview")),
-          leading: MaybeMasterDetail.of(context)!.isShowingMaster
-              ? null
-              : IconButton(
-                  icon: Icon(Icons.menu),
-                  onPressed: widget.openMainDrawer,
-                  tooltip: context.materialLocale.openAppDrawerTooltip,
-                ),
-        ),
-        body: CustomScrollView(
-          controller: controller,
-          slivers: [
-            SliverList(
-              delegate: SliverChildListDelegate(items),
-            ),
-          ],
-        ),
-      ),
+      child: StreamBuilder<bool>(
+          stream: MaybeMasterDetail.getShowingStream(context),
+          initialData: false,
+          builder: (context, value) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(context.loc.translate("drawer.overview")),
+                leading: value.data ?? false
+                    ? null
+                    : IconButton(
+                        icon: Icon(Icons.menu),
+                        onPressed: widget.openMainDrawer,
+                        tooltip: context.materialLocale.openAppDrawerTooltip,
+                      ),
+              ),
+              body: CustomScrollView(
+                controller: controller,
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildListDelegate(items),
+                  ),
+                ],
+              ),
+            );
+          }),
     );
   }
 

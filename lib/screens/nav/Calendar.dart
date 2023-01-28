@@ -453,7 +453,7 @@ class _CalendarPaneState extends State<CalendarPane> {
                       .format(day),
                   style: TextStyle(
                     fontFamily:
-                        Theme.of(context).textTheme.headline6!.fontFamily,
+                        Theme.of(context).textTheme.titleLarge!.fontFamily,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -515,12 +515,15 @@ class _CalendarPaneState extends State<CalendarPane> {
                         .format(dayOfWeek),
                     style: TextStyle(
                       fontFamily:
-                          Theme.of(context).textTheme.headline6!.fontFamily,
+                          Theme.of(context).textTheme.titleLarge?.fontFamily,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: emptyDays.contains(dayOfWeek.weekday) &&
                               dayOfWeek.weekday > 5
-                          ? Colors.red[Utils.getContrastShade(context)]
+                          ? context.harmonize(
+                              color:
+                                  Colors.red[Utils.getContrastShade(context)]!,
+                            )
                           : null,
                     ),
                   ),
@@ -528,13 +531,14 @@ class _CalendarPaneState extends State<CalendarPane> {
                 );
               },
               todayBuilder: (context, date, focusedDay) {
-                final bg = Theme.of(context)
-                    .primaryColor
-                    .lighten(date == focusedDay ? 0 : 0.2);
+                // final bg = Theme.of(context)
+                //     .primaryColor
+                //     .lighten(date == focusedDay ? 0 : 0.2);
+                final scheme = Theme.of(context).colorScheme;
                 return Container(
                   child: CircleAvatar(
-                    backgroundColor: bg,
-                    foregroundColor: bg.contrastColor,
+                    backgroundColor: scheme.tertiaryContainer,
+                    foregroundColor: scheme.onTertiaryContainer,
                     child: Text(
                       date.day.toString(),
                       style: TextStyle(fontSize: 13),
@@ -544,8 +548,8 @@ class _CalendarPaneState extends State<CalendarPane> {
                 );
               },
               defaultBuilder: (context, date, focusedDay) {
-                final fg = Theme.of(context).textTheme.bodyText1!.color!;
-                final caption = Theme.of(context).textTheme.caption!.color!;
+                final fg = Theme.of(context).textTheme.titleLarge!.color!;
+                final caption = Theme.of(context).textTheme.bodySmall!.color!;
                 return Container(
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
@@ -560,16 +564,16 @@ class _CalendarPaneState extends State<CalendarPane> {
                 );
               },
               selectedBuilder: (context, date, focusedDay) {
-                final bg = Theme.of(context).primaryColor;
+                final scheme = Theme.of(context).colorScheme;
                 return Container(
                   child: CircleAvatar(
-                    backgroundColor: bg,
-                    foregroundColor: bg.contrastColor,
+                    backgroundColor: scheme.secondaryContainer,
+                    foregroundColor: scheme.onSecondaryContainer,
                     child: Text(
                       date.day.toString(),
                       style: TextStyle(
                         fontSize: 13,
-                        color: bg.contrastColor,
+                        color: scheme.onSecondaryContainer,
                       ),
                     ),
                   ),

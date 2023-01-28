@@ -207,7 +207,7 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
                     )
                   : FlLine(
                       color: value % 1 == 0 || value % 1 == 0.5
-                          ? Theme.of(context).dividerColor
+                          ? Theme.of(context).colorScheme.secondaryContainer
                           : Colors.transparent,
                       strokeWidth: 1,
                       dashArray: value % 1 == 0.5 ? [5] : null,
