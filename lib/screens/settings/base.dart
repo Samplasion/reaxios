@@ -147,6 +147,7 @@ class _SettingsTileGroupTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      iconColor: Theme.of(context).colorScheme.onSecondaryContainer,
       minVerticalPadding: 16,
       title: title,
       subtitle: subtitle,

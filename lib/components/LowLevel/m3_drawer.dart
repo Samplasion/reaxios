@@ -38,7 +38,6 @@ class M3DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    timeDilation = 5.0;
     final scheme = Theme.of(context).colorScheme;
     final NavigationDrawerThemeData navigationDrawerTheme =
         NavigationDrawerTheme.of(context);
