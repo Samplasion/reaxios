@@ -421,10 +421,8 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print(e);
       context.hideCurrentSnackBar();
-      context.showSnackbar(
+      context.showSnackbarError(
         context.loc.translate("main.webVersionError"),
-        backgroundColor: Colors.red,
-        style: TextStyle(color: Colors.red.contrastText),
       );
     }
   }
