@@ -8,10 +8,16 @@ import '../../components/LowLevel/GradientCircleAvatar.dart';
 import '../../components/LowLevel/Loading.dart';
 import '../../components/Utilities/ResourcefulCardListItem.dart';
 import '../../cubit/app_cubit.dart';
+import '../../timetable/structures/Settings.dart';
 
-class CurriculumPane extends StatelessWidget {
+class CurriculumPane extends StatefulWidget {
   const CurriculumPane({super.key});
 
+  @override
+  State<CurriculumPane> createState() => _CurriculumPaneState();
+}
+
+class _CurriculumPaneState extends State<CurriculumPane> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
@@ -25,10 +31,11 @@ class CurriculumPane extends StatelessWidget {
   }
 
   Widget buildOk(BuildContext context, List<Curriculum> curricula) {
-    return ListView.builder(
-      itemBuilder: (context, index) =>
-          _curriculumBuilder(context, curricula[index]),
-      itemCount: curricula.length,
+    return ListView(
+      children: [
+        for (final curriculum in curricula)
+          _curriculumBuilder(context, curriculum),
+      ],
     );
   }
 
@@ -90,6 +97,7 @@ class CurriculumPane extends StatelessWidget {
           ),
           style: TextStyle(color: color.foreground),
         ),
+        side: BorderSide(color: scheme.secondaryContainer),
         backgroundColor: color.background,
         visualDensity: VisualDensity.compact,
       ),
