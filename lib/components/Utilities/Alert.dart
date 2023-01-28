@@ -79,6 +79,7 @@ class Alert extends StatelessWidget {
           child: Builder(
             builder: (context) {
               final txt = text ?? textBuilder!(context);
+              double textOpacity = 0.86;
               return Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: txt == null
@@ -123,7 +124,7 @@ class Alert extends StatelessWidget {
                                         children: [txt.text],
                                         style: TextStyle(
                                           color: color.foreground
-                                              .withOpacity(0.86),
+                                              .withOpacity(textOpacity),
                                         ),
                                       ),
                                     )
@@ -132,7 +133,7 @@ class Alert extends StatelessWidget {
                                         children: [txt.text],
                                         style: TextStyle(
                                           color: color.foreground
-                                              .withOpacity(0.86),
+                                              .withOpacity(textOpacity),
                                         ),
                                       ),
                                     )
@@ -141,8 +142,8 @@ class Alert extends StatelessWidget {
                                 data: txt.data,
                                 styleSheet: MarkdownStyleSheet(
                                   p: TextStyle(
-                                      color:
-                                          color.foreground.withOpacity(0.86)),
+                                      color: color.foreground
+                                          .withOpacity(textOpacity)),
                                 ),
                               )
                             else if (txt is MarkdownBody)
@@ -150,8 +151,8 @@ class Alert extends StatelessWidget {
                                 data: txt.data,
                                 styleSheet: MarkdownStyleSheet(
                                   p: TextStyle(
-                                      color:
-                                          color.foreground.withOpacity(0.86)),
+                                      color: color.foreground
+                                          .withOpacity(textOpacity)),
                                 ),
                               )
                             else
