@@ -462,66 +462,70 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.horizontal(right: Radius.circular(16)),
         ),
         clipBehavior: Clip.hardEdge,
-        child: ListView(
-          // shrinkWrap: true,
-          children: [
-            SizedBox(height: 16),
-            M3DrawerHeading(
-                kIsWeb ? context.loc.translate("about.appName") : app.appName),
-            SizedBox(height: 16),
-            for (final s in _session.students)
-              Builder(builder: (context) {
-                return M3DrawerListTile(
-                  leading: Icon(Icons.person),
-                  title: Text("${s.firstName} ${s.lastName}"),
-                  selected: s.studentUUID ==
-                      context.read<AppCubit>().student?.studentUUID,
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: ListView(
+            // shrinkWrap: true,
+            children: [
+              SizedBox(height: 16),
+              M3DrawerHeading(kIsWeb
+                  ? context.loc.translate("about.appName")
+                  : app.appName),
+              SizedBox(height: 16),
+              for (final s in _session.students)
+                Builder(builder: (context) {
+                  return M3DrawerListTile(
+                    leading: Icon(Icons.person),
+                    title: Text("${s.firstName} ${s.lastName}"),
+                    selected: s.studentUUID ==
+                        context.read<AppCubit>().student?.studentUUID,
+                    onTap: () {
+                      if (!MaybeMasterDetail.of(context)!.isShowingMaster)
+                        Navigator.pop(context);
+                      if (s.studentUUID ==
+                          context.read<AppCubit>().student?.studentUUID) return;
+                      final storage = context.read<Storage>();
+                      storage.setLastStudentID(s.studentUUID);
+                      _session.student = s;
+                      context.read<AppCubit>().clearData();
+                      context.read<AppCubit>().setStudent(s);
+                      setState(() {
+                        _showUserDetails = false;
+                        _initPanes(_session, _login);
+                      });
+                      _runCallback(_selectedPane);
+                    },
+                  );
+                }),
+              Divider(
+                height: 33,
+                indent: 28,
+                endIndent: 28,
+              ),
+              M3DrawerHeading(context.loc.translate("drawer.destinations")),
+              SizedBox(height: 16),
+              ..._buildDrawerItems(),
+              Builder(
+                builder: (context) => M3DrawerListTile(
+                  title: Text(context.loc.translate("drawer.webVersion")),
+                  leading: Icon(Icons.public),
                   onTap: () {
-                    if (!MaybeMasterDetail.of(context)!.isShowingMaster)
-                      Navigator.pop(context);
-                    if (s.studentUUID ==
-                        context.read<AppCubit>().student?.studentUUID) return;
-                    final storage = context.read<Storage>();
-                    storage.setLastStudentID(s.studentUUID);
-                    _session.student = s;
-                    context.read<AppCubit>().clearData();
-                    context.read<AppCubit>().setStudent(s);
-                    setState(() {
-                      _showUserDetails = false;
-                      _initPanes(_session, _login);
-                    });
-                    _runCallback(_selectedPane);
+                    launchWeb(context);
                   },
-                );
-              }),
-            Divider(
-              height: 33,
-              indent: 28,
-              endIndent: 28,
-            ),
-            M3DrawerHeading(context.loc.translate("drawer.destinations")),
-            SizedBox(height: 16),
-            ..._buildDrawerItems(),
-            Builder(
-              builder: (context) => M3DrawerListTile(
-                title: Text(context.loc.translate("drawer.webVersion")),
-                leading: Icon(Icons.public),
-                onTap: () {
-                  launchWeb(context);
-                },
+                ),
               ),
-            ),
-            if (kDebugMode) ...[
-              M3DrawerListTile(
-                title: Text("[DEBUG] Show no Internet page"),
-                leading: Icon(Icons.wifi_off),
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, "nointernet");
-                },
-              ),
+              if (kDebugMode) ...[
+                M3DrawerListTile(
+                  title: Text("[DEBUG] Show no Internet page"),
+                  leading: Icon(Icons.wifi_off),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, "nointernet");
+                  },
+                ),
+              ],
+              ...showEndOfDrawerItems(context),
             ],
-            ...showEndOfDrawerItems(context),
-          ],
+          ),
         ),
       ),
     );
