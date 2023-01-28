@@ -16,15 +16,12 @@ import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/entities/Student/Student.dart';
 import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
-import 'package:reaxios/components/ListItems/RegistroAboutListItem.dart';
-import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/LowLevel/lifecycle_reactor.dart';
 import 'package:reaxios/components/LowLevel/m3_drawer.dart';
 import 'package:reaxios/components/Utilities/updates/update_scope.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/format.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';
 import 'package:reaxios/screens/nav/Authorizations.dart';
@@ -42,9 +39,7 @@ import 'package:reaxios/storage.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
-import '../consts.dart';
 import '../system/AppInfoStore.dart';
 import 'nav/BulletinBoard.dart';
 import 'nav/Calculator.dart';
@@ -71,8 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _panes = [];
   List<List<dynamic>> _drawerItems = [];
   int _selectedPane = 0;
-
-  ScrollController _drawerController = ScrollController();
 
   bool appIsActive = true;
 
@@ -393,10 +386,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Student _getStudent() {
-    return _session.students.length > 0 ? _session.student : Student.empty();
-  }
-
   Future<void> launchWeb(BuildContext context) async {
     context.showSnackbar(context.loc.translate("main.loading"));
     try {
@@ -456,39 +445,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ));
     }
     return items;
-  }
-
-  Widget _buildUserDetail() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          final s = _session.students[index];
-          return M3DrawerListTile(
-            leading: Icon(Icons.person),
-            title: Text("${s.firstName} ${s.lastName}"),
-            selected:
-                s.studentUUID == context.read<AppCubit>().student?.studentUUID,
-            onTap: () {
-              final storage = context.read<Storage>();
-              storage.setLastStudentID(s.studentUUID);
-              if (!MaybeMasterDetail.of(context)!.isShowingMaster)
-                Navigator.pop(context);
-              _session.student = s;
-              context.read<AppCubit>().clearData();
-              context.read<AppCubit>().setStudent(s);
-              _runCallback(_selectedPane);
-              setState(() {
-                _showUserDetails = false;
-                _initPanes(_session, _login);
-              });
-            },
-          );
-        },
-        itemCount: _session.students.length,
-      ),
-    );
   }
 
   Drawer? _getDrawer(bool loading) {
@@ -574,9 +530,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<AppCubit>();
-    final appInfo = context.watch<AppInfoStore>();
-    final app = appInfo.packageInfo;
-
     _initPanes(_session, _login);
 
     return LifecycleReactor(
@@ -697,17 +650,30 @@ class _HomeScreenState extends State<HomeScreen> {
           StreamBuilder<int>(
             stream: cubit.loadingTasks,
             builder: (context, state) {
+              var cardTheme = Theme.of(context).cardTheme;
               final child = Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 500),
                   padding: const EdgeInsets.all(4.0),
                   decoration: BoxDecoration(
-                    boxShadow: kElevationToShadow[4],
-                    color: Theme.of(context).cardTheme.color!,
+                    color: ElevationOverlay.applySurfaceTint(
+                      cardTheme.color ?? Theme.of(context).cardColor,
+                      cardTheme.surfaceTintColor,
+                      cardTheme.elevation ?? 4,
+                    ),
                     shape: BoxShape.circle,
                   ),
-                  child: CupertinoActivityIndicator(),
+                  child: SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                      ),
+                    ),
+                  ),
                 ),
               );
               return AnimatedCrossFade(
