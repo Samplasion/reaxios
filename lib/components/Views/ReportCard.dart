@@ -35,12 +35,17 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
       if (!openPanels.containsKey(s)) openPanels[s] = false;
     });
 
+    final scheme = Theme.of(context).colorScheme;
     if (!reportCard.visible)
       return Column(
         children: [
           Alert(
             title: context.loc.translate("reportCard.notAvailableTitle"),
             textBuilder: reportCard.dateRead == null ? (_) => null : null,
+            color: AlertColor(
+              scheme.tertiaryContainer,
+              scheme.onTertiaryContainer,
+            ),
             text: reportCard.dateRead == null
                 ? null
                 : MarkdownBody(

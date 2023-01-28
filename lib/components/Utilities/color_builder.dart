@@ -38,7 +38,7 @@ class ColorBuilder extends StatelessWidget {
           final isValid = light != null && dark != null;
 
           if (shouldBeDynamic(context) && isValid) {
-            return builder(light, dark);
+            return builder(light.harmonized(), dark.harmonized());
           }
 
           final lightColorScheme = ColorScheme.fromSeed(
@@ -48,7 +48,7 @@ class ColorBuilder extends StatelessWidget {
             secondary: accent,
             onSecondary: accent.contrastText,
             brightness: Brightness.light,
-          );
+          ).harmonized();
           final darkColorScheme = ColorScheme.fromSeed(
             seedColor: primary,
             primary: primary,
@@ -56,9 +56,7 @@ class ColorBuilder extends StatelessWidget {
             secondary: accent,
             onSecondary: accent.contrastText,
             brightness: Brightness.dark,
-          );
-          Color(0xfffffbff);
-          Color(0xff201b16);
+          ).harmonized();
           print(
               "$primary, ${lightColorScheme.surface}, ${lightColorScheme.background}");
           // final darkColorScheme = ColorScheme.dark(
