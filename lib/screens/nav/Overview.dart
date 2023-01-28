@@ -113,25 +113,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      return Scaffold(
-        appBar: loading
-            ? AppBar(
-                title: Text(
-                  context.loc.translate("drawer.overview"),
-                ),
-                leading: MaybeMasterDetail.of(context)!.isShowingMaster
-                    ? null
-                    : IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: widget.openMainDrawer,
-                        tooltip: context.materialLocale.openAppDrawerTooltip,
-                      ),
-              )
-            : null,
-        body: loading ? LoadingUI() : _buildBody(),
-      );
-    });
+    return loading ? LoadingUI() : _buildBody();
   }
 
   @override
@@ -375,49 +357,32 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
     return RefreshIndicator(
       onRefresh: () async {
         final cubit = context.read<AppCubit>();
-        // Only await the futures that are most likely to freeze the UI
-        debugPrint("Loading structural...");
-        cubit.loadStructural(force: true).then((_) {
-          debugPrint("Loaded structural.");
-          debugPrint("Loading assignments...");
-          cubit.loadAssignments(force: true).then((_) {
-            debugPrint("Loaded assignments.");
-            debugPrint("Loading grades...");
-            cubit.loadGrades(force: true).then((_) {
-              debugPrint("Loaded grades.");
-              debugPrint("Loaded topics.");
-              cubit.loadTopics(force: true).then((_) {
-                debugPrint("Loaded topics...");
-              });
-            });
-          });
+        print(String data) => debugPrint("[${DateTime.now()}] $data");
+        print("Loading structural...");
+        return cubit.loadStructural(force: true).then((_) {
+          print("Loaded structural.");
+          print("Loading assignments...");
+          return cubit.loadAssignments(force: true);
+        }).then((_) {
+          print("Loaded assignments.");
+          print("Loading grades...");
+          return cubit.loadGrades(force: true);
+        }).then((_) {
+          print("Loaded grades.");
+          print("Loading topics...");
+          return cubit.loadTopics(force: true);
+        }).then((_) {
+          print("Loaded topics.");
         });
       },
-      child: StreamBuilder<bool>(
-          stream: MaybeMasterDetail.getShowingStream(context),
-          initialData: false,
-          builder: (context, value) {
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(context.loc.translate("drawer.overview")),
-                leading: value.data ?? false
-                    ? null
-                    : IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: widget.openMainDrawer,
-                        tooltip: context.materialLocale.openAppDrawerTooltip,
-                      ),
-              ),
-              body: CustomScrollView(
-                controller: controller,
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildListDelegate(items),
-                  ),
-                ],
-              ),
-            );
-          }),
+      child: CustomScrollView(
+        controller: controller,
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate(items),
+          ),
+        ],
+      ),
     );
   }
 

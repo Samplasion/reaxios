@@ -252,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
         [
           Icon(Icons.home),
           Text(context.loc.translate("drawer.overview")),
-          false,
+          true,
           () async {
             cubit.loadGrades().then((_) {
               cubit.loadAssignments();
