@@ -102,8 +102,8 @@ flutter:
   assets:
     - assets/icon.png
     # l10n
-    - locales/en.json
-    - locales/it.json
+    - assets/locales/en.json
+    - assets/locales/it.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
