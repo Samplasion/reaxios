@@ -10,14 +10,9 @@ import '../../components/Utilities/ResourcefulCardListItem.dart';
 import '../../cubit/app_cubit.dart';
 import '../../timetable/structures/Settings.dart';
 
-class CurriculumPane extends StatefulWidget {
+class CurriculumPane extends StatelessWidget {
   const CurriculumPane({super.key});
 
-  @override
-  State<CurriculumPane> createState() => _CurriculumPaneState();
-}
-
-class _CurriculumPaneState extends State<CurriculumPane> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
