@@ -26,11 +26,17 @@ class CurriculumPane extends StatelessWidget {
   }
 
   Widget buildOk(BuildContext context, List<Curriculum> curricula) {
-    return ListView(
-      children: [
-        for (final curriculum in curricula)
-          _curriculumBuilder(context, curriculum),
-      ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        final cubit = context.read<AppCubit>();
+        await cubit.loadCurricula(force: true);
+      },
+      child: ListView(
+        children: [
+          for (final curriculum in curricula)
+            _curriculumBuilder(context, curriculum),
+        ],
+      ),
     );
   }
 
