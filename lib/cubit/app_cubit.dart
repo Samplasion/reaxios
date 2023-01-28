@@ -93,15 +93,15 @@ class AppCubit extends HydratedCubit<AppState> {
     emit(state.copyWith(school: school));
   }
 
-  Future<void> loadObject(VoidFutureCallback objectGetter) async {
-    try {
-      load();
-      await objectGetter();
-    } catch (e) {
-      print(e);
-    } finally {
+  Future<void> loadObject(VoidFutureCallback objectGetter) {
+    load();
+    return objectGetter().then((_) {
       loaded();
-    }
+    }, onError: (e) {
+      print(e);
+      if (e is Error) print(e.stackTrace);
+      loaded();
+    });
   }
 
   Future<void> loadAssignments({bool force = false}) async {

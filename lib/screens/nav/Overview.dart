@@ -268,7 +268,61 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         )
         .toList();
 
+    final colorScheme = Theme.of(context).colorScheme;
     final items = [
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Card(
+          margin: EdgeInsets.zero,
+          color: colorScheme.secondary,
+          child: DefaultTextStyle.merge(
+            style: TextStyle(color: colorScheme.onSecondary),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: Icon(
+                        Icons.account_circle,
+                        size: 50,
+                        color: colorScheme.onSecondary,
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        student.fullName,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                      ).padding(bottom: 5),
+                      Text(
+                        "${context.dateToString(student.birthday)} [${calculateAge(student.birthday)}] - ${context.loc.translate("main.gender${describeEnum(student.gender)[0]}")}",
+                        style: TextStyle(
+                          color: colorScheme.onSecondary.withOpacity(0.76),
+                          fontSize: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+
       // The card hides itself when there's
       // no update to show.
       UpgradeCard(),
@@ -324,37 +378,42 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       onRefresh: () async {
         final cubit = context.read<AppCubit>();
         // Only await the futures that are most likely to freeze the UI
-        cubit.loadStructural(force: true);
-        cubit.loadAssignments(force: true);
-        await cubit.loadGrades(force: true);
-        await cubit.loadTopics(force: true);
+        debugPrint("Loading structural...");
+        cubit.loadStructural(force: true).then((_) {
+          debugPrint("Loaded structural.");
+          debugPrint("Loading assignments...");
+          cubit.loadAssignments(force: true).then((_) {
+            debugPrint("Loaded assignments.");
+            debugPrint("Loading grades...");
+            cubit.loadGrades(force: true).then((_) {
+              debugPrint("Loaded grades.");
+              debugPrint("Loaded topics.");
+              cubit.loadTopics(force: true).then((_) {
+                debugPrint("Loaded topics...");
+              });
+            });
+          });
+        });
       },
-      child: CustomScrollView(
-        controller: controller,
-        slivers: [
-          BlocBuilder<AppCubit, AppState>(
-            bloc: cubit,
-            builder: (context, _) {
-              return SliverPersistentHeader(
-                pinned: true,
-                floating: false,
-                delegate: CustomSliverDelegate(
-                  hideTitleWhenExpanded: false,
-                  openMenu: widget.openMainDrawer,
-                  expandedHeight: MediaQuery.of(context).padding.top + 185,
-                  collapsedHeight:
-                      MediaQuery.of(context).padding.top + toolbarHeight,
-                  period: cubit.currentPeriod,
-                  student: student,
-                  switchToTab: widget.switchToTab,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(context.loc.translate("drawer.overview")),
+          leading: MaybeMasterDetail.of(context)!.isShowingMaster
+              ? null
+              : IconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: widget.openMainDrawer,
+                  tooltip: context.materialLocale.openAppDrawerTooltip,
                 ),
-              );
-            },
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(items),
-          ),
-        ],
+        ),
+        body: CustomScrollView(
+          controller: controller,
+          slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate(items),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -22,7 +22,7 @@ abstract class SettingsTile<T> extends StatefulWidget {
 
   @protected
   T getSetting(T defaultValue) {
-    return Settings.getValue<T>(prefKey, defaultValue);
+    return Settings.getValue<T>(prefKey) ?? defaultValue;
   }
 }
 
@@ -115,10 +115,8 @@ class _ColorTileState extends State<ColorTile> {
   void initState() {
     super.initState();
     _color = ColorSerializer().fromJson(
-      (Settings.getValue(
-        widget.prefKey,
-        ColorSerializer().toJson(widget.defaultValue),
-      )),
+      (Settings.getValue(widget.prefKey) ??
+          ColorSerializer().toJson(widget.defaultValue)),
     );
   }
 

@@ -252,9 +252,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(context.loc.translate("drawer.overview")),
           false,
           () async {
-            cubit.loadAssignments();
-            cubit.loadGrades();
-            cubit.loadTopics();
+            cubit.loadGrades().then((_) {
+              cubit.loadAssignments();
+            });
           }
         ],
         [

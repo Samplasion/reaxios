@@ -111,7 +111,7 @@ void gradesBackgroundService() async {
       ticker: 'Nuovo voto in ${grade.subject}',
       onlyAlertOnce: true,
       color: cs.fromJson(
-        S.Settings.getValue("primary-color", cs.toJson(defaultPrimary)),
+        S.Settings.getValue("primary-color") ?? cs.toJson(defaultPrimary),
       ),
       styleInformation: BigTextStyleInformation(
         grade.comment,
@@ -168,7 +168,7 @@ void bulletinBoardBackgroundService() async {
       ),
       onlyAlertOnce: true,
       color: cs.fromJson(
-        S.Settings.getValue("primary-color", cs.toJson(defaultPrimary)),
+        S.Settings.getValue("primary-color") ?? cs.toJson(defaultPrimary),
       ),
       showWhen: true,
       when: bulletin.date.millisecondsSinceEpoch,
