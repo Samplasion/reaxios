@@ -133,6 +133,7 @@ class _SettingsTileGroupTile extends StatelessWidget {
   final Widget? leading;
   final Widget? trailing;
   final void Function()? onTap;
+  final bool isThreeLine;
 
   const _SettingsTileGroupTile({
     this.title,
@@ -140,6 +141,7 @@ class _SettingsTileGroupTile extends StatelessWidget {
     this.leading,
     this.trailing,
     this.onTap,
+    this.isThreeLine = false,
   });
 
   @override
@@ -148,9 +150,20 @@ class _SettingsTileGroupTile extends StatelessWidget {
       minVerticalPadding: 16,
       title: title,
       subtitle: subtitle,
-      leading: leading,
-      trailing: trailing,
+      leading: leading == null
+          ? null
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [leading!],
+            ),
+      trailing: trailing == null
+          ? null
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [trailing!],
+            ),
       onTap: onTap,
+      isThreeLine: isThreeLine,
     );
   }
 }
@@ -847,6 +860,7 @@ class SettingsListTile extends SettingsTile {
   final Widget? subtitle;
   final Widget? leading;
   final Widget? trailing;
+  final bool isThreeLine;
 
   @override
   final bool shouldShowInDescription;
@@ -859,6 +873,7 @@ class SettingsListTile extends SettingsTile {
     this.leading,
     this.trailing,
     this.shouldShowInDescription = false,
+    this.isThreeLine = false,
   }) : super(key: key);
 
   @override
@@ -874,6 +889,7 @@ class _SettingsListTileState extends State<SettingsListTile> {
       subtitle: widget.subtitle,
       leading: widget.leading,
       trailing: widget.trailing,
+      isThreeLine: widget.isThreeLine,
     );
   }
 }

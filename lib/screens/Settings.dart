@@ -135,19 +135,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text(context.loc.translate("drawer.settings")),
             centerTitle: true,
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final fragment = _fragments[index];
-                return ListTile(
-                  leading: fragment.icon,
-                  title: Text(fragment.title),
-                  subtitle: Text(fragment.body.getDescription(context)),
-                  onTap: () => _pushFragment(context, fragment),
-                  isThreeLine: true,
-                );
-              },
-              childCount: _fragments.length,
+          SliverToBoxAdapter(
+            child: SettingsTileGroup(
+              children: [
+                for (int index = 0; index < _fragments.length; index++)
+                  () {
+                    final fragment = _fragments[index];
+                    return SettingsListTile(
+                      leading: fragment.icon,
+                      title: Text(fragment.title),
+                      subtitle: Text(fragment.body.getDescription(context)),
+                      onTap: () => _pushFragment(context, fragment),
+                      isThreeLine: true,
+                    );
+                  }()
+              ],
             ),
           ),
         ],
