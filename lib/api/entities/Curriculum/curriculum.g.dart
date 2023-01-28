@@ -13,7 +13,7 @@ Curriculum _$CurriculumFromJson(Map<String, dynamic> json) => Curriculum(
       course: json['descCorso'] as String,
       section: json['sezione'] as String,
       classYear: json['classe'] as int,
-      outcome: json['esito'] as String?,
+      outcome: json['descEsito'] as String?,
       outcomeTypeRaw: json['tipoEsito'] as String,
       credits: json['credito'] as String,
     );
@@ -26,7 +26,7 @@ Map<String, dynamic> _$CurriculumToJson(Curriculum instance) =>
       'descCorso': instance.course,
       'sezione': instance.section,
       'classe': instance.classYear,
-      'esito': instance.outcome,
+      'descEsito': instance.outcome,
       'tipoEsito': instance.outcomeTypeRaw,
       'credito': instance.credits,
     };

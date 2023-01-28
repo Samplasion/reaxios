@@ -35,7 +35,7 @@ class Curriculum extends Equatable implements AbstractJson {
   final String section;
   @JsonKey(name: "classe")
   final int classYear;
-  @JsonKey(name: "esito")
+  @JsonKey(name: "descEsito")
   final String? outcome;
   @JsonKey(name: "tipoEsito")
   final String outcomeTypeRaw;
