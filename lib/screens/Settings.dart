@@ -152,6 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
           ),
+          SliverToBoxAdapter(child: SizedBox(height: 16)),
         ],
       ),
     );
