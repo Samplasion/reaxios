@@ -99,7 +99,7 @@ class TestAxios implements Axios {
   }
 
   @override
-  Future<List<Grade>> getGrades() async {
+  Future<List<Grade>> getGrades(Structural _structural) async {
     final now = DateTime.now();
     return [
       Grade.test(
@@ -182,7 +182,7 @@ class TestAxios implements Axios {
 
   @override
   Future<List<ReportCard>> getReportCards([bool forceReload = false]) async {
-    final grades = await this.getGrades();
+    final grades = await this.getGrades(await getStructural());
     return [
       ReportCard(
         studentUUID: "634F8D7A-0717-416D-A9E5-8A36BAA36B56",
@@ -269,7 +269,7 @@ class TestAxios implements Axios {
 
   @override
   Future<List<String>> getSubjects() async {
-    return (await this.getGrades())
+    return (await this.getGrades(await getStructural()))
         .map((grade) => grade.subject)
         .toList()
         .toSet()

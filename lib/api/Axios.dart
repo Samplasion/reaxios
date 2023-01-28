@@ -44,8 +44,15 @@ List<APIAuthorizations> _authorizationsFromJSON(List<dynamic> json) {
   return json.map((e) => APIAuthorizations.fromJson(e)).toList();
 }
 
-List<APIAssignments> _assignmentsFromJSON(List<dynamic> json) {
-  return json.map((e) => APIAssignments.fromJson(e)).toList();
+List<Assignment> _assignmentsFromJSON(List<dynamic> data) {
+  List<dynamic> json = data.first;
+  String studentID = data.last;
+  return json
+      .map((e) => APIAssignments.fromJson(e))
+      .where((element) => element.idAlunno == studentID)
+      .map((e) => e.compiti)
+      .expand((i) => i)
+      .toList();
 }
 
 List<APIBulletins> _bulletinsFromJSON(List<dynamic> json) {
@@ -64,8 +71,16 @@ List<APINotes> _notesFromJSON(List<dynamic> json) {
   return json.map((e) => APINotes.fromJson(e)).toList();
 }
 
-List<APITopics> _topicsFromJSON(List<dynamic> json) {
-  return json.map((e) => APITopics.fromJson(e)).toList();
+List<Topic> _topicsFromJSON(List<dynamic> data) {
+  List<dynamic> json = data.first;
+  String studentID = data.last;
+  return json
+      .map((e) => APITopics.fromJson(e))
+      .toList()
+      .where((element) => element.idAlunno == studentID)
+      .map((e) => e.argomenti)
+      .expand((i) => i)
+      .toList();
 }
 
 List<ReportCard> _reportCardsFromJSON(List<dynamic> json) {
@@ -373,30 +388,21 @@ class Axios {
   }
 
   Future<List<Assignment>> getAssignments() async {
-    final List<APIAssignments> res =
+    final List<Assignment> res =
         await this._makeAuthenticatedCall<dynamic>("GET_COMPITI_MASTER", (raw) {
-      return compute<List<dynamic>, List<APIAssignments>>(
-          _assignmentsFromJSON, raw);
+      return compute<List<dynamic>, List<Assignment>>(
+          _assignmentsFromJSON, [raw, student!.studentUUID]);
       // List<JSON> list = List<JSON>.from(raw);
       // return Future.wait(
       //     list.map((e) => compute(APIAssignments.fromJson, e)).toList());
     });
-    return res
-        .where((element) => element.idAlunno == student!.studentUUID)
-        .map((e) => e.compiti)
-        .expand((i) => i)
-        .toList();
+    return res;
   }
 
-  Future<List<Grade>> getGrades() async {
-    final structural = await this.getStructural();
+  Future<List<Grade>> getGrades(Structural structural) async {
     final List<APIGrades> res = await this
         ._makeAuthenticatedCall<dynamic>("GET_VOTI_LIST_DETAIL", (raw) {
       return compute<List<dynamic>, List<APIGrades>>(_gradesFromJSON, raw);
-      // List<JSON> list = List<JSON>.from(raw);
-      // return Future.wait(
-      //     list.map((e) => compute(APIGrades.fromJson, e)).toList());
-      // return (raw as List).map((e) => APIGrades.fromJson(e)).toList();
     });
     final data =
         res.where((element) => element.idAlunno == student!.studentUUID);
@@ -407,8 +413,6 @@ class Axios {
           );
           return grades;
         })
-        .toList()
-        .reversed
         .expand((i) => i)
         .toList()
       ..sort((a, b) => b.date.compareTo(a.date));
@@ -463,19 +467,12 @@ class Axios {
   }
 
   Future<List<Topic>> getTopics() async {
-    final List<APITopics> res = await this
+    final List<Topic> res = await this
         ._makeAuthenticatedCall<dynamic>("GET_ARGOMENTI_MASTER", (raw) {
-      return compute<List<dynamic>, List<APITopics>>(_topicsFromJSON, raw);
-      // List<JSON> list = List<JSON>.from(raw);
-      // return Future.wait(
-      //     list.map((e) => compute(APITopics.fromJson, e)).toList());
-      // return (raw as List).map((e) => APITopics.fromJson(e)).toList();
+      return compute<List<dynamic>, List<Topic>>(
+          _topicsFromJSON, [raw, student!.studentUUID]);
     });
-    return res
-        .where((element) => element.idAlunno == student!.studentUUID)
-        .map((e) => e.argomenti)
-        .expand((i) => i)
-        .toList();
+    return res;
   }
 
   Future<List<Bulletin>> getBulletins() async {

@@ -118,7 +118,11 @@ class AppCubit extends HydratedCubit<AppState> {
   Future<void> loadGrades({bool force = false}) async {
     if (force || this.state.grades == null)
       await loadObject(() async {
-        final grades = await state.axios!.getGrades();
+        final grades = await state.axios!.getGrades(await () async {
+          if (this.structural != null) return this.structural!;
+          await this.loadStructural();
+          return this.structural!;
+        }());
         emit(state.copyWith(grades: grades));
       });
   }

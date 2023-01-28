@@ -18,6 +18,8 @@ import 'package:reaxios/services/compute.dart';
 import 'package:reaxios/tuple.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../api/entities/Structural/Structural.dart';
+
 final defaultPrimary = Colors.orange[400]!;
 final defaultAccent = Colors.purple[400]!;
 
@@ -96,7 +98,8 @@ void gradesBackgroundService() async {
     return;
   }
 
-  List<Grade> grades = await session.getGrades();
+  Structural structural = await session.getStructural();
+  List<Grade> grades = await session.getGrades(structural);
 
   // TODO: add shown grades to shared preferences
 
