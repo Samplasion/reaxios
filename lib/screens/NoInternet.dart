@@ -67,64 +67,72 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
     return WillPopScope(
       child: MaybeMasterDetail(
         master: getDrawer(context, false),
-        detail: Scaffold(
-          appBar: _selectedItem == 1
-              ? null
-              : AppBar(
-                  title: Text("Registro"),
-                  leading: Builder(builder: (context) {
-                    return MaybeMasterDetail.of(context)!.isShowingMaster
-                        ? Container()
-                        : Builder(builder: (context) {
-                            return IconButton(
-                              tooltip: MaterialLocalizations.of(context)
-                                  .openAppDrawerTooltip,
-                              onPressed: () {
-                                Scaffold.of(context).openDrawer();
-                              },
-                              icon: Icon(Icons.menu),
-                            );
-                          });
-                  }),
-                ),
-          drawer: getDrawer(context, true),
-          body: _selectedItem == 1
-              ? Builder(
-                  builder: (context) => TimetablePane(
-                    openMainDrawer: () => Scaffold.of(context).openDrawer(),
-                  ),
-                )
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      EmptyUI(
-                        icon: Icons.wifi_off,
-                        text: context.loc.translate("noInternet.body"),
-                      ),
-                      SizedBox(height: 16),
-                      OutlinedButton(
-                        onPressed: loading
-                            ? null
-                            : () {
-                                setState(() {
-                                  loading = true;
-                                });
-                                context.showSnackbar(
-                                    context.loc.translate("main.loading"));
-                                _checkConnection().then((_) {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                });
-                              },
-                        child: Text(context.loc.translate("noInternet.cta")),
-                      ),
-                    ],
-                  ),
-                ),
-        ),
+        detail: Builder(builder: (context) {
+          return StreamBuilder<bool>(
+              stream: MaybeMasterDetail.getShowingStream(context),
+              initialData: false,
+              builder: (context, isShowingMasterSnapshot) {
+                final isShowingMaster = isShowingMasterSnapshot.data ?? false;
+                return Scaffold(
+                  appBar: _selectedItem == 1
+                      ? null
+                      : AppBar(
+                          title: Text("Registro"),
+                          leading: isShowingMaster
+                              ? Container()
+                              : Builder(builder: (context) {
+                                  return IconButton(
+                                    tooltip: MaterialLocalizations.of(context)
+                                        .openAppDrawerTooltip,
+                                    onPressed: () {
+                                      Scaffold.of(context).openDrawer();
+                                    },
+                                    icon: Icon(Icons.menu),
+                                  );
+                                }),
+                        ),
+                  drawer: isShowingMaster ? null : getDrawer(context, true),
+                  body: _selectedItem == 1
+                      ? Builder(
+                          builder: (context) => TimetablePane(
+                            openMainDrawer: () =>
+                                Scaffold.of(context).openDrawer(),
+                          ),
+                        )
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              EmptyUI(
+                                icon: Icons.wifi_off,
+                                text: context.loc.translate("noInternet.body"),
+                              ),
+                              SizedBox(height: 16),
+                              OutlinedButton(
+                                onPressed: loading
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        context.showSnackbar(context.loc
+                                            .translate("main.loading"));
+                                        _checkConnection().then((_) {
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                        });
+                                      },
+                                child: Text(
+                                    context.loc.translate("noInternet.cta")),
+                              ),
+                            ],
+                          ),
+                        ),
+                );
+              });
+        }),
       ),
       onWillPop: () => Future.value(false),
     );
