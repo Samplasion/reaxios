@@ -51,23 +51,23 @@ class M3DrawerListTile extends StatelessWidget {
             // color: selected ? scheme.secondaryContainer : null,
           ),
           clipBehavior: Clip.antiAlias,
-          child: SelectableAnimatedBuilder(
-              isSelected: selected,
-              builder: (context, animation) {
-                return Stack(
-                  children: [
-                    LayoutBuilder(builder: (context, constraints) {
-                      return NavigationIndicator(
-                        animation: animation,
-                        color: scheme.secondaryContainer,
-                        shape: StadiumBorder(),
-                        width: constraints.maxWidth,
-                        height: 56,
-                      );
-                    }),
-                    Material(
-                      type: MaterialType.transparency,
-                      child: InkWell(
+          child: Material(
+            type: MaterialType.transparency,
+            child: SelectableAnimatedBuilder(
+                isSelected: selected,
+                builder: (context, animation) {
+                  return Stack(
+                    children: [
+                      LayoutBuilder(builder: (context, constraints) {
+                        return NavigationIndicator(
+                          animation: animation,
+                          color: scheme.secondaryContainer,
+                          shape: StadiumBorder(),
+                          width: constraints.maxWidth,
+                          height: 56,
+                        );
+                      }),
+                      InkWell(
                         mouseCursor: SystemMouseCursors.click,
                         customBorder: StadiumBorder(),
                         onTap: onTap,
@@ -106,10 +106,10 @@ class M3DrawerListTile extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              }),
+                    ],
+                  );
+                }),
+          ),
         ),
       ),
     );
