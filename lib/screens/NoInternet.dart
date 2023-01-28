@@ -148,38 +148,42 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
               )
             : null,
         clipBehavior: scrim ? Clip.hardEdge : Clip.none,
-        child: ListView(
-          children: [
-            SizedBox(height: 16),
-            M3DrawerHeading(
-                kIsWeb ? context.loc.translate("about.appName") : app.appName),
-            SizedBox(height: 16),
-            M3DrawerListTile(
-              title: Text(context.loc.translate("noInternet.title")),
-              leading: Icon(Icons.wifi_off),
-              selected: _selectedItem == 0,
-              onTap: () {
-                setState(() {
-                  _selectedItem = 0;
-                });
-                if (!MaybeMasterDetail.shouldBeShowingMaster(context))
-                  Navigator.pop(context);
-              },
-            ),
-            M3DrawerListTile(
-              title: Text(context.loc.translate("drawer.timetable")),
-              leading: Icon(Icons.access_time),
-              selected: _selectedItem == 1,
-              onTap: () {
-                setState(() {
-                  _selectedItem = 1;
-                });
-                if (!MaybeMasterDetail.shouldBeShowingMaster(context))
-                  Navigator.pop(context);
-              },
-            ),
-            ...showEndOfDrawerItems(context),
-          ],
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: ListView(
+            children: [
+              SizedBox(height: 16),
+              M3DrawerHeading(kIsWeb
+                  ? context.loc.translate("about.appName")
+                  : app.appName),
+              SizedBox(height: 16),
+              M3DrawerListTile(
+                title: Text(context.loc.translate("noInternet.title")),
+                leading: Icon(Icons.wifi_off),
+                selected: _selectedItem == 0,
+                onTap: () {
+                  setState(() {
+                    _selectedItem = 0;
+                  });
+                  if (!MaybeMasterDetail.shouldBeShowingMaster(context))
+                    Navigator.pop(context);
+                },
+              ),
+              M3DrawerListTile(
+                title: Text(context.loc.translate("drawer.timetable")),
+                leading: Icon(Icons.access_time),
+                selected: _selectedItem == 1,
+                onTap: () {
+                  setState(() {
+                    _selectedItem = 1;
+                  });
+                  if (!MaybeMasterDetail.shouldBeShowingMaster(context))
+                    Navigator.pop(context);
+                },
+              ),
+              ...showEndOfDrawerItems(context),
+            ],
+          ),
         ),
       ),
     );
