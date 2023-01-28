@@ -149,6 +149,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             canvasColor: scheme.background,
             cardTheme: cardTheme,
             cardColor: cardTheme.color,
+            dividerColor: scheme.surfaceVariant,
             dialogBackgroundColor: ElevationOverlay.applySurfaceTint(
               scheme.surface,
               scheme.surfaceTint,
