@@ -8,7 +8,7 @@ class NotificationBadge extends StatelessWidget {
     required this.child,
     required this.showBadge,
     this.background = const Color(0),
-    this.foreground = const Color(0xFFFF4444),
+    this.foreground,
     this.alignment = Alignment.centerLeft,
     this.rightOffset = 0,
   }) : super(key: key);
@@ -16,34 +16,32 @@ class NotificationBadge extends StatelessWidget {
   final Widget child;
   final bool showBadge;
   final Color? background;
-  final Color foreground;
+  final Color? foreground;
   final AlignmentGeometry alignment;
   final double rightOffset;
 
   @override
   Widget build(BuildContext context) {
-    final bg = background ?? Theme.of(context).cardTheme.color!;
-    return [
-      child,
-      if (showBadge)
-        [
-          Container(
-            width: 12,
-            height: 12,
-            child: CircleAvatar(
-              backgroundColor: bg,
+    final fg = foreground != null
+        ? context.harmonize(color: foreground!)
+        : Theme.of(context).colorScheme.error;
+    return Stack(
+      alignment: alignment,
+      children: [
+        child,
+        if (showBadge)
+          Positioned(
+            top: 0,
+            right: rightOffset,
+            child: Container(
+              width: 9,
+              height: 9,
+              child: CircleAvatar(
+                backgroundColor: fg,
+              ),
             ),
           ),
-          Container(
-            width: 9,
-            height: 9,
-            child: CircleAvatar(
-              backgroundColor: context.harmonize(color: foreground),
-            ),
-          ),
-        ]
-            .toStack(alignment: Alignment.center)
-            .positioned(top: 0, right: rightOffset),
-    ].toStack(alignment: alignment);
+      ],
+    );
   }
 }
