@@ -40,7 +40,6 @@ class M3DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    timeDilation = 1;
     final scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12),
