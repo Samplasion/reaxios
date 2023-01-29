@@ -23,24 +23,25 @@ class M3DrawerHeading extends StatelessWidget {
 }
 
 class M3DrawerListTile extends StatelessWidget {
-  final Widget leading;
+  final Widget icon;
   final Widget title;
+  final Widget? selectedIcon;
   final bool selected;
   final void Function() onTap;
 
   const M3DrawerListTile({
     super.key,
-    required this.leading,
+    required this.icon,
     required this.title,
+    this.selectedIcon,
     this.selected = false,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    timeDilation = 1;
     final scheme = Theme.of(context).colorScheme;
-    final NavigationDrawerThemeData navigationDrawerTheme =
-        NavigationDrawerTheme.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12),
       child: MouseRegion(
@@ -93,7 +94,21 @@ class M3DrawerListTile extends StatelessWidget {
                               selectedColor: scheme.onSecondaryContainer,
                               child: ListTile(
                                 mouseCursor: SystemMouseCursors.click,
-                                leading: leading,
+                                leading: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 200),
+                                  child: () {
+                                    if (_isForwardOrCompleted(animation)) {
+                                      return KeyedSubtree(
+                                        child: selectedIcon ?? icon,
+                                        key: ValueKey(selectedIcon ?? icon),
+                                      );
+                                    }
+                                    return KeyedSubtree(
+                                      child: icon,
+                                      key: ValueKey(icon),
+                                    );
+                                  }(),
+                                ),
                                 title: DefaultTextStyle.merge(
                                   child: title,
                                   maxLines: 1,
@@ -114,4 +129,11 @@ class M3DrawerListTile extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Returns `true` if this animation is ticking forward, or has completed,
+/// based on [status].
+bool _isForwardOrCompleted(Animation<double> animation) {
+  return animation.status == AnimationStatus.forward ||
+      animation.status == AnimationStatus.completed;
 }

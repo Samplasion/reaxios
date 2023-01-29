@@ -562,7 +562,7 @@ List<Widget> showEndOfDrawerItems(BuildContext context) {
     ),
     M3DrawerListTile(
       title: Text(context.loc.translate("drawer.settings")),
-      leading: Icon(Icons.settings),
+      icon: Icon(Icons.settings),
       onTap: () {
         if (!MaybeMasterDetail.shouldBeShowingMaster(context))
           Navigator.pop(context);
@@ -572,7 +572,7 @@ List<Widget> showEndOfDrawerItems(BuildContext context) {
     RegistroAboutListItem(),
     M3DrawerListTile(
       title: Text(context.loc.translate("drawer.logOut")),
-      leading: Icon(Icons.exit_to_app),
+      icon: Icon(Icons.exit_to_app),
       onTap: () {
         _showExitDialog(context);
       },

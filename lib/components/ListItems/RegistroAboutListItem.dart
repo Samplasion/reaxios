@@ -21,7 +21,7 @@ class RegistroAboutListItem extends StatelessWidget {
         kIsWeb ? context.loc.translate("about.appName") : app.appName;
 
     return M3DrawerListTile(
-      leading: Icon(Icons.info),
+      icon: Icon(Icons.info),
       title: Text(context.materialLocale.aboutListTileTitle(appName)),
       onTap: () {
         showAboutDialog(

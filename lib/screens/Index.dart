@@ -41,6 +41,7 @@ import 'package:reaxios/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../system/AppInfoStore.dart';
+import '../tuple.dart';
 import 'nav/BulletinBoard.dart';
 import 'nav/Calculator.dart';
 import 'nav/Meetings.dart';
@@ -65,7 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _showUserDetails = false;
 
   List<Widget> _panes = [];
-  List<List<dynamic>> _drawerItems = [];
+  List<Tuple4<Tuple2<Widget, Widget>, Widget, bool, Function?>> _drawerItems =
+      [];
   int _selectedPane = 0;
 
   bool appIsActive = true;
@@ -170,8 +172,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _runCallback([int index = 0]) async {
     try {
-      if (_drawerItems[index][3] != null && _drawerItems[index][3] is Function)
-        await _drawerItems[index][3]();
+      if (_drawerItems[index].fourth != null &&
+          _drawerItems[index].fourth is Function)
+        await _drawerItems[index].fourth!();
     } catch (e) {
       print(e);
       // Do nothing; the HydratedCubit will have stale data, but at least
@@ -250,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ];
       _drawerItems = [
         [
-          Icon(Icons.home),
+          Tuple2(Icon(Icons.home_outlined), Icon(Icons.home)),
           Text(context.loc.translate("drawer.overview")),
           false,
           () async {
@@ -260,7 +263,8 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         ],
         [
-          Icon(Icons.calendar_today),
+          Tuple2(
+              Icon(Icons.calendar_today_outlined), Icon(Icons.calendar_today)),
           Text(context.loc.translate("drawer.calendar")),
           false,
           () {
@@ -270,13 +274,13 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         ],
         [
-          Icon(Icons.book),
+          Tuple2(Icon(Icons.book_outlined), Icon(Icons.book)),
           Text(context.loc.translate("drawer.assignments")),
           false,
           () => cubit.loadAssignments(),
         ],
         [
-          Icon(Icons.star),
+          Tuple2(Icon(Icons.star_border), Icon(Icons.star)),
           Text(context.loc.translate("drawer.grades")),
           false,
           () {
@@ -286,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         ],
         [
-          Icon(Icons.calculate),
+          Tuple2(Icon(Icons.calculate_outlined), Icon(Icons.calculate)),
           Text(context.loc.translate("drawer.calculator")),
           false,
           () {
@@ -296,61 +300,62 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         ],
         [
-          Icon(Icons.topic),
+          Tuple2(Icon(Icons.topic_outlined), Icon(Icons.topic)),
           Text(context.loc.translate("drawer.topics")),
           false,
           () => cubit.loadTopics(),
         ],
         [
-          Icon(Icons.access_time),
+          Tuple2(Icon(Icons.access_time_outlined), Icon(Icons.access_time)),
           Text(context.loc.translate("drawer.timetable")),
           false,
           () {},
         ],
         [
-          Icon(Icons.mail),
+          Tuple2(Icon(Icons.mail_outlined), Icon(Icons.mail)),
           Text(context.loc.translate("drawer.secretary")),
           true,
           () => cubit.loadBulletins(),
         ],
         [
-          Icon(Icons.contact_mail),
+          Tuple2(Icon(Icons.contact_mail_outlined), Icon(Icons.contact_mail)),
           Text(context.loc.translate("drawer.teacherNotes")),
           true,
           () => cubit.loadNotes(),
         ],
         [
-          Icon(Icons.perm_contact_cal),
+          Tuple2(Icon(Icons.perm_contact_cal_outlined),
+              Icon(Icons.perm_contact_cal)),
           Text(context.loc.translate("drawer.notices")),
           true,
           () => cubit.loadNotes(),
         ],
         [
-          Icon(Icons.no_accounts),
+          Tuple2(Icon(Icons.no_accounts_outlined), Icon(Icons.no_accounts)),
           Text(context.loc.translate("drawer.absences")),
           true,
           () => cubit.loadAbsences()
         ],
         [
-          Icon(Icons.edit),
+          Tuple2(Icon(Icons.edit_outlined), Icon(Icons.edit)),
           Text(context.loc.translate("drawer.authorizations")),
           true,
           () => cubit.loadAuthorizations()
         ],
         [
-          Icon(Icons.terrain),
+          Tuple2(Icon(Icons.terrain_outlined), Icon(Icons.terrain)),
           Text(context.loc.translate("drawer.teacherMeetings")),
           true,
           () => cubit.loadMeetings()
         ],
         [
-          Icon(Icons.badge),
+          Tuple2(Icon(Icons.badge_outlined), Icon(Icons.badge)),
           Text(context.loc.translate("drawer.teachingMaterials")),
           true,
           () => cubit.loadMaterials()
         ],
         [
-          Icon(Icons.star_outline),
+          Tuple2(Icon(Icons.star_border), Icon(Icons.star_half)),
           Text(context.loc.translate("drawer.stats")),
           true,
           () {
@@ -361,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         ],
         [
-          Icon(Icons.gradient),
+          Tuple2(Icon(Icons.gradient_outlined), Icon(Icons.gradient)),
           Text(context.loc.translate("drawer.reportCards")),
           true,
           () {
@@ -370,7 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         ],
         [
-          Icon(Icons.school),
+          Tuple2(Icon(Icons.school_outlined), Icon(Icons.school)),
           Text(context.loc.translate("drawer.curriculum")),
           true,
           () {
@@ -378,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         ],
         [
-          Icon(Icons.person),
+          Tuple2(Icon(Icons.person_outlined), Icon(Icons.person)),
           Text(context.loc.translate("drawer.info")),
           true,
           () {
@@ -387,12 +392,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         if (kDebugMode)
           [
-            Icon(Icons.color_lens),
+            Tuple2(Icon(Icons.color_lens_outlined), Icon(Icons.color_lens)),
             Text("[DEBUG] Show colors"),
             true,
             () {},
           ],
-      ];
+      ]
+          .map((el) => Tuple4<Tuple2<Widget, Widget>, Widget, bool,
+              Function>.fromIterable(el))
+          .toList();
     });
   }
 
@@ -442,8 +450,9 @@ class _HomeScreenState extends State<HomeScreen> {
     List<Widget> items = [];
     for (var index = 0; index < _drawerItems.length; index++) {
       items.add(M3DrawerListTile(
-        leading: _drawerItems[index][0],
-        title: _drawerItems[index][1],
+        icon: _drawerItems[index].first.first,
+        selectedIcon: _drawerItems[index].first.second,
+        title: _drawerItems[index].second,
         selected: index == _selectedPane,
         onTap: () {
           if (!MaybeMasterDetail.shouldBeShowingMaster(context))
@@ -481,7 +490,7 @@ class _HomeScreenState extends State<HomeScreen> {
               for (final s in _session.students)
                 Builder(builder: (context) {
                   return M3DrawerListTile(
-                    leading: Icon(Icons.person),
+                    icon: Icon(Icons.person),
                     title: Text("${s.firstName} ${s.lastName}"),
                     selected: s.studentUUID ==
                         context.read<AppCubit>().student?.studentUUID,
@@ -514,7 +523,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Builder(
                 builder: (context) => M3DrawerListTile(
                   title: Text(context.loc.translate("drawer.webVersion")),
-                  leading: Icon(Icons.public),
+                  icon: Icon(Icons.public),
                   onTap: () {
                     launchWeb(context);
                   },
@@ -523,7 +532,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (kDebugMode) ...[
                 M3DrawerListTile(
                   title: Text("[DEBUG] Show no Internet page"),
-                  leading: Icon(Icons.wifi_off),
+                  icon: Icon(Icons.wifi_off),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, "nointernet");
                   },
@@ -607,9 +616,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context, AsyncSnapshot<bool> state) {
                       final showingMaster = state.data ?? false;
                       return Scaffold(
-                        appBar: _drawerItems[_selectedPane][2]
+                        appBar: _drawerItems[_selectedPane].third
                             ? AppBar(
-                                title: _drawerItems[_selectedPane][1],
+                                title: _drawerItems[_selectedPane].second,
                                 leading: MaybeMasterDetail.of(context)!
                                         .isShowingMaster
                                     ? null

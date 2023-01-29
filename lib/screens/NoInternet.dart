@@ -169,7 +169,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
               SizedBox(height: 16),
               M3DrawerListTile(
                 title: Text(context.loc.translate("noInternet.title")),
-                leading: Icon(Icons.wifi_off),
+                icon: Icon(Icons.wifi_off),
                 selected: _selectedItem == 0,
                 onTap: () {
                   setState(() {
@@ -181,7 +181,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
               ),
               M3DrawerListTile(
                 title: Text(context.loc.translate("drawer.timetable")),
-                leading: Icon(Icons.access_time),
+                icon: Icon(Icons.access_time),
                 selected: _selectedItem == 1,
                 onTap: () {
                   setState(() {
