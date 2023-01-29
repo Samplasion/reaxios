@@ -15,20 +15,27 @@ typedef OnChange<T> = void Function(T value);
 abstract class BaseSettings extends StatelessWidget {
   const BaseSettings({Key? key}) : super(key: key);
 
-  List<SettingsTile> getTiles(BuildContext context, Settings settings);
+  List<SettingsTile> getTiles(
+      BuildContext context, Settings settings, Function setState);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<Settings>(
-      builder: (context, settings, child) => ListView(
-        children: [...getTiles(context, settings), SizedBox(height: 16)],
-      ),
+      builder: (context, settings, child) =>
+          StatefulBuilder(builder: (context, setState) {
+        return ListView(
+          children: [
+            ...getTiles(context, settings, setState),
+            SizedBox(height: 16)
+          ],
+        );
+      }),
     );
   }
 
   String getDescription(BuildContext context) {
     Settings settings = Provider.of<Settings>(context, listen: false);
-    return getTiles(context, settings)
+    return getTiles(context, settings, () {})
         .where((element) => element.shouldShowInDescription)
         .map((e) {
           if (e is SettingsTileGroup) {
@@ -935,6 +942,50 @@ class _SubscreenListTileState extends State<SubscreenListTile> {
           ),
         );
       },
+    );
+  }
+}
+
+class SliderListTile extends SettingsTile {
+  @override
+  final Widget title;
+  final Widget? leading;
+  final double min;
+  final double max;
+  final double value;
+  final int? divisions;
+  final ValueChanged<double> onChanged;
+
+  const SliderListTile({
+    super.key,
+    required this.title,
+    this.leading,
+    required this.min,
+    required this.max,
+    required this.value,
+    this.divisions,
+    required this.onChanged,
+  });
+
+  @override
+  State<SliderListTile> createState() => _SliderListTileState();
+}
+
+class _SliderListTileState extends State<SliderListTile> {
+  @override
+  Widget build(BuildContext context) {
+    return _SettingsTileGroupTile(
+      title: widget.title,
+      subtitle: Slider(
+        value: widget.value,
+        min: widget.min,
+        max: widget.max,
+        onChanged: widget.onChanged,
+        inactiveColor: Theme.of(context).colorScheme.background,
+        label: widget.value.toString(),
+        divisions: widget.divisions,
+      ),
+      leading: widget.leading,
     );
   }
 }

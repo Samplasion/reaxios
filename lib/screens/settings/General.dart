@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
@@ -11,7 +12,11 @@ class GeneralSettings extends BaseSettings {
   const GeneralSettings({Key? key}) : super(key: key);
 
   @override
-  List<SettingsTile> getTiles(BuildContext context, Settings settings) {
+  List<SettingsTile> getTiles(
+    BuildContext context,
+    Settings settings,
+    Function setState,
+  ) {
     return [
       SettingsTileGroup(
         title: SettingsHeaderTile(
@@ -137,6 +142,19 @@ class GeneralSettings extends BaseSettings {
               RestartWidget.restartApp(context);
             },
           ),
+          if (kDebugMode)
+            SliderListTile(
+              title: Text("[DEBUG] Time dilation"),
+              min: 1,
+              max: 10,
+              value: timeDilation,
+              divisions: 9,
+              onChanged: (value) {
+                setState(() {
+                  timeDilation = value;
+                });
+              },
+            ),
         ],
       ),
     ];

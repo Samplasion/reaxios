@@ -10,7 +10,7 @@ class DataSettings extends BaseSettings {
   const DataSettings({Key? key}) : super(key: key);
 
   @override
-  List<SettingsTile> getTiles(BuildContext context, Settings settings) {
+  List<SettingsTile> getTiles(BuildContext context, Settings settings, _) {
     return [
       SettingsTileGroup(
         title: SettingsHeader(title: context.loc.translate("settings.data")),

@@ -8,7 +8,7 @@ class TimeSettings extends BaseSettings {
   const TimeSettings({Key? key}) : super(key: key);
 
   @override
-  List<SettingsTile> getTiles(BuildContext context, Settings settings) => [
+  List<SettingsTile> getTiles(BuildContext context, Settings settings, _) => [
         SettingsTileGroup(
           title: SettingsHeader(title: context.loc.translate("settings.time")),
           children: [
