@@ -245,6 +245,15 @@ class Settings extends UndisposableChangeNotifier {
     notifyListeners();
   }
 
+  bool getUseCustomSecondary() {
+    return _prefs.getBool("useCustomSecondary") ?? false;
+  }
+
+  void setUseCustomSecondary(bool useCustomSecondary) {
+    _prefs.setBool("useCustomSecondary", useCustomSecondary);
+    notifyListeners();
+  }
+
   // --------
 
   Future<String> get directory async {
@@ -346,6 +355,7 @@ class Settings extends UndisposableChangeNotifier {
         "useDynamicColor": getUseDynamicColor(),
         "harmonizeColors": getHarmonizeColors(),
         "useGradients": getUseGradients(),
+        "useCustomSecondary": getUseCustomSecondary(),
       };
 
   set json(Map<String, dynamic> obj) {
@@ -429,6 +439,10 @@ class Settings extends UndisposableChangeNotifier {
     }
     if (obj.containsKey("useGradients") && obj["useGradients"] is bool) {
       setUseGradients(obj["useGradients"] as bool);
+    }
+    if (obj.containsKey("useCustomSecondary") &&
+        obj["useCustomSecondary"] is bool) {
+      setUseCustomSecondary(obj["useCustomSecondary"] as bool);
     }
 
     notifyListeners();

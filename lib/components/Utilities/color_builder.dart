@@ -41,20 +41,21 @@ class ColorBuilder extends StatelessWidget {
             return builder(light.harmonized(), dark.harmonized());
           }
 
+          final customAccent = settings.getUseCustomSecondary();
           final lightColorScheme = ColorScheme.fromSeed(
             seedColor: primary,
-            primary: primary,
-            onPrimary: primary.contrastText,
-            secondary: accent,
-            onSecondary: accent.contrastText,
+            primary: customAccent ? primary : null,
+            onPrimary: customAccent ? primary.contrastText : null,
+            secondary: customAccent ? accent : null,
+            onSecondary: customAccent ? accent.contrastText : null,
             brightness: Brightness.light,
           ).harmonized();
           final darkColorScheme = ColorScheme.fromSeed(
             seedColor: primary,
-            primary: primary,
-            onPrimary: primary.contrastText,
-            secondary: accent,
-            onSecondary: accent.contrastText,
+            primary: customAccent ? primary : null,
+            onPrimary: customAccent ? primary.contrastText : null,
+            secondary: customAccent ? accent : null,
+            onSecondary: customAccent ? accent.contrastText : null,
             brightness: Brightness.dark,
           ).harmonized();
           print(

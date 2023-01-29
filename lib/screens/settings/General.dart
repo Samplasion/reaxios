@@ -40,10 +40,25 @@ class GeneralSettings extends BaseSettings {
             onChange: (color) => settings.setPrimaryColor(color),
             value: settings.getPrimaryColor(),
           ),
-          ColorTile(
-            title: Text(context.loc.translate("generalSettings.colorPrimary")),
-            onChange: (color) => settings.setAccentColor(color),
-            value: settings.getAccentColor(),
+          SwitchSettingsTile(
+            key: ValueKey("useCustomSecondary"),
+            title: Text(
+                context.loc.translate("generalSettings.useCustomSecondary")),
+            subtitle: Text(context.loc
+                .translate("generalSettings.useCustomSecondaryExpl")),
+            value: settings.getUseCustomSecondary(),
+            onChange: (useCustomSecondary) {
+              settings.setUseCustomSecondary(useCustomSecondary);
+            },
+          ),
+          ConditionalListTile(
+            show: settings.getUseCustomSecondary(),
+            child: ColorTile(
+              title:
+                  Text(context.loc.translate("generalSettings.colorPrimary")),
+              onChange: (color) => settings.setAccentColor(color),
+              value: settings.getAccentColor(),
+            ),
           ),
           SwitchSettingsTile(
             title:

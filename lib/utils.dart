@@ -303,6 +303,11 @@ extension ColorUtils on Color {
   }
 }
 
+extension BoolUtils on bool {
+  CrossFadeState get crossFadeState =>
+      this ? CrossFadeState.showFirst : CrossFadeState.showSecond;
+}
+
 extension HarmonizedMaterialColor on MaterialColor {
   harmonizeWith(BuildContext context) {
     return MaterialColor(

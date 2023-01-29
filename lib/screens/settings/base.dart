@@ -52,6 +52,7 @@ abstract class SettingsTile extends StatefulWidget {
   Widget get title;
 
   bool get shouldShowInDescription => true;
+  bool get build => true;
 
   const SettingsTile({Key? key}) : super(key: key);
 }
@@ -61,7 +62,7 @@ class _EmptySentinel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SizedBox(width: 0, height: 0);
   }
 }
 
@@ -94,27 +95,33 @@ class _SettingsTileGroupState extends State<SettingsTileGroup> {
 
     for (int i = 0; i < widget.children.length; i++) {
       mappedWidgets.add(
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 1.5),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(
-                top: i == 0 ? Radius.circular(30) : Radius.circular(4),
-                bottom: i == widget.children.length - 1
-                    ? Radius.circular(30)
-                    : Radius.circular(4),
-              ),
-              color: Theme.of(context).colorScheme.secondaryContainer,
-            ),
-            clipBehavior: Clip.antiAlias,
+        AnimatedCrossFade(
+          crossFadeState: widget.children[i].build.crossFadeState,
+          firstChild: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 1.5),
             child: Container(
-              alignment: Alignment.center,
-              child: Material(
-                type: MaterialType.transparency,
-                child: widget.children[i],
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  top: i == 0 ? Radius.circular(30) : Radius.circular(4),
+                  bottom: i == widget.children.length - 1
+                      ? Radius.circular(30)
+                      : Radius.circular(4),
+                ),
+                color: Theme.of(context).colorScheme.secondaryContainer,
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Container(
+                alignment: Alignment.center,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: widget.children[i],
+                ),
               ),
             ),
           ),
+          secondChild: Container(),
+          duration: const Duration(milliseconds: 250),
+          sizeCurve: Curves.easeOut,
         ),
       );
     }
@@ -196,12 +203,15 @@ class SwitchSettingsTile extends SettingsTile {
 }
 
 class _SwitchSettingsTileState extends State<SwitchSettingsTile> {
+  final key = UniqueKey();
+
   @override
   Widget build(BuildContext context) {
     return _SettingsTileGroupTile(
       title: widget.title,
       subtitle: widget.subtitle,
       trailing: Switch(
+        key: key,
         value: widget.value,
         onChanged: widget.onChange,
         activeColor: Theme.of(context).colorScheme.tertiary,
@@ -996,5 +1006,35 @@ class _SliderListTileState extends State<SliderListTile> {
       ),
       leading: widget.leading,
     );
+  }
+}
+
+class ConditionalListTile extends SettingsTile {
+  final SettingsTile child;
+  final bool show;
+
+  @override
+  Widget get title => child.title;
+
+  @override
+  bool get build => show;
+
+  @override
+  bool get shouldShowInDescription => child.shouldShowInDescription && show;
+
+  const ConditionalListTile({
+    super.key,
+    required this.show,
+    required this.child,
+  });
+
+  @override
+  State<ConditionalListTile> createState() => _ConditionalListTileState();
+}
+
+class _ConditionalListTileState extends State<ConditionalListTile> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }

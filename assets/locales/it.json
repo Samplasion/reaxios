@@ -346,7 +346,9 @@
     "harmonizeColors": "Armonizzazione dei colori",
     "harmonizeColorsExpl": "Modifica leggermente tutti i colori verso il tuo colore di tinta.",
     "useGradients": "Usa i gradienti",
-    "useGradientsExpl": "Usa un gradiente con tonalità diverse dello stesso colore, invece che un colore piatto, come sfondo di molti widget"
+    "useGradientsExpl": "Usa un gradiente con tonalità diverse dello stesso colore, invece che un colore piatto, come sfondo di molti widget.",
+    "useCustomSecondary": "Usa un colore secondario personalizzato",
+    "useCustomSecondaryExpl": "Se questa opzione è disabilitata, il colore è derivato dal colore primario. Inoltre, disabilitare questa opzione altererà il colore primario per un look più armonizzato."
   },
   "timeSettings": {
     "defaultLessonDuration": "Durata delle lezioni",
