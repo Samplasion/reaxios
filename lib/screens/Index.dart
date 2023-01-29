@@ -490,7 +490,8 @@ class _HomeScreenState extends State<HomeScreen> {
               for (final s in _session.students)
                 Builder(builder: (context) {
                   return M3DrawerListTile(
-                    icon: Icon(Icons.person),
+                    icon: Icon(Icons.person_outlined),
+                    selectedIcon: Icon(Icons.person),
                     title: Text("${s.firstName} ${s.lastName}"),
                     selected: s.studentUUID ==
                         context.read<AppCubit>().student?.studentUUID,
