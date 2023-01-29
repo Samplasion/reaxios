@@ -205,6 +205,15 @@ class _SwitchSettingsTileState extends State<SwitchSettingsTile> {
         value: widget.value,
         onChanged: widget.onChange,
         activeColor: Theme.of(context).colorScheme.tertiary,
+        thumbIcon: MaterialStateProperty.resolveWith<Icon?>((states) {
+          if (states.contains(MaterialState.selected)) {
+            return Icon(
+              Icons.check,
+              color: Theme.of(context).colorScheme.onTertiary,
+            );
+          }
+          return const Icon(Icons.close);
+        }),
       ),
       onTap: () => widget.onChange(!widget.value),
     );
