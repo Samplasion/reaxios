@@ -32,11 +32,15 @@ class ReportCard extends Equatable {
   @JsonKey(name: "materie")
   final List<ReportCardSubject> subjects;
   @JsonKey(name: "dataVisualizzazione")
-  // @DateSerializer()
   final String dateReadRaw;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   DateTime? get dateRead {
     try {
-      return DateSerializer().fromJson(dateReadRaw);
+      final date = DateSerializer().fromJson(dateReadRaw);
+      // The serializer returns the epoch as a sentinel
+      // value if the server-returned date is invalid
+      if (date.millisecondsSinceEpoch == 0) return null;
+      return date;
     } catch (_) {
       return null;
     }
@@ -61,11 +65,11 @@ class ReportCard extends Equatable {
     required this.read,
     required this.visible,
     required this.subjects,
-    required String dateRead,
+    required this.dateReadRaw,
     required this.canViewAbsences,
     this.eduGrade = "",
     this.cardKind = "",
-  }) : dateReadRaw = dateRead;
+  });
 
   factory ReportCard.fromJson(Map<String, dynamic> json) =>
       _$ReportCardFromJson(json);
@@ -83,7 +87,7 @@ class ReportCard extends Equatable {
         read: false,
         visible: false,
         subjects: [],
-        dateRead: "****",
+        dateReadRaw: "****",
         canViewAbsences: false,
         eduGrade: "",
         cardKind: "",
@@ -100,7 +104,7 @@ class ReportCard extends Equatable {
         read: true,
         visible: true,
         subjects: [],
-        dateRead: "****",
+        dateReadRaw: "****",
         canViewAbsences: true,
         eduGrade: "",
         cardKind: "",

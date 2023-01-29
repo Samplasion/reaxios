@@ -41,18 +41,18 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
         children: [
           Alert(
             title: context.loc.translate("reportCard.notAvailableTitle"),
-            textBuilder: reportCard.dateRead == null ? (_) => null : null,
             color: AlertColor(
               scheme.tertiaryContainer,
               scheme.onTertiaryContainer,
             ),
-            text: reportCard.dateRead == null
-                ? null
-                : MarkdownBody(
-                    data: context.loc.translate("reportCard.notAvailableBody", {
+            text: MarkdownBody(
+              data: reportCard.dateRead == null
+                  ? context.loc
+                      .translate("reportCard.notAvailableBodyUnknownDate")
+                  : context.loc.translate("reportCard.notAvailableBody", {
                       "day": context.dateToString(reportCard.dateRead!),
                     }),
-                  ),
+            ),
           )
         ],
       );
@@ -132,7 +132,7 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                             : GradeText(context,
                                 grade: e.details[0].grade.toDouble())
                       ],
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
                   mouseCursor: SystemMouseCursors.click,

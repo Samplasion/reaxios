@@ -238,6 +238,7 @@
   "reportCard": {
     "notAvailableTitle": "Pagella non disponibile",
     "notAvailableBody": "La pagella sarà disponibile dal **{day}**",
+    "notAvailableBodyUnknownDate": "Non è stato specificato quando sarà disponibile",
     "overview": "Riepilogo",
     "average": "Media: ",
     "absences": "Assenze: **{absences}**",

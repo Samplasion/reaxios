@@ -238,6 +238,7 @@
   "reportCard": {
     "notAvailableTitle": "Your report card isn't ready yet",
     "notAvailableBody": "It should release by **{day}**",
+    "notAvailableBodyUnknownDate": "It's not yet known when it will be available",
     "overview": "Overview",
     "average": "Average: ",
     "absences": "Absences: **{absences}**",
