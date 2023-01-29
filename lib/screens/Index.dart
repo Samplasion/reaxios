@@ -22,6 +22,7 @@ import 'package:reaxios/components/LowLevel/lifecycle_reactor.dart';
 import 'package:reaxios/components/LowLevel/m3_drawer.dart';
 import 'package:reaxios/components/Utilities/updates/update_scope.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
+import 'package:reaxios/i18n/delegate.dart';
 import 'package:reaxios/screens/nav/Absences.dart';
 import 'package:reaxios/screens/nav/Assignments.dart';
 import 'package:reaxios/screens/nav/Authorizations.dart';
@@ -180,6 +181,21 @@ class _HomeScreenState extends State<HomeScreen> {
       // Do nothing; the HydratedCubit will have stale data, but at least
       // the app will run.
     }
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    debugPrint("[${widget.runtimeType}] Calling reassemble()...");
+    AppLocalizations.of(context).load().then((value) {
+      if (mounted) {
+        if (value) {
+          context.showSnackbar("Reloaded strings!");
+        } else {
+          context.showSnackbarError("Couldn't reload strings!");
+        }
+      }
+    });
   }
 
   @override
