@@ -45,9 +45,6 @@ class _ResourcefulCardListItemState extends State<ResourcefulCardListItem> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final bg = theme.cardTheme.color!;
-
     final Text subtitle = widget.subtitle;
 
     Widget leading = widget.leading;
@@ -62,83 +59,95 @@ class _ResourcefulCardListItemState extends State<ResourcefulCardListItem> {
       padding: const EdgeInsets.all(8),
       child: Card(
         margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: ListTile(
-            leading: SizedBox(
-              child: leading,
-              width: 50,
-              height: 50,
-            ),
-            title: Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: Text(
-                widget.title,
-                style: TextStyle(
-                  fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ).merge(widget.titleStyle),
+        child: InkWell(
+          onTap: widget.onClick,
+          onLongPress: widget.onLongPress,
+          mouseCursor: SystemMouseCursors.click,
+          borderRadius: BorderRadius.circular(13),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: ListTile(
+              leading: SizedBox(
+                child: leading,
+                width: 50,
+                height: 50,
               ),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DefaultTextStyle.merge(
-                  child: subtitle,
-                  style: (subtitle.style ?? DefaultTextStyle.of(context).style)
-                      .merge(Theme.of(context).textTheme.labelLarge)
-                      .merge(
-                        TextStyle(
-                          color: Theme.of(context).textTheme.caption!.color,
-                        ),
-                      ),
+              title: Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontFamily:
+                        Theme.of(context).textTheme.titleLarge!.fontFamily,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ).merge(widget.titleStyle),
                 ),
-                DefaultTextStyle.merge(
-                  child: widget.location,
-                  style: (widget.location.style ??
-                          DefaultTextStyle.of(context).style)
-                      .merge(
-                    Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(
-                          fontFamily:
-                              Theme.of(context).textTheme.bodyText2?.fontFamily,
-                        )
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DefaultTextStyle.merge(
+                    child: subtitle,
+                    style: (subtitle.style ??
+                            DefaultTextStyle.of(context).style)
+                        .merge(Theme.of(context).textTheme.labelLarge)
                         .merge(
                           TextStyle(
                             color: Theme.of(context).textTheme.caption!.color,
                           ),
                         ),
                   ),
-                ),
-                DefaultTextStyle.merge(
-                  child: widget.date,
-                  style:
-                      (widget.date.style ?? DefaultTextStyle.of(context).style)
+                  DefaultTextStyle.merge(
+                    child: widget.location,
+                    style: (widget.location.style ??
+                            DefaultTextStyle.of(context).style)
+                        .merge(
+                      Theme.of(context)
+                          .textTheme
+                          .labelMedium
+                          ?.copyWith(
+                            fontFamily: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                ?.fontFamily,
+                          )
                           .merge(
-                    Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(
-                          fontFamily:
-                              Theme.of(context).textTheme.bodyText2?.fontFamily,
-                        )
-                        .merge(
-                          TextStyle(
-                            color: Theme.of(context).textTheme.caption!.color,
+                            TextStyle(
+                              color: Theme.of(context).textTheme.caption!.color,
+                            ),
                           ),
-                        ),
+                    ),
                   ),
-                ),
-                SizedBox(height: 8),
-                widget.description,
-                if (widget.footer != null) ...[
+                  DefaultTextStyle.merge(
+                    child: widget.date,
+                    style: (widget.date.style ??
+                            DefaultTextStyle.of(context).style)
+                        .merge(
+                      Theme.of(context)
+                          .textTheme
+                          .labelMedium
+                          ?.copyWith(
+                            fontFamily: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                ?.fontFamily,
+                          )
+                          .merge(
+                            TextStyle(
+                              color: Theme.of(context).textTheme.caption!.color,
+                            ),
+                          ),
+                    ),
+                  ),
                   SizedBox(height: 8),
-                  widget.footer!,
-                ]
-              ],
+                  widget.description,
+                  if (widget.footer != null) ...[
+                    SizedBox(height: 8),
+                    widget.footer!,
+                  ]
+                ],
+              ),
             ),
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:reaxios/api/entities/Meeting/Meeting.dart';
 
 import '../../utils.dart';
 import '../LowLevel/GradientCircleAvatar.dart';
+import '../Utilities/Alert.dart';
 import '../Utilities/ResourcefulCardListItem.dart';
 
 class MeetingListItem extends StatelessWidget {
@@ -23,9 +24,13 @@ class MeetingListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final available = meeting.meetings.dates.any((date) => date.hasSeats);
+    final scheme = Theme.of(context).colorScheme;
     return ResourcefulCardListItem(
       leading: GradientCircleAvatar(
-        color: Utils.getColorFromString(meeting.teacher),
+        color: context.harmonize(
+          color: Utils.getColorFromString(meeting.teacher),
+        ),
         child: Icon(Icons.event),
       ),
       title: meeting.subject,
@@ -33,8 +38,8 @@ class MeetingListItem extends StatelessWidget {
       description: meeting.meetings.note.isNotEmpty
           ? Linkify(
               text: meeting.meetings.note,
-              style:
-                  TextStyle(color: Theme.of(context).textTheme.caption!.color),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
               onOpen: context.defaultLinkHandler,
             )
           : Container(),
@@ -53,20 +58,94 @@ class MeetingListItem extends StatelessWidget {
                   title: Text(date.date),
                   subtitle: date.mode.isNotEmpty ? Text(date.mode) : null,
                 ),
-          if (getBadge(context) != null) ...[
-            getBadge(context)!,
-          ],
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              if (getBadge(context) != null) getBadge(context)!,
+              if (getLinkBadge(context) != null) getLinkBadge(context)!,
+            ],
+          ),
         ],
       ),
       onClick: onClick
           ? () {
+              if (!available) {
+                context.showSnackbarError(
+                  context.loc.translate("teacherMeetings.thereAreNoSeats"),
+                );
+                return;
+              }
+              showDialog(
+                context: context,
+                builder: (context) {
+                  int? selected;
+                  return StatefulBuilder(
+                    builder: (BuildContext context, setState) {
+                      return AlertDialog(
+                        scrollable: true,
+                        title: Text("teacherMeetings.chooseDayAndTime"),
+                        content: Column(
+                          children: [
+                            Divider(),
+                            for (int i = 0; i < 100; i++)
+                              ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: selected == i
+                                      ? scheme.primary
+                                      : scheme.surfaceVariant,
+                                  foregroundColor: selected == i
+                                      ? scheme.onPrimary
+                                      : scheme.onSurfaceVariant,
+                                  child: Icon(
+                                    selected == i ? Icons.check : Icons.today,
+                                  ),
+                                ),
+                                title: Text("$i"),
+                                onTap: () {
+                                  print(selected == i);
+                                  setState(() {
+                                    selected = i;
+                                  });
+                                },
+                              ),
+                            Divider(),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
               // TODO: Open meeting time picker
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
-                    context.loc.translate("teacherMeetings.unimplemented")),
-              ));
+              context.showSnackbar(
+                context.loc.translate("teacherMeetings.unimplemented"),
+              );
             }
           : null,
+    );
+  }
+
+  Widget? getLinkBadge(BuildContext context) {
+    if (meeting.meetings.link.isEmpty) return null;
+
+    final scheme = Theme.of(context).colorScheme;
+    final color = AlertColor(
+      scheme.tertiaryContainer,
+      scheme.onTertiaryContainer,
+    );
+
+    return Chip(
+      avatar: Icon(Icons.link, color: color.foreground),
+      label: Text(
+        context.loc.translate(
+          "teacherMeetings.link",
+        ),
+        style: TextStyle(color: color.foreground),
+      ),
+      side: BorderSide(color: scheme.secondaryContainer),
+      backgroundColor: color.background,
+      visualDensity: VisualDensity.compact,
     );
   }
 
@@ -75,35 +154,26 @@ class MeetingListItem extends StatelessWidget {
       return null;
     }
 
-    return meeting.meetings.dates.any((date) => date.hasSeats)
-        ? Badge(
-            toAnimate: false,
-            shape: BadgeShape.square,
-            badgeColor: Colors.green,
-            // There's no stadium border, so this'll do
-            borderRadius: BorderRadius.circular(9999),
-            badgeContent: Text(
-              context.loc.translate("teacherMeetings.seatsAvailable"),
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: Theme.of(context).textTheme.caption!.fontSize,
-              ),
-            ),
-            elevation: 0,
-          )
-        : Badge(
-            toAnimate: false,
-            shape: BadgeShape.square,
-            badgeColor: Colors.red,
-            borderRadius: BorderRadius.circular(9999),
-            badgeContent: Text(
-              context.loc.translate("teacherMeetings.noSeatsAvailable"),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Theme.of(context).textTheme.caption!.fontSize,
-              ),
-            ),
-            elevation: 0,
-          );
+    final scheme = Theme.of(context).colorScheme;
+    final available = meeting.meetings.dates.any((date) => date.hasSeats);
+    final color = AlertColor.fromMaterialColor(
+      context,
+      (available ? Colors.green : Colors.red).harmonizeWith(context),
+    );
+    final no = available ? "s" : "noS";
+    final icon = available ? Icons.check : Icons.close;
+
+    return Chip(
+      avatar: Icon(icon, color: color.foreground),
+      label: Text(
+        context.loc.translate(
+          "teacherMeetings.${no}eatsAvailable",
+        ),
+        style: TextStyle(color: color.foreground),
+      ),
+      side: BorderSide(color: scheme.secondaryContainer),
+      backgroundColor: color.background,
+      visualDensity: VisualDensity.compact,
+    );
   }
 }
