@@ -157,7 +157,6 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         .toList();
     // ..sort((a, b) => b.date.compareTo(a.date));
 
-    final accent = Theme.of(context).colorScheme.secondary;
     final scheme = Theme.of(context).colorScheme;
 
     final topicCards = [
@@ -354,35 +353,59 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
       ).center(),
     ];
 
-    return RefreshIndicator(
-      onRefresh: () async {
-        final cubit = context.read<AppCubit>();
-        print(String data) => debugPrint("[${DateTime.now()}] $data");
-        print("Loading structural...");
-        return cubit.loadStructural(force: true).then((_) {
-          print("Loaded structural.");
-          print("Loading assignments...");
-          return cubit.loadAssignments(force: true);
-        }).then((_) {
-          print("Loaded assignments.");
-          print("Loading grades...");
-          return cubit.loadGrades(force: true);
-        }).then((_) {
-          print("Loaded grades.");
-          print("Loading topics...");
-          return cubit.loadTopics(force: true);
-        }).then((_) {
-          print("Loaded topics.");
-        });
-      },
-      child: CustomScrollView(
-        controller: controller,
-        slivers: [
-          SliverList(
-            delegate: SliverChildListDelegate(items),
+    return StreamBuilder<bool>(
+      stream: MaybeMasterDetail.getShowingStream(context),
+      initialData: false,
+      builder: (context, isShowingMasterSnapshot) {
+        final isShowingMaster = isShowingMasterSnapshot.data ?? false;
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(context.loc.translate("drawer.overview")),
+            leading: isShowingMaster
+                ? null
+                : Builder(builder: (context) {
+                    return IconButton(
+                      tooltip: MaterialLocalizations.of(context)
+                          .openAppDrawerTooltip,
+                      onPressed: () {
+                        widget.openMainDrawer();
+                      },
+                      icon: Icon(Icons.menu),
+                    );
+                  }),
           ),
-        ],
-      ),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              final cubit = context.read<AppCubit>();
+              print(String data) => debugPrint("[${DateTime.now()}] $data");
+              print("Loading structural...");
+              return cubit.loadStructural(force: true).then((_) {
+                print("Loaded structural.");
+                print("Loading assignments...");
+                return cubit.loadAssignments(force: true);
+              }).then((_) {
+                print("Loaded assignments.");
+                print("Loading grades...");
+                return cubit.loadGrades(force: true);
+              }).then((_) {
+                print("Loaded grades.");
+                print("Loading topics...");
+                return cubit.loadTopics(force: true);
+              }).then((_) {
+                print("Loaded topics.");
+              });
+            },
+            child: CustomScrollView(
+              controller: controller,
+              slivers: [
+                SliverList(
+                  delegate: SliverChildListDelegate(items),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
