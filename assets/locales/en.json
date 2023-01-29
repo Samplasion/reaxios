@@ -420,6 +420,6 @@
       "heldBack": "Held back",
       "noData": "No data"
     },
-    "schoolYear": "School year {year}"
+    "schoolYear": "{year} school year"
   }
 }
