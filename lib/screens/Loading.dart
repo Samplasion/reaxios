@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,7 +66,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
         if (error != null) {
           print(error);
-          Navigator.pushReplacementNamed(context, "login");
+          if (error is Error) print(error.stackTrace);
+          if (error is DioError &&
+              error.error.toString().contains("SocketException")) {
+            Navigator.pushReplacementNamed(context, "nointernet");
+          } else {
+            Navigator.pushReplacementNamed(context, "login");
+          }
           return;
         }
 
