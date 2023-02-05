@@ -79,7 +79,7 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                     context,
                     shade: Theme.of(context).brightness == Brightness.dark
                         ? 200
-                        : 400,
+                        : 800,
                     grade: simpleAverage(reportCard.subjects
                         .map((e) => e.gradeAverage)
                         .where((e) => e > 0)
