@@ -24,9 +24,7 @@ class ColorBuilder extends StatelessWidget {
     return dcEnabled && dcSupported;
   }
 
-  ColorScheme fix(ColorScheme scheme) => scheme.copyWith(
-        outline: scheme.surfaceVariant,
-      );
+  ColorScheme fix(ColorScheme scheme) => scheme;
 
   @override
   Widget build(BuildContext context) {
