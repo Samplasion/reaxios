@@ -251,66 +251,71 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
 
     final colorScheme = Theme.of(context).colorScheme;
     final items = [
-      Padding(
-        padding: const EdgeInsets.all(16),
-        child: Card(
-          margin: EdgeInsets.zero,
-          color: colorScheme.secondary,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(13),
-            splashColor: colorScheme.secondaryContainer.withOpacity(0.2),
-            onTap: () {
-              // Curriculum
-              widget.switchToTab(16);
-            },
-            child: DefaultTextStyle.merge(
-              style: TextStyle(color: colorScheme.onSecondary),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: Icon(
-                          Icons.account_circle,
-                          size: 50,
+      Center(
+        child: MaxWidthContainer(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Card(
+              margin: EdgeInsets.zero,
+              color: colorScheme.secondary,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(13),
+                splashColor: colorScheme.secondaryContainer.withOpacity(0.2),
+                onTap: () {
+                  // Curriculum
+                  widget.switchToTab(16);
+                },
+                child: DefaultTextStyle.merge(
+                  style: TextStyle(color: colorScheme.onSecondary),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: Icon(
+                              Icons.account_circle,
+                              size: 50,
+                              color: colorScheme.onSecondary,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                student.fullName,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                              ).padding(bottom: 5),
+                              Text(
+                                "${context.dateToString(student.birthday)} [${calculateAge(student.birthday)}] - ${context.loc.translate("main.gender${describeEnum(student.gender)[0]}")}",
+                                style: TextStyle(
+                                  color:
+                                      colorScheme.onSecondary.withOpacity(0.76),
+                                  fontSize: 12,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right_rounded,
                           color: colorScheme.onSecondary,
                         ),
-                      ),
+                      ],
                     ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            student.fullName,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.fade,
-                          ).padding(bottom: 5),
-                          Text(
-                            "${context.dateToString(student.birthday)} [${calculateAge(student.birthday)}] - ${context.loc.translate("main.gender${describeEnum(student.gender)[0]}")}",
-                            style: TextStyle(
-                              color: colorScheme.onSecondary.withOpacity(0.76),
-                              fontSize: 12,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.fade,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      color: colorScheme.onSecondary,
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -329,7 +334,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
             style: Theme.of(context).textTheme.headline6,
           ).padding(horizontal: 16, top: 8),
           ...gradeCards,
-        ].map((e) => MaxWidthContainer(child: e).center()),
+        ].map((e) => Center(child: MaxWidthContainer(child: e))),
 
       TodaysEvents(),
 
@@ -340,7 +345,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
             style: Theme.of(context).textTheme.headline6,
           ).padding(horizontal: 16, top: 8),
           _getAssignmentTimeline(tmrAssignments),
-        ].map((e) => MaxWidthContainer(child: e).center()),
+        ].map((e) => Center(child: MaxWidthContainer(child: e))),
 
       if (topicCards.isNotEmpty) ...[
         MaxWidthContainer(
