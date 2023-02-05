@@ -203,7 +203,7 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
   }
 
   int getGradeShade(BuildContext context, [int delta = 300]) {
-    final center = 600;
+    final center = 500;
     return Theme.of(context).brightness == Brightness.dark
         ? center - delta
         : center + delta;
