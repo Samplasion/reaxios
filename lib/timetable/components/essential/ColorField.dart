@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/utils.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
-import '../../../showDialogSuper.dart';
+import '../../../utils/showDialogSuper.dart';
 
 class ColorField extends StatefulWidget {
   ColorField(

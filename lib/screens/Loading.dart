@@ -9,7 +9,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../cubit/app_cubit.dart';

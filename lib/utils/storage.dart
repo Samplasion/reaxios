@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'timetable/structures/Settings.dart';
+import '../timetable/structures/Settings.dart';
 
 class Storage extends UndisposableChangeNotifier {
   late SharedPreferences _prefs;

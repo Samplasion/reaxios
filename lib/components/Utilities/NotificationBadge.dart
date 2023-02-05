@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class NotificationBadge extends StatelessWidget {

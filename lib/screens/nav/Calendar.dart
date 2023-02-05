@@ -26,8 +26,8 @@ import 'package:reaxios/structs/calendar_event.dart';
 import 'package:reaxios/timetable/extensions.dart'
     show ColorExtension, RangeExtension;
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/tuple.dart';
-import 'package:reaxios/utils.dart' hide ColorUtils;
+import 'package:reaxios/utils/tuple.dart';
+import 'package:reaxios/utils/utils.dart' hide ColorUtils;
 import 'package:styled_widget/styled_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 

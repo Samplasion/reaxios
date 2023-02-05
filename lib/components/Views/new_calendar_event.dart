@@ -3,7 +3,7 @@ import 'package:reaxios/components/LowLevel/DateField.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/structs/calendar_event.dart';
 import 'package:reaxios/timetable/components/essential/ColorField.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class _SmallTitle extends StatelessWidget {
   final String text;

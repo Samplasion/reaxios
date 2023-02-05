@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class _XY {
   final double x;

@@ -12,7 +12,7 @@ import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class _GradeChartEntry {

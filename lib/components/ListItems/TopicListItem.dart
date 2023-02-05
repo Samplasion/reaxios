@@ -3,8 +3,8 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
-import 'package:reaxios/format.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/format.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import "package:styled_widget/styled_widget.dart";
 

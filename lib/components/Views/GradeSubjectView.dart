@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/average.dart';
+import 'package:reaxios/utils/average.dart';
 import 'package:reaxios/components/Charts/GradeLineChart.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
@@ -17,10 +17,10 @@ import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Views/SubjectSettingsView.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
-import 'package:reaxios/format.dart';
+import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/structs/GradeAlertBoundaries.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class GradeSubjectView extends StatefulWidget {

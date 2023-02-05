@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/screens/nav/Timetable.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 import '../components/LowLevel/MaybeMasterDetail.dart';
 import '../components/LowLevel/m3_drawer.dart';

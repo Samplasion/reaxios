@@ -9,8 +9,8 @@ import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
-import 'package:reaxios/format.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/format.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 

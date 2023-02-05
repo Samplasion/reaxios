@@ -8,7 +8,7 @@ import 'package:reaxios/components/ListItems/AuthorizationListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import "package:styled_widget/styled_widget.dart";
 
 class AuthorizationsPane extends StatefulWidget {

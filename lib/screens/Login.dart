@@ -9,11 +9,11 @@ import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/ListItems/SchoolListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../consts.dart';
-import '../format.dart';
+import '../utils/consts.dart';
+import '../utils/format.dart';
 
 final useScreens = (onPrev, onNext, onDone) => [
       _LoginScreenPage1(

@@ -1,8 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
@@ -10,11 +7,8 @@ import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Views/ReportCard.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:screenshot/screenshot.dart';
-
-import '../../i18n/delegate.dart';
-import '../../snapshot.dart';
 
 class ReportCardsPane extends StatefulWidget {
   ReportCardsPane({

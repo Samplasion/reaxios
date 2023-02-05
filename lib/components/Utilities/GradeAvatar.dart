@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class GradeAvatar extends StatelessWidget {
   const GradeAvatar({

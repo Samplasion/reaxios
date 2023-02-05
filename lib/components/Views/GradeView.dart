@@ -7,10 +7,10 @@ import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
-import 'package:reaxios/format.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/format.dart';
+import 'package:reaxios/utils/utils.dart';
 
-import '../../consts.dart';
+import '../../utils/consts.dart';
 import '../../cubit/app_cubit.dart';
 
 class GradeView extends StatefulWidget {

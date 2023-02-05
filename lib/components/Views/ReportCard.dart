@@ -4,8 +4,8 @@ import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
 import 'package:reaxios/api/utils/utils.dart';
 import 'package:reaxios/components/Utilities/Alert.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
-import 'package:reaxios/format.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/format.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 // ignore: must_be_immutable

@@ -8,7 +8,7 @@ import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/MaterialFolderView.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class MaterialTeacherView extends StatelessWidget {

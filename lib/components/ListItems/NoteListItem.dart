@@ -5,7 +5,7 @@ import 'package:reaxios/api/entities/Note/Note.dart';
 import 'package:reaxios/api/enums/NoteKind.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class NoteListItem extends StatelessWidget {

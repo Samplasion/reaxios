@@ -4,7 +4,7 @@ import 'package:reaxios/timetable/components/essential/EventView.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Weekday.dart';
 import 'package:reaxios/timetable/utils.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class EventWeekView extends StatefulWidget {
   const EventWeekView({

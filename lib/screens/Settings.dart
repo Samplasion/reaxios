@@ -7,7 +7,7 @@ import 'package:reaxios/screens/settings/Time.dart';
 import 'package:reaxios/screens/settings/Update.dart';
 import 'package:reaxios/screens/settings/base.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 import 'settings/General.dart';
 

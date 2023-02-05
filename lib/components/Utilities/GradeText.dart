@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reaxios/api/utils/utils.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class GradeText extends TextSpan {
   GradeText(

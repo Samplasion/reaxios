@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:reaxios/format.dart';
+import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/screens/settings/base.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class TimeSettings extends BaseSettings {
   const TimeSettings({Key? key}) : super(key: key);

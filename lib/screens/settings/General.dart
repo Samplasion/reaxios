@@ -6,7 +6,7 @@ import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:reaxios/screens/settings/base.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class GeneralSettings extends BaseSettings {
   const GeneralSettings({Key? key}) : super(key: key);

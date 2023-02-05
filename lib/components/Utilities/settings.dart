@@ -4,9 +4,9 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/timetable/showModalBottomSheetSuper.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
-import '../../showDialogSuper.dart';
+import '../../utils/showDialogSuper.dart';
 
 typedef OnChange<T> = void Function(T value);
 

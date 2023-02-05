@@ -5,10 +5,10 @@ import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/AlertBottomSheet.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 import '../../timetable/showModalBottomSheetSuper.dart';
-import '../../../../showDialogSuper.dart';
+import '../../../../utils/showDialogSuper.dart';
 
 typedef OnChange<T> = void Function(T value);
 

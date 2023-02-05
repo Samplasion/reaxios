@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/components/ListItems/MeetingListItem.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class BookMeetingView extends StatefulWidget {
   BookMeetingView({Key? key}) : super(key: key);

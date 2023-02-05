@@ -15,7 +15,7 @@ import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/notifications.dart';
 import 'package:reaxios/services/compute.dart';
-import 'package:reaxios/tuple.dart';
+import 'package:reaxios/utils/tuple.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/entities/Structural/Structural.dart';

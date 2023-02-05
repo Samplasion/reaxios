@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:animations/animations.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' hide compute;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -36,13 +35,13 @@ import 'package:reaxios/screens/nav/Stats.dart';
 import 'package:reaxios/screens/nav/Topics.dart';
 import 'package:reaxios/screens/nav/colors.dart';
 import 'package:reaxios/services/compute.dart';
-import 'package:reaxios/storage.dart';
+import 'package:reaxios/utils/storage.dart';
 import 'package:reaxios/system/intents.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../system/AppInfoStore.dart';
-import '../tuple.dart';
+import '../utils/tuple.dart';
 import 'nav/BulletinBoard.dart';
 import 'nav/Calculator.dart';
 import 'nav/Meetings.dart';

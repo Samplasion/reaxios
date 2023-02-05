@@ -12,7 +12,7 @@ import '../../api/entities/Meeting/Meeting.dart';
 import '../../components/LowLevel/Empty.dart';
 import '../../components/LowLevel/GradientCircleAvatar.dart';
 import '../../components/Utilities/ResourcefulCardListItem.dart';
-import '../../utils.dart';
+import '../../utils/utils.dart';
 
 class MeetingsPane extends StatefulWidget {
   MeetingsPane({

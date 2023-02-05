@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reaxios/api/entities/School/School.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class SchoolListItem extends StatelessWidget {
   const SchoolListItem(

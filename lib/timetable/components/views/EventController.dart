@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
-import 'package:reaxios/consts.dart';
+import 'package:reaxios/utils/consts.dart';
 import 'package:reaxios/timetable/components/views/DayView.dart';
 import 'package:reaxios/timetable/components/views/EventMassEditor.dart';
 import 'package:reaxios/timetable/components/views/WeekView.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 import '../../../components/LowLevel/MaybeMasterDetail.dart';
 import 'EventEditor.dart';

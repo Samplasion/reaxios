@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/format.dart';
+import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/timetable/components/essential/DayViewText.dart';
 import 'package:reaxios/timetable/components/essential/EventWeekView.dart';
 import 'package:reaxios/timetable/extensions.dart';
@@ -8,12 +8,12 @@ import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Weekday.dart';
 import 'package:reaxios/timetable/utils.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 import '../../../components/LowLevel/ConditionalChild.dart';
 import '../../../components/LowLevel/MaybeMasterDetail.dart';
-import '../../../consts.dart';
-import '../../../tuple.dart';
+import '../../../utils/consts.dart';
+import '../../../utils/tuple.dart';
 
 class WeekView extends StatefulWidget {
   WeekView(

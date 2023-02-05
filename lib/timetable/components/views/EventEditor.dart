@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/format.dart';
+import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/timetable/components/essential/ColorField.dart';
 import 'package:reaxios/timetable/components/essential/GradientCircleAvatar.dart';
 import 'package:reaxios/timetable/components/essential/TimeField.dart';
@@ -12,7 +12,7 @@ import 'package:reaxios/timetable/structures/Store.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Weekday.dart';
 import 'package:reaxios/timetable/utils.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class EventEditor extends StatefulWidget {
   EventEditor(

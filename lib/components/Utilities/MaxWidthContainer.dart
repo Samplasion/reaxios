@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../consts.dart';
+import '../../utils/consts.dart';
 
 class MaxWidthContainer extends StatelessWidget {
   final Widget child;

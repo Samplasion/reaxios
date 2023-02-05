@@ -26,12 +26,12 @@ import 'package:reaxios/screens/Settings.dart';
 import 'package:reaxios/services/notifications.dart';
 import 'package:reaxios/system/AppInfoStore.dart';
 import 'package:reaxios/system/intents.dart';
-import 'change_notifier_provider.dart';
+import 'utils/change_notifier_provider.dart';
 import 'cubit/app_cubit.dart';
-import 'osversion.dart';
+import 'utils/osversion.dart';
 import 'timetable/structures/Settings.dart' as timetable;
 import 'timetable/structures/Store.dart' as timetable;
-import 'storage.dart' as s;
+import 'utils/storage.dart' as s;
 
 class MyHttpOverrides extends HttpOverrides {
   @override

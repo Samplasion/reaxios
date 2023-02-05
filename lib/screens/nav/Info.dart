@@ -7,7 +7,7 @@ import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/Utilities/settings.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 import '../../api/Axios.dart';
 import '../../api/enums/Gender.dart';

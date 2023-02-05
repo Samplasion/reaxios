@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/format.dart';
+import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/utils.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 import 'MaybeOverflowText.dart';
 

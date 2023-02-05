@@ -6,9 +6,9 @@ import 'package:reaxios/components/ListItems/AuthorizationListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
-import '../../consts.dart';
+import '../../utils/consts.dart';
 
 class AuthorizationView extends StatelessWidget {
   const AuthorizationView({

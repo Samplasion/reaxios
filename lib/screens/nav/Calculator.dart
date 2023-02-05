@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/average.dart';
+import 'package:reaxios/utils/average.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/enums/AverageMode.dart';
-import 'package:reaxios/showDialogSuper.dart';
+import 'package:reaxios/utils/showDialogSuper.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 
 import '../../api/Axios.dart';
@@ -21,7 +21,7 @@ import '../../components/Utilities/BoldText.dart';
 import '../../components/Utilities/GradeAvatar.dart';
 import '../../components/Utilities/GradeText.dart';
 
-import '../../utils.dart';
+import '../../utils/utils.dart';
 
 class CalculatorPane extends StatefulWidget {
   final Period? period;

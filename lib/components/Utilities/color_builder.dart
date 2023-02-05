@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../timetable/structures/Settings.dart' as timetable;
-import '../../utils.dart';
+import '../../utils/utils.dart';
 
 typedef Widget ColorSchemeBuilder(
     ColorScheme? lightDynamic, ColorScheme? darkDynamic);

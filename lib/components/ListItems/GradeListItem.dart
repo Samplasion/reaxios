@@ -6,7 +6,7 @@ import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/GradeView.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class GradeListItem extends StatelessWidget {
   GradeListItem({

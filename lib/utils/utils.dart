@@ -20,17 +20,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 
-import 'components/ListItems/RegistroAboutListItem.dart';
-import 'components/LowLevel/MaybeMasterDetail.dart';
-import 'components/LowLevel/m3_drawer.dart';
-import 'cubit/app_cubit.dart';
-import 'enums/AverageMode.dart';
-import 'enums/GradeDisplay.dart';
-import 'i18n/delegate.dart';
+import '../components/ListItems/RegistroAboutListItem.dart';
+import '../components/LowLevel/MaybeMasterDetail.dart';
+import '../components/LowLevel/m3_drawer.dart';
+import '../cubit/app_cubit.dart';
+import '../enums/AverageMode.dart';
+import '../enums/GradeDisplay.dart';
+import '../i18n/delegate.dart';
 import 'osversion.dart';
-import 'timetable/download.dart'
+import '../timetable/download.dart'
     if (dart.library.html) 'timetable/download_web.dart';
-import 'timetable/utils.dart';
+import '../timetable/utils.dart';
 
 extension StringUtils on String {
   repeat(int times) {

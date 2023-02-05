@@ -13,7 +13,7 @@ import 'package:reaxios/structs/calendar_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../enums/UpdateNagMode.dart';
-import '../../utils.dart';
+import '../../utils/utils.dart';
 import 'Event.dart';
 import '../utils.dart';
 

@@ -4,7 +4,7 @@ import 'package:reaxios/timetable/components/essential/ColorField.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 import 'package:reaxios/timetable/utils.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 
 class EventMassEditor extends StatefulWidget {
   EventMassEditor({

@@ -27,12 +27,12 @@ import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Utilities/updates/upgrade_card.dart';
-import 'package:reaxios/consts.dart';
+import 'package:reaxios/utils/consts.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/format.dart';
+import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/timetable/extensions.dart' hide ColorExtension;
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils.dart';
+import 'package:reaxios/utils/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import '../../components/LowLevel/MaybeMasterDetail.dart';

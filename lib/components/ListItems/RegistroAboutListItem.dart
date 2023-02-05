@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:reaxios/components/LowLevel/m3_drawer.dart';
 
 import '../../system/AppInfoStore.dart';
-import '../../utils.dart';
+import '../../utils/utils.dart';
 
 class RegistroAboutListItem extends StatelessWidget {
   const RegistroAboutListItem({Key? key}) : super(key: key);
