@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/values.dart';
+
 class AlertBottomSheet extends AlertDialog {
   final void Function() onClosing;
   final AnimationController? animationController;
@@ -18,7 +20,8 @@ class AlertBottomSheet extends AlertDialog {
         const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
     TextStyle? contentTextStyle,
     List<Widget>? actions,
-    EdgeInsetsGeometry actionsPadding = EdgeInsets.zero,
+    EdgeInsetsGeometry actionsPadding = const EdgeInsets.only(
+        right: RegistroValues.padding, bottom: RegistroValues.padding),
     MainAxisAlignment? actionsAlignment,
     VerticalDirection? actionsOverflowDirection,
     double? actionsOverflowButtonSpacing,
