@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/utils/utils.dart' as axios_utils;
+import 'package:share_plus/share_plus.dart';
 
 // Matches before a capital letter that is not also at beginning of string.
 import 'dart:math';
@@ -20,8 +26,10 @@ import 'components/LowLevel/m3_drawer.dart';
 import 'cubit/app_cubit.dart';
 import 'enums/AverageMode.dart';
 import 'enums/GradeDisplay.dart';
-import 'format.dart';
 import 'i18n/delegate.dart';
+import 'timetable/download.dart'
+    if (dart.library.html) 'timetable/download_web.dart';
+import 'timetable/utils.dart';
 
 extension StringUtils on String {
   repeat(int times) {
@@ -584,4 +592,75 @@ List<Widget> showEndOfDrawerItems(BuildContext context) {
     ),
     SizedBox(height: 16),
   ];
+}
+
+bool isPhone() {
+  return Platform.isAndroid || Platform.isIOS;
+}
+
+Future<String> get directory async {
+  // Directory tempDir = await getApplicationDocumentsDirectory();
+  late Directory tempDir;
+  if (isPhone()) {
+    tempDir = await getTemporaryDirectory();
+  } else {
+    tempDir = (await getApplicationDocumentsDirectory());
+  }
+  return tempDir.path;
+}
+
+Future<String> getRandomFilePath({
+  String name = "settings",
+  String extension = "json",
+}) async {
+  if (isPhone()) {
+    return "${await directory}/${name}_${getRandomString(20)}.$extension";
+  }
+  return "${await directory}/$name.$extension";
+}
+
+Future shareArbitraryData({
+  required dynamic data,
+  required String filename,
+  FileType type = FileType.custom,
+  List<String>? allowedExtensions,
+}) async {
+  if (!kIsWeb) {
+    if (!isPhone()) {
+      String? path = await FilePicker.platform.saveFile(
+        type: type,
+        allowedExtensions: allowedExtensions,
+        fileName: filename,
+      );
+      if (path == null) return;
+      final file = File(path);
+      if (data is String) {
+        await file.writeAsString(data, flush: true);
+      } else if (data is List<int>) {
+        await file.writeAsBytes(data, flush: true);
+      } else {
+        throw TypeError();
+      }
+    } else {
+      final filePath = await getRandomFilePath();
+      final file = File(filePath);
+      if (data is String) {
+        await file.writeAsString(data, flush: true);
+      } else if (data is List<int>) {
+        await file.writeAsBytes(data, flush: true);
+      } else {
+        throw TypeError();
+      }
+
+      await Share.shareFiles([filePath]);
+    }
+  } else {
+    if (data is String) {
+      download(filename, data.codeUnits);
+    } else if (data is List<int>) {
+      download(filename, data);
+    } else {
+      throw TypeError();
+    }
+  }
 }

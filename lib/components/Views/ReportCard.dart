@@ -10,9 +10,14 @@ import 'package:styled_widget/styled_widget.dart';
 
 // ignore: must_be_immutable
 class ReportCardComponent extends StatefulWidget {
-  ReportCardComponent({Key? key, required this.reportCard}) : super(key: key);
+  ReportCardComponent({
+    Key? key,
+    required this.reportCard,
+    this.forceExpandAll = false,
+  }) : super(key: key);
 
   final ReportCard reportCard;
+  final bool forceExpandAll;
 
   @override
   _ReportCardComponentState createState() => _ReportCardComponentState();
@@ -57,11 +62,14 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
         ],
       );
 
+    final alertColor = AlertColor.tertiary(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Alert(
           title: context.loc.translate("reportCard.overview"),
+          color: alertColor,
           textBuilder: (context) => [
             RichText(
               text: TextSpan(
@@ -69,6 +77,9 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                   TextSpan(text: context.loc.translate("reportCard.average")),
                   GradeText(
                     context,
+                    shade: Theme.of(context).brightness == Brightness.dark
+                        ? 200
+                        : 400,
                     grade: simpleAverage(reportCard.subjects
                         .map((e) => e.gradeAverage)
                         .where((e) => e > 0)
@@ -76,8 +87,7 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                   ),
                 ],
                 style: TextStyle(
-                  fontFamily: Theme.of(context).textTheme.bodyText2!.fontFamily,
-                  color: Theme.of(context).textTheme.bodyText2!.color,
+                  color: alertColor.foreground,
                 ),
               ),
             ),
@@ -115,9 +125,14 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
               openPanels[subjects[index]] = !open;
             });
           },
+          elevation: 0,
           children: reportCard.subjects.map((e) {
             return ExpansionPanel(
-              isExpanded: openPanels[e.name] ?? true,
+              backgroundColor: ElevationOverlay.applySurfaceTint(
+                  Theme.of(context).cardTheme.color!,
+                  Theme.of(context).cardTheme.surfaceTintColor,
+                  Theme.of(context).cardTheme.elevation!),
+              isExpanded: widget.forceExpandAll || (openPanels[e.name] ?? true),
               canTapOnHeader: true,
               headerBuilder: (context, isOpen) {
                 return ListTile(

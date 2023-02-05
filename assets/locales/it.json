@@ -249,7 +249,9 @@
     "grade": "Voto: ",
     "subjAbsences": "Assenze",
     "subjKind": "Tipo",
-    "subjGrade": "Voto"
+    "subjGrade": "Voto",
+    "saveToPhoto": "Esporta come foto",
+    "filename": "pagella"
   },
   "assignments": {
     "empty": "Non hai compiti (in assoluto)!",

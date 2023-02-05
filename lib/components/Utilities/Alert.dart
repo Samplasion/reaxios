@@ -20,6 +20,16 @@ class AlertColor {
       color[fgShade]!,
     );
   }
+
+  factory AlertColor.secondary(context) => AlertColor(
+        Theme.of(context).colorScheme.secondaryContainer,
+        Theme.of(context).colorScheme.onSecondaryContainer,
+      );
+
+  factory AlertColor.tertiary(context) => AlertColor(
+        Theme.of(context).colorScheme.tertiaryContainer,
+        Theme.of(context).colorScheme.onTertiaryContainer,
+      );
 }
 
 class Alert extends StatelessWidget {

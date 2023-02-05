@@ -249,7 +249,9 @@
     "grade": "Grade: ",
     "subjAbsences": "Absences",
     "subjKind": "Kind",
-    "subjGrade": "Grade"
+    "subjGrade": "Grade",
+    "saveToPhoto": "Export as photo",
+    "filename": "reportcard"
   },
   "assignments": {
     "empty": "You've got no homework at all!",

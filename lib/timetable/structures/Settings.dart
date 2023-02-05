@@ -10,12 +10,10 @@ import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:reaxios/structs/SubjectObjective.dart';
 import 'package:reaxios/structs/calendar_event.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../enums/UpdateNagMode.dart';
-import '../download.dart' if (dart.library.html) '../download_web.dart';
+import '../../utils.dart';
 import 'Event.dart';
 import '../utils.dart';
 
@@ -256,31 +254,6 @@ class Settings extends UndisposableChangeNotifier {
 
   // --------
 
-  Future<String> get directory async {
-    // Directory tempDir = await getApplicationDocumentsDirectory();
-    late Directory tempDir;
-    if (isPhone()) {
-      tempDir = await getTemporaryDirectory();
-    } else {
-      tempDir = (await getApplicationDocumentsDirectory());
-    }
-    return tempDir.path;
-  }
-
-  Future<String> getRandomFilePath({
-    String name = "settings",
-    String extension = "json",
-  }) async {
-    if (isPhone()) {
-      return "${await directory}/${name}_${getRandomString(20)}.$extension";
-    }
-    return "${await directory}/$name.$extension";
-  }
-
-  bool isPhone() {
-    return Platform.isAndroid || Platform.isIOS;
-  }
-
   Future share([List<String>? keys, String name = "settings.json"]) async {
     final encoded = jsonEncode(
       Map<String, dynamic>.fromIterable(
@@ -291,28 +264,12 @@ class Settings extends UndisposableChangeNotifier {
       ),
     );
 
-    if (!kIsWeb) {
-      if (!isPhone()) {
-        String? path = await FilePicker.platform.saveFile(
-          type: FileType.custom,
-          allowedExtensions: ["json"],
-          fileName: name,
-        );
-        if (path == null) return;
-        final file = File(path);
-        await file.writeAsString(encoded, flush: true);
-      } else {
-        final filePath = await getRandomFilePath();
-        final file = File(filePath);
-        await file.writeAsString(encoded, flush: true);
-
-        await Share.shareFiles([filePath]);
-      }
-    } else {
-      download("settings.json", encoded.codeUnits);
-    }
-
-    // await file.delete();
+    return shareArbitraryData(
+      data: encoded,
+      filename: name,
+      type: FileType.custom,
+      allowedExtensions: ["json"],
+    );
   }
 
   Future load() async {
