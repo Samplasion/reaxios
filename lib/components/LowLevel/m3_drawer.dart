@@ -99,12 +99,12 @@ class M3DrawerListTile extends StatelessWidget {
                                     if (_isForwardOrCompleted(animation)) {
                                       return KeyedSubtree(
                                         child: selectedIcon ?? icon,
-                                        key: ValueKey(selectedIcon ?? icon),
+                                        key: ValueKey(selected),
                                       );
                                     }
                                     return KeyedSubtree(
                                       child: icon,
-                                      key: ValueKey(icon),
+                                      key: ValueKey(selected),
                                     );
                                   }(),
                                 ),
