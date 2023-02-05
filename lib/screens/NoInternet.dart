@@ -11,7 +11,7 @@ import 'package:reaxios/screens/nav/Timetable.dart';
 import 'package:reaxios/utils/utils.dart';
 
 import '../components/LowLevel/MaybeMasterDetail.dart';
-import '../components/LowLevel/m3_drawer.dart';
+import '../components/LowLevel/m3/drawer.dart';
 import '../system/AppInfoStore.dart';
 
 class NoInternetScreen extends StatefulWidget {

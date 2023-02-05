@@ -23,7 +23,7 @@ import 'package:reaxios/timetable/structures/Settings.dart';
 import '../components/ListItems/RegistroAboutListItem.dart';
 import '../components/LowLevel/MaybeMasterDetail.dart';
 import '../components/LowLevel/m3/divider.dart';
-import '../components/LowLevel/m3_drawer.dart';
+import '../components/LowLevel/m3/drawer.dart';
 import '../cubit/app_cubit.dart';
 import '../enums/AverageMode.dart';
 import '../enums/GradeDisplay.dart';

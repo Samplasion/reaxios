@@ -18,7 +18,7 @@ import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
 import 'package:reaxios/components/LowLevel/lifecycle_reactor.dart';
-import 'package:reaxios/components/LowLevel/m3_drawer.dart';
+import 'package:reaxios/components/LowLevel/m3/drawer.dart';
 import 'package:reaxios/components/Utilities/updates/update_scope.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/i18n/delegate.dart';
