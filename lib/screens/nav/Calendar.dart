@@ -32,6 +32,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../components/LowLevel/RestartWidget.dart';
+import '../../components/LowLevel/m3/divider.dart';
 
 // lang: it
 
@@ -598,7 +599,7 @@ class _CalendarPaneState extends State<CalendarPane> {
             ),
           ),
           const SizedBox(height: 16.0),
-          Divider(height: 0, indent: 8, endIndent: 8),
+          M3Divider(height: 0, indent: 8, endIndent: 8),
           Expanded(
             child: PageTransitionSwitcher(
               reverse: _previouslyFocusedDay.isAfter(_focusedDay),

@@ -9,6 +9,7 @@ import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils/utils.dart';
 
 import '../../utils/consts.dart';
+import '../LowLevel/m3/divider.dart';
 
 class AuthorizationView extends StatelessWidget {
   const AuthorizationView({
@@ -111,7 +112,7 @@ class AuthorizationView extends StatelessWidget {
       return [];
     else
       return [
-        Divider(),
+        M3Divider(),
         ...accessories,
       ];
   }

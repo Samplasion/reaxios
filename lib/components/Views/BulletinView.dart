@@ -16,6 +16,8 @@ import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/utils/utils.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../LowLevel/m3/divider.dart';
+
 class BulletinView extends StatelessWidget {
   const BulletinView({
     Key? key,
@@ -67,7 +69,7 @@ class BulletinView extends StatelessWidget {
 
   List<Widget> _getAccessories(BuildContext context) {
     return [
-      Divider(),
+      M3Divider(),
       if (!bulletin.read)
         ElevatedButton(
           onPressed: () {
@@ -94,7 +96,7 @@ class BulletinView extends StatelessWidget {
         ),
       if (bulletin.read) Text(context.loc.translate("bulletins.alreadyRead")),
       if (kDebugMode) ...[
-        Divider(),
+        M3Divider(),
         ElevatedButton(
           child: Text("[DEBUG] Print JSON"),
           onPressed: () {

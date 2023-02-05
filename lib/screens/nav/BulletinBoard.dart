@@ -57,7 +57,7 @@ class _BulletinsPaneState extends ReloadableState<BulletinsPane> {
         onRefresh: _refresh,
         child: ListView.builder(
           // shrinkWrap: true,
-          // separatorBuilder: (_a, _b) => Divider(),
+          // separatorBuilder: (_a, _b) => M3Divider(),
           controller: controller,
           itemBuilder: (context, i) {
             return Padding(

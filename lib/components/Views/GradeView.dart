@@ -12,6 +12,7 @@ import 'package:reaxios/utils/utils.dart';
 
 import '../../utils/consts.dart';
 import '../../cubit/app_cubit.dart';
+import '../LowLevel/m3/divider.dart';
 
 class GradeView extends StatefulWidget {
   const GradeView({
@@ -80,7 +81,7 @@ class _GradeViewState extends State<GradeView> {
                   ),
                 ),
                 if (gradeIsValid) ...[
-                  Divider(),
+                  M3Divider(),
                   CardListItem(
                     leading: NotificationBadge(
                       child: GradientCircleAvatar(
@@ -99,7 +100,7 @@ class _GradeViewState extends State<GradeView> {
                         {"0": (grade.weight * 100).toInt().toString()})),
                   ),
                 ],
-                Divider(),
+                M3Divider(),
                 if (grade.seen)
                   CardListItem(
                     leading: NotificationBadge(

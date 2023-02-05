@@ -7,6 +7,7 @@ import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils/utils.dart';
 
 import '../../utils/consts.dart';
+import '../LowLevel/m3/divider.dart';
 
 class AbsenceView extends StatelessWidget {
   const AbsenceView({
@@ -52,7 +53,7 @@ class AbsenceView extends StatelessWidget {
 
   List<Widget> _getAccessories(BuildContext context) {
     return [
-      Divider(),
+      M3Divider(),
       if (absence.isJustifiable && !absence.isJustified)
         ElevatedButton(
           onPressed: () {

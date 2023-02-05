@@ -13,6 +13,7 @@ import 'package:sticky_headers/sticky_headers.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import '../../components/LowLevel/MaybeMasterDetail.dart';
+import '../../components/LowLevel/m3/divider.dart';
 
 class TopicsPane extends StatefulWidget {
   TopicsPane({
@@ -147,7 +148,7 @@ class _TopicsPaneState extends State<TopicsPane> {
             ),
           ),
           SliverToBoxAdapter(
-            child: Divider(),
+            child: M3Divider(),
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -213,7 +214,7 @@ class _TopicsPaneState extends State<TopicsPane> {
           },
           child: ListView.separated(
             shrinkWrap: true,
-            separatorBuilder: (_a, _b) => Divider(),
+            separatorBuilder: (_a, _b) => M3Divider(),
             controller: _mainController,
             itemBuilder: (context, i) {
               return StickyHeader(

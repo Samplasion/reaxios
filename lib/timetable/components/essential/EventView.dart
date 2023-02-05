@@ -7,6 +7,7 @@ import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/timetable/utils.dart';
 import 'package:reaxios/utils/utils.dart';
 
+import '../../../components/LowLevel/m3/divider.dart';
 import 'MaybeOverflowText.dart';
 
 class EventView extends StatefulWidget {
@@ -192,7 +193,7 @@ class _EventViewState extends State<EventView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Divider(),
+        M3Divider(),
         ...widget.actions.entries.map((entry) {
           return OutlinedButton(
             child: Text(context.loc.translate("timetable.actions${entry.key}")),

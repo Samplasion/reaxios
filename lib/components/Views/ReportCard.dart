@@ -8,6 +8,8 @@ import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/utils/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
+import '../LowLevel/m3/divider.dart';
+
 // ignore: must_be_immutable
 class ReportCardComponent extends StatefulWidget {
   ReportCardComponent({
@@ -169,7 +171,7 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                                         .translate("reportCard.subjAbsences"),
                                     e.absences.toInt().toString(),
                                   ),
-                                  Divider(),
+                                  M3Divider(),
                                 ]
                               : []),
                           if (e.details.length > 0) ...[

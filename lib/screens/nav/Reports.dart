@@ -12,6 +12,8 @@ import 'package:reaxios/utils/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import "package:styled_widget/styled_widget.dart";
 
+import '../../components/LowLevel/m3/divider.dart';
+
 class NotesPane extends StatefulWidget {
   NotesPane({
     Key? key,
@@ -73,7 +75,7 @@ class _NotesPaneState extends State<NotesPane> {
       onRefresh: _refresh,
       child: ListView.separated(
         shrinkWrap: true,
-        separatorBuilder: (_a, _b) => Divider(),
+        separatorBuilder: (_a, _b) => M3Divider(),
         controller: controller,
         itemBuilder: (context, i) {
           return StickyHeader(

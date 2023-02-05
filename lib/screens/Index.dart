@@ -40,6 +40,7 @@ import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../components/LowLevel/m3/divider.dart';
 import '../system/AppInfoStore.dart';
 import '../utils/tuple.dart';
 import 'nav/BulletinBoard.dart';
@@ -528,11 +529,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   );
                 }),
-              Divider(
-                height: 33,
-                indent: 28,
-                endIndent: 28,
-              ),
+              M3Divider.drawer(),
               M3DrawerHeading(context.loc.translate("drawer.destinations")),
               SizedBox(height: 16),
               ..._buildDrawerItems(),

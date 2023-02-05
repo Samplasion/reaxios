@@ -5,6 +5,7 @@ import 'package:reaxios/api/entities/Meeting/Meeting.dart';
 
 import '../../utils/utils.dart';
 import '../LowLevel/GradientCircleAvatar.dart';
+import '../LowLevel/m3/divider.dart';
 import '../Utilities/Alert.dart';
 import '../Utilities/ResourcefulCardListItem.dart';
 
@@ -87,7 +88,7 @@ class MeetingListItem extends StatelessWidget {
                         title: Text("teacherMeetings.chooseDayAndTime"),
                         content: Column(
                           children: [
-                            Divider(),
+                            M3Divider(),
                             for (int i = 0; i < 100; i++)
                               ListTile(
                                 leading: CircleAvatar(
@@ -109,7 +110,7 @@ class MeetingListItem extends StatelessWidget {
                                   });
                                 },
                               ),
-                            Divider(),
+                            M3Divider(),
                           ],
                         ),
                       );
