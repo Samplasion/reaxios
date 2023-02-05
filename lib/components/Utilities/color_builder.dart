@@ -19,7 +19,7 @@ class ColorBuilder extends StatelessWidget {
   bool shouldBeDynamic(BuildContext context) {
     final settings = Provider.of<timetable.Settings>(context);
     final dcEnabled = settings.getUseDynamicColor();
-    final dcSupported = true; // FIXME
+    final dcSupported = context.supportsDynamicColor();
 
     return dcEnabled && dcSupported;
   }

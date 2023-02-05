@@ -24,7 +24,7 @@ class GeneralSettings extends BaseSettings {
               Text(context.loc.translate("generalSettings.groupsColorsTitle")),
         ),
         children: [
-          if (!kIsWeb) ...[
+          if (!kIsWeb && context.supportsDynamicColor()) ...[
             SwitchSettingsTile(
               title:
                   Text(context.loc.translate("generalSettings.dynamicColor")),

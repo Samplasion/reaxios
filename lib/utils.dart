@@ -27,6 +27,7 @@ import 'cubit/app_cubit.dart';
 import 'enums/AverageMode.dart';
 import 'enums/GradeDisplay.dart';
 import 'i18n/delegate.dart';
+import 'osversion.dart';
 import 'timetable/download.dart'
     if (dart.library.html) 'timetable/download_web.dart';
 import 'timetable/utils.dart';
@@ -337,6 +338,14 @@ extension PrettyGrade on Grade {
 }
 
 extension ContextUtils on BuildContext {
+  bool supportsDynamicColor() {
+    final androidSupport =
+        Platform.isAndroid && (androidInfo.version.sdkInt ?? 0) >= 31;
+    final macSupport = Platform.isMacOS;
+    final winSupport = Platform.isWindows;
+    return androidSupport || macSupport || winSupport;
+  }
+
   String localizeDate(DateTime date) {
     String locale = Localizations.localeOf(this).languageCode;
     return DateFormat.yMMMMd(locale).format(date);
