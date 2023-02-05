@@ -30,7 +30,7 @@ import '../enums/GradeDisplay.dart';
 import '../i18n/delegate.dart';
 import 'osversion.dart';
 import '../timetable/download.dart'
-    if (dart.library.html) 'timetable/download_web.dart';
+    if (dart.library.html) '../timetable/download_web.dart';
 import '../timetable/utils.dart';
 
 extension StringUtils on String {
