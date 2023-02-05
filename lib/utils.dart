@@ -642,7 +642,14 @@ Future shareArbitraryData({
         throw TypeError();
       }
     } else {
-      final filePath = await getRandomFilePath();
+      final segments = filename.split(".");
+      final filenameWithoutExtension =
+          segments.sublist(0, segments.length - 1).join(".");
+      final extension = segments.last;
+      final filePath = await getRandomFilePath(
+        name: filenameWithoutExtension,
+        extension: extension,
+      );
       final file = File(filePath);
       if (data is String) {
         await file.writeAsString(data, flush: true);
