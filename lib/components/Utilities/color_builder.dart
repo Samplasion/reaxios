@@ -24,6 +24,10 @@ class ColorBuilder extends StatelessWidget {
     return dcEnabled && dcSupported;
   }
 
+  ColorScheme fix(ColorScheme scheme) => scheme.copyWith(
+        outline: scheme.surfaceVariant,
+      );
+
   @override
   Widget build(BuildContext context) {
     final settings = Provider.of<timetable.Settings>(context);
@@ -38,7 +42,7 @@ class ColorBuilder extends StatelessWidget {
           final isValid = light != null && dark != null;
 
           if (shouldBeDynamic(context) && isValid) {
-            return builder(light.harmonized(), dark.harmonized());
+            return builder(fix(light.harmonized()), fix(dark.harmonized()));
           }
 
           final customAccent = settings.getUseCustomSecondary();
@@ -58,16 +62,8 @@ class ColorBuilder extends StatelessWidget {
             onSecondary: customAccent ? accent.contrastText : null,
             brightness: Brightness.dark,
           ).harmonized();
-          print(
-              "$primary, ${lightColorScheme.surface}, ${lightColorScheme.background}");
-          // final darkColorScheme = ColorScheme.dark(
-          //   primary: primary,
-          //   onPrimary: primary.contrastText,
-          //   secondary: accent,
-          //   onSecondary: accent.contrastText,
-          // );
 
-          return builder(lightColorScheme, darkColorScheme);
+          return builder(fix(lightColorScheme), fix(darkColorScheme));
         });
       },
     );

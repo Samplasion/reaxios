@@ -148,6 +148,10 @@ class ColorSchemeView extends StatelessWidget {
         ColorGroup(
           children: [
             ColorChip(label: 'outline', color: colorScheme.outline),
+            ColorChip(
+              label: 'outlineVariant',
+              color: colorScheme.outlineVariant,
+            ),
             ColorChip(label: 'shadow', color: colorScheme.shadow),
             ColorChip(
                 label: 'inverseSurface',
