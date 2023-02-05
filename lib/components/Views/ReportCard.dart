@@ -77,9 +77,7 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                   TextSpan(text: context.loc.translate("reportCard.average")),
                   GradeText(
                     context,
-                    shade: Theme.of(context).brightness == Brightness.dark
-                        ? 200
-                        : 800,
+                    shade: getGradeShade(context),
                     grade: simpleAverage(reportCard.subjects
                         .map((e) => e.gradeAverage)
                         .where((e) => e > 0)
@@ -144,8 +142,11 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                             text: context.loc.translate("reportCard.grade")),
                         e.details[0].grade == 0
                             ? TextSpan(text: "-")
-                            : GradeText(context,
-                                grade: e.details[0].grade.toDouble())
+                            : GradeText(
+                                context,
+                                shade: getGradeShade(context, 200),
+                                grade: e.details[0].grade.toDouble(),
+                              )
                       ],
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
@@ -181,6 +182,7 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                                 RichText(
                                   text: GradeText(
                                     context,
+                                    shade: getGradeShade(context, 200),
                                     grade: e.details[0].grade.toDouble(),
                                     label: e.details[0].textGrade,
                                   ),
@@ -198,6 +200,13 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
         )
       ],
     );
+  }
+
+  int getGradeShade(BuildContext context, [int delta = 300]) {
+    final center = 600;
+    return Theme.of(context).brightness == Brightness.dark
+        ? center - delta
+        : center + delta;
   }
 }
 
