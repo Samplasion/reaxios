@@ -14,7 +14,7 @@ import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/format.dart';
 import 'package:reaxios/utils.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class BulletinView extends StatelessWidget {
   const BulletinView({
@@ -134,7 +134,7 @@ class BulletinView extends StatelessWidget {
                   : context.loc.translate("bulletins.openLink")),
               onClick: () async {
                 print(jsonEncode(e.toJson()));
-                if (await canLaunch(e.url)) {
+                if (await canLaunchUrlString(e.url)) {
                   if (e.kind == BulletinAttachmentKind.File) {
                     showDialog(
                       context: context,
@@ -156,14 +156,14 @@ class BulletinView extends StatelessWidget {
                                 .translate("main.downloadButtonLabel")),
                             onPressed: () {
                               Navigator.pop(context);
-                              launch(e.url);
+                              launchUrlString(e.url);
                             },
                           ),
                         ],
                       ),
                     );
                   } else {
-                    await launch(e.url);
+                    await launchUrlString(e.url);
                   }
                 } else {
                   if (e.kind == BulletinAttachmentKind.File) {
