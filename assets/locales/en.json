@@ -12,7 +12,7 @@
     "failedText": "Failed",
     "failedLinkOpen": "Unable to open link.",
     "failedFileDownload": "Unable to download file.",
-    "downloadButtonLabel": "DOWNLOAD",
+    "downloadButtonLabel": "Download",
     "noDataForPeriod": "There is no data for the selected period.",
     "noPermission": "You don't have the permission to enter this section. Contact your school for more information.",
     "didYouKnow": "You can change the style of grades from the settings.\nYou can change the colors from the settings.\nYou don't need a PIN to authorize absences.",
