@@ -323,6 +323,37 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         ),
       ),
 
+      QuickLinkContainer(
+        openPane: widget.switchToTab,
+        children: [
+          QuickLink(
+            "drawer.assignments",
+            Colors.green,
+            index: 2,
+          ),
+          QuickLink(
+            "drawer.topics",
+            Colors.teal,
+            index: 5,
+          ),
+          QuickLink(
+            "drawer.teachingMaterials",
+            Colors.orange,
+            index: 13,
+          ),
+          QuickLink(
+            "drawer.secretary",
+            Colors.indigo,
+            index: 7,
+          ),
+          QuickLink(
+            "drawer.timetable",
+            Colors.cyan,
+            index: 6,
+          ),
+        ],
+      ),
+
       // The card hides itself when there's
       // no update to show.
       UpgradeCard(),
@@ -438,213 +469,6 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
   }
 }
 
-class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
-  final double collapsedHeight;
-  final double expandedHeight;
-  final bool hideTitleWhenExpanded;
-  final void Function() openMenu;
-  final Student student;
-  final Period? period;
-  final void Function(int index) switchToTab;
-
-  CustomSliverDelegate({
-    required this.collapsedHeight,
-    required this.expandedHeight,
-    required this.openMenu,
-    required this.student,
-    required this.period,
-    required this.switchToTab,
-    this.hideTitleWhenExpanded = true,
-  });
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    final scheme = Theme.of(context).colorScheme;
-    final appBarSize = (expandedHeight - shrinkOffset);
-    final cardTopPosition = (expandedHeight / 2 - shrinkOffset) / 2; // / 10;
-    final proportion = 2 - (expandedHeight / appBarSize);
-    final percent = proportion < 0 || proportion > 1 ? 0.0 : proportion;
-    return SizedBox(
-      height: expandedHeight + expandedHeight / 2,
-      child: Stack(
-        children: [
-          SizedBox(
-            height: appBarSize < collapsedHeight ? collapsedHeight : appBarSize,
-            child: AppBar(
-              leading: MaybeMasterDetail.of(context)!.isShowingMaster
-                  ? null
-                  : IconButton(
-                      icon: Icon(Icons.menu),
-                      onPressed: openMenu,
-                      tooltip: context.materialLocale.openAppDrawerTooltip,
-                    ),
-              backgroundColor: ElevationOverlay.applySurfaceTint(
-                scheme.surface,
-                scheme.surfaceTint,
-                2,
-              ),
-              notificationPredicate: (_) => false,
-              title: Opacity(
-                opacity: hideTitleWhenExpanded ? 1.0 - percent : 1.0,
-                child: Text(context.loc.translate("drawer.overview")),
-              ),
-            ),
-          ),
-          if (percent > 0)
-            Positioned(
-              left: 0.0,
-              right: 0.0,
-              top: max(cardTopPosition, 0),
-              bottom: 0.0,
-              child: Opacity(
-                opacity: percent,
-                child: Transform.scale(
-                  scale: map(percent, 0, 1, 0.88, 1).toDouble(),
-                  child: MaxWidthContainer(
-                    child: UserCard(
-                      student: student,
-                      period: period,
-                      switchToTab: switchToTab,
-                      elevationPercentage: percent,
-                    ),
-                  ).center(),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => expandedHeight + expandedHeight / 2;
-
-  @override
-  double get minExtent => collapsedHeight;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
-  }
-}
-
-class UserCard extends StatelessWidget {
-  const UserCard({
-    required this.student,
-    this.period,
-    // required this.store,
-    required this.switchToTab,
-    required this.elevationPercentage,
-  });
-
-  final Student student;
-  final Period? period;
-  // final RegistroStore store;
-  final void Function(int index) switchToTab;
-  final double elevationPercentage;
-
-  bg(BuildContext context) => Theme.of(context).colorScheme.secondary;
-  fg(BuildContext context) => Theme.of(context).colorScheme.onSecondary;
-  get smallTextOpacity => 0.76;
-
-  Widget _buildUserRow(BuildContext context) {
-    final fg = this.fg(context);
-    return <Widget>[
-      Icon(Icons.account_circle)
-          .iconSize(50)
-          .iconColor(fg)
-          .constrained(height: 50, width: 50)
-          .padding(right: 10),
-      <Widget>[
-        Text(
-          student.fullName,
-          style: TextStyle(
-            color: fg,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.fade,
-        ).padding(bottom: 5),
-        Text(
-          "${context.dateToString(student.birthday)} [${calculateAge(student.birthday)}] - ${context.loc.translate("main.gender${describeEnum(student.gender)[0]}")}",
-          style: TextStyle(
-            color: fg.withOpacity(smallTextOpacity),
-            fontSize: 12,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.fade,
-        ),
-      ].toColumn(crossAxisAlignment: CrossAxisAlignment.start),
-    ].toRow();
-  }
-
-  Widget _buildUserStats(BuildContext context) {
-    final cubit = context.watch<AppCubit>();
-    return <Widget>[
-      AnimatedBuilder(
-        animation: Provider.of<Settings>(context),
-        builder: (BuildContext context, Widget? child) {
-          final averageMode = Provider.of<Settings>(context).getAverageMode();
-          final relevantGrades = period == null
-              ? cubit.grades
-              : cubit.grades.where((g) => g.period == period!.desc).toList();
-          return _buildUserStatsItem(
-            context,
-            gradeAverage(averageMode, relevantGrades).toString(),
-            context.loc.translate("overview.average"),
-            3,
-          );
-        },
-      ),
-      _buildUserStatsItem(context, cubit.grades.length.toString(),
-          context.loc.translate("overview.grades"), 3),
-      _buildUserStatsItem(context, cubit.assignments.length.toString(),
-          context.loc.translate("overview.assignments"), 2),
-      _buildUserStatsItem(context, cubit.topics.length.toString(),
-          context.loc.translate("overview.topics"), 5),
-    ]
-        .toRow(mainAxisAlignment: MainAxisAlignment.spaceAround)
-        .padding(vertical: 10)
-        .parent(({required child}) => ClipRect(child: child));
-  }
-
-  Widget _buildUserStatsItem(BuildContext context, String value, String text,
-      [int? index]) {
-    final fg = this.fg(context);
-    return <Widget>[
-      Text(value).fontSize(20).textColor(fg).padding(bottom: 5),
-      Text(text).textColor(fg.withOpacity(smallTextOpacity)).fontSize(12),
-    ]
-        .toColumn()
-        .gestures(onTap: index == null ? null : () => switchToTab(index));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bg = this.bg(context);
-    return <Widget>[_buildUserRow(context), _buildUserStats(context)]
-        .toColumn(mainAxisAlignment: MainAxisAlignment.spaceAround)
-        .padding(horizontal: 20, vertical: 10)
-        .decorated(
-          gradient: LinearGradient(
-            colors: getGradient(context, bg),
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-          ),
-          borderRadius: BorderRadius.circular(20),
-        )
-        .elevation(0)
-        .height(175)
-        .alignment(Alignment.center)
-        .padding(top: 32, horizontal: 16);
-  }
-}
-
 class TodaysEvents extends StatelessWidget {
   const TodaysEvents({Key? key}) : super(key: key);
 
@@ -704,4 +528,101 @@ class TodaysEvents extends StatelessWidget {
       ),
     );
   }
+}
+
+class QuickLinkContainer extends StatelessWidget {
+  final List<QuickLink> children;
+  final Function openPane;
+
+  const QuickLinkContainer(
+      {required this.children, required this.openPane, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final last = children.length - 1;
+    return Column(
+      children: [
+        for (int i = 0; i <= last; i++)
+          _buildRow(context, children[i], i == 0, i == last),
+      ],
+    );
+  }
+
+  Widget _buildRow(
+      BuildContext context, QuickLink link, bool isFirst, bool isLast) {
+    final background = context.harmonize(color: link.color);
+    final foreground = background.contrastText;
+    final radius = BorderRadius.vertical(
+      top: isFirst ? Radius.circular(13) : Radius.circular(2.5),
+      bottom: isLast ? Radius.circular(13) : Radius.circular(2.5),
+    );
+    return Center(
+      child: MaxWidthContainer(
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: isFirst ? 8 : 1.5,
+            bottom: isLast ? 8 : 1.5,
+          ),
+          child: Card(
+            margin: EdgeInsets.zero,
+            color: background,
+            shape: RoundedRectangleBorder(
+              borderRadius: radius,
+            ),
+            child: InkWell(
+              borderRadius: radius,
+              splashColor: foreground.withOpacity(0.07),
+              onTap: () {
+                // Curriculum
+                openPane(link.index);
+              },
+              child: DefaultTextStyle.merge(
+                style: TextStyle(color: foreground),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              context.loc.translate(link.l10nKey),
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        color: foreground,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class QuickLink {
+  final String l10nKey;
+  final Color color;
+  final int index;
+
+  const QuickLink(
+    this.l10nKey,
+    this.color, {
+    required this.index,
+  });
 }
