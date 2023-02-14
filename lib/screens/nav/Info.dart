@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:reaxios/api/entities/Login/Login.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/Utilities/settings.dart';
@@ -24,8 +23,6 @@ class InfoPane extends StatefulWidget {
 }
 
 class _InfoPaneState extends State<InfoPane> {
-  final LocalAuthentication auth = LocalAuthentication();
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
@@ -42,37 +39,6 @@ class _InfoPaneState extends State<InfoPane> {
     return CircleAvatar(
       child: icon,
     );
-  }
-
-  Future<bool> _authenticate() async {
-    if (kIsWeb) return true;
-    try {
-      final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
-      final bool canAuthenticate =
-          canAuthenticateWithBiometrics || await auth.isDeviceSupported();
-
-      if (!canAuthenticate) {
-        return true;
-      }
-
-      final List<BiometricType> availableBiometrics =
-          await auth.getAvailableBiometrics();
-
-      if (availableBiometrics.isEmpty) {
-        return true;
-      }
-
-      try {
-        final bool didAuthenticate = await auth.authenticate(
-            localizedReason: context.loc.translate("infoPane.authReason"));
-        return didAuthenticate;
-      } on PlatformException {
-        return true;
-      }
-    } on MissingPluginException {
-      // The system does not support local authentication
-      return true;
-    }
   }
 
   Map<String, bool> _sensitiveShown = {};
@@ -187,30 +153,16 @@ class _InfoPaneState extends State<InfoPane> {
                   trailing: info.sensitive
                       ? IconButton(
                           onPressed: () {
-                            (info.sensitive && !shouldBeShown
-                                    ? _authenticate()
-                                    : Future.value(true))
-                                .then((v) {
-                              if (v) {
-                                setState(() {
-                                  _sensitiveShown[info.title] = !shouldBeShown;
-                                });
-                              }
+                            setState(() {
+                              _sensitiveShown[info.title] = !shouldBeShown;
                             });
                           },
                           icon: Icon(Icons.remove_red_eye),
                         )
                       : null,
                   onTap: () {
-                    (info.sensitive ? _authenticate() : Future.value(true))
-                        .then((v) {
-                      print(v);
-                      if (v) {
-                        Clipboard.setData(ClipboardData(text: info.text));
-                        context
-                            .showSnackbar(context.loc.translate("main.copied"));
-                      }
-                    });
+                    Clipboard.setData(ClipboardData(text: info.text));
+                    context.showSnackbar(context.loc.translate("main.copied"));
                   },
                 );
               }()
