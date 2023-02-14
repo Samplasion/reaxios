@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:reaxios/utils/utils.dart';
+import '../api/utils/utils.dart' as axios_utils;
 import 'structures/Event.dart';
 
 extension RangeExtension on int {
@@ -10,6 +11,7 @@ extension RangeExtension on int {
 }
 
 extension ColorExtension on Color {
+  Color get contrastText => axios_utils.getContrastText(this);
   Color lighten(double amount) => Color.lerp(this, Colors.white, amount)!;
   Color darken(double amount) => Color.lerp(this, Colors.black, amount)!;
 

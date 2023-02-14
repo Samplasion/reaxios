@@ -30,9 +30,9 @@ import 'package:reaxios/components/Utilities/updates/upgrade_card.dart';
 import 'package:reaxios/utils/consts.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils/format.dart';
-import 'package:reaxios/timetable/extensions.dart' hide ColorExtension;
+import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils/utils.dart';
+import 'package:reaxios/utils/utils.dart' hide ColorUtils;
 import 'package:styled_widget/styled_widget.dart';
 
 import '../../components/LowLevel/MaybeMasterDetail.dart';
@@ -550,8 +550,9 @@ class QuickLinkContainer extends StatelessWidget {
 
   Widget _buildRow(
       BuildContext context, QuickLink link, bool isFirst, bool isLast) {
-    final background = context.harmonize(color: link.color);
-    final foreground = background.contrastText;
+    final pivot = context.harmonize(color: link.color);
+    final background = pivot.toSlightGradient(context);
+    final foreground = pivot.contrastText;
     final radius = BorderRadius.vertical(
       top: isFirst ? Radius.circular(13) : Radius.circular(2.5),
       bottom: isLast ? Radius.circular(13) : Radius.circular(2.5),
@@ -565,45 +566,48 @@ class QuickLinkContainer extends StatelessWidget {
             top: isFirst ? 8 : 1.5,
             bottom: isLast ? 8 : 1.5,
           ),
-          child: Card(
+          child: Container(
             margin: EdgeInsets.zero,
-            color: background,
-            shape: RoundedRectangleBorder(
+            decoration: BoxDecoration(
               borderRadius: radius,
+              gradient: LinearGradient(colors: background),
             ),
-            child: InkWell(
-              borderRadius: radius,
-              splashColor: foreground.withOpacity(0.07),
-              onTap: () {
-                // Curriculum
-                openPane(link.index);
-              },
-              child: DefaultTextStyle.merge(
-                style: TextStyle(color: foreground),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              context.loc.translate(link.l10nKey),
-                              style: TextStyle(
-                                fontSize: 16,
+            child: Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                borderRadius: radius,
+                splashColor: foreground.withOpacity(0.07),
+                onTap: () {
+                  // Curriculum
+                  openPane(link.index);
+                },
+                child: DefaultTextStyle.merge(
+                  style: TextStyle(color: foreground),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                context.loc.translate(link.l10nKey),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.fade,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Icon(
-                        Icons.chevron_right_rounded,
-                        color: foreground,
-                      ),
-                    ],
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          color: foreground,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
