@@ -6,6 +6,7 @@ import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/AlertBottomSheet.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils/utils.dart';
+import 'package:reaxios/utils/values.dart';
 
 import '../../timetable/showModalBottomSheetSuper.dart';
 import '../../../../utils/showDialogSuper.dart';
@@ -98,14 +99,17 @@ class _SettingsTileGroupState extends State<SettingsTileGroup> {
         AnimatedCrossFade(
           crossFadeState: widget.children[i].build.crossFadeState,
           firstChild: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 1.5),
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: RegistroValues.interCardPadding,
+            ),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(
-                  top: i == 0 ? Radius.circular(30) : Radius.circular(4),
-                  bottom: i == widget.children.length - 1
-                      ? Radius.circular(30)
-                      : Radius.circular(4),
+                borderRadius: RegistroValues.getRadius(
+                  i == 0,
+                  i == widget.children.length - 1,
+                  largeRadius: 30,
+                  smallRadius: 4,
                 ),
                 color: Theme.of(context).colorScheme.secondaryContainer,
               ),
