@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:reaxios/api/entities/Meeting/Meeting.dart';
@@ -77,47 +78,48 @@ class MeetingListItem extends StatelessWidget {
                 );
                 return;
               }
-              showDialog(
-                context: context,
-                builder: (context) {
-                  int? selected;
-                  return StatefulBuilder(
-                    builder: (BuildContext context, setState) {
-                      return AlertDialog(
-                        scrollable: true,
-                        title: Text("teacherMeetings.chooseDayAndTime"),
-                        content: Column(
-                          children: [
-                            M3Divider(),
-                            for (int i = 0; i < 100; i++)
-                              ListTile(
-                                leading: CircleAvatar(
-                                  backgroundColor: selected == i
-                                      ? scheme.primary
-                                      : scheme.surfaceVariant,
-                                  foregroundColor: selected == i
-                                      ? scheme.onPrimary
-                                      : scheme.onSurfaceVariant,
-                                  child: Icon(
-                                    selected == i ? Icons.check : Icons.today,
+              if (kDebugMode)
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    int? selected;
+                    return StatefulBuilder(
+                      builder: (BuildContext context, setState) {
+                        return AlertDialog(
+                          scrollable: true,
+                          title: Text("teacherMeetings.chooseDayAndTime"),
+                          content: Column(
+                            children: [
+                              M3Divider(),
+                              for (int i = 0; i < 100; i++)
+                                ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: selected == i
+                                        ? scheme.primary
+                                        : scheme.surfaceVariant,
+                                    foregroundColor: selected == i
+                                        ? scheme.onPrimary
+                                        : scheme.onSurfaceVariant,
+                                    child: Icon(
+                                      selected == i ? Icons.check : Icons.today,
+                                    ),
                                   ),
+                                  title: Text("$i"),
+                                  onTap: () {
+                                    print(selected == i);
+                                    setState(() {
+                                      selected = i;
+                                    });
+                                  },
                                 ),
-                                title: Text("$i"),
-                                onTap: () {
-                                  print(selected == i);
-                                  setState(() {
-                                    selected = i;
-                                  });
-                                },
-                              ),
-                            M3Divider(),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-              );
+                              M3Divider(),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
               // TODO: Open meeting time picker
               context.showSnackbar(
                 context.loc.translate("teacherMeetings.unimplemented"),
