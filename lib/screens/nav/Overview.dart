@@ -554,14 +554,7 @@ class QuickLinkContainer extends StatelessWidget {
     final pivot = context.harmonize(color: link.color);
     final background = pivot.toSlightGradient(context);
     final foreground = pivot.contrastText;
-    final radius = BorderRadius.vertical(
-      top: isFirst
-          ? Radius.circular(RegistroValues.cardRadius)
-          : Radius.circular(RegistroValues.tinyCardRadius),
-      bottom: isLast
-          ? Radius.circular(RegistroValues.cardRadius)
-          : Radius.circular(RegistroValues.tinyCardRadius),
-    );
+    final radius = RegistroValues.getRadius(isFirst, isLast);
     return Center(
       child: MaxWidthContainer(
         child: Padding(
