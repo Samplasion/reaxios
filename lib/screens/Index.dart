@@ -50,6 +50,7 @@ import 'nav/Meetings.dart';
 import 'nav/ReportCards.dart';
 import 'nav/Timetable.dart';
 import 'nav/curriculum.dart';
+import 'panes.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -65,11 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _loading = true;
   Axios _session = new Axios(new AxiosAccount("", "", ""), compute: compute);
   Login _login = Login.empty();
-  bool _showUserDetails = false;
-
-  List<Widget> _panes = [];
-  List<Tuple4<Tuple2<Widget, Widget>, Widget, bool, Function?>> _drawerItems =
-      [];
   int _selectedPane = 0;
 
   bool appIsActive = true;
@@ -156,9 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
       cubit.setStudent(_session.student!);
     }
 
-    _initPanes(_session, _login);
-
     await context.read<AppCubit>().loadStructural();
+    // TODO: Allow the user to choose this instead of hardcoding
     await _runCallback(0);
 
     setState(() {
@@ -174,9 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _runCallback([int index = 0]) async {
     try {
-      if (_drawerItems[index].fourth != null &&
-          _drawerItems[index].fourth is Function)
-        await _drawerItems[index].fourth!();
+      if (panes[index].onLoad != null && panes[index].onLoad is Function)
+        await panes[index].onLoad!(context);
     } catch (e) {
       print(e);
       // Do nothing; the HydratedCubit will have stale data, but at least
@@ -202,223 +196,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void setState(VoidCallback fn) {
     if (mounted) super.setState(fn);
-  }
-
-  void _initPanes(Axios session, Login login) {
-    final cubit = context.read<AppCubit>();
-    setState(() {
-      _panes = [
-        Builder(
-          builder: (context) => OverviewPane(
-            session: session,
-            login: login,
-            student: session.student ?? Student.empty(),
-            openMainDrawer: () => Scaffold.of(context).openDrawer(),
-            switchToTab: _switchToTab,
-          ),
-        ),
-        CalendarPane(session: session),
-        Builder(
-          builder: (context) => AssignmentsPane(
-            session: session,
-            openMainDrawer: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-        Builder(
-          builder: (context) => GradesPane(
-            session: session,
-            openMainDrawer: () => Scaffold.of(context).openDrawer(),
-            period: cubit.currentPeriod,
-          ),
-        ),
-        Builder(
-          builder: (context) => CalculatorPane(
-            session: session,
-            openMainDrawer: () => Scaffold.of(context).openDrawer(),
-            period: cubit.currentPeriod,
-          ),
-        ),
-        Builder(
-          builder: (context) => TopicsPane(
-            session: session,
-            openMainDrawer: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-        Builder(
-          builder: (context) => TimetablePane(
-            openMainDrawer: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-        BulletinsPane(session: session),
-        NotesPane(
-          session: session,
-          kind: NoteKind.Note,
-        ),
-        NotesPane(
-          session: session,
-          kind: NoteKind.Notice,
-        ),
-        AbsencesPane(session: session),
-        AuthorizationsPane(session: session),
-        MeetingsPane(session: session),
-        MaterialsPane(session: session),
-        StatsPane(session: session),
-        ReportCardsPane(session: session),
-        CurriculumPane(),
-        InfoPane(login: _login),
-        if (kDebugMode) ColorsPane(),
-      ];
-      _drawerItems = [
-        [
-          Tuple2(Icon(Icons.home_outlined), Icon(Icons.home)),
-          Text(context.loc.translate("drawer.overview")),
-          false,
-          () async {
-            cubit.loadGrades().then((_) {
-              cubit.loadAssignments();
-            });
-          }
-        ],
-        [
-          Tuple2(
-              Icon(Icons.calendar_today_outlined), Icon(Icons.calendar_today)),
-          Text(context.loc.translate("drawer.calendar")),
-          false,
-          () {
-            cubit.loadAssignments();
-            cubit.loadTopics();
-            cubit.loadStructural();
-          }
-        ],
-        [
-          Tuple2(Icon(Icons.book_outlined), Icon(Icons.book)),
-          Text(context.loc.translate("drawer.assignments")),
-          false,
-          () => cubit.loadAssignments(),
-        ],
-        [
-          Tuple2(Icon(Icons.star_border), Icon(Icons.star)),
-          Text(context.loc.translate("drawer.grades")),
-          false,
-          () {
-            cubit.loadGrades();
-            cubit.loadStructural();
-            cubit.loadSubjects();
-          }
-        ],
-        [
-          Tuple2(Icon(Icons.calculate_outlined), Icon(Icons.calculate)),
-          Text(context.loc.translate("drawer.calculator")),
-          false,
-          () {
-            cubit.loadGrades();
-            cubit.loadStructural();
-            cubit.loadSubjects();
-          }
-        ],
-        [
-          Tuple2(Icon(Icons.topic_outlined), Icon(Icons.topic)),
-          Text(context.loc.translate("drawer.topics")),
-          false,
-          () => cubit.loadTopics(),
-        ],
-        [
-          Tuple2(Icon(Icons.access_time_outlined), Icon(Icons.access_time)),
-          Text(context.loc.translate("drawer.timetable")),
-          false,
-          () {},
-        ],
-        [
-          Tuple2(Icon(Icons.mail_outlined), Icon(Icons.mail)),
-          Text(context.loc.translate("drawer.secretary")),
-          true,
-          () => cubit.loadBulletins(),
-        ],
-        [
-          Tuple2(Icon(Icons.contact_mail_outlined), Icon(Icons.contact_mail)),
-          Text(context.loc.translate("drawer.teacherNotes")),
-          true,
-          () => cubit.loadNotes(),
-        ],
-        [
-          Tuple2(Icon(Icons.perm_contact_cal_outlined),
-              Icon(Icons.perm_contact_cal)),
-          Text(context.loc.translate("drawer.notices")),
-          true,
-          () => cubit.loadNotes(),
-        ],
-        [
-          Tuple2(Icon(Icons.no_accounts_outlined), Icon(Icons.no_accounts)),
-          Text(context.loc.translate("drawer.absences")),
-          true,
-          () => cubit.loadAbsences()
-        ],
-        [
-          Tuple2(Icon(Icons.edit_outlined), Icon(Icons.edit)),
-          Text(context.loc.translate("drawer.authorizations")),
-          true,
-          () => cubit.loadAuthorizations()
-        ],
-        [
-          Tuple2(Icon(Icons.terrain_outlined), Icon(Icons.terrain)),
-          Text(context.loc.translate("drawer.teacherMeetings")),
-          true,
-          () => cubit.loadMeetings()
-        ],
-        [
-          Tuple2(Icon(Icons.badge_outlined), Icon(Icons.badge)),
-          Text(context.loc.translate("drawer.teachingMaterials")),
-          true,
-          () => cubit.loadMaterials()
-        ],
-        [
-          Tuple2(Icon(Icons.star_border), Icon(Icons.star_half)),
-          Text(context.loc.translate("drawer.stats")),
-          true,
-          () {
-            cubit.loadAbsences();
-            cubit.loadGrades();
-            cubit.loadStructural();
-            cubit.loadTopics();
-          }
-        ],
-        [
-          Tuple2(Icon(Icons.gradient_outlined), Icon(Icons.gradient)),
-          Text(context.loc.translate("drawer.reportCards")),
-          true,
-          () {
-            cubit.loadReportCards();
-            cubit.loadStructural();
-          }
-        ],
-        [
-          Tuple2(Icon(Icons.school_outlined), Icon(Icons.school)),
-          Text(context.loc.translate("drawer.curriculum")),
-          true,
-          () {
-            cubit.loadCurricula();
-          }
-        ],
-        [
-          Tuple2(Icon(Icons.person_outlined), Icon(Icons.person)),
-          Text(context.loc.translate("drawer.info")),
-          true,
-          () {
-            cubit.loadStructural();
-          }
-        ],
-        if (kDebugMode)
-          [
-            Tuple2(Icon(Icons.color_lens_outlined), Icon(Icons.color_lens)),
-            Text("[DEBUG] Show colors"),
-            true,
-            () {},
-          ],
-      ]
-          .map((el) => Tuple4<Tuple2<Widget, Widget>, Widget, bool,
-              Function>.fromIterable(el))
-          .toList();
-    });
   }
 
   Future<void> launchWeb(BuildContext context) async {
@@ -465,11 +242,13 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _buildDrawerItems() {
     // final width = MediaQuery.of(context).size.width;
     List<Widget> items = [];
-    for (var index = 0; index < _drawerItems.length; index++) {
+    for (var index = 0; index < panes.length; index++) {
+      final pane = panes[index];
+      if (!pane.isShown) continue;
       items.add(M3DrawerListTile(
-        icon: _drawerItems[index].first.first,
-        selectedIcon: _drawerItems[index].first.second,
-        title: _drawerItems[index].second,
+        icon: pane.icon,
+        selectedIcon: pane.activeIcon,
+        title: pane.titleBuilder(context),
         selected: index == _selectedPane,
         onTap: () {
           if (!MaybeMasterDetail.shouldBeShowingMaster(context))
@@ -522,10 +301,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       _session.student = s;
                       context.read<AppCubit>().clearData();
                       context.read<AppCubit>().setStudent(s);
-                      setState(() {
-                        _showUserDetails = false;
-                        _initPanes(_session, _login);
-                      });
                       _runCallback(_selectedPane);
                     },
                   );
@@ -563,7 +338,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<AppCubit>();
-    _initPanes(_session, _login);
 
     return LifecycleReactor(
       onChange: (state) => setState(() {
@@ -630,9 +404,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context, AsyncSnapshot<bool> state) {
                       final showingMaster = state.data ?? false;
                       return Scaffold(
-                        appBar: _drawerItems[_selectedPane].third
+                        appBar: panes[_selectedPane].usesManagedAppBar
                             ? AppBar(
-                                title: _drawerItems[_selectedPane].second,
+                                title:
+                                    panes[_selectedPane].titleBuilder(context),
                                 leading: MaybeMasterDetail.of(context)!
                                         .isShowingMaster
                                     ? null
@@ -671,7 +446,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       return null;
                                     })
                                   },
-                                  child: _panes[_selectedPane],
+                                  child: panes[_selectedPane].builder(
+                                    context,
+                                    _session,
+                                    _login,
+                                    _switchToTab,
+                                  ),
                                 );
                               }),
                       );
