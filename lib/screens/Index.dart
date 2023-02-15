@@ -39,6 +39,7 @@ import 'package:reaxios/utils/storage.dart';
 import 'package:reaxios/system/intents.dart';
 import 'package:reaxios/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../components/LowLevel/m3/divider.dart';
 import '../system/AppInfoStore.dart';
@@ -438,7 +439,7 @@ class _HomeScreenState extends State<HomeScreen> {
         </html>""";
       final url = "data:text/html;base64,${base64.encode(utf8.encode(html))}";
       try {
-        throw "";
+        launchUrlString(url);
       } catch (e) {
         print(e);
         context.hideCurrentSnackBar();
