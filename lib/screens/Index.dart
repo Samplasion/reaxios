@@ -43,6 +43,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../components/LowLevel/m3/divider.dart';
 import '../system/AppInfoStore.dart';
+import '../timetable/structures/Settings.dart';
 import '../utils/tuple.dart';
 import 'nav/BulletinBoard.dart';
 import 'nav/Calculator.dart';
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _loading = true;
   Axios _session = new Axios(new AxiosAccount("", "", ""), compute: compute);
   Login _login = Login.empty();
-  int _selectedPane = 0;
+  String _selectedPane = "";
 
   bool appIsActive = true;
 
@@ -75,6 +76,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
+      final settings = context.read<Settings>();
+      String openingPage = settings.getOpeningPage();
+      if (!panes.containsKey(openingPage)) openingPage = paneList.first.id;
+      _selectedPane = openingPage;
+
       _initSession();
     });
 
@@ -153,8 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     await context.read<AppCubit>().loadStructural();
-    // TODO: Allow the user to choose this instead of hardcoding
-    await _runCallback(0);
+    await _runCallback(_selectedPane);
 
     setState(() {
       _loading = false;
@@ -167,10 +172,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> _runCallback([int index = 0]) async {
+  Future<void> _runCallback([String index = "overview"]) async {
     try {
-      if (panes[index].onLoad != null && panes[index].onLoad is Function)
-        await panes[index].onLoad!(context);
+      if (panes[index]!.onLoad != null && panes[index]!.onLoad is Function)
+        await panes[index]!.onLoad!(context);
     } catch (e) {
       print(e);
       // Do nothing; the HydratedCubit will have stale data, but at least
@@ -243,13 +248,13 @@ class _HomeScreenState extends State<HomeScreen> {
     // final width = MediaQuery.of(context).size.width;
     List<Widget> items = [];
     for (var index = 0; index < panes.length; index++) {
-      final pane = panes[index];
+      final pane = paneList[index];
       if (!pane.isShown) continue;
       items.add(M3DrawerListTile(
         icon: pane.icon,
         selectedIcon: pane.activeIcon,
         title: pane.titleBuilder(context),
-        selected: index == _selectedPane,
+        selected: pane.id == _selectedPane,
         onTap: () {
           if (!MaybeMasterDetail.shouldBeShowingMaster(context))
             Navigator.pop(context);
@@ -404,10 +409,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context, AsyncSnapshot<bool> state) {
                       final showingMaster = state.data ?? false;
                       return Scaffold(
-                        appBar: panes[_selectedPane].usesManagedAppBar
+                        appBar: (panes[_selectedPane]?.usesManagedAppBar ??
+                                true)
                             ? AppBar(
                                 title:
-                                    panes[_selectedPane].titleBuilder(context),
+                                    panes[_selectedPane]?.titleBuilder(context),
                                 leading: MaybeMasterDetail.of(context)!
                                         .isShowingMaster
                                     ? null
@@ -446,12 +452,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                       return null;
                                     })
                                   },
-                                  child: panes[_selectedPane].builder(
-                                    context,
-                                    _session,
-                                    _login,
-                                    _switchToTab,
-                                  ),
+                                  child: panes[_selectedPane]?.builder(
+                                        context,
+                                        _session,
+                                        _login,
+                                        _switchToTab,
+                                      ) ??
+                                      Container(),
                                 );
                               }),
                       );
@@ -507,10 +514,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  String _getKeyFromIndex(int index) => paneList[index].id;
+
   void _switchToTab(int index) {
-    _runCallback(index);
+    _runCallback(_getKeyFromIndex(index));
     setState(() {
-      _selectedPane = index;
+      _selectedPane = _getKeyFromIndex(index);
     });
   }
 

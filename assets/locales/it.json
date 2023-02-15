@@ -350,7 +350,8 @@
     "useGradients": "Usa i gradienti",
     "useGradientsExpl": "Usa un gradiente con tonalità diverse dello stesso colore, invece che un colore piatto, come sfondo di molti widget.",
     "useCustomSecondary": "Usa un colore secondario personalizzato",
-    "useCustomSecondaryExpl": "Se questa opzione è disabilitata, il colore è derivato dal colore primario. Inoltre, disabilitare questa opzione altererà il colore primario per un look più armonizzato."
+    "useCustomSecondaryExpl": "Se questa opzione è disabilitata, il colore è derivato dal colore primario. Inoltre, disabilitare questa opzione altererà il colore primario per un look più armonizzato.",
+    "openingPageLabel": "Pagina d'apertura"
   },
   "timeSettings": {
     "defaultLessonDuration": "Durata delle lezioni",

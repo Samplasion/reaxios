@@ -8,6 +8,8 @@ import 'package:reaxios/screens/settings/base.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils/utils.dart';
 
+import '../panes.dart';
+
 class GeneralSettings extends BaseSettings {
   const GeneralSettings({Key? key}) : super(key: key);
 
@@ -99,6 +101,19 @@ class GeneralSettings extends BaseSettings {
               context.loc.translate("generalSettings.groupsBehaviorTitle")),
         ),
         children: [
+          RadioModalTile(
+            title:
+                Text(context.loc.translate("generalSettings.openingPageLabel")),
+            values: {
+              for (final pane in paneList.where((pane) => pane.isShown))
+                pane.id: context.loc.translate(pane.titleKey),
+            },
+            selectedValue: settings.getOpeningPage(),
+            onChange: (dynamic value) {
+              if (value is! String || !panes.containsKey(value)) return;
+              settings.setOpeningPage(value);
+            },
+          ),
           RadioModalTile(
             title: Text(
                 context.loc.translate("generalSettings.gradeDisplayLabel")),

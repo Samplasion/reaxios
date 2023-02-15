@@ -28,12 +28,12 @@ import 'nav/Topics.dart';
 import 'nav/colors.dart';
 import 'nav/curriculum.dart';
 
-List<Pane> get panes => [
+List<Pane> get paneList => [
       Pane(
         icon: Icon(Icons.home_outlined),
         activeIcon: Icon(Icons.home),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.overview")),
+        titleKey: "drawer.overview",
+        id: "overview",
         usesManagedAppBar: false,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -56,8 +56,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.calendar_today_outlined),
         activeIcon: Icon(Icons.calendar_today),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.calendar")),
+        titleKey: "drawer.calendar",
+        id: "calendar",
         usesManagedAppBar: false,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -70,8 +70,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.book_outlined),
         activeIcon: Icon(Icons.book),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.assignments")),
+        titleKey: "drawer.assignments",
+        id: "assignments",
         usesManagedAppBar: false,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -89,7 +89,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.star_outline),
         activeIcon: Icon(Icons.star),
-        titleBuilder: (context) => Text(context.loc.translate("drawer.grades")),
+        titleKey: "drawer.grades",
+        id: "grades",
         usesManagedAppBar: false,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -111,8 +112,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.calculate_outlined),
         activeIcon: Icon(Icons.calculate),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.calculator")),
+        titleKey: "drawer.calculator",
+        id: "calculator",
         usesManagedAppBar: false,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -134,7 +135,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.topic_outlined),
         activeIcon: Icon(Icons.topic),
-        titleBuilder: (context) => Text(context.loc.translate("drawer.topics")),
+        titleKey: "drawer.topics",
+        id: "topics",
         usesManagedAppBar: false,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -152,8 +154,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.access_time_outlined),
         activeIcon: Icon(Icons.access_time),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.timetable")),
+        titleKey: "drawer.timetable",
+        id: "timetable",
         usesManagedAppBar: false,
         builder: (context, session, login, switchToTab) {
           return Builder(
@@ -166,8 +168,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.mail_outlined),
         activeIcon: Icon(Icons.mail),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.secretary")),
+        titleKey: "drawer.secretary",
+        id: "secretary",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -178,8 +180,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.contact_mail_outlined),
         activeIcon: Icon(Icons.contact_mail),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.teacherNotes")),
+        titleKey: "drawer.teacherNotes",
+        id: "teacherNotes",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -193,8 +195,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.perm_contact_cal_outlined),
         activeIcon: Icon(Icons.perm_contact_cal),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.notices")),
+        titleKey: "drawer.notices",
+        id: "notices",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -208,8 +210,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.no_accounts_outlined),
         activeIcon: Icon(Icons.no_accounts),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.absences")),
+        titleKey: "drawer.absences",
+        id: "absences",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -220,8 +222,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.edit_outlined),
         activeIcon: Icon(Icons.edit),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.authorizations")),
+        titleKey: "drawer.authorizations",
+        id: "authorizations",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -233,8 +235,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.terrain_outlined),
         activeIcon: Icon(Icons.terrain),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.teacherMeetings")),
+        titleKey: "drawer.teacherMeetings",
+        id: "teacherMeetings",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -245,8 +247,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.badge_outlined),
         activeIcon: Icon(Icons.badge),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.teachingMaterials")),
+        titleKey: "drawer.teachingMaterials",
+        id: "teachingMaterials",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -258,7 +260,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.star_border),
         activeIcon: Icon(Icons.star_half),
-        titleBuilder: (context) => Text(context.loc.translate("drawer.stats")),
+        titleKey: "drawer.stats",
+        id: "stats",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -273,8 +276,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.gradient_outlined),
         activeIcon: Icon(Icons.gradient),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.reportCards")),
+        titleKey: "drawer.reportCards",
+        id: "reportCards",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -288,8 +291,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.school_outlined),
         activeIcon: Icon(Icons.school),
-        titleBuilder: (context) =>
-            Text(context.loc.translate("drawer.curriculum")),
+        titleKey: "drawer.curriculum",
+        id: "curriculum",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -300,7 +303,8 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.person_outlined),
         activeIcon: Icon(Icons.person),
-        titleBuilder: (context) => Text(context.loc.translate("drawer.info")),
+        titleKey: "drawer.info",
+        id: "info",
         usesManagedAppBar: true,
         onLoad: (context) async {
           final cubit = context.read<AppCubit>();
@@ -311,12 +315,16 @@ List<Pane> get panes => [
       Pane(
         icon: Icon(Icons.color_lens_outlined),
         activeIcon: Icon(Icons.color_lens),
-        titleBuilder: (context) => Text("[DEBUG] Show colors"),
+        titleKey: "[DEBUG] Show colors",
+        id: "colors",
         usesManagedAppBar: true,
         builder: (context, session, login, _) => ColorsPane(),
         isShown: kDebugMode,
       ),
     ];
+Map<String, Pane> get panes => {
+      for (final pane in paneList) pane.id: pane,
+    };
 
 typedef Widget PaneBuilder(
   BuildContext context,
@@ -328,16 +336,21 @@ typedef Widget PaneBuilder(
 class Pane {
   final Widget icon;
   final Widget? activeIcon;
-  final WidgetBuilder titleBuilder;
+  final String titleKey;
+  final String id;
   final bool usesManagedAppBar;
   final Future<void> Function(BuildContext)? onLoad;
   final PaneBuilder builder;
   final bool isShown;
 
+  Widget titleBuilder(BuildContext context) =>
+      Text(context.loc.translate(titleKey));
+
   const Pane({
     required this.icon,
     this.activeIcon,
-    required this.titleBuilder,
+    required this.titleKey,
+    required this.id,
     required this.usesManagedAppBar,
     this.onLoad,
     required this.builder,

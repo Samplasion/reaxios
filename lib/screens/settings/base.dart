@@ -372,26 +372,24 @@ class _RadioModalTileState<T> extends State<RadioModalTile<T>>
                   animationController: _animationController,
                   scrollable: true,
                   title: widget.title,
-                  content: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: widget.values.length,
-                    itemBuilder: (context, index) {
-                      final entry = widget.values.entries.elementAt(index);
-                      return RadioListTile<T>(
-                        title: Text(entry.value),
-                        value: entry.key,
-                        groupValue: _value,
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        onChanged: (value) {
-                          _setState(() {
-                            if (value != null) {
-                              _value = value;
-                              widget.onChange?.call(value);
-                            }
-                          });
-                        },
-                      );
-                    },
+                  content: Column(
+                    children: [
+                      for (final entry in widget.values.entries)
+                        RadioListTile<T>(
+                          title: Text(entry.value),
+                          value: entry.key,
+                          groupValue: _value,
+                          activeColor: Theme.of(context).colorScheme.secondary,
+                          onChanged: (value) {
+                            _setState(() {
+                              if (value != null) {
+                                _value = value;
+                                widget.onChange?.call(value);
+                              }
+                            });
+                          },
+                        ),
+                    ],
                   ),
                   actions: [
                     TextButton(

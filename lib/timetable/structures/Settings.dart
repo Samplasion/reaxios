@@ -252,6 +252,15 @@ class Settings extends UndisposableChangeNotifier {
     notifyListeners();
   }
 
+  String getOpeningPage() {
+    return _prefs.getString("openingPage") ?? "overview";
+  }
+
+  void setOpeningPage(String openingPage) {
+    _prefs.setString("openingPage", openingPage);
+    notifyListeners();
+  }
+
   // --------
 
   Future share([List<String>? keys, String name = "settings.json"]) async {
@@ -313,6 +322,7 @@ class Settings extends UndisposableChangeNotifier {
         "harmonizeColors": getHarmonizeColors(),
         "useGradients": getUseGradients(),
         "useCustomSecondary": getUseCustomSecondary(),
+        "openingPage": getOpeningPage(),
       };
 
   set json(Map<String, dynamic> obj) {
@@ -400,6 +410,9 @@ class Settings extends UndisposableChangeNotifier {
     if (obj.containsKey("useCustomSecondary") &&
         obj["useCustomSecondary"] is bool) {
       setUseCustomSecondary(obj["useCustomSecondary"] as bool);
+    }
+    if (obj.containsKey("openingPage") && obj["openingPage"] is String) {
+      setOpeningPage(obj["openingPage"] as String);
     }
 
     notifyListeners();

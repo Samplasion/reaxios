@@ -350,7 +350,8 @@
     "useGradients": "Use gradients",
     "useGradientsExpl": "Use color gradients with various shades of the same color, instead of a flat color, in various places.",
     "useCustomSecondary": "Use custom accent color",
-    "useCustomSecondaryExpl": "Uses a custom accent color. If this is disabled, the color is derived from the primary color. Additionally, disabling this option will slightly alter the primary color for a more harmonized look."
+    "useCustomSecondaryExpl": "Uses a custom accent color. If this is disabled, the color is derived from the primary color. Additionally, disabling this option will slightly alter the primary color for a more harmonized look.",
+    "openingPageLabel": "Opening page"
   },
   "timeSettings": {
     "defaultLessonDuration": "Default lesson duration",
