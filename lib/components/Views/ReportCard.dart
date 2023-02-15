@@ -9,6 +9,7 @@ import 'package:reaxios/utils/utils.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import '../LowLevel/m3/divider.dart';
+import '../LowLevel/m3/expansion_panel.dart';
 
 // ignore: must_be_immutable
 class ReportCardComponent extends StatefulWidget {
@@ -120,13 +121,12 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
           ),
           selectable: true,
         ),
-        ExpansionPanelList(
+        M3ExpansionPanelList(
           expansionCallback: (index, open) {
             setState(() {
               openPanels[subjects[index]] = !open;
             });
           },
-          elevation: 0,
           children: reportCard.subjects.map((e) {
             return ExpansionPanel(
               backgroundColor: ElevationOverlay.applySurfaceTint(

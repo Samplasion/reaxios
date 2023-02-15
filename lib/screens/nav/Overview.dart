@@ -38,6 +38,7 @@ import 'package:styled_widget/styled_widget.dart';
 import '../../components/LowLevel/MaybeMasterDetail.dart';
 import '../../timetable/components/essential/EventView.dart';
 import '../../timetable/structures/Event.dart';
+import '../../utils/values.dart';
 
 class OverviewPane extends StatefulWidget {
   OverviewPane({
@@ -554,8 +555,12 @@ class QuickLinkContainer extends StatelessWidget {
     final background = pivot.toSlightGradient(context);
     final foreground = pivot.contrastText;
     final radius = BorderRadius.vertical(
-      top: isFirst ? Radius.circular(13) : Radius.circular(2.5),
-      bottom: isLast ? Radius.circular(13) : Radius.circular(2.5),
+      top: isFirst
+          ? Radius.circular(RegistroValues.cardRadius)
+          : Radius.circular(RegistroValues.tinyCardRadius),
+      bottom: isLast
+          ? Radius.circular(RegistroValues.cardRadius)
+          : Radius.circular(RegistroValues.tinyCardRadius),
     );
     return Center(
       child: MaxWidthContainer(
@@ -563,8 +568,8 @@ class QuickLinkContainer extends StatelessWidget {
           padding: EdgeInsets.only(
             left: 16,
             right: 16,
-            top: isFirst ? 8 : 1.5,
-            bottom: isLast ? 8 : 1.5,
+            top: isFirst ? 8 : RegistroValues.interCardPadding,
+            bottom: isLast ? 8 : RegistroValues.interCardPadding,
           ),
           child: Container(
             margin: EdgeInsets.zero,
