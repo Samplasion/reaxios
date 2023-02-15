@@ -140,12 +140,14 @@ class ReportCardSubject extends Equatable {
   final ReportCardSubjectKind kind;
   @JsonKey(name: "tipoRecupero")
   final String recoveryKind;
-  @JsonKey(name: "assenze", defaultValue: 0)
-  final double absences;
+  @JsonKey(name: "assenze", defaultValue: "0")
+  final String absences;
   @JsonKey(name: "mediaVoti", defaultValue: 0)
   final double gradeAverage;
   @JsonKey(name: "detail")
   final List<ReportCardSubjectDetail> details;
+
+  num get parsedAbsences => num.tryParse(absences) ?? 0;
 
   const ReportCardSubject({
     required this.id,

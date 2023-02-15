@@ -103,7 +103,8 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                     .fold<int>(
                       0,
                       (previousValue, ReportCardSubject? element) =>
-                          previousValue + (element?.absences ?? 0).toInt(),
+                          previousValue +
+                          (element?.parsedAbsences ?? 0).toInt(),
                     )
                     .toString(),
                 "failed": carenze.toString(),
@@ -169,7 +170,7 @@ class _ReportCardComponentState extends State<ReportCardComponent> {
                                   DataRow(
                                     context.loc
                                         .translate("reportCard.subjAbsences"),
-                                    e.absences.toInt().toString(),
+                                    e.parsedAbsences.toInt().toString(),
                                   ),
                                   M3Divider(),
                                 ]

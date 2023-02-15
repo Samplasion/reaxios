@@ -201,7 +201,7 @@ class TestAxios implements Axios {
               name: subject,
               kind: ReportCardSubjectKind.Other,
               recoveryKind: '',
-              absences: Random().nextInt(20).toDouble(),
+              absences: Random().nextInt(20).toDouble().toString(),
               gradeAverage: gradeAverage(
                   grades.where((e) => subject == e.subject).toList()),
               details: [
