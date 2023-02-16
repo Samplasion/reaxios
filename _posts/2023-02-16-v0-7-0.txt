@@ -1,0 +1,19 @@
+---
+date: 2023-02-16 16:15:00 +0100
+platforms:
+  - os: android
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.7.0/Registro-android-0.7.0+1676561095-release.apk
+  - os: macos
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.7.0/Registro-mac-0.7.0+1676561159-release.zip
+  - os: ios
+    enclosure: https://github.com/Samplasion/reaxios/releases/download/v0.7.0/Registro-ios-0.7.0+1676561273-release.ipa
+    size: 14649813
+short_version_string: 0.7.0
+size: 28274164
+subtitle: "Customization update"
+title: "Version 0.7.0"
+version: 0.7.0
+---
+
+- Stile ancora più conforme a Material You
+- Ancora più impostazioni e personalizzazioni
