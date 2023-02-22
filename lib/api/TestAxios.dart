@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:dio/dio.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Meeting/Meeting.dart';
 import 'package:reaxios/api/entities/Topic/Topic.dart';

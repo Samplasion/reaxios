@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:animations/animations.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' hide compute;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';

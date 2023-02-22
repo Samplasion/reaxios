@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -39,7 +38,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
     print("[NOI] Checking...");
 
     try {
-      await Dio().get("https://1.1.1.1");
+      // await Dio().get("https://1.1.1.1");
     } catch (e) {
       print(e);
       print(!e.toString().contains("XMLHttpRequest error"));
