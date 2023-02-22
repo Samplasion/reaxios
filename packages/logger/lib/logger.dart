@@ -12,12 +12,12 @@ class Logger {
 
   static w(String data) => instance.warn(data);
   warn(String data) {
-    _print("DBG", data, Styles.YELLOW);
+    _print("WRN", data, Styles.YELLOW);
   }
 
   static e(String data) => instance.error(data);
   error(String data) {
-    _print("DBG", data, Styles.RED);
+    _print("ERR", data, Styles.RED);
   }
 
   _print(String level, String data, Styles textColor) {
