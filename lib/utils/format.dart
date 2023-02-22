@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:logger/logger.dart';
 
 String formatString(String base, List<dynamic> replacements) {
   final Map<String, dynamic> replacementMap = {};
@@ -14,7 +15,7 @@ String formatStringWithMap(String base, Map<String, dynamic> replacements) {
     if (replacements.containsKey(key)) {
       return "${replacements[key]}";
     }
-    print("Found string without replacement\n"
+    Logger.w("Found string without replacement\n"
         "String: $base\n"
         "Match: $key\n"
         "Map: $replacements");

@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:logger/logger.dart';
 import 'package:reaxios/api/entities/Meeting/Meeting.dart';
 
 import '../../utils/utils.dart';
@@ -106,7 +107,7 @@ class MeetingListItem extends StatelessWidget {
                                   ),
                                   title: Text("$i"),
                                   onTap: () {
-                                    print(selected == i);
+                                    Logger.d((selected == i).toString());
                                     setState(() {
                                       selected = i;
                                     });

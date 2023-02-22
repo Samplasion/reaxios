@@ -78,7 +78,6 @@ class SubjectSettingsView extends StatelessWidget {
   }
 
   SubjectObjective? get value {
-    print(settings.getSubjectObjectives());
     return settings.getSubjectObjectives()[subjectID];
   }
 

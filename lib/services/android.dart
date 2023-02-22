@@ -7,6 +7,7 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
+import 'package:logger/logger.dart';
 import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Account.dart';
@@ -48,7 +49,7 @@ Future<Axios?> getSession(Isolate current) async {
   final String pass = prefs.getString('pass') ?? '';
 
   if (school.isEmpty || user.isEmpty || pass.isEmpty) {
-    print(
+    Logger.w(
         '[Background] [${DateTime.now()}] [#${current.hashCode}] Missing credentials.');
     current.kill(priority: Isolate.immediate);
     return null;
@@ -63,8 +64,8 @@ Future<Axios?> getSession(Isolate current) async {
     final userID = prefs.getString('selectedStudent');
     if (userID != null) session.setStudentByID(userID);
   } catch (e) {
-    debugPrint(e.toString());
-    print(
+    Logger.d(e.toString());
+    Logger.w(
         '[Background] [${DateTime.now()}] [#${current.hashCode}] Background isolate killed. Reason: Login failed.');
     current.kill(priority: Isolate.immediate);
   }
@@ -78,11 +79,11 @@ void gradesBackgroundService() async {
 
   SendPort? uiSendPort = IsolateNameServer.lookupPortByName(isolateName);
   if (uiSendPort == null) {
-    print(
+    Logger.w(
         '[Background] [${DateTime.now()}] [#$isolateId] [gradesBackgroundService] INFO: No UI isolate found.');
   }
 
-  print(
+  Logger.d(
       '[Background] [${DateTime.now()}] [#$isolateId] [gradesBackgroundService] Background isolate ran.');
 
   // 1. Get the shared preferences.
@@ -93,7 +94,7 @@ void gradesBackgroundService() async {
 
   Axios? session = await getSession(current);
   if (session == null) {
-    print(
+    Logger.e(
         '[Background] [${DateTime.now()}] [#$isolateId] [gradesBackgroundService] FATAL: Background isolate killed. Reason: getSession() returned null.');
     return;
   }
@@ -140,16 +141,16 @@ void bulletinBoardBackgroundService() async {
 
   SendPort? uiSendPort = IsolateNameServer.lookupPortByName(isolateName);
   if (uiSendPort == null) {
-    print(
+    Logger.w(
         '[Background] [${DateTime.now()}] [#$isolateId] [bulletinBoardBackgroundService] INFO: No UI isolate found.');
   }
 
-  print(
+  Logger.d(
       '[Background] [${DateTime.now()}] [#$isolateId] [bulletinBoardBackgroundService] Background isolate ran.');
 
   Axios? session = await getSession(current);
   if (session == null) {
-    print(
+    Logger.e(
         '[Background] [${DateTime.now()}] [#$isolateId] [bulletinBoardBackgroundService] FATAL: Background isolate killed. Reason: getSession() returned null.');
     return;
   }
@@ -208,10 +209,10 @@ Future<void> initializeNotifications(
   bool result = await AndroidAlarmManager.initialize();
 
   if (!result) {
-    print("!!! FAILED INITIALIZING ANDROID NOTIFICATIONS !!!");
+    Logger.e("!!! FAILED INITIALIZING ANDROID NOTIFICATIONS !!!");
   }
 
-  print("[UI] [${DateTime.now()}] Notifications initialized.");
+  Logger.d("[UI] [${DateTime.now()}] Notifications initialized.");
 }
 
 Future<void> startNotificationServices() async {
@@ -226,7 +227,7 @@ Future<void> startNotificationServices() async {
 
   for (int id in BackgroundServiceID.values) {
     Tuple2<Duration, Function> tuple = getBackgroundService(id);
-    print(
+    Logger.d(
         "[UI] [${DateTime.now()}] Starting service with ID #$id. Next run in ${tuple.first}.");
     await AndroidAlarmManager.periodic(
       tuple.first,

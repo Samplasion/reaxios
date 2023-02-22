@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
@@ -95,7 +96,7 @@ class _StatsPaneState extends State<StatsPane> {
         .where((grade) => grade.weight > 0)
         .toList()
       ..sort((a, b) => a.grade.compareTo(b.grade));
-    print(gradesByGrade.map((s) => "${s.subject}\t${s.grade}").join("\n"));
+    Logger.d(gradesByGrade.map((s) => "${s.subject}\t${s.grade}").join("\n"));
     final best = gradeAverage(
       averageMode,
       currentGrades

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Account.dart';
@@ -177,7 +178,7 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
         _selectedIndex = -1;
       });
     } catch (e) {
-      print(e);
+      Logger.d("$e");
       context.showSnackbar(
         context.loc.translate("errors.request"),
         style: TextStyle(color: Colors.white),
@@ -352,7 +353,7 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
     // } catch (e) {
     final e = await cubit.login(account);
     if (e != null) {
-      print(e);
+      Logger.d("$e");
       if (e.toString().toLowerCase().contains("controllare codice utente")) {
         context.showSnackbar(
           context.loc.translate("errors.authentication"),
@@ -384,7 +385,7 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
         widget.onDone();
       }
     } catch (e) {
-      print(e);
+      Logger.d("$e");
       context.showSnackbar(
         context.loc.translate("errors.request"),
         style: TextStyle(color: Colors.white),

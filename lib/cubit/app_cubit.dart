@@ -3,6 +3,7 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:logger/logger.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Absence/Absence.dart';
 import 'package:reaxios/api/entities/Account.dart';
@@ -101,8 +102,8 @@ class AppCubit extends HydratedCubit<AppState> {
     return objectGetter().then((_) {
       loaded();
     }, onError: (e) {
-      print(e);
-      if (e is Error) print(e.stackTrace);
+      Logger.e("$e");
+      if (e is Error) Logger.e("${e.stackTrace}");
       loaded();
     });
   }
@@ -248,7 +249,7 @@ class AppCubit extends HydratedCubit<AppState> {
 
   @override
   void hydrate() {
-    print("AppCubit: Hydrate AppCubit");
+    Logger.d("AppCubit: Hydrate AppCubit");
     super.hydrate();
   }
 }

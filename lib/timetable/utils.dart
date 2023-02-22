@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'structures/DayTime.dart';
 
 final beforeNonLeadingCapitalLetter = RegExp(r"(?=(?!^)[A-Z])");
@@ -36,7 +37,7 @@ String generateAbbreviation(
       .where((element) => element.trim().isNotEmpty)
       .toList();
 
-  print(words);
+  Logger.d("$words");
 
   var out = "";
   if (words.length >= length) {

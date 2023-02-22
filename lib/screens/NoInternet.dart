@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/screens/nav/Timetable.dart';
@@ -35,13 +36,13 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
 
     if (!mounted) return;
 
-    print("[NOI] Checking...");
+    Logger.d("[NOI] Checking...");
 
     try {
       // await Dio().get("https://1.1.1.1");
     } catch (e) {
-      print(e);
-      print(!e.toString().contains("XMLHttpRequest error"));
+      Logger.e("$e");
+      Logger.e((!e.toString().contains("XMLHttpRequest error")).toString());
       if (e is! Error && (!e.toString().contains("XMLHttpRequest error"))) {
         context.showSnackbar(
           context.loc.translate("noInternet.stillNoWifi"),
@@ -50,14 +51,14 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
             color: Colors.red.contrastText,
           ),
         );
-        // print(e.stackTrace);
-        print("[NOI] Still no Internet.");
+        // Logger.e("${e.stackTrace}");
+        Logger.d("[NOI] Still no Internet.");
         // return Future.delayed(
         //     Duration(milliseconds: delay), _checkConnection(delay));
       }
     }
 
-    print("[NOI] Internet found!");
+    Logger.d("[NOI] Internet found!");
     if (mounted) RestartWidget.restartApp(context);
   }
 

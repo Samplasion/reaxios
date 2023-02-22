@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/entities/Grade/Grade.dart';
 import 'package:reaxios/api/entities/Structural/Structural.dart';
@@ -135,7 +136,7 @@ class _GradeLineChartState extends State<GradeLineChart> {
                             value != value.truncate()) return _("");
                         final date = usefulGrades[value.truncate()].date;
 
-                        print(value);
+                        Logger.d(value.toString());
 
                         if (value.truncate() == 0) {
                           return _(context.dateToString(date, short: true));

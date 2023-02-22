@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:reaxios/timetable/extensions.dart';
 import 'package:reaxios/timetable/structures/Event.dart';
 
@@ -20,9 +21,9 @@ class _EventCardState extends State<EventCard> {
   @override
   void initState() {
     super.initState();
-    debugPrint('initState');
+    Logger.d('initState');
     _timer = Timer.periodic(Duration(seconds: 10), (timer) {
-      debugPrint('timer');
+      Logger.d('timer');
       setState(() {});
     });
   }
@@ -31,7 +32,7 @@ class _EventCardState extends State<EventCard> {
   void dispose() {
     _timer.cancel();
     super.dispose();
-    debugPrint('dispose');
+    Logger.d('dispose');
   }
 
   @override

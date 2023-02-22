@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:upgrader/upgrader.dart';
@@ -26,7 +27,7 @@ class _UpgradeCard extends UpgradeBase {
   @override
   Widget build(BuildContext context, UpgradeBaseState state) {
     if (upgrader.debugLogging) {
-      print('UpgradeCard: build UpgradeCard');
+      Logger.d('UpgradeCard: build UpgradeCard');
     }
 
     return FutureBuilder(
@@ -79,7 +80,7 @@ class _UpgradeCard extends UpgradeBase {
                           Padding(
                             padding: const EdgeInsets.only(top: 15.0),
                             child: Text(
-                              upgrader.messages!
+                              upgrader.messages
                                       .message(UpgraderMessage.prompt) ??
                                   '',
                             ),
@@ -140,7 +141,7 @@ class _UpgradeCard extends UpgradeBase {
             );
           } else {
             if (upgrader.debugLogging) {
-              print('UpgradeCard: will not display');
+              Logger.d('UpgradeCard: will not display');
             }
           }
         }
@@ -157,14 +158,14 @@ class UpgradeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = Provider.of<Settings>(context);
     if (settings.getUpdateNagMode() != UpdateNagMode.banner) {
-      debugPrint(
+      Logger.d(
           'UpgradeCard: not showing because update nag mode is not banner');
       return Container();
     }
 
     Upgrader upgrader = getAppcastConfig();
     if (upgrader.appcastConfig == null) {
-      debugPrint('UpgradeCard: no appcast configuration found');
+      Logger.w('UpgradeCard: no appcast configuration found');
       return Container();
     }
 

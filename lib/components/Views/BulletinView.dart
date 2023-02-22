@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/api/enums/BulletinAttachmentKind.dart';
@@ -100,7 +101,7 @@ class BulletinView extends StatelessWidget {
         ElevatedButton(
           child: Text("[DEBUG] Print JSON"),
           onPressed: () {
-            print(bulletin.toJson());
+            Logger.d(jsonEncode(bulletin.toJson()));
           },
         ),
       ]
@@ -135,7 +136,6 @@ class BulletinView extends StatelessWidget {
                   ? context.loc.translate("bulletins.download")
                   : context.loc.translate("bulletins.openLink")),
               onClick: () async {
-                print(jsonEncode(e.toJson()));
                 if (await canLaunchUrlString(e.url)) {
                   if (e.kind == BulletinAttachmentKind.File) {
                     showDialog(

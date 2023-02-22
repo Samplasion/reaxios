@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
@@ -428,7 +429,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
           body: RefreshIndicator(
             onRefresh: () async {
               final cubit = context.read<AppCubit>();
-              print(String data) => debugPrint("[${DateTime.now()}] $data");
+              print(String data) => Logger.d("[${DateTime.now()}] $data");
               print("Loading structural...");
               return cubit.loadStructural(force: true).then((_) {
                 print("Loaded structural.");

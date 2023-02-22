@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:mobx/mobx.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +22,8 @@ abstract class _AppInfoStoreBase with Store {
 
   @action
   Future<void> getPackageInfo() async {
-    debugPrint('getPackageInfo');
+    Logger.d('getPackageInfo');
     packageInfo = await PackageInfo.fromPlatform();
-    debugPrint('PackageInfo: $packageInfo');
+    Logger.d('PackageInfo: $packageInfo');
   }
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:reaxios/api/utils/ColorSerializer.dart';
 import 'package:reaxios/enums/AverageMode.dart';
@@ -329,7 +330,7 @@ class Settings extends UndisposableChangeNotifier {
     if (obj.containsKey("events") && obj["events"] is List) {
       final events =
           (obj["events"] as List).map((l) => Event.fromJson(l)).toList();
-      print(events);
+      Logger.d("$events");
       if (events.every(((e) => e.isValid))) {
         setEvents(
           events,

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class UndisposingChangeNotifierProvider<T extends ChangeNotifier?>
@@ -35,6 +36,6 @@ class UndisposingChangeNotifierProvider<T extends ChangeNotifier?>
         );
 
   static void _dispose(BuildContext context, ChangeNotifier? notifier) {
-    debugPrint("Fake-disposing $notifier");
+    Logger.d("Fake-disposing $notifier");
   }
 }

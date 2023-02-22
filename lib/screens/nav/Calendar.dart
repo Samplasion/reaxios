@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Assignment/Assignment.dart';
@@ -474,7 +475,8 @@ class _CalendarPaneState extends State<CalendarPane> {
                   return e is GenericEventWidget && e.type == EventType.custom;
                 }).cast<CustomEventWidget>();
                 if (filtered.length > 0 || custom.length > 0) {
-                  print(custom.isEmpty ? null : custom.last.runtimeType);
+                  Logger.d((custom.isEmpty ? null : custom.last.runtimeType)
+                      .toString());
                   return Padding(
                     padding: const EdgeInsets.only(left: 2),
                     child: Row(

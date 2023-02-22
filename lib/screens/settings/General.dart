@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:logger/logger.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
@@ -129,7 +130,7 @@ class GeneralSettings extends BaseSettings {
             },
             selectedValue: settings.getGradeDisplay().serialized,
             onChange: (dynamic value) {
-              print("Value changed: $value");
+              Logger.d("Value changed: $value");
               settings.setGradeDisplay(deserializeGradeDisplay(value));
             },
           ),
@@ -146,7 +147,7 @@ class GeneralSettings extends BaseSettings {
             },
             selectedValue: settings.getAverageMode().serialized,
             onChange: (dynamic value) {
-              print("Value changed: $value");
+              Logger.d("Value changed: $value");
               settings.setAverageMode(deserializeAverageMode(value));
             },
           ),

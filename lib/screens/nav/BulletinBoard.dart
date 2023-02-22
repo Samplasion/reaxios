@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/components/ListItems/BulletinListItem.dart';
@@ -50,7 +51,7 @@ class _BulletinsPaneState extends ReloadableState<BulletinsPane> {
   Widget buildOk(BuildContext context, List<Bulletin> bulletins) {
     final entries = bulletins; // map.entries.toList();
 
-    print("build");
+    Logger.d("build");
 
     return Container(
       child: RefreshIndicator(

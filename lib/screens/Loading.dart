@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:logger/logger.dart';
 import 'package:reaxios/api/entities/Account.dart';
 import 'package:reaxios/api/utils/Encrypter.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
@@ -36,7 +37,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         if (!prefs.containsKey("school") ||
             !prefs.containsKey("user") ||
             !prefs.containsKey("pass")) {
-          print("No login details found [1]");
+          Logger.d("No login details found [1]");
           Navigator.pushReplacementNamed(context, "login");
           return;
         }
@@ -46,13 +47,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
         final pass = prefs.getString("pass")!;
 
         if (school.trim() == "" || user.trim() == "" || pass.trim() == "") {
-          print("No login details found [2]");
+          Logger.d("No login details found [2]");
           Navigator.pushReplacementNamed(context, "login");
           return;
         }
 
         if (cubit.hasAccount) {
-          print("Already logged in");
+          Logger.d("Already logged in");
           Navigator.pushReplacementNamed(context, "/");
           return;
         }
@@ -64,8 +65,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
         ));
 
         if (error != null) {
-          print(error);
-          if (error is Error) print(error.stackTrace);
+          Logger.e("$error");
+          if (error is Error) Logger.e("${error.stackTrace}");
           if (error is HttpException &&
               error.toString().contains("SocketException")) {
             Navigator.pushReplacementNamed(context, "nointernet");

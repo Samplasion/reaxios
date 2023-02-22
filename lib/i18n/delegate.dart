@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 
 class AppLocalizations {
   final Locale locale;
@@ -45,7 +46,7 @@ class AppLocalizations {
 
   T? get<T>(String key) {
     if (_raw[key] == null) {
-      debugPrint('[I18N] Warning: key "$key" is undefined.');
+      Logger.w('[I18N] Warning: key "$key" is undefined.');
     }
 
     return _raw[key];
@@ -69,7 +70,7 @@ class AppLocalizations {
 
   String translate(String key, [Map<String, String>? replacements]) {
     if (_localizedStrings[key] == null) {
-      debugPrint('[I18N] Warning: key "$key" is undefined.');
+      Logger.w('[I18N] Warning: key "$key" is undefined.');
     }
 
     var value = _localizedStrings[key] ?? key;
@@ -87,12 +88,12 @@ class AppLocalizations {
     int? precision,
   }) {
     if (_raw[key] == null) {
-      debugPrint('[I18N] Warning: key "$key" is undefined.');
+      Logger.w('[I18N] Warning: key "$key" is undefined.');
       return key;
     }
 
     if (_raw[key]['other'] == null) {
-      debugPrint(
+      Logger.w(
           '[I18N] Warning: key "$key.other" is undefined in pluralization.');
       return key;
     }

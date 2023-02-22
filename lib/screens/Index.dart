@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/TestAxios.dart';
 import 'package:reaxios/api/entities/Account.dart';
@@ -148,7 +149,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     await _session.getStudents(true);
     final lastStudentID = storage.getLastStudentID();
-    print(lastStudentID);
     if (lastStudentID != null &&
         _session.students
             .any((element) => element.studentUUID == lastStudentID)) {
@@ -177,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (panes[index]!.onLoad != null && panes[index]!.onLoad is Function)
         await panes[index]!.onLoad!(context);
     } catch (e) {
-      print(e);
+      Logger.e("$e");
       // Do nothing; the HydratedCubit will have stale data, but at least
       // the app will run.
     }
@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void reassemble() {
     super.reassemble();
-    debugPrint("[${widget.runtimeType}] Calling reassemble()...");
+    Logger.d("[${widget.runtimeType}] Calling reassemble()...");
     AppLocalizations.of(context).load().then((value) {
       if (mounted) {
         if (value) {
@@ -223,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
       try {
         launchUrlString(url);
       } catch (e) {
-        print(e);
+        Logger.e("$e");
         context.hideCurrentSnackBar();
         context.showSnackbarError(
           context.loc.translate("main.failedLinkOpen"),
@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
     } catch (e) {
-      print(e);
+      Logger.e("$e");
       context.hideCurrentSnackBar();
       context.showSnackbarError(
         context.loc.translate("main.webVersionError"),

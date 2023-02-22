@@ -1,3 +1,4 @@
+import 'package:logger/logger.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 
 class GradeAlertBoundaries {
@@ -29,7 +30,7 @@ class GradeAlertBoundaries {
   );
 
   static GradeAlertBoundaries get(GradeDisplay type) {
-    print(type);
+    Logger.d(type.toString());
     switch (type) {
       case GradeDisplay.letter:
         return _letter;

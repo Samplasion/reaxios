@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:reaxios/utils/utils.dart';
 import '../api/utils/utils.dart' as axios_utils;
 import 'structures/Event.dart';
@@ -52,13 +53,13 @@ extension ListExtension<T> on List<T> {
 
 extension NullLogExtension on Null {
   void log() {
-    print(this);
+    Logger.d("$this");
   }
 }
 
 extension ObjectLogExtension on Object {
   void log() {
-    print(this);
+    Logger.d("$this");
   }
 }
 
