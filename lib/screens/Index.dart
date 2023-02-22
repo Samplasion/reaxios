@@ -93,19 +93,20 @@ class _HomeScreenState extends State<HomeScreen> {
       if (!appIsActive) return;
       if (!mounted) return;
 
-      // print("[NOI] Checking...");
+      // TODO: restore
+      // // print("[NOI] Checking...");
 
-      try {
-        await Dio().get("https://1.1.1.1");
-      } on DioError {
-        // print("[NOI] No Internet.");
-        Navigator.pushReplacementNamed(context, "nointernet");
-        return;
-      }
+      // try {
+      //   await Dio().get("https://1.1.1.1");
+      // } on DioError {
+      //   // print("[NOI] No Internet.");
+      //   Navigator.pushReplacementNamed(context, "nointernet");
+      //   return;
+      // }
 
-      // print("[NOI] Still Internet");
-      return Future.delayed(
-          Duration(milliseconds: delay), _checkConnection(delay));
+      // // print("[NOI] Still Internet");
+      // return Future.delayed(
+      //     Duration(milliseconds: delay), _checkConnection(delay));
     };
   }
 
@@ -121,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final pass = prefs.getString("pass")!;
 
       try {
-        await Dio().get("https://1.1.1.1");
+        // await Dio().get("https://1.1.1.1");
       } catch (e) {
         // print(e is! Error && (!e.toString().contains("XMLHttpRequest error")));
         if (e is! Error && (!e.toString().contains("XMLHttpRequest error"))) {

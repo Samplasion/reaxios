@@ -1,24 +1,26 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:reaxios/api/entities/Absence/Absence.dart';
-import 'package:reaxios/api/entities/Assignment/Assignment.dart';
-import 'package:reaxios/api/entities/Authorization/Authorization.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/api/entities/Material/Material.dart';
-import 'package:reaxios/api/entities/Meeting/Meeting.dart';
-import 'package:reaxios/api/entities/Note/Note.dart';
-import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
-import 'package:reaxios/api/entities/School/School.dart';
-import 'package:reaxios/api/entities/Structural/Structural.dart';
-import 'package:reaxios/api/entities/Topic/Topic.dart';
+import 'package:http/http.dart' as http;
 
+import 'entities/Absence/Absence.dart';
+import 'entities/Account.dart';
+import 'entities/Assignment/Assignment.dart';
+import 'entities/Authorization/Authorization.dart';
 import 'entities/Bulletin/Bulletin.dart';
 import 'entities/Curriculum/curriculum.dart';
-import 'entities/Student/Student.dart';
+import 'entities/Grade/Grade.dart';
 import 'entities/Login/Login.dart';
-import 'entities/Account.dart';
+import 'entities/Material/Material.dart';
+import 'entities/Meeting/Meeting.dart';
+import 'entities/Note/Note.dart';
+import 'entities/ReportCard/ReportCard.dart';
+import 'entities/School/School.dart';
+import 'entities/Structural/Structural.dart';
+import 'entities/Student/Student.dart';
+import 'entities/Topic/Topic.dart';
 import 'utils/Encrypter.dart';
 
 typedef JSON = Map<String, dynamic>;
@@ -144,7 +146,7 @@ class Axios {
   late final AxiosAccount _account;
   Login? _session;
   List<Student> _students = [];
-  final client = Dio();
+  final _client = http.Client();
   Student? student;
   void Function() onError = () {};
   //int _requests = 0;
@@ -204,6 +206,18 @@ class Axios {
     }
   }
 
+  Future<http.Response> _sendRequest({
+    required Uri url,
+    required String method,
+    required Map<String, String> headers,
+    required dynamic body,
+  }) {
+    if (method.toLowerCase() == "post") {
+      return _client.post(url, headers: headers, body: body);
+    }
+    return _client.get(url, headers: headers);
+  }
+
   /// The function where all requests are sent.
   Future<T> _makeCall<T>(
     String url, {
@@ -215,14 +229,14 @@ class Axios {
   }) async {
     // _requests++;
     try {
-      final res = await client.requestUri(Uri.tryParse(url)!,
-          options: Options(
-            headers: headers,
-            method: method,
-          ),
-          data: body);
+      final res = await _sendRequest(
+        url: Uri.tryParse(url)!,
+        method: method,
+        headers: headers,
+        body: body,
+      );
 
-      final text = res.toString();
+      final text = res.body;
       dynamic data = _RawAPIResponse(
           jsonDecode(Encrypter.decrypt(text).replaceAll("#CR#", "\\n")));
 
@@ -241,7 +255,7 @@ class Axios {
       }
 
       return model(data.response);
-    } on DioError /* catch (e) */ {
+    } on HttpException {
       onError();
       rethrow;
     }

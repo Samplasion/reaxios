@@ -67,8 +67,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
         if (error != null) {
           print(error);
           if (error is Error) print(error.stackTrace);
-          if (error is DioError &&
-              error.error.toString().contains("SocketException")) {
+          if (error is HttpException &&
+              error.toString().contains("SocketException")) {
             Navigator.pushReplacementNamed(context, "nointernet");
           } else {
             Navigator.pushReplacementNamed(context, "login");

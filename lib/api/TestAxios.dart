@@ -42,9 +42,6 @@ class TestAxios implements Axios {
       AxiosAccount(student!.schoolUUID, student!.studentUUID, "passw0rd!");
 
   @override
-  Dio get client => Dio();
-
-  @override
   Future<List<Absence>> getAbsences() async {
     return [Absence.test()];
   }
