@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/RestartWidget.dart';
@@ -39,23 +40,17 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
     Logger.d("[NOI] Checking...");
 
     try {
-      // await Dio().get("https://1.1.1.1");
+      await get(Uri.parse("https://1.1.1.1"));
     } catch (e) {
       Logger.e("$e");
       Logger.e((!e.toString().contains("XMLHttpRequest error")).toString());
-      if (e is! Error && (!e.toString().contains("XMLHttpRequest error"))) {
-        context.showSnackbar(
-          context.loc.translate("noInternet.stillNoWifi"),
-          backgroundColor: Colors.red,
-          style: TextStyle(
-            color: Colors.red.contrastText,
-          ),
-        );
-        // Logger.e("${e.stackTrace}");
-        Logger.d("[NOI] Still no Internet.");
-        // return Future.delayed(
-        //     Duration(milliseconds: delay), _checkConnection(delay));
-      }
+      return context.showSnackbar(
+        context.loc.translate("noInternet.stillNoWifi"),
+        backgroundColor: Colors.red,
+        style: TextStyle(
+          color: Colors.red.contrastText,
+        ),
+      );
     }
 
     Logger.d("[NOI] Internet found!");
