@@ -67,8 +67,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         if (error != null) {
           Logger.e("$error");
           if (error is Error) Logger.e("${error.stackTrace}");
-          if (error is HttpException &&
-              error.toString().contains("SocketException")) {
+          if (error.toString().contains("Failed host lookup")) {
             Navigator.pushReplacementNamed(context, "nointernet");
           } else {
             Navigator.pushReplacementNamed(context, "login");

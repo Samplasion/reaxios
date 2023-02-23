@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 import 'package:reaxios/api/Axios.dart';
 import 'package:reaxios/api/TestAxios.dart';
@@ -90,23 +91,22 @@ class _HomeScreenState extends State<HomeScreen> {
   FutureOr<dynamic> Function() _checkConnection(int delay) {
     return () async {
       if (kIsWeb) return;
-      if (!appIsActive) return;
-      if (!mounted) return;
 
-      // TODO: restore
-      // // print("[NOI] Checking...");
+      if (appIsActive && mounted) {
+        Logger.d("[NOI] Checking...");
 
-      // try {
-      //   await Dio().get("https://1.1.1.1");
-      // } on DioError {
-      //   // print("[NOI] No Internet.");
-      //   Navigator.pushReplacementNamed(context, "nointernet");
-      //   return;
-      // }
+        try {
+          await get(Uri.parse("https://1.1.1.1"));
+        } catch (e) {
+          Logger.w("[NOI] No Internet.");
+          Navigator.pushReplacementNamed(context, "nointernet");
+          return;
+        }
 
-      // // print("[NOI] Still Internet");
-      // return Future.delayed(
-      //     Duration(milliseconds: delay), _checkConnection(delay));
+        Logger.d("[NOI] Still Internet");
+      }
+      return Future.delayed(
+          Duration(milliseconds: delay), _checkConnection(delay));
     };
   }
 
@@ -120,17 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
       final school = prefs.getString("school")!;
       final user = prefs.getString("user")!;
       final pass = prefs.getString("pass")!;
-
-      try {
-        // await Dio().get("https://1.1.1.1");
-      } catch (e) {
-        // print(e is! Error && (!e.toString().contains("XMLHttpRequest error")));
-        if (e is! Error && (!e.toString().contains("XMLHttpRequest error"))) {
-          // print("[NOI] No Internet.");
-          Navigator.pushReplacementNamed(context, "nointernet");
-          return;
-        }
-      }
 
       // print("$school, $user, $pass");
       _session = Axios(AxiosAccount(school, user, Encrypter.decrypt(pass)),
