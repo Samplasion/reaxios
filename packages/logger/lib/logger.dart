@@ -10,19 +10,24 @@ class Logger {
     _print("DBG", data, Styles.CYAN);
   }
 
+  static i(String data) => instance.warn(data);
+  info(String data) {
+    _print("INFO", data, Styles.BLUE);
+  }
+
   static w(String data) => instance.warn(data);
   warn(String data) {
-    _print("WRN", data, Styles.YELLOW);
+    _print("WARN", data, Styles.YELLOW);
   }
 
   static e(String data) => instance.error(data);
   error(String data) {
-    _print("ERR", data, Styles.RED);
+    _print("ERROR", data, Styles.RED);
   }
 
   _print(String level, String data, Styles textColor) {
-    final str = Colorize(data);
-    str.apply(textColor);
-    print("${Colorize("[$level]").apply(textColor).dark()} $str");
+    final str = Colorize(data).apply(textColor);
+    final levelStr = Colorize("[$level]").apply(textColor).dark();
+    print("$levelStr $str");
   }
 }
