@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:axios_api/Axios.dart';
+import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Absence/Absence.dart';
 import 'package:axios_api/entities/Grade/Grade.dart';
 import 'package:axios_api/entities/Structural/Structural.dart';

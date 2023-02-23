@@ -7,7 +7,7 @@ import 'package:reaxios/components/Views/book_meeting.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:styled_widget/styled_widget.dart';
 
-import 'package:axios_api/Axios.dart';
+import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Meeting/Meeting.dart';
 import '../../components/LowLevel/Empty.dart';
 import '../../components/LowLevel/GradientCircleAvatar.dart';

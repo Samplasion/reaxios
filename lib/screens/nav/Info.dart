@@ -8,7 +8,7 @@ import 'package:reaxios/components/Utilities/settings.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils/utils.dart';
 
-import 'package:axios_api/Axios.dart';
+import 'package:axios_api/client.dart';
 import 'package:axios_api/enums/Gender.dart';
 import '../../components/LowLevel/Loading.dart';
 import '../../cubit/app_cubit.dart';

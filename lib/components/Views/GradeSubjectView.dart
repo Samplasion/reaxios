@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:axios_api/Axios.dart';
+import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Grade/Grade.dart';
 import 'package:reaxios/utils/average.dart';
 import 'package:reaxios/components/Charts/GradeLineChart.dart';

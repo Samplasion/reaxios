@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:axios_api/Axios.dart';
+import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Structural/Structural.dart';
 import 'package:axios_api/interfaces/AbstractJson.dart';
 import 'package:axios_api/utils/BooleanSerializer.dart';

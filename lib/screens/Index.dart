@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
-import 'package:axios_api/Axios.dart';
+import 'package:axios_api/client.dart';
 import 'package:axios_api/TestAxios.dart';
 import 'package:axios_api/entities/Account.dart';
 import 'package:axios_api/entities/Login/Login.dart';

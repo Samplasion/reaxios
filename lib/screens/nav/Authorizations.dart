@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:axios_api/Axios.dart';
+import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Authorization/Authorization.dart';
 import 'package:axios_api/entities/Student/Student.dart';
 import 'package:reaxios/components/ListItems/AuthorizationListItem.dart';

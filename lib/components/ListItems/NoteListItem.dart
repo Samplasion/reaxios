@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:axios_api/Axios.dart';
+import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Note/Note.dart';
 import 'package:axios_api/enums/NoteKind.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';

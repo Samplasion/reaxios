@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:axios_api/Axios.dart';
+import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Bulletin/Bulletin.dart';
 import 'package:axios_api/enums/BulletinKind.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';

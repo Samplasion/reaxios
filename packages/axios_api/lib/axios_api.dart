@@ -1,4 +1,4 @@
 library axios_api;
 
-export 'Axios.dart';
+export 'client.dart';
 export 'TestAxios.dart';

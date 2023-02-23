@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:axios_api/Axios.dart';
+import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Meeting/Meeting.dart';
 import 'package:axios_api/entities/Topic/Topic.dart';
 import 'package:axios_api/entities/Student/Student.dart';
