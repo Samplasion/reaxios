@@ -73,6 +73,7 @@ Future<Axios?> getSession(Isolate current) async {
   return session;
 }
 
+@pragma("vm:entry-point")
 void gradesBackgroundService() async {
   final Isolate current = Isolate.current;
   final int isolateId = current.hashCode;
@@ -135,6 +136,7 @@ void gradesBackgroundService() async {
   }
 }
 
+@pragma("vm:entry-point")
 void bulletinBoardBackgroundService() async {
   final Isolate current = Isolate.current;
   final int isolateId = current.hashCode;
