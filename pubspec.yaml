@@ -79,6 +79,8 @@ dependencies:
   http: ^0.13.5
   logger:
     path: packages/logger
+  axios_api:
+    path: packages/axios_api
 
 dev_dependencies:
   flutter_test:

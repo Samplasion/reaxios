@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
-import 'package:reaxios/api/utils/utils.dart';
+import 'package:axios_api/entities/ReportCard/ReportCard.dart';
+import 'package:axios_api/utils/utils.dart';
 import 'package:reaxios/components/Utilities/Alert.dart';
 import 'package:reaxios/components/Utilities/GradeText.dart';
 import 'package:reaxios/utils/format.dart';

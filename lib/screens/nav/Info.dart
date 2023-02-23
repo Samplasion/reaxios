@@ -2,14 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reaxios/api/entities/Login/Login.dart';
-import 'package:reaxios/api/utils/Encrypter.dart';
+import 'package:axios_api/entities/Login/Login.dart';
+import 'package:axios_api/utils/Encrypter.dart';
 import 'package:reaxios/components/Utilities/settings.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils/utils.dart';
 
-import '../../api/Axios.dart';
-import '../../api/enums/Gender.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/enums/Gender.dart';
 import '../../components/LowLevel/Loading.dart';
 import '../../cubit/app_cubit.dart';
 

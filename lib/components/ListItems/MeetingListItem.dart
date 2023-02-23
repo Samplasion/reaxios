@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:logger/logger.dart';
-import 'package:reaxios/api/entities/Meeting/Meeting.dart';
+import 'package:axios_api/entities/Meeting/Meeting.dart';
 
 import '../../utils/utils.dart';
 import '../LowLevel/GradientCircleAvatar.dart';

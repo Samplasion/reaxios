@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 
-import '../api/entities/Assignment/Assignment.dart';
-import '../api/entities/Topic/Topic.dart';
+import 'package:axios_api/entities/Assignment/Assignment.dart';
+import 'package:axios_api/entities/Topic/Topic.dart';
 import '../components/ListItems/AssignmentListItem.dart';
 import '../components/ListItems/CustomCalendarEventListItem.dart';
 import '../components/ListItems/TopicListItem.dart';

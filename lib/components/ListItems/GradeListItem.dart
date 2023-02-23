@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Grade/Grade.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/GradeAvatar.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';

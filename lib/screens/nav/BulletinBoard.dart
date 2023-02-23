@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Bulletin/Bulletin.dart';
 import 'package:reaxios/components/ListItems/BulletinListItem.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/ReloadableState.dart';

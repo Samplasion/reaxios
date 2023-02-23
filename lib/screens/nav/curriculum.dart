@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reaxios/components/Utilities/Alert.dart';
 import 'package:reaxios/utils/utils.dart';
 
-import '../../api/entities/Curriculum/curriculum.dart';
+import 'package:axios_api/entities/Curriculum/curriculum.dart';
 import '../../components/LowLevel/GradientCircleAvatar.dart';
 import '../../components/LowLevel/Loading.dart';
 import '../../components/Utilities/ResourcefulCardListItem.dart';

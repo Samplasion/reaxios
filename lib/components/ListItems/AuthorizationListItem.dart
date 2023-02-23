@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Authorization/Authorization.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Authorization/Authorization.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/AuthorizationView.dart';

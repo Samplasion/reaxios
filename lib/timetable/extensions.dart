@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:reaxios/utils/utils.dart';
-import '../api/utils/utils.dart' as axios_utils;
+import 'package:axios_api/utils/utils.dart' as axios_utils;
 import 'structures/Event.dart';
 
 extension RangeExtension on int {

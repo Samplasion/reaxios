@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Grade/Grade.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';

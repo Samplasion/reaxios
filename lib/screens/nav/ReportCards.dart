@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/ReportCard/ReportCard.dart';
-import 'package:reaxios/api/entities/Structural/Structural.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/ReportCard/ReportCard.dart';
+import 'package:axios_api/entities/Structural/Structural.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Views/ReportCard.dart';

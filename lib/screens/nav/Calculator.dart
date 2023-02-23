@@ -10,9 +10,9 @@ import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/utils/showDialogSuper.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 
-import '../../api/Axios.dart';
-import '../../api/entities/Grade/Grade.dart';
-import '../../api/entities/Structural/Structural.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Grade/Grade.dart';
+import 'package:axios_api/entities/Structural/Structural.dart';
 import '../../components/LowLevel/Empty.dart';
 import '../../components/LowLevel/Loading.dart';
 import '../../components/LowLevel/MaybeMasterDetail.dart';

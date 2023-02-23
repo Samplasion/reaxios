@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Authorization/Authorization.dart';
-import 'package:reaxios/api/entities/Student/Student.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Authorization/Authorization.dart';
+import 'package:axios_api/entities/Student/Student.dart';
 import 'package:reaxios/components/ListItems/AuthorizationListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';

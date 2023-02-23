@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Absence/Absence.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Absence/Absence.dart';
 import 'package:reaxios/components/ListItems/AbsenceListItem.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils/utils.dart';

@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
+import 'package:axios_api/entities/Grade/Grade.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils/utils.dart';
 

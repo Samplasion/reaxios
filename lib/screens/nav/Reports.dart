@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Note/Note.dart';
-import 'package:reaxios/api/enums/NoteKind.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Note/Note.dart';
+import 'package:axios_api/enums/NoteKind.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/ListItems/NoteListItem.dart';

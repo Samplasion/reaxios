@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:reaxios/api/utils/ColorSerializer.dart';
+import 'package:axios_api/utils/ColorSerializer.dart';
 import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:reaxios/structs/SubjectObjective.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Student/Student.dart';
-import 'package:reaxios/api/entities/Topic/Topic.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Student/Student.dart';
+import 'package:axios_api/entities/Topic/Topic.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/ListItems/TopicListItem.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';

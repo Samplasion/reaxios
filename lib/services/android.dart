@@ -8,18 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart' as S;
 import 'package:logger/logger.dart';
-import 'package:reaxios/api/utils/ColorSerializer.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Account.dart';
-import 'package:reaxios/api/entities/Bulletin/Bulletin.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/api/utils/Encrypter.dart';
+import 'package:axios_api/utils/ColorSerializer.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Account.dart';
+import 'package:axios_api/entities/Bulletin/Bulletin.dart';
+import 'package:axios_api/entities/Grade/Grade.dart';
+import 'package:axios_api/utils/Encrypter.dart';
 import 'package:reaxios/notifications.dart';
 import 'package:reaxios/services/compute.dart';
 import 'package:reaxios/utils/tuple.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../api/entities/Structural/Structural.dart';
+import 'package:axios_api/entities/Structural/Structural.dart';
 
 final defaultPrimary = Colors.orange[400]!;
 final defaultAccent = Colors.purple[400]!;

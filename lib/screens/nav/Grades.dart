@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/api/entities/Structural/Structural.dart';
-import 'package:reaxios/api/entities/Student/Student.dart';
-import 'package:reaxios/api/utils/utils.dart' hide gradeAverage;
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Grade/Grade.dart';
+import 'package:axios_api/entities/Structural/Structural.dart';
+import 'package:axios_api/entities/Student/Student.dart';
+import 'package:axios_api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
 import 'package:reaxios/components/ListItems/GradeListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';

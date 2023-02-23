@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:axios_api/utils/utils.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -8,9 +9,9 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/api/entities/Grade/Grade.dart';
-import 'package:reaxios/api/entities/Login/Login.dart';
-import 'package:reaxios/api/utils/utils.dart' as axios_utils;
+import 'package:axios_api/entities/Grade/Grade.dart';
+import 'package:axios_api/entities/Login/Login.dart';
+import 'package:axios_api/utils/utils.dart' as axios_utils;
 import 'package:share_plus/share_plus.dart';
 
 // Matches before a capital letter that is not also at beginning of string.
@@ -286,6 +287,17 @@ int calculateAge(DateTime birthDate) {
     age--;
   }
   return age;
+}
+
+Color getGradeColor(BuildContext context, double grade,
+    [int shade = 500, int suff = 6]) {
+  if (isNaN(grade)) return Colors.blue[shade]!;
+  if (grade < suff)
+    return context.harmonize(color: Colors.red[shade]!);
+  else if (grade < suff + 0.5)
+    return context.harmonize(color: Colors.orange[shade]!);
+  else
+    return context.harmonize(color: Colors.green[shade]!);
 }
 
 extension ColorUtils on Color {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:logger/logger.dart';
-import 'package:reaxios/api/utils/ColorSerializer.dart';
+import 'package:axios_api/utils/ColorSerializer.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/timetable/showModalBottomSheetSuper.dart';
 import 'package:reaxios/utils/utils.dart';

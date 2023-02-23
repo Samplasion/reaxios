@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:reaxios/api/Axios.dart';
-import 'package:reaxios/api/entities/Login/Login.dart';
+import 'package:axios_api/Axios.dart';
+import 'package:axios_api/entities/Login/Login.dart';
 
-import '../api/entities/Student/Student.dart';
-import '../api/enums/NoteKind.dart';
+import 'package:axios_api/entities/Student/Student.dart';
+import 'package:axios_api/enums/NoteKind.dart';
 import '../cubit/app_cubit.dart';
 import '../utils/utils.dart';
 import 'nav/Absences.dart';
