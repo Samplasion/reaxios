@@ -118,8 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
       if (kIsWeb) return;
 
       if (appIsActive && mounted) {
-        Logger.d("[NOI] Checking...");
-
         try {
           await get(Uri.parse("https://1.1.1.1"));
         } catch (e) {
@@ -127,8 +125,6 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.pushReplacementNamed(context, "nointernet");
           return;
         }
-
-        Logger.d("[NOI] Still Internet");
       }
       return Future.delayed(
           Duration(milliseconds: delay), _checkConnection(delay));
