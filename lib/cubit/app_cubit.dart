@@ -40,6 +40,7 @@ class AppCubit extends HydratedCubit<AppState> {
   void loaded() => loadingTasks.add(loadingTasks.value - 1);
 
   late Stream<bool> isEmpty = stream.map((state) => state.isEmpty);
+  late BehaviorSubject errorStream = BehaviorSubject();
 
   bool get hasAccount => state.axios?.account != null;
   School? get school => state.school;
@@ -102,6 +103,7 @@ class AppCubit extends HydratedCubit<AppState> {
     return objectGetter().then((_) {
       loaded();
     }, onError: (e) {
+      errorStream.add(e);
       Logger.e("$e");
       if (e is Error) Logger.e("${e.stackTrace}");
       loaded();

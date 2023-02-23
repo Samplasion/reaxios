@@ -72,6 +72,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool appIsActive = true;
 
+  late StreamSubscription subscription;
+
+  _connectErrorCallback() {
+    final cubit = context.read<AppCubit>();
+    subscription = cubit.errorStream.listen((value) {
+      onError();
+    });
+  }
+
+  _disconnectErrorCallback() {
+    subscription.cancel();
+  }
+
+  onError() {
+    if (!mounted) return;
+    Navigator.pushReplacementNamed(context, "nointernet");
+  }
+
   @override
   void initState() {
     super.initState();
@@ -82,10 +100,17 @@ class _HomeScreenState extends State<HomeScreen> {
       if (!panes.containsKey(openingPage)) openingPage = paneList.first.id;
       _selectedPane = openingPage;
 
+      _connectErrorCallback();
       _initSession();
     });
 
     _checkConnection(15000)();
+  }
+
+  @override
+  void dispose() {
+    _disconnectErrorCallback();
+    super.dispose();
   }
 
   FutureOr<dynamic> Function() _checkConnection(int delay) {
@@ -153,12 +178,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _loading = false;
     });
-  }
-
-  @override
-  void dispose() {
-    // _subscription?.cancel();
-    super.dispose();
   }
 
   Future<void> _runCallback([String index = "overview"]) async {
