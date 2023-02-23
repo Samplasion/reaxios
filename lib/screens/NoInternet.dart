@@ -44,6 +44,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
     } catch (e) {
       Logger.e("$e");
       Logger.e((!e.toString().contains("XMLHttpRequest error")).toString());
+      loading = false;
       return context.showSnackbar(
         context.loc.translate("noInternet.stillNoWifi"),
         backgroundColor: Colors.red,
