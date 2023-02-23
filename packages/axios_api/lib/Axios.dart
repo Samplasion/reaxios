@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 import 'entities/Absence/Absence.dart';
 import 'entities/Account.dart';
@@ -34,6 +35,7 @@ Future<R> defaultCompute<Q, R>(ComputeCallback<Q, R> callback, Q message,
   return Future.microtask(() => callback(message));
 }
 
+// ignore: constant_identifier_names
 const VENDOR_TOKEN = "5ed95c58-fbc2-4db8-92cb-7e1e73ba2065";
 const kMaxRequests = 5;
 
@@ -124,19 +126,9 @@ class _RawAPIResponse<T> {
   late String errormessage;
   late int errorcode;
   _RawAPIResponse(JSON data)
-      : this.response = data['response'],
-        this.errormessage = data['errormessage'] ?? "",
-        this.errorcode = data['errorcode'] ?? 0;
-
-  // static error(String message) {
-  //   return _RawAPIResponse(
-  //       {"response": null, "errorcode": -1, "errormessage": message});
-  // }
-
-  // static wrap<T>(T value) {
-  //   return _RawAPIResponse<T>(
-  //       {"response": value, "errorcode": 0, "errormessage": ""});
-  // }
+      : response = data['response'],
+        errormessage = data['errormessage'] ?? "",
+        errorcode = data['errorcode'] ?? 0;
 
   get isError => this.response == null;
 }
@@ -172,13 +164,13 @@ class Axios {
   static Future<List<School>> searchSchools(String query) async {
     if (query.trim().length < 3) return [];
 
-    final session = new Axios(
-      new AxiosAccount("", "", ""),
+    final session = Axios(
+      const AxiosAccount("", "", ""),
       compute: defaultCompute,
     );
     final url = Axios._getURL("GET", "RetrieveAPPCustomerInformationByString",
         data: {"sSearch": query, "sVendorToken": VENDOR_TOKEN});
-    print(url);
+    Logger.d(url);
     final res = await session._makeCall<dynamic>(url, model: (raw) {
       List<dynamic> list = raw;
       return list.map((e) => School.fromJson(e)).toList();
@@ -188,19 +180,15 @@ class Axios {
 
   Future<Login?> _getSession() async {
     try {
-      if (this._session == null ||
-          DateTime.now().difference(sessionStart).inMinutes >
-              10 /*  || _requests >= kMaxRequests */)
-        await this.login();
-      else {
-        final res = this._session;
-        if (res == null) await this.login();
+      if (_session == null ||
+          DateTime.now().difference(sessionStart).inMinutes > 10) {
+        await login();
+      } else {
+        final res = _session;
+        if (res == null) await login();
       }
-      return this._session;
+      return _session;
     } catch (e) {
-      // this._session = null;
-      // print("$e ${this._account}");
-      // return _RawAPIResponse.error("No session\n" + e.toString());
       return null;
     }
   }
@@ -241,15 +229,15 @@ class Axios {
 
       if (data.errorcode != 0) {
         if (data.errormessage.contains("9999|Utente non trovato")) {
-          print("Got error: Utente non trovato");
+          Logger.i("Got error: Utente non trovato");
           if (lastCall != null) {
             _session = null;
             return _retryLastCall(lastCall);
           } else {
-            print(" └> Additionally, no last call was provided.");
+            Logger.i(" └> Additionally, no last call was provided.");
           }
         }
-        print("Error [${data.errorcode}] - ${data.errormessage}");
+        Logger.e("Error [${data.errorcode}] - ${data.errormessage}");
         throw (data.errormessage);
       }
 
@@ -280,9 +268,9 @@ class Axios {
     String? sModule,
     String? method,
   ]) async {
-    var session; // = await this._getSession();
+    Login? session; // = await this._getSession();
     do {
-      session = await this._getSession();
+      session = await _getSession();
       // if (session == null) throw ("Unauthenticable.");
     } while (session == null);
 
@@ -302,13 +290,13 @@ class Axios {
             "data": data
           };
     final json = {
-      "sCodiceFiscale": this._account.schoolID,
+      "sCodiceFiscale": _account.schoolID,
       "sVendorToken": VENDOR_TOKEN,
       "sCommandJSON": sCommandJSON,
       "sSessionGuid": session.sessionUUID,
     };
 
-    final _method = method ?? (data == null ? "GET" : "POST");
+    final definiteMethod = method ?? (data == null ? "GET" : "POST");
 
     // Set the last call so that we can retry it in case of session expiration.
     final lastCall = _LastCall(
@@ -320,51 +308,50 @@ class Axios {
       method: method,
     );
 
-    if (_method == "POST") {
-      // print(json);
-      return this._makeCall<T>(
-        Axios._getURL(_method, path, data: json),
+    if (definiteMethod == "POST") {
+      return _makeCall<T>(
+        Axios._getURL(definiteMethod, path, data: json),
         model: model,
-        method: _method,
-        headers: _method == "POST" ? defaultPOSTHeaders : defaultHeaders,
+        method: definiteMethod,
+        headers: definiteMethod == "POST" ? defaultPOSTHeaders : defaultHeaders,
         body: jsonEncode(
             {"JsonRequest": Encrypter.encryptPost(jsonEncode(json))}),
         lastCall: lastCall,
       );
     }
-    return this._makeCall<T>(
-      Axios._getURL(_method, path, data: json),
+    return _makeCall<T>(
+      Axios._getURL(definiteMethod, path, data: json),
       model: model,
-      method: _method,
-      headers: _method == "POST" ? defaultPOSTHeaders : defaultHeaders,
+      method: definiteMethod,
+      headers: definiteMethod == "POST" ? defaultPOSTHeaders : defaultHeaders,
       lastCall: lastCall,
     );
   }
 
   static String _getURL(String method, String path, {dynamic data}) {
-    const URL = "https://wssd.axioscloud.it/webservice/AxiosCloud_Ws_Rest.svc/";
+    const url = "https://wssd.axioscloud.it/webservice/AxiosCloud_Ws_Rest.svc/";
     switch (method.toLowerCase()) {
       case "post":
-        return "$URL$path";
+        return "$url$path";
       default:
-        return "$URL$path?${Encrypter.encrypt(jsonEncode(data))}";
+        return "$url$path?${Encrypter.encrypt(jsonEncode(data))}";
     }
   }
 
   Future<Login> login() async {
     final url = Axios._getURL("GET", "Login", data: {
       "sAppName": "FAM_APP",
-      "sCodiceFiscale": this._account.schoolID,
-      "sUserName": this._account.userID,
-      "sPassword": this._account.userPassword,
+      "sCodiceFiscale": _account.schoolID,
+      "sUserName": _account.userID,
+      "sPassword": _account.userPassword,
       "sVendorToken": VENDOR_TOKEN
     });
     final res =
-        await this._makeCall<Login>(url, model: (map) => Login.fromJson(map));
-    this._session = res;
-    final students = await this.getStudents();
-    if (this.student == null) this.student = students[0];
-    this._students = students;
+        await _makeCall<Login>(url, model: (map) => Login.fromJson(map));
+    _session = res;
+    final students = await getStudents();
+    student ??= students[0];
+    _students = students;
 
     sessionStart = DateTime.now();
 
@@ -379,11 +366,10 @@ class Axios {
     //     "sPassword": this._account.userPassword,
     //     "sVendorToken": VENDOR_TOKEN
     // });
-    if (_students.length > 0 && !forceReload)
+    if (_students.isNotEmpty && !forceReload) {
       return _students;
-    else {
-      final res =
-          await this._makeAuthenticatedCall<dynamic>("GET_STUDENTI", (raw) {
+    } else {
+      final res = await _makeAuthenticatedCall<dynamic>("GET_STUDENTI", (raw) {
         return compute<List<dynamic>, List<Student>>(_studentsFromJSON, raw);
         // return Future.wait(
         //     list.map((e) => compute(Student.fromJson, e)).toList());
@@ -402,7 +388,7 @@ class Axios {
 
   Future<List<Assignment>> getAssignments() async {
     final List<Assignment> res =
-        await this._makeAuthenticatedCall<dynamic>("GET_COMPITI_MASTER", (raw) {
+        await _makeAuthenticatedCall<dynamic>("GET_COMPITI_MASTER", (raw) {
       return compute<List<dynamic>, List<Assignment>>(
           _assignmentsFromJSON, [raw, student!.studentUUID]);
       // List<JSON> list = List<JSON>.from(raw);
@@ -413,8 +399,8 @@ class Axios {
   }
 
   Future<List<Grade>> getGrades(Structural structural) async {
-    final List<APIGrades> res = await this
-        ._makeAuthenticatedCall<dynamic>("GET_VOTI_LIST_DETAIL", (raw) {
+    final List<APIGrades> res =
+        await _makeAuthenticatedCall<dynamic>("GET_VOTI_LIST_DETAIL", (raw) {
       return compute<List<dynamic>, List<APIGrades>>(_gradesFromJSON, raw);
     });
     final data =
@@ -432,7 +418,7 @@ class Axios {
   }
 
   Future<Structural> getStructural() async {
-    final JSON sJson = await this._makeAuthenticatedCall<JSON>(
+    final JSON sJson = await _makeAuthenticatedCall<JSON>(
       "GET_STRUCTURAL",
       (json) => json,
     );
@@ -444,7 +430,7 @@ class Axios {
   }
 
   Future<List<Period>> getPeriods() async {
-    final res = await this.getStructural();
+    final res = await getStructural();
     return res.periods[0].periods;
   }
 
@@ -461,14 +447,13 @@ class Axios {
                 period.endDate.millisecondsSinceEpoch;
       }, orElse: () => null);
     } catch (e) {
-      // print("error: $e");
       return null;
     }
   }
 
   Future<List<ReportCard>> getReportCards([bool forceReload = false]) async {
-    final res = await this
-        ._makeAuthenticatedCall<dynamic>("GET_PAGELLA_MASTER_V3", (raw) {
+    final res =
+        await _makeAuthenticatedCall<dynamic>("GET_PAGELLA_MASTER_V3", (raw) {
       return compute<List<dynamic>, List<ReportCard>>(
           _reportCardsFromJSON, raw);
       // List<JSON> list = List<JSON>.from(raw);
@@ -480,8 +465,8 @@ class Axios {
   }
 
   Future<List<Topic>> getTopics() async {
-    final List<Topic> res = await this
-        ._makeAuthenticatedCall<dynamic>("GET_ARGOMENTI_MASTER", (raw) {
+    final List<Topic> res =
+        await _makeAuthenticatedCall<dynamic>("GET_ARGOMENTI_MASTER", (raw) {
       return compute<List<dynamic>, List<Topic>>(
           _topicsFromJSON, [raw, student!.studentUUID]);
     });
@@ -489,8 +474,8 @@ class Axios {
   }
 
   Future<List<Bulletin>> getBulletins() async {
-    final List<APIBulletins> res = await this
-        ._makeAuthenticatedCall<dynamic>("GET_COMUNICAZIONI_MASTER", (raw) {
+    final List<APIBulletins> res = await _makeAuthenticatedCall<dynamic>(
+        "GET_COMUNICAZIONI_MASTER", (raw) {
       return compute<List<dynamic>, List<APIBulletins>>(
           _bulletinsFromJSON, raw);
       // List<JSON> list = List<JSON>.from(raw);
@@ -498,7 +483,6 @@ class Axios {
       //     list.map((e) => compute(APIBulletins.fromJson, e)).toList());
       // return (raw as List).map((e) => APIBulletins.fromJson(e)).toList();
     });
-    // print(res.map((e) => e.toJson()));
     return res
         .where((element) => element.idAlunno == student!.studentUUID)
         .map((e) => e.comunicazioni)
@@ -509,7 +493,7 @@ class Axios {
 
   Future<List<Note>> getNotes() async {
     final List<APINotes> res =
-        await this._makeAuthenticatedCall<dynamic>("GET_NOTE_MASTER", (raw) {
+        await _makeAuthenticatedCall<dynamic>("GET_NOTE_MASTER", (raw) {
       return compute<List<dynamic>, List<APINotes>>(_notesFromJSON, raw);
       // List<JSON> list = List<JSON>.from(raw);
       // return Future.wait(
@@ -526,7 +510,7 @@ class Axios {
   Future<List<Absence>> getAbsences() async {
     final structural = await getStructural();
     final List<APIAbsences> res =
-        await this._makeAuthenticatedCall<dynamic>("GET_ASSENZE_MASTER", (raw) {
+        await _makeAuthenticatedCall<dynamic>("GET_ASSENZE_MASTER", (raw) {
       return compute<List<dynamic>, List<APIAbsences>>(_absencesFromJSON, raw);
       // List<JSON> list = List<JSON>.from(raw);
       // return Future.wait(
@@ -545,8 +529,8 @@ class Axios {
   }
 
   Future<List<MaterialTeacherData>> getMaterials([String? uuid]) async {
-    final List<APIMaterials> res = await this
-        ._makeAuthenticatedCall<dynamic>("GET_MATERIALE_MASTER", (raw) {
+    final List<APIMaterials> res =
+        await _makeAuthenticatedCall<dynamic>("GET_MATERIALE_MASTER", (raw) {
       return compute<List<dynamic>, List<APIMaterials>>(
           _materialsFromJSON, raw);
       // List<JSON> list = List<JSON>.from(raw);
@@ -558,20 +542,20 @@ class Axios {
         .where((element) => element.idAlunno == (uuid ?? student!.studentUUID))
         .map((e) => e.docenti
           ..forEach((teacher) {
-            teacher.folders.forEach((folder) {
+            for (var folder in teacher.folders) {
               folder.setSession(this).setTeacher(teacher);
-            });
+            }
           }))
         .expand((i) => i)
         .toList();
   }
 
   Future<List<MeetingSchema>> getTeacherMeetings() async {
-    final List<MeetingSchema> res = await this
-        ._makeAuthenticatedCall<dynamic>("GET_COLLOQUI_MASTER", (raw) {
+    final List<MeetingSchema> res =
+        await _makeAuthenticatedCall<dynamic>("GET_COLLOQUI_MASTER", (raw) {
       return (raw as List).map((e) => MeetingSchema.fromJson(e)).toList();
     });
-    print(res);
+    Logger.d("$res");
     return res
         .where((element) => element.studentID == student!.studentUUID)
         // .map((e) => e.docenti
@@ -586,7 +570,7 @@ class Axios {
 
   Future<List<MaterialData>> getMaterialDetails(
       String teacherUUID, String folderUUID) async {
-    final List<MaterialData> res = await this._makeAuthenticatedCall<dynamic>(
+    final List<MaterialData> res = await _makeAuthenticatedCall<dynamic>(
       "GET_MATERIALE_DETAIL",
       (raw) {
         return (raw as List).map((e) => MaterialData.fromJson(e)).toList();
@@ -603,12 +587,12 @@ class Axios {
   }
 
   Future<List<Curriculum>> getCurriculum() async {
-    final List<Curriculum> res = await this._makeAuthenticatedCall<dynamic>(
+    final List<Curriculum> res = await _makeAuthenticatedCall<dynamic>(
       "GET_CURRICULUM_MASTER",
       (raw) {
         return compute<List<dynamic>, List<Curriculum>>(
           curriculaFromJSON,
-          [raw, this.student!.studentUUID],
+          [raw, student!.studentUUID],
         );
       },
       "RetrieveDataInformation",
@@ -623,10 +607,8 @@ class Axios {
 
   Future<List<Authorization>> getAuthorizations() async {
     final structural = await getStructural();
-    final List<APIAuthorizations> res = await this
-        ._makeAuthenticatedCall<dynamic>("GET_AUTORIZZAZIONI_MASTER", (raw) {
-      // print(jsonEncode(raw));
-      // return [];
+    final List<APIAuthorizations> res = await _makeAuthenticatedCall<dynamic>(
+        "GET_AUTORIZZAZIONI_MASTER", (raw) {
       return compute<List<dynamic>, List<APIAuthorizations>>(
           _authorizationsFromJSON, raw);
       // List<JSON> list = List<JSON>.from(raw);
@@ -656,26 +638,26 @@ class Axios {
     final assignments = await getAssignments();
 
     final List<String> res = <String>[];
-    topics.forEach((topic) {
+    for (var topic in topics) {
       if (topic.subject.isNotEmpty) {
         res.add(topic.subject);
       }
-    });
-    assignments.forEach((assignment) {
+    }
+    for (var assignment in assignments) {
       if (assignment.subject.isNotEmpty) {
         res.add(assignment.subject);
       }
-    });
+    }
 
     return res.toSet().toList();
   }
 
   Future<Bulletin> markBulletinAsRead(Bulletin bulletin) async {
-    String result = await this._makeAuthenticatedCall(
+    String result = await _makeAuthenticatedCall(
       "APP_PROCESS_QUEUE",
-      (_any) => "$_any",
+      (any) => "$any",
       "ExecuteCommand",
-      {"comunicazioneId": bulletin.id, "alunnoId": this.student?.studentUUID},
+      {"comunicazioneId": bulletin.id, "alunnoId": student?.studentUUID},
       "COMUNICAZIONI_READ",
     );
 
@@ -693,16 +675,16 @@ class Axios {
     // The official app doesn't care about the result
     // of this operation. So we don't either
     try {
-      await this._makeAuthenticatedCall(
+      await _makeAuthenticatedCall(
         "APP_PROCESS_QUEUE",
-        (_any) => "$_any",
+        (any) => "$any",
         "ExecuteCommand",
         {
           // "id": grade.id,
           "idVoto": grade.id,
           // "@i_vread_voto_id": int.parse(grade.id),
           // "i_vread_voto_id": int.parse(grade.id),
-          "pin": this._session?.pin ?? "",
+          "pin": _session?.pin ?? "",
           "idAlunno": student?.studentUUID,
         },
         "VOTO_VISTA",
@@ -715,7 +697,7 @@ class Axios {
 
     // if (read) {
     grade.seen = true;
-    grade.seenBy = "${this._session?.firstName} ${this._session?.lastName}";
+    grade.seenBy = "${_session?.firstName} ${_session?.lastName}";
     grade.seenOn = DateTime.now();
     // }
   }
@@ -726,9 +708,9 @@ class Axios {
 
     if (student == null) return false;
 
-    String result = await this._makeAuthenticatedCall(
+    String result = await _makeAuthenticatedCall(
       "APP_PROCESS_QUEUE",
-      (_any) => "$_any",
+      (any) => "$any",
       "ExecuteCommand",
       {
         "id": absence.id,
@@ -749,9 +731,9 @@ class Axios {
 
     if (student == null) return false;
 
-    String result = await this._makeAuthenticatedCall(
+    String result = await _makeAuthenticatedCall(
       "APP_PROCESS_DIRECT",
-      (_any) => "$_any",
+      (any) => "$any",
       "ExecuteCommand",
       {
         "idAlunno": student.studentUUID,
@@ -769,12 +751,12 @@ class Axios {
     final List<Bulletin> unread = bulletins.where((e) => !e.read).toList();
     if (unread.isEmpty) return true;
     for (final bulletin in unread) {
-      await this.markBulletinAsRead(bulletin);
+      await markBulletinAsRead(bulletin);
     }
     return true;
   }
 
   Future<Map<String, dynamic>> getWebVersionUrl() async {
-    return this._makeAuthenticatedCall("GET_URL_WEB", (json) => json);
+    return _makeAuthenticatedCall("GET_URL_WEB", (json) => json);
   }
 }

@@ -1,7 +1,6 @@
 name: axios_api
 description: A new Flutter package project.
 version: 0.0.1
-homepage:
 
 environment:
   sdk: '>=2.19.0 <3.0.0'
@@ -14,6 +13,8 @@ dependencies:
   html: ^0.15.1
   http: ^0.13.5
   json_annotation: ^4.8.0
+  logger:
+    path: ../logger
 
 dev_dependencies:
   flutter_test:
