@@ -5,11 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:axios_api/client.dart';
-import 'package:axios_api/entities/Absence/Absence.dart';
-import 'package:axios_api/entities/Grade/Grade.dart';
 import 'package:axios_api/entities/Structural/Structural.dart';
-import 'package:axios_api/entities/Topic/Topic.dart';
-import 'package:axios_api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/Charts/GradeTimeAverageChart.dart';
 import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
@@ -134,8 +130,8 @@ class _StatsPaneState extends State<StatsPane> {
         .toSet()
         .toList();
 
-    final primary = Theme.of(context).primaryColor;
-    final accent = Theme.of(context).accentColor;
+    final primary = Theme.of(context).colorScheme.primary;
+    final accent = Theme.of(context).colorScheme.secondary;
 
     final items = <Widget>[
       if (currentGrades.isNotEmpty)

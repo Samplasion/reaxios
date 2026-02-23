@@ -12,7 +12,7 @@ Curriculum _$CurriculumFromJson(Map<String, dynamic> json) => Curriculum(
       school: json['descScuola'] as String,
       course: json['descCorso'] as String,
       section: json['sezione'] as String,
-      classYear: json['classe'] as int,
+      classYear: (json['classe'] as num).toInt(),
       outcome: json['descEsito'] as String?,
       outcomeTypeRaw: json['tipoEsito'] as String,
       credits: json['credito'] as String,

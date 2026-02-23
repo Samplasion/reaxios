@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_linkify/flutter_linkify.dart';

@@ -37,7 +37,7 @@ class TopicListItem extends StatelessWidget {
       title: (topic.subject),
       subtitle: SelectableLinkify(
         text: "$hr${topic.topic.trim()}".trim(),
-        style: TextStyle(color: Theme.of(context).textTheme.caption?.color),
+        style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
         onOpen: (link) async {
           if (await canLaunch(link.url)) {
             await launch(link.url);

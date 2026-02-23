@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:axios_api/entities/Grade/Grade.dart';
-import 'package:axios_api/entities/Structural/Structural.dart';
 import 'package:axios_api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
@@ -94,9 +93,10 @@ class _GradeLineChartState extends State<GradeLineChart> {
               LineChartData(
                 lineTouchData: LineTouchData(
                   touchTooltipData: LineTouchTooltipData(
-                    tooltipBgColor: tooltipColor(
-                            Theme.of(context).cardTheme.color!, 0.1, 0.1)
-                        .withAlpha((0.65 * 255).round()),
+                    // TODO
+                    // tooltipBgColor: tooltipColor(
+                    //         Theme.of(context).cardTheme.color!, 0.1, 0.1)
+                    //     .withAlpha((0.65 * 255).round()),
                     getTooltipItems: (List<LineBarSpot> touchedSpots) {
                       return touchedSpots.map((LineBarSpot touchedSpot) {
                         return LineTooltipItem(
@@ -129,7 +129,7 @@ class _GradeLineChartState extends State<GradeLineChart> {
                               s,
                               style: Theme.of(context)
                                   .textTheme
-                                  .caption!
+                                  .bodySmall!
                                   .copyWith(fontWeight: FontWeight.w100),
                             );
                         if (value >= usefulGrades.length ||

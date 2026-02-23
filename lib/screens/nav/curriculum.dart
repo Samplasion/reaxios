@@ -8,7 +8,6 @@ import '../../components/LowLevel/GradientCircleAvatar.dart';
 import '../../components/LowLevel/Loading.dart';
 import '../../components/Utilities/ResourcefulCardListItem.dart';
 import '../../cubit/app_cubit.dart';
-import '../../timetable/structures/Settings.dart';
 
 class CurriculumPane extends StatelessWidget {
   const CurriculumPane({super.key});

@@ -86,7 +86,7 @@ class Bulletin extends Equatable implements AbstractJson {
       read: false,
       reply: "",
       textReply: "",
-      attachments: [],
+      attachments: const [],
     );
   }
 
@@ -116,7 +116,7 @@ class Bulletin extends Equatable implements AbstractJson {
       read: false,
       reply: "",
       textReply: "",
-      attachments: [
+      attachments: const [
         BulletinAttachment(
           kind: BulletinAttachmentKind.File,
           url: "https://google.com",
@@ -229,7 +229,7 @@ class BulletinKindSerializer implements JsonConverter<BulletinKind, String> {
 
   @override
   BulletinKind fromJson(String json) {
-    switch ("$json".toUpperCase()) {
+    switch (json.toUpperCase()) {
       case "D":
         return BulletinKind.Principal;
       case "S":
@@ -267,7 +267,7 @@ class BulletinAttachmentKindSerializer
 
   @override
   BulletinAttachmentKind fromJson(String json) {
-    switch ("$json".toUpperCase()) {
+    switch (json.toUpperCase()) {
       case "1":
         return BulletinAttachmentKind.File;
       case "O":

@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +9,6 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Meeting/Meeting.dart';
 import '../../components/LowLevel/Empty.dart';
-import '../../components/LowLevel/GradientCircleAvatar.dart';
-import '../../components/Utilities/ResourcefulCardListItem.dart';
 import '../../utils/utils.dart';
 
 class MeetingsPane extends StatefulWidget {

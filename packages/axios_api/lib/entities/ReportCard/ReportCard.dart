@@ -36,7 +36,7 @@ class ReportCard extends Equatable {
   @JsonKey(includeFromJson: false, includeToJson: false)
   DateTime? get dateRead {
     try {
-      final date = DateSerializer().fromJson(dateReadRaw);
+      final date = const DateSerializer().fromJson(dateReadRaw);
       // The serializer returns the epoch as a sentinel
       // value if the server-returned date is invalid
       if (date.millisecondsSinceEpoch == 0) return null;
@@ -76,7 +76,7 @@ class ReportCard extends Equatable {
 
   Map<String, dynamic> toJson() => _$ReportCardToJson(this);
 
-  static ReportCard empty() => ReportCard(
+  static ReportCard empty() => const ReportCard(
         studentUUID: "",
         periodUUID: "",
         periodCode: "",
@@ -93,7 +93,7 @@ class ReportCard extends Equatable {
         cardKind: "",
       );
 
-  static ReportCard test() => ReportCard(
+  static ReportCard test() => const ReportCard(
         studentUUID: "9d8f8f9d-b8b8-4b8b-b8b8-b8b8b8b8b8b8",
         periodUUID: "9d8f8f9d-b8b8-4b8b-b8b8-b8b8b8b8b8b8",
         periodCode: "abcde",
@@ -214,7 +214,7 @@ class ReportCardSubjectKindSerializer
 
   @override
   ReportCardSubjectKind fromJson(String json) {
-    switch ("$json".toLowerCase()) {
+    switch (json.toLowerCase()) {
       case "1":
         return ReportCardSubjectKind.Religion;
       case "4":

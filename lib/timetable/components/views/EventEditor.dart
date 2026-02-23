@@ -119,29 +119,34 @@ class _EventEditorState extends State<EventEditor> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                TypeAheadFormField<Event>(
-                  textFieldConfiguration: TextFieldConfiguration(
-                    controller: name,
-                    decoration: InputDecoration(
-                      hintText: context.loc.translate("timetable.editNameHint"),
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (val) {
-                      setState(() {
-                        generatedAbbreviation = generateAbbreviation(
-                          3,
-                          val,
-                          ignoreList: settings.getIgnoreList(),
-                        );
-                      });
-                    },
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return context.loc.translate("timetable.editNameError");
-                    }
+                TypeAheadField<Event>(
+                  builder: (context, controller, focusNode) {
+                    return TextFormField(
+                      controller: controller,
+                      focusNode: focusNode,
+                      decoration: InputDecoration(
+                        hintText:
+                            context.loc.translate("timetable.editNameHint"),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return context.loc
+                              .translate("timetable.editNameError");
+                        }
 
-                    return null;
+                        return null;
+                      },
+                      onChanged: (val) {
+                        setState(() {
+                          generatedAbbreviation = generateAbbreviation(
+                            3,
+                            val,
+                            ignoreList: settings.getIgnoreList(),
+                          );
+                        });
+                      },
+                    );
                   },
                   suggestionsCallback: (pattern) async {
                     return settings
@@ -150,7 +155,8 @@ class _EventEditorState extends State<EventEditor> {
                         .where((event) => event.name
                             .toLowerCase()
                             .contains(pattern.toLowerCase()))
-                        .toSet();
+                        .toSet()
+                        .toList();
                   },
                   itemBuilder: (BuildContext context, Event? itemData) {
                     if (itemData == null) return Container();
@@ -163,7 +169,7 @@ class _EventEditorState extends State<EventEditor> {
                       ),
                     );
                   },
-                  onSuggestionSelected: (Event suggestion) {
+                  onSelected: (Event suggestion) {
                     setState(() {
                       name.text = suggestion.name;
                       abbreviation.text = suggestion.abbr;
@@ -249,6 +255,7 @@ class _EventEditorState extends State<EventEditor> {
                             // return "Select a time sooner than the ending time.";
                             return context.loc
                                 .translate("timetable.editStartError");
+                          return null;
                         },
                         decoration: InputDecoration(
                           labelText:
@@ -272,6 +279,7 @@ class _EventEditorState extends State<EventEditor> {
                             // return "Select a time later than the starting time.";
                             return context.loc
                                 .translate("timetable.editEndError");
+                          return null;
                         },
                         decoration: InputDecoration(
                           labelText:

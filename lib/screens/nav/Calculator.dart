@@ -1,20 +1,16 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:reaxios/utils/average.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/enums/AverageMode.dart';
 import 'package:reaxios/utils/showDialogSuper.dart';
-import 'package:reaxios/timetable/structures/Settings.dart';
 
 import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Grade/Grade.dart';
 import 'package:axios_api/entities/Structural/Structural.dart';
 import '../../components/LowLevel/Empty.dart';
-import '../../components/LowLevel/Loading.dart';
 import '../../components/LowLevel/MaybeMasterDetail.dart';
 import '../../components/Utilities/AlertBottomSheet.dart';
 import '../../components/Utilities/BoldText.dart';
@@ -243,7 +239,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
                       Text(
                         grade.period,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       )
@@ -251,7 +247,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
                       Text(
                         context.loc.translate("calculator.unknownPeriod"),
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -400,7 +396,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
                   Container(
                     child: Text(
                       context.loc.translate("calculator.selectAtLeast1"),
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
                 ] else ...[
@@ -418,7 +414,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
                                       text: context.loc
                                           .translate("calculator.average"),
                                       style:
-                                          Theme.of(context).textTheme.caption,
+                                          Theme.of(context).textTheme.bodySmall,
                                     ),
                                     GradeText(context, grade: average),
                                   ],
@@ -436,7 +432,7 @@ class _CalculatorPaneState extends State<CalculatorPane>
                                   TextSpan(children: withIndicesAndWidgets),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.caption,
+                                  style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ),
                             ),
@@ -534,7 +530,7 @@ class _SubjectSelectorBottomSheetState
                     const SizedBox(height: 4),
                     Text(
                       context.dateToString(grade.date),
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
@@ -557,7 +553,7 @@ class _SubjectSelectorBottomSheetState
             Text(
               context.loc.translate("calculator.noGrades"),
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ],
@@ -642,6 +638,7 @@ class _NewGradeDialogState extends State<NewGradeDialog> {
                 if (grade < 1 || grade > 10) {
                   return context.loc.translate("calculator.gradeOutOfRange");
                 }
+                return null;
               },
             ),
           ],

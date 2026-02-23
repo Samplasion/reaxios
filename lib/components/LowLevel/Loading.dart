@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart' hide Gradient;
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:reaxios/components/LowLevel/Gradient.dart';
 import 'package:reaxios/utils/utils.dart';
 

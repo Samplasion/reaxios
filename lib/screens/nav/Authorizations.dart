@@ -85,7 +85,7 @@ class _AuthorizationsPaneState extends State<AuthorizationsPane> {
               child: MaxWidthContainer(
                 child: Text(
                   entry.key,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
             ),

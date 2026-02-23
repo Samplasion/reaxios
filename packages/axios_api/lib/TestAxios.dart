@@ -21,10 +21,12 @@ import 'package:axios_api/utils/utils.dart';
 class TestAxios implements Axios {
   TestAxios() : super();
 
+  @override
   ComputeImpl compute = defaultCompute;
 
   @override
   void Function() get onError => () => print("error");
+  @override
   set onError(void Function() onError) {}
 
   @override
@@ -73,7 +75,7 @@ class TestAxios implements Axios {
     return [
       Authorization.test()
         ..setSession(this)
-        ..setKinds(await this.getStructural())
+        ..setKinds(await getStructural())
         ..setPeriod("I QUADRIMESTRE")
     ];
   }
@@ -95,7 +97,7 @@ class TestAxios implements Axios {
   }
 
   @override
-  Future<List<Grade>> getGrades(Structural _structural) async {
+  Future<List<Grade>> getGrades(Structural structural) async {
     final now = DateTime.now();
     return [
       Grade.test(
@@ -103,14 +105,14 @@ class TestAxios implements Axios {
         "Lingua e Letteratura Italiana",
         "Vittoria Scassi",
         "Interrogazione sulla Divina Commedia",
-        date: now.subtract(Duration(days: 7)),
+        date: now.subtract(const Duration(days: 7)),
       ),
       Grade.test(
         6.5,
         "Disegno e Storia dell'Arte",
         "Ugo Spitaliere",
         "Esposizione PowerPoint sull'Arte Gotica",
-        date: now.subtract(Duration(days: 4)),
+        date: now.subtract(const Duration(days: 4)),
         kind: "Altro/Unico",
       ),
       Grade.test(
@@ -118,7 +120,7 @@ class TestAxios implements Axios {
         "Religione",
         "Marco Ghironi",
         "Partecipazione attiva",
-        date: now.subtract(Duration(days: 3)),
+        date: now.subtract(const Duration(days: 3)),
         kind: "Altro/Unico",
       ),
       Grade.test(
@@ -126,7 +128,7 @@ class TestAxios implements Axios {
         "Informatica",
         "Giuseppe Carollo",
         "Verifica sull'iterazione: ciclo while, do/while e for.",
-        date: now.subtract(Duration(days: 2)),
+        date: now.subtract(const Duration(days: 2)),
         kind: "Scritto",
       ),
       Grade.test(
@@ -134,14 +136,14 @@ class TestAxios implements Axios {
         "Scienze Naturali",
         "Giovanni Pizzi",
         "Interrogazione sulla meccanica quantistica",
-        date: now.subtract(Duration(days: 9)),
+        date: now.subtract(const Duration(days: 9)),
       ),
       Grade.test(
         7.50,
         "Matematica",
         "Alessandro Bresciani",
         "Verifica sulle funzioni",
-        date: now.subtract(Duration(days: 18)),
+        date: now.subtract(const Duration(days: 18)),
         kind: "Scritto",
       ),
       Grade.test(
@@ -149,7 +151,7 @@ class TestAxios implements Axios {
         "Informatica",
         "Giuseppe Carollo",
         "Interrogazione sull'iterazione",
-        date: now.subtract(Duration(days: 12)),
+        date: now.subtract(const Duration(days: 12)),
       )
     ]..sort((a, b) => a.date.compareTo(b.date));
   }
@@ -178,7 +180,7 @@ class TestAxios implements Axios {
 
   @override
   Future<List<ReportCard>> getReportCards([bool forceReload = false]) async {
-    final grades = await this.getGrades(await getStructural());
+    final grades = await getGrades(await getStructural());
     return [
       ReportCard(
         studentUUID: "634F8D7A-0717-416D-A9E5-8A36BAA36B56",
@@ -225,14 +227,14 @@ class TestAxios implements Axios {
     return Structural(
       periods: [
         Periods(
-          schoolID: this.student!.schoolUUID,
-          periods: await this.getPeriods(),
+          schoolID: student!.schoolUUID,
+          periods: await getPeriods(),
         ),
       ],
       gradeKinds: [
         GradeKinds(
-          schoolID: this.student!.schoolUUID,
-          kinds: [
+          schoolID: student!.schoolUUID,
+          kinds: const [
             GradeKind(
               kind: "Orale",
               code: "O",
@@ -241,13 +243,13 @@ class TestAxios implements Axios {
           ],
         ),
       ],
-      absenceKinds: [
+      absenceKinds: const [
         SimpleKind(kind: "C", desc: "desc"),
       ],
-      authorizationKinds: [
+      authorizationKinds: const [
         SimpleKind(kind: "C", desc: "desc"),
       ],
-      justificationKinds: [
+      justificationKinds: const [
         SimpleKind(kind: "C", desc: "desc"),
       ],
     );
@@ -255,7 +257,7 @@ class TestAxios implements Axios {
 
   @override
   Future<List<Student>> getStudents([bool forceReload = false]) async {
-    return this.students;
+    return students;
   }
 
   @override
@@ -265,7 +267,7 @@ class TestAxios implements Axios {
 
   @override
   Future<List<String>> getSubjects() async {
-    return (await this.getGrades(await getStructural()))
+    return (await getGrades(await getStructural()))
         .map((grade) => grade.subject)
         .toList()
         .toSet()
@@ -277,8 +279,8 @@ class TestAxios implements Axios {
       id: "D840640D-CF1A-416E-88BB-93EF40839E29",
       topic: desc,
       subject: subj,
-      date: _fakeDate.subtract(Duration(days: 7)),
-      publicationDate: _fakeDate.subtract(Duration(days: 7)),
+      date: _fakeDate.subtract(const Duration(days: 7)),
+      publicationDate: _fakeDate.subtract(const Duration(days: 7)),
       lessonHour: (Random().nextInt(5) + 1).toString(),
       flags: "",
     );
@@ -327,7 +329,7 @@ class TestAxios implements Axios {
       userID: "12456",
       password: "passw0rd!",
       kind: "studente",
-      birthday: new DateTime(2004, 04, 21),
+      birthday: DateTime(2004, 04, 21),
     );
   }
 
@@ -343,7 +345,7 @@ class TestAxios implements Axios {
   }
 
   @override
-  List<Student> get students => [this.student!];
+  List<Student> get students => [student!];
 
   @override
   Future<List<MeetingSchema>> getTeacherMeetings() async {

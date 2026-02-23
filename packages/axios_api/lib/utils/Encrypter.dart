@@ -391,7 +391,7 @@ class Encrypter {
     -1,
     -1
   ];
-  static final String b64 =
+  static const String b64 =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
   static List<int> getRC4() {

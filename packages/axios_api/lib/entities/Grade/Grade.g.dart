@@ -20,7 +20,7 @@ Grade _$GradeFromJson(Map<String, dynamic> json) => Grade(
       seen: const BooleanSerializer().fromJson(json['vistato'] as String),
       seenBy: json['vistatoUtente'] as String?,
       seenOn: const DateSerializer().fromJson(json['vistatoData'] as String),
-    )..period = json['period'] as String;
+    )..period = json['period'] as String? ?? '';
 
 Map<String, dynamic> _$GradeToJson(Grade instance) => <String, dynamic>{
       'idVoto': instance.id,

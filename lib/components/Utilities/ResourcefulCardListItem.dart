@@ -94,7 +94,7 @@ class _ResourcefulCardListItemState extends State<ResourcefulCardListItem> {
                         .merge(Theme.of(context).textTheme.labelLarge)
                         .merge(
                           TextStyle(
-                            color: Theme.of(context).textTheme.caption!.color,
+                            color: Theme.of(context).textTheme.bodySmall!.color,
                           ),
                         ),
                   ),
@@ -109,12 +109,12 @@ class _ResourcefulCardListItemState extends State<ResourcefulCardListItem> {
                           ?.copyWith(
                             fontFamily: Theme.of(context)
                                 .textTheme
-                                .bodyText2
+                                .bodyMedium
                                 ?.fontFamily,
                           )
                           .merge(
                             TextStyle(
-                              color: Theme.of(context).textTheme.caption!.color,
+                              color: Theme.of(context).textTheme.bodySmall!.color,
                             ),
                           ),
                     ),
@@ -130,12 +130,12 @@ class _ResourcefulCardListItemState extends State<ResourcefulCardListItem> {
                           ?.copyWith(
                             fontFamily: Theme.of(context)
                                 .textTheme
-                                .bodyText2
+                                .bodyMedium
                                 ?.fontFamily,
                           )
                           .merge(
                             TextStyle(
-                              color: Theme.of(context).textTheme.caption!.color,
+                              color: Theme.of(context).textTheme.bodySmall!.color,
                             ),
                           ),
                     ),

@@ -51,6 +51,7 @@ class SubjectSettingsView extends StatelessWidget {
                   return context.loc.translate("grades.invalidObjective");
                 }
               }
+              return null;
             },
             onChange: (String val) {
               if (val.isNotEmpty) {

@@ -96,9 +96,9 @@ class Alert extends StatelessWidget {
                     child: Theme(
                       data: ThemeData(
                         textTheme: Theme.of(context).textTheme.copyWith(
-                              bodyText2: Theme.of(context)
+                              bodyMedium: Theme.of(context)
                                   .textTheme
-                                  .bodyText2!
+                                  .bodyMedium!
                                   .copyWith(
                                     color: color.foreground,
                                   ),

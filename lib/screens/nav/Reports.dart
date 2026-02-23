@@ -88,7 +88,7 @@ class _NotesPaneState extends State<NotesPane> {
                 child: MaxWidthContainer(
                   child: Text(
                     entries[i].key,
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
               ),

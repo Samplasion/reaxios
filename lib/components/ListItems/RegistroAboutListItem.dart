@@ -12,7 +12,7 @@ class RegistroAboutListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final TextStyle textStyle = theme.textTheme.bodyText2!;
+    final TextStyle textStyle = theme.textTheme.bodyMedium!;
 
     final appInfo = context.watch<AppInfoStore>();
     final app = appInfo.packageInfo;

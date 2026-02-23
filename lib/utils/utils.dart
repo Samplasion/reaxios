@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:axios_api/entities/Grade/Grade.dart';
-import 'package:axios_api/entities/Login/Login.dart';
 import 'package:axios_api/utils/utils.dart' as axios_utils;
 import 'package:share_plus/share_plus.dart';
 
@@ -677,7 +676,7 @@ Future shareArbitraryData({
         throw TypeError();
       }
 
-      await Share.shareFiles([filePath]);
+      await Share.shareXFiles([XFile(filePath)]);
     }
   } else {
     if (data is String) {

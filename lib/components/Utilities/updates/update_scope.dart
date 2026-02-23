@@ -23,7 +23,8 @@ class UpdateScope extends StatelessWidget {
     if (settings.getUpdateNagMode() != UpdateNagMode.alert) return child;
 
     Upgrader upgrader = getAppcastConfig();
-    if (upgrader.appcastConfig == null) {
+    if (upgrader.storeController.getUpgraderStore(upgrader.state.upgraderOS) ==
+        null) {
       return child;
     }
 

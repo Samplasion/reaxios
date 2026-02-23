@@ -57,7 +57,7 @@ class AbsenceListItem extends StatelessWidget {
           ? MarkdownBody(
               data: justifiedText,
               styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Theme.of(context).textTheme.caption!.color),
+                p: TextStyle(color: Theme.of(context).textTheme.bodySmall!.color),
               ),
             )
           : Container(),

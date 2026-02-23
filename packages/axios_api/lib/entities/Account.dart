@@ -7,15 +7,16 @@ class AxiosAccount {
 
   const AxiosAccount(this.schoolID, this.userID, this.userPassword);
 
+  @override
   toString() {
-    return "AxiosInstance(school: ${this.schoolID}, uid: ${this.userID}, password: ${this.userPassword})";
+    return "AxiosInstance(school: $schoolID, uid: $userID, password: $userPassword)";
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "schoolID": this.schoolID,
-      "userID": this.userID,
-      "userPassword": Encrypter.encrypt(this.userPassword),
+      "schoolID": schoolID,
+      "userID": userID,
+      "userPassword": Encrypter.encrypt(userPassword),
     };
   }
 

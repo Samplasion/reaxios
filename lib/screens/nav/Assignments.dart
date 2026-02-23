@@ -229,7 +229,7 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         entries[i].key,
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
                   ),

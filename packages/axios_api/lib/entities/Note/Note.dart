@@ -22,10 +22,11 @@ class Note extends Equatable implements AbstractJson {
   @NoteKindSerializer()
   NoteKind rawKind;
   NoteKind get kind {
-    if (content.startsWith(RegExp(r"<.+>Comunicazione: </.+>")))
+    if (content.startsWith(RegExp(r"<.+>Comunicazione: </.+>"))) {
       return NoteKind.Note;
-    else
+    } else {
       return NoteKind.Notice;
+    }
   }
 
   @JsonKey(name: "idNota")
@@ -79,7 +80,7 @@ class Note extends Equatable implements AbstractJson {
   }
 
   static test() {
-    final content = "L'alunno interviene spesso durante la lezione in maniera "
+    const content = "L'alunno interviene spesso durante la lezione in maniera "
         "inappropriata. Gli è' stato suggerito di non farlo poichè tali "
         "interventi sono sempre poco chiari, proiettati su aspetti non "
         "strettamente attinenti all'obiettivo della lezione e soprattutto "
@@ -149,7 +150,7 @@ class NoteKindSerializer implements JsonConverter<NoteKind, String> {
   NoteKind fromJson(String json) {
     // print("Tipo nota");
     // print(json);
-    switch ("$json".toUpperCase()) {
+    switch (json.toUpperCase()) {
       case "C":
         return NoteKind.Note;
       default:

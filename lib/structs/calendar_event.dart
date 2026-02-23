@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 
 import 'package:axios_api/entities/Assignment/Assignment.dart';
 import 'package:axios_api/entities/Topic/Topic.dart';
 import '../components/ListItems/AssignmentListItem.dart';
 import '../components/ListItems/CustomCalendarEventListItem.dart';
 import '../components/ListItems/TopicListItem.dart';
-import '../components/LowLevel/GradientCircleAvatar.dart';
-import '../components/Utilities/CardListItem.dart';
 
 enum EventType {
   assignment,

@@ -74,7 +74,7 @@ class __LoginScreenPage1State extends State<_LoginScreenPage1> {
                     ),
                     Text(
                       context.loc.translate("login.selectSchool"),
-                      style: Theme.of(context).textTheme.headline5,
+                      style: Theme.of(context).textTheme.headlineSmall,
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -246,7 +246,7 @@ class __LoginScreenPage2State extends State<_LoginScreenPage2> {
                         cubit.school?.title ?? "",
                         cubit.school?.name ?? ""
                       ]),
-                      style: Theme.of(context).textTheme.headline5,
+                      style: Theme.of(context).textTheme.headlineSmall,
                       textAlign: TextAlign.center,
                     ),
                   ],

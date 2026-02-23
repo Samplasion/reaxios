@@ -13,21 +13,19 @@ Future<void> sendNotification(
       FlutterLocalNotificationsPlugin();
   final AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings(androidIcon);
-  final IOSInitializationSettings initializationSettingsIOS =
-      IOSInitializationSettings(
+  final DarwinInitializationSettings initializationSettingsIOS =
+      DarwinInitializationSettings(
     onDidReceiveLocalNotification: (_, __, ___, ____) {},
   );
-  final MacOSInitializationSettings initializationSettingsMacOS =
-      MacOSInitializationSettings();
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
-    macOS: initializationSettingsMacOS,
+    macOS: initializationSettingsIOS,
   );
 
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
-    onSelectNotification: notificationPayload,
+    onDidReceiveNotificationResponse: (res) => notificationPayload(res.payload),
   );
 
   final NotificationDetails platformChannelSpecifics = NotificationDetails(

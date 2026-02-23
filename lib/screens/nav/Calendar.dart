@@ -12,13 +12,9 @@ import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Assignment/Assignment.dart';
 import 'package:axios_api/entities/Structural/Structural.dart';
 import 'package:axios_api/entities/Topic/Topic.dart';
-import 'package:reaxios/components/ListItems/AssignmentListItem.dart';
-import 'package:reaxios/components/ListItems/TopicListItem.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
-import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/LowLevel/MaybeMasterDetail.dart';
-import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Views/new_calendar_event.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
@@ -27,7 +23,6 @@ import 'package:reaxios/structs/calendar_event.dart';
 import 'package:reaxios/timetable/extensions.dart'
     show ColorExtension, RangeExtension;
 import 'package:reaxios/timetable/structures/Settings.dart';
-import 'package:reaxios/utils/tuple.dart';
 import 'package:reaxios/utils/utils.dart' hide ColorUtils;
 import 'package:styled_widget/styled_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -654,7 +649,8 @@ class _CalendarPaneState extends State<CalendarPane> {
       return e.date.isSameDay(date);
     }).toList();
 
-    todaysAssignments.sort((a1, a2) => a1.lessonHour.compareTo(a2.lessonHour));
+    todaysAssignments
+        .sort((a1, a2) => (a1.lessonHour ?? 99).compareTo(a2.lessonHour ?? 99));
     todaysTopics.sort((t1, t2) => t1.lessonHour.compareTo(t2.lessonHour));
 
     if (todaysCalendarEvents.isNotEmpty) {
@@ -662,7 +658,7 @@ class _CalendarPaneState extends State<CalendarPane> {
         Text(
           context.loc.translate("calendar.customEvents"),
           style: TextStyle(
-            fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
+            fontFamily: Theme.of(context).textTheme.titleLarge!.fontFamily,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -706,7 +702,7 @@ class _CalendarPaneState extends State<CalendarPane> {
         Text(
           context.loc.translate("calendar.homework"),
           style: TextStyle(
-            fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
+            fontFamily: Theme.of(context).textTheme.titleLarge!.fontFamily,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -722,7 +718,7 @@ class _CalendarPaneState extends State<CalendarPane> {
         Text(
           context.loc.translate("calendar.topics"),
           style: TextStyle(
-            fontFamily: Theme.of(context).textTheme.headline6!.fontFamily,
+            fontFamily: Theme.of(context).textTheme.titleLarge!.fontFamily,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),

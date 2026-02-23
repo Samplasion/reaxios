@@ -13,7 +13,7 @@ Future<Uint8List?> captureWidget(
       globalKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
 
   final RenderView renderView = RenderView(
-    window: ui.window,
+    view: View.of(context),
     child: RenderPositionedBox(
         alignment: Alignment.center, child: repaintBoundary),
     configuration: ViewConfiguration(

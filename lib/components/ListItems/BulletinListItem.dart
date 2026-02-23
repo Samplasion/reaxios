@@ -82,7 +82,7 @@ class BulletinListItem extends StatelessWidget {
           : Linkify(
               text: bulletin.desc.trim(),
               style:
-                  TextStyle(color: Theme.of(context).textTheme.caption?.color),
+                  TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
               onOpen: (link) async {
                 if (await canLaunch(link.url)) {
                   await launch(link.url);

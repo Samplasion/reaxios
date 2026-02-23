@@ -21,7 +21,6 @@ import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/GradeSubjectView.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';
 import 'package:reaxios/utils/utils.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -357,7 +356,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
                       GradeText(context, grade: average),
                       TextSpan(text: ")"),
                     ],
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
               ),
@@ -440,7 +439,7 @@ class _GradesPaneState extends ReloadableState<GradesPane>
           title: subject,
           subtitle: RichText(
             text: TextSpan(
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
               children: [
                 if (!isEmpty) ...[
                   TextSpan(

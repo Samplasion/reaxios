@@ -42,7 +42,7 @@ class NoteListItem extends StatelessWidget {
       title: note.teacher,
       subtitle: SelectableLinkify(
         text: note.cleanContent.trim(),
-        style: TextStyle(color: Theme.of(context).textTheme.caption?.color),
+        style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
         onOpen: (link) async {
           if (await canLaunchUrlString(link.url)) {
             await launchUrlString(link.url);

@@ -124,8 +124,8 @@ class Authorization extends Equatable implements AbstractJson {
   }
 
   Authorization setKinds(Structural structural) {
-    this.kind = structural.authorizationKinds
-        .firstWhere((element) => element.kind == this.rawKind,
+    kind = structural.authorizationKinds
+        .firstWhere((element) => element.kind == rawKind,
             orElse: () => SimpleKind.empty())
         .desc;
     return this;

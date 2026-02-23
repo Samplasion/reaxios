@@ -39,7 +39,7 @@ class _CardListItemState extends State<CardListItem> {
       child: Text(
         widget.title,
         style: TextStyle(
-          fontFamily: theme.textTheme.headline6!.fontFamily,
+          fontFamily: theme.textTheme.titleLarge!.fontFamily,
           fontWeight: FontWeight.bold,
           fontSize: 16,
         ).merge(widget.titleStyle),

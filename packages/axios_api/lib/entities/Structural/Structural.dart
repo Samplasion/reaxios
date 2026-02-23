@@ -92,7 +92,7 @@ class SimpleKind extends Equatable {
   const SimpleKind({required this.kind, required this.desc});
 
   static SimpleKind empty() {
-    return SimpleKind(kind: "", desc: "");
+    return const SimpleKind(kind: "", desc: "");
   }
 
   factory SimpleKind.fromJson(Map<String, dynamic> json) =>

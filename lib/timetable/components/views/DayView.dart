@@ -252,11 +252,11 @@ class _DayViewState extends State<DayView> with TickerProviderStateMixin {
             child: Icon(
               Icons.access_time,
               size: 64,
-              color: Theme.of(context).textTheme.caption!.color,
+              color: Theme.of(context).textTheme.bodySmall!.color,
             ),
           ),
           Text(context.loc.translate("timetable.emptyDay"),
-              style: Theme.of(context).textTheme.caption),
+              style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );

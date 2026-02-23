@@ -5,7 +5,7 @@ class BooleanSerializer implements JsonConverter<bool, String> {
 
   @override
   bool fromJson(String json) {
-    switch ("$json".toLowerCase()) {
+    switch (json.toLowerCase()) {
       case "s":
       case "si":
       case "true":

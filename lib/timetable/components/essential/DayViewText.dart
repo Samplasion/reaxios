@@ -11,7 +11,7 @@ class DayViewText extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8.0),
       child: Text(
         text.toUpperCase(),
-        style: Theme.of(context).textTheme.caption,
+        style: Theme.of(context).textTheme.bodySmall,
         textAlign: TextAlign.center,
         maxLines: 1,
       ),

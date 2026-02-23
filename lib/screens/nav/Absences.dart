@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -9,7 +8,6 @@ import 'package:axios_api/entities/Student/Student.dart';
 import 'package:reaxios/components/ListItems/AbsenceListItem.dart';
 import 'package:reaxios/components/Utilities/Alert.dart';
 import 'package:reaxios/components/LowLevel/Empty.dart';
-import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
 import 'package:reaxios/utils/utils.dart';
@@ -95,7 +93,7 @@ class _AbsencesPaneState extends State<AbsencesPane> {
               child: MaxWidthContainer(
                 child: Text(
                   entry.key,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
             ),

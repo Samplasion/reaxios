@@ -52,7 +52,7 @@ MeetingDate _$MeetingDateFromJson(Map<String, dynamic> json) => MeetingDate(
       date: json['data'] as String,
       rawSeats: json['posti'] as String,
       rawTimes: json['orari'] as String,
-      rawBooked: json['prenotazione'] as int,
+      rawBooked: (json['prenotazione'] as num).toInt(),
       mode: json['modalita'] as String,
     );
 

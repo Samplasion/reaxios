@@ -14,7 +14,7 @@ class EmptyUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final caption = Theme.of(context).textTheme.caption;
+    final caption = Theme.of(context).textTheme.bodySmall;
     return Container(
       child: Center(
         child: Column(

@@ -17,10 +17,10 @@ class DateSerializer implements JsonConverter<DateTime, String> {
       seconds = int.parse(timeString.split(":")[2]);
     }
 
-    if (dateParts.length < 3) return new DateTime.fromMillisecondsSinceEpoch(0);
+    if (dateParts.length < 3) return DateTime.fromMillisecondsSinceEpoch(0);
 
     // month is 0-based, that's why we need dataParts[1] - 1
-    return new DateTime(int.parse(dateParts[2]), int.parse(dateParts[1]),
+    return DateTime(int.parse(dateParts[2]), int.parse(dateParts[1]),
         int.parse(dateParts[0]), hours, minutes, seconds);
   }
 

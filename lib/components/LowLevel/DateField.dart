@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:reaxios/timetable/structures/DayTime.dart';
 import 'package:reaxios/utils/utils.dart';
 
 class DateField extends StatefulWidget {

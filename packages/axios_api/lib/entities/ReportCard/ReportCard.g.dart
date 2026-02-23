@@ -52,7 +52,7 @@ ReportCardSubject _$ReportCardSubjectFromJson(Map<String, dynamic> json) =>
       kind: const ReportCardSubjectKindSerializer()
           .fromJson(json['tipoMat'] as String),
       recoveryKind: json['tipoRecupero'] as String,
-      absences: (json['assenze'] as String?) ?? "0",
+      absences: json['assenze'] as String? ?? '0',
       gradeAverage: (json['mediaVoti'] as num?)?.toDouble() ?? 0,
       details: (json['detail'] as List<dynamic>)
           .map((e) =>

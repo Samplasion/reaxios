@@ -138,7 +138,7 @@ class MaterialFolderData extends Equatable implements AbstractJson {
 
   Future<List<MaterialData>> getMaterials() async {
     return await session.getMaterialDetails(
-        this.teacher.id, this.id.toString());
+        teacher.id, id.toString());
   }
 
   @override
@@ -203,7 +203,7 @@ class MaterialTeacherData extends Equatable implements AbstractJson {
   }
 
   static MaterialTeacherData test() {
-    return MaterialTeacherData(
+    return const MaterialTeacherData(
       id: 'c95e625d-edf8-4f86-84a6-d421c27fc445',
       name: 'Giovanni',
       subjects: 'Matematica, Fisica, Chimica',
@@ -212,7 +212,7 @@ class MaterialTeacherData extends Equatable implements AbstractJson {
   }
 
   static MaterialTeacherData empty() {
-    return MaterialTeacherData(
+    return const MaterialTeacherData(
       id: '',
       name: '',
       subjects: '',

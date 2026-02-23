@@ -63,12 +63,12 @@ class _EventCardState extends State<EventCard> {
                 children: [
                   Text(
                     "No events for today",
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   SizedBox(height: 16),
                   Text(
                     "Your day is free.",
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
               ),
@@ -115,20 +115,20 @@ class _EventCardState extends State<EventCard> {
         children: [
           Text(
             "${widget.event!.start}-${widget.event!.end}",
-            style: Theme.of(context).textTheme.bodyText2!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: widget.event!.color.contrastColor,
                 ),
           ),
           Text(
             widget.event!.name,
-            style: Theme.of(context).textTheme.headline6!.copyWith(
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
                   color: widget.event!.color.contrastColor,
                 ),
           ),
           SizedBox(height: 8),
           Text(
             "Starts in ${printDuration(widget.event!.start.toDateTime().difference(DateTime.now()), tersity: DurationTersity.minute, delimiter: ' and ')}",
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: widget.event!.color.contrastColor,
                 ),
           ),
@@ -151,20 +151,20 @@ class _EventCardState extends State<EventCard> {
         children: [
           Text(
             "${widget.event!.start}-${widget.event!.end}",
-            style: Theme.of(context).textTheme.bodyText2!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: widget.event!.color.contrastColor,
                 ),
           ),
           Text(
             widget.event!.name,
-            style: Theme.of(context).textTheme.headline6!.copyWith(
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
                   color: widget.event!.color.contrastColor,
                 ),
           ),
           SizedBox(height: 8),
           Text(
             "Ends in ${printDuration(widget.event!.end.toDateTime().difference(DateTime.now()), tersity: DurationTersity.minute, delimiter: ' and ')}",
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: widget.event!.color.contrastColor,
                 ),
           ),

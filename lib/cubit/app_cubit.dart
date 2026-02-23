@@ -74,10 +74,9 @@ class AppCubit extends HydratedCubit<AppState> {
 
   Structural? get structural => state.structural;
   List<Period> get periods => structural?.periods[0].periods ?? [];
-  Period? get currentPeriod =>
-      // ignore: unnecessary_cast
-      (periods as List<Period?>)
-          .firstWhere((period) => period!.isCurrent(), orElse: () => null);
+  Period? get currentPeriod => periods
+      .cast<Period?>()
+      .firstWhere((period) => period!.isCurrent(), orElse: () => null);
 
   Student? get student => state.student ?? state.axios?.student;
 

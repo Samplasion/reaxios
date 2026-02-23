@@ -7,7 +7,7 @@ part of 'Material.dart';
 // **************************************************************************
 
 MaterialData _$MaterialDataFromJson(Map<String, dynamic> json) => MaterialData(
-      id: json['idContent'] as int,
+      id: (json['idContent'] as num).toInt(),
       description: json['descrizione'] as String,
       rawText: json['testo'] as String,
       date: const DateSerializer().fromJson(json['data'] as String),

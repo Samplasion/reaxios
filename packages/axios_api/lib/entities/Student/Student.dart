@@ -73,7 +73,7 @@ class Student implements AbstractJson {
   static test() {
     return Student(
       avatar: "",
-      birthday: new DateTime(2004, 04, 21),
+      birthday: DateTime(2004, 04, 21),
       id: 1,
       firstName: "Mario",
       lastName: "Rossi",

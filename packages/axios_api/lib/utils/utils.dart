@@ -56,29 +56,31 @@ String getHumanMonth(int mon) {
 
 String pad(n, [int digits = 2]) {
   final val = pow(10, digits - 1);
-  if (n < val)
+  if (n < val) {
     return "${"0"}$n";
-  else
+  } else {
     return n.toString();
+  }
 }
 
 String gradeToString(dynamic grade) {
   if (grade is String && grade.trim().isEmpty) return "";
 
   double dblGrade = 0;
-  if (isNaN(double.tryParse('$grade'.replaceAll(",", ".")) ?? double.nan))
+  if (isNaN(double.tryParse('$grade'.replaceAll(",", ".")) ?? double.nan)) {
     return '$grade';
-  else
+  } else {
     dblGrade = double.parse('$grade'.replaceAll(",", "."));
+  }
 
   if (dblGrade == 10) return '10';
 
   if (dblGrade.floorToDouble() == dblGrade) return '${dblGrade.toInt()}';
 
   final dec = dblGrade % 1;
-  if (dec >= 0 && dec <= 0.125)
+  if (dec >= 0 && dec <= 0.125) {
     return '${dblGrade.floor().toInt()}';
-  else if (dec > 0.125 && dec <= 0.375)
+  } else if (dec > 0.125 && dec <= 0.375)
     return '${dblGrade.floor().toInt()}+';
   else if (dec > 0.375 && dec <= 0.625)
     return '${dblGrade.floor().toInt()}½';
@@ -93,10 +95,11 @@ String gradeToLetter(dynamic grade) {
   if (grade is String && grade.trim() == "") return '';
 
   double dblGrade = 0;
-  if (isNaN(double.tryParse('$grade'.replaceAll(",", ".")) ?? double.nan))
+  if (isNaN(double.tryParse('$grade'.replaceAll(",", ".")) ?? double.nan)) {
     return '$grade';
-  else
+  } else {
     dblGrade = double.parse('$grade'.replaceAll(",", "."));
+  }
 
   if (dblGrade == 0) return '$grade';
 
@@ -106,9 +109,9 @@ String gradeToLetter(dynamic grade) {
 
   debugPrint(percent.toString());
 
-  if (percent >= 97)
+  if (percent >= 97) {
     return 'A+';
-  else if (percent >= 93)
+  } else if (percent >= 93)
     return 'A';
   else if (percent >= 90)
     return 'A-';
@@ -139,7 +142,7 @@ String gradeToLetter(dynamic grade) {
 }
 
 bool isNaN(double d) {
-  return d != d || d == double.nan;
+  return d != d;
 }
 
 double gradeAverage(List<Grade> grades) {
@@ -179,14 +182,16 @@ Color getContrastText(
 }
 
 String titleCase(String str) {
-  final tc = (str) => str[0].toUpperCase() + str.substring(1).toLowerCase();
+  tc(str) => str[0].toUpperCase() + str.substring(1).toLowerCase();
   return str.split(" ").map(tc).join(" ");
 }
 
 extension ListRepeat<T> on List<T> {
   List<T> repeat(int times) {
     List<T> source = this;
-    for (int time = 0; time < times; time++) source = source + this;
+    for (int time = 0; time < times; time++) {
+      source = source + this;
+    }
     return source;
   }
 }

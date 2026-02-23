@@ -1,4 +1,3 @@
-// @dart=2.9
 // ignore_for_file: deprecated_member_use
 
 import 'dart:io';
@@ -35,7 +34,7 @@ import 'utils/storage.dart' as s;
 
 class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext context) {
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
@@ -56,13 +55,13 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   await S.Settings.init();
 
-  final storage = await HydratedStorage.build(
+  HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
         : await getApplicationDocumentsDirectory(),
   );
-  HydratedBlocOverrides.runZoned(
-    () => runApp(RestartWidget(
+  runApp(
+    RestartWidget(
       child: BlocProvider(
         create: (context) => AppCubit(),
         child: MultiProvider(
@@ -80,8 +79,7 @@ void main() async {
           ],
         ),
       ),
-    )),
-    storage: storage,
+    ),
   );
 
   if (Platform.isAndroid) {
@@ -105,7 +103,7 @@ ThemeMode getThemeMode(String tm) {
 }
 
 class RegistroElettronicoApp extends StatefulWidget {
-  RegistroElettronicoApp({Key key}) : super(key: key);
+  RegistroElettronicoApp({super.key});
 
   @override
   _RegistroElettronicoAppState createState() => _RegistroElettronicoAppState();
@@ -125,8 +123,11 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
     final themeMode = settings.getThemeMode();
     return ColorBuilder(
       builder: (light, dark) {
+        light ??= ColorScheme.light();
+        dark ??= ColorScheme.dark();
+
         final useMaterial3 = true;
-        final primary = dark.primary, accent = dark.secondary;
+        final primary = dark.primary /* , accent = dark.secondary */;
 
         ThemeData getThemeData(ColorScheme scheme) {
           final cardTheme = CardTheme(
@@ -139,7 +140,6 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             colorScheme: scheme,
             useMaterial3: useMaterial3,
             primaryColor: primary,
-            accentColor: accent,
             tabBarTheme: TabBarTheme(
               indicatorSize: TabBarIndicatorSize.label,
               indicator: MaterialDesignIndicator(
@@ -181,8 +181,8 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             builder: (context, _) {
               return MaterialApp(
                 title: 'Registro Axios',
-                theme: getThemeData(light),
-                darkTheme: getThemeData(dark),
+                theme: getThemeData(light!),
+                darkTheme: getThemeData(dark!),
                 themeMode: getThemeMode(themeMode),
                 // home: MyHomePage(title: 'Flutter Demo Home Page'),
                 initialRoute: "loading",

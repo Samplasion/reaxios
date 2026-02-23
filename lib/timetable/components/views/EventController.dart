@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reaxios/components/LowLevel/RestartWidget.dart';
 import 'package:reaxios/utils/consts.dart';
 import 'package:reaxios/timetable/components/views/DayView.dart';
 import 'package:reaxios/timetable/components/views/EventMassEditor.dart';
@@ -170,11 +169,11 @@ class _EventControllerState extends State<EventController> {
     return GestureDetector(
       child: NavigationRail(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        selectedLabelTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+        selectedLabelTextStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
               color: Theme.of(context).colorScheme.primary,
             ),
         unselectedLabelTextStyle:
-            Theme.of(context).textTheme.bodyText1!.copyWith(
+            Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: Theme.of(context).disabledColor,
                 ),
         selectedIndex: _currentIndex,

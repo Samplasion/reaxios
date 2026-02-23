@@ -39,7 +39,7 @@ class _EventWeekViewState extends State<EventWeekView>
           userZoomable: false,
           style: DayViewStyle(
             backgroundColor: theme.canvasColor,
-            backgroundRulesColor: theme.textTheme.caption?.color?.withAlpha(80),
+            backgroundRulesColor: theme.textTheme.bodySmall?.color?.withAlpha(80),
             currentTimeRuleColor: theme.primaryColor,
             currentTimeRuleHeight: 2,
           ),
@@ -51,13 +51,13 @@ class _EventWeekViewState extends State<EventWeekView>
                   .toShortString(context.currentLocale.languageCode)
                   .toUpperCase();
             },
-            textStyle: theme.textTheme.caption
+            textStyle: theme.textTheme.bodySmall
                 ?.copyWith(overflow: TextOverflow.visible),
             color: theme.cardTheme.color!,
           ),
           hoursColumnStyle: HoursColumnStyle(
               color: theme.cardTheme.color!,
-              textStyle: theme.textTheme.caption,
+              textStyle: theme.textTheme.bodySmall,
               width: widget.showHours ? 25 : 0,
               timeFormatter: (hm) {
                 return hm.hour.toString();

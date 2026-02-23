@@ -61,7 +61,7 @@ class _EventViewState extends State<EventView> {
 
     final baseStyle = TextStyle(color: fg);
 
-    final bigText = Theme.of(context).textTheme.headline6!;
+    final bigText = Theme.of(context).textTheme.titleLarge!;
 
     String weekText = "";
     if (settings.getWeeks() > 1) {
@@ -164,9 +164,7 @@ class _EventViewState extends State<EventView> {
         primaryColor: fg,
         colorScheme: ColorScheme(
           primary: fg,
-          primaryVariant: fg,
           secondary: fg,
-          secondaryVariant: fg,
           surface: fg,
           background: fg,
           error: fg,

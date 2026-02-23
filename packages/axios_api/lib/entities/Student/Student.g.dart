@@ -9,7 +9,7 @@ part of 'Student.dart';
 Student _$StudentFromJson(Map<String, dynamic> json) => Student(
       avatar: json['avatar'] as String,
       birthday: const DateSerializer().fromJson(json['dataNascita'] as String),
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       firstName: json['nome'] as String,
       lastName: json['cognome'] as String,
       parentID: json['userId'] as String,

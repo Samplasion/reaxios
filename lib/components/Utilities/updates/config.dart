@@ -11,26 +11,18 @@ Upgrader getAppcastConfig() {
   final upgrader = Upgrader(
     debugDisplayAlways: kDebugMode,
     debugLogging: kDebugMode,
-    appcastConfig: _getConfig(),
-    showIgnore: true,
+    storeController: _getConfig(),
+    // showIgnore: true,
   );
 
   return upgrader;
 }
 
-AppcastConfiguration? _getConfig() {
-  if (Platform.isAndroid) {
-    final appcastURL = 'https://samplasion.github.io/reaxios/appcast.xml';
-    return AppcastConfiguration(
-      url: appcastURL,
-      supportedOS: ['android'],
-    );
-  } else if (Platform.isMacOS) {
-    final appcastURL = 'https://samplasion.github.io/reaxios/appcast_mac.xml';
-    return AppcastConfiguration(
-      url: appcastURL,
-      supportedOS: ['macos'],
-    );
-  }
-  return null;
+UpgraderStoreController? _getConfig() {
+  return UpgraderStoreController(
+    onAndroid: () => UpgraderAppcastStore(
+        appcastURL: 'https://samplasion.github.io/reaxios/appcast.xml'),
+    onMacOS: () => UpgraderAppcastStore(
+        appcastURL: 'https://samplasion.github.io/reaxios/appcast_mac.xml'),
+  );
 }

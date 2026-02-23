@@ -62,8 +62,9 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
         LineChartData(
           lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
-              tooltipBgColor:
-                  Theme.of(context).primaryColor.contrastText.withOpacity(0.5),
+              // TODO
+              // tooltipBgColor:
+              //     Theme.of(context).primaryColor.contrastText.withOpacity(0.5),
               tooltipPadding: const EdgeInsets.all(5),
               getTooltipItems: (List<LineBarSpot> touchedSpots) {
                 return touchedSpots.map((LineBarSpot touchedSpot) {
@@ -138,7 +139,8 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
           ],
           extraLinesData: ExtraLinesData(
             horizontalLines: [
-              HorizontalLine(y: 6, color: Theme.of(context).accentColor),
+              HorizontalLine(
+                  y: 6, color: Theme.of(context).colorScheme.secondary),
             ],
           ),
         ),

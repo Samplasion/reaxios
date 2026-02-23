@@ -13,7 +13,6 @@ import 'package:reaxios/components/Utilities/CardListItem.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/cubit/app_cubit.dart';
-import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/utils/utils.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 

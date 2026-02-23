@@ -6,7 +6,6 @@ import 'package:reaxios/components/LowLevel/GradientCircleAvatar.dart';
 import 'package:reaxios/components/Utilities/NotificationBadge.dart';
 import 'package:reaxios/components/Views/AuthorizationView.dart';
 import 'package:reaxios/components/Utilities/CardListItem.dart';
-import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/utils/utils.dart';
 
 class AuthorizationListItem extends StatelessWidget {
@@ -74,7 +73,7 @@ class AuthorizationListItem extends StatelessWidget {
       subtitle: MarkdownBody(
         data: "**${authorization.insertedBy}**\n$concursText  $justifiedText",
         styleSheet: MarkdownStyleSheet(
-          p: TextStyle(color: Theme.of(context).textTheme.caption!.color),
+          p: TextStyle(color: Theme.of(context).textTheme.bodySmall!.color),
         ),
       ),
       details: Text(

@@ -27,7 +27,7 @@ class Absence extends Equatable implements AbstractJson {
   @JsonKey(name: "datagiust")
   String rawDateJustified;
   bool get isJustified => rawDateJustified.isNotEmpty;
-  DateTime get dateJustified => DateSerializer().fromJson(rawDateJustified);
+  DateTime get dateJustified => const DateSerializer().fromJson(rawDateJustified);
 
   String kindJustified = "";
 
@@ -108,12 +108,12 @@ class Absence extends Equatable implements AbstractJson {
   }
 
   Absence setKinds(Structural structural) {
-    this.kind = structural.absenceKinds
-        .firstWhere((element) => element.kind == this.rawKind,
+    kind = structural.absenceKinds
+        .firstWhere((element) => element.kind == rawKind,
             orElse: () => SimpleKind.empty())
         .desc;
-    this.kindJustified = structural.justificationKinds
-        .firstWhere((element) => element.kind == this.rawKindJustified,
+    kindJustified = structural.justificationKinds
+        .firstWhere((element) => element.kind == rawKindJustified,
             orElse: () => SimpleKind.empty())
         .desc;
     return this;

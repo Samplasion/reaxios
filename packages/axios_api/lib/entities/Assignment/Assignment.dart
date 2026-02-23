@@ -24,7 +24,7 @@ class Assignment extends Equatable implements AbstractJson {
   String subject;
   @JsonKey(name: "oreLezione")
   @IntSerializer()
-  int lessonHour;
+  int? lessonHour;
   @JsonKey(name: "idCompito")
   String id;
   @JsonKey(name: "descCompiti")

@@ -16,7 +16,6 @@ import 'package:reaxios/components/Utilities/GradeAvatar.dart';
 import 'package:reaxios/components/Utilities/MaxWidthContainer.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
 import 'package:reaxios/components/Views/SubjectSettingsView.dart';
-import 'package:reaxios/enums/GradeDisplay.dart';
 import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/structs/GradeAlertBoundaries.dart';
 import 'package:reaxios/timetable/structures/Settings.dart';

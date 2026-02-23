@@ -18,7 +18,7 @@ class MaterialTeacherView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = Theme.of(context).accentColor;
+    final accent = Theme.of(context).colorScheme.secondary;
     return Scaffold(
       appBar: AppBar(
         title: Text(teacher.name),

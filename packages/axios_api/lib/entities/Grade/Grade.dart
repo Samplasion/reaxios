@@ -49,6 +49,7 @@ class Grade extends Equatable implements AbstractJson {
   @DateSerializer()
   DateTime seenOn;
 
+  @JsonKey(defaultValue: "")
   String period = "";
 
   Grade({
@@ -135,12 +136,12 @@ class Grade extends Equatable implements AbstractJson {
     final kinds = structural.gradeKinds[0].kinds;
     final periods = structural.periods[0].periods;
 
-    this.weight = this.grade == 0 ? 0 : this.weight / 100;
-    this.prettyGrade =
+    weight = grade == 0 ? 0 : weight / 100;
+    prettyGrade =
         /* this.weight == 0 ? this.prettyGrade : */ gradeToString(
-            this.grade == 0 ? this.prettyGrade : this.grade);
-    this.kind = kinds.firstWhere((element) => element.kind == this.kind).desc;
-    this.period = periods
+            grade == 0 ? prettyGrade : grade);
+    kind = kinds.firstWhere((element) => element.kind == kind).desc;
+    period = periods
         .firstWhere((p) => p.id == periodID, orElse: () => periods[0])
         .desc;
   }

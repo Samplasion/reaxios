@@ -1,12 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:axios_api/client.dart';
 import 'package:axios_api/entities/Grade/Grade.dart';
 import 'package:axios_api/entities/Structural/Structural.dart';
-import 'package:axios_api/utils/utils.dart' hide gradeAverage;
 import 'package:reaxios/components/LowLevel/Empty.dart';
 import 'package:reaxios/components/LowLevel/Loading.dart';
 import 'package:reaxios/components/Utilities/NiceHeader.dart';
@@ -107,9 +104,10 @@ class _GradeAverageChartState extends State<GradeAverageChart> {
           barTouchData: BarTouchData(
             enabled: true,
             touchTooltipData: BarTouchTooltipData(
-              tooltipBgColor:
-                  tooltipColor(Theme.of(context).cardTheme.color!, 0.1, 0.1)
-                      .withAlpha((0.65 * 255).round()),
+              // TODO
+              // tooltipBgColor:
+              //     tooltipColor(Theme.of(context).cardTheme.color!, 0.1, 0.1)
+              //         .withAlpha((0.65 * 255).round()),
               tooltipPadding: const EdgeInsets.all(8),
               // tooltipBottomMargin: 8,
               getTooltipItem: (
