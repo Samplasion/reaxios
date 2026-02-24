@@ -48,7 +48,7 @@ class Weekday implements Comparable {
   }
 
   @override
-  int get hashCode => hashValues(value, week);
+  int get hashCode => Object.hash(value, week);
 
   @override
   bool operator ==(Object other) {

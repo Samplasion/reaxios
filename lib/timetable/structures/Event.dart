@@ -86,7 +86,7 @@ class Event {
 
   @override
   int get hashCode {
-    return hashValues(name, notes, start, end, color, weekday);
+    return Object.hash(name, notes, start, end, color, weekday);
   }
 
   @override

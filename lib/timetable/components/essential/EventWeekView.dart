@@ -39,7 +39,8 @@ class _EventWeekViewState extends State<EventWeekView>
           userZoomable: false,
           style: DayViewStyle(
             backgroundColor: theme.canvasColor,
-            backgroundRulesColor: theme.textTheme.bodySmall?.color?.withAlpha(80),
+            backgroundRulesColor:
+                theme.textTheme.bodySmall?.color?.withAlpha(80),
             currentTimeRuleColor: theme.primaryColor,
             currentTimeRuleHeight: 2,
           ),
@@ -55,7 +56,7 @@ class _EventWeekViewState extends State<EventWeekView>
                 ?.copyWith(overflow: TextOverflow.visible),
             color: theme.cardTheme.color!,
           ),
-          hoursColumnStyle: HoursColumnStyle(
+          hourColumnStyle: HourColumnStyle(
               color: theme.cardTheme.color!,
               textStyle: theme.textTheme.bodySmall,
               width: widget.showHours ? 25 : 0,
@@ -91,10 +92,6 @@ class _WeekViewEventBase extends FlutterWeekViewEvent {
           description: event.notes,
           start: event.start.toDateTime(day),
           end: event.end.toDateTime(day),
-          backgroundColor: event.color,
-          textStyle: TextStyle(
-            color: getContrastColor(event.color),
-          ),
         );
 
   @override

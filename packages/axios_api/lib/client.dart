@@ -224,6 +224,10 @@ class Axios {
       );
 
       final text = res.body;
+      if (text.startsWith("<?xml")) {
+        Logger.e("XML response: ${res.statusCode}");
+        throw Exception("XML response: ${res.statusCode}");
+      }
       dynamic data = _RawAPIResponse(
           jsonDecode(Encrypter.decrypt(text).replaceAll("#CR#", "\\n")));
 
@@ -339,13 +343,16 @@ class Axios {
   }
 
   Future<Login> login() async {
-    final url = Axios._getURL("GET", "Login", data: {
+    final data = {
       "sAppName": "FAM_APP",
       "sCodiceFiscale": _account.schoolID,
+      "sCustomerIdSpid": _account.schoolID,
       "sUserName": _account.userID,
       "sPassword": _account.userPassword,
       "sVendorToken": VENDOR_TOKEN
-    });
+    };
+    print(data);
+    final url = Axios._getURL("GET", "Login", data: data);
     final res =
         await _makeCall<Login>(url, model: (map) => Login.fromJson(map));
     _session = res;

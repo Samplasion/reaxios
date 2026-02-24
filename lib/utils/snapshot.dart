@@ -17,8 +17,8 @@ Future<Uint8List?> captureWidget(
     child: RenderPositionedBox(
         alignment: Alignment.center, child: repaintBoundary),
     configuration: ViewConfiguration(
-      size: Size(1000, 1000),
-      devicePixelRatio: 1,
+      logicalConstraints: BoxConstraints.tight(const Size(1000, 1000)),
+      devicePixelRatio: 1.0,
     ),
   );
 

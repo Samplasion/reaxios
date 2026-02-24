@@ -57,8 +57,9 @@ void main() async {
 
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getApplicationDocumentsDirectory(),
+        ? HydratedStorageDirectory.web
+        : HydratedStorageDirectory(
+            (await getApplicationDocumentsDirectory()).path),
   );
   runApp(
     RestartWidget(
@@ -130,7 +131,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
         final primary = dark.primary /* , accent = dark.secondary */;
 
         ThemeData getThemeData(ColorScheme scheme) {
-          final cardTheme = CardTheme(
+          final cardTheme = CardThemeData(
             color: scheme.surface,
             surfaceTintColor: scheme.surfaceTint,
             shadowColor: Colors.transparent,
@@ -140,7 +141,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
             colorScheme: scheme,
             useMaterial3: useMaterial3,
             primaryColor: primary,
-            tabBarTheme: TabBarTheme(
+            tabBarTheme: TabBarThemeData(
               indicatorSize: TabBarIndicatorSize.label,
               indicator: MaterialDesignIndicator(
                 indicatorHeight: 4,
@@ -166,7 +167,7 @@ class _RegistroElettronicoAppState extends State<RegistroElettronicoApp> {
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-            dialogTheme: DialogTheme(
+            dialogTheme: DialogThemeData(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),

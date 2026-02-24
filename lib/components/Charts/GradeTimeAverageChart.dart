@@ -104,9 +104,9 @@ class _GradeTimeAverageChartState extends State<GradeTimeAverageChart> {
                   if (value >= 4)
                     return Text(
                       value.toInt().toString(),
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     );
-                  return Text("", style: Theme.of(context).textTheme.caption);
+                  return Text("", style: Theme.of(context).textTheme.bodySmall);
                 },
               ),
             ),

@@ -127,7 +127,7 @@ class _EventCardState extends State<EventCard> {
           ),
           SizedBox(height: 8),
           Text(
-            "Starts in ${printDuration(widget.event!.start.toDateTime().difference(DateTime.now()), tersity: DurationTersity.minute, delimiter: ' and ')}",
+            "Starts in ${prettyDuration(widget.event!.start.toDateTime().difference(DateTime.now()), tersity: DurationTersity.minute, delimiter: ' and ')}",
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: widget.event!.color.contrastColor,
                 ),
@@ -163,7 +163,7 @@ class _EventCardState extends State<EventCard> {
           ),
           SizedBox(height: 8),
           Text(
-            "Ends in ${printDuration(widget.event!.end.toDateTime().difference(DateTime.now()), tersity: DurationTersity.minute, delimiter: ' and ')}",
+            "Ends in ${prettyDuration(widget.event!.end.toDateTime().difference(DateTime.now()), tersity: DurationTersity.minute, delimiter: ' and ')}",
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: widget.event!.color.contrastColor,
                 ),

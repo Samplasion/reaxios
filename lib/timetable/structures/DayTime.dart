@@ -13,7 +13,7 @@ class _Tuple<T1, T2> {
   }
 }
 
-class DayTime extends TimeOfDay implements Comparable<DayTime> {
+class DayTime extends TimeOfDay {
   DayTime({required int hour, required int minute})
       : super(
           hour: _getCorrectedMinutesAndSeconds(hour, minute)[0],
@@ -85,7 +85,8 @@ class DayTime extends TimeOfDay implements Comparable<DayTime> {
   }
 
   @override
-  int compareTo(DayTime other) {
-    return inMinutes.compareTo(other.inMinutes);
+  int compareTo(TimeOfDay other) {
+    final otherInMinutes = other.hour * TimeOfDay.minutesPerHour + other.minute;
+    return inMinutes.compareTo(otherInMinutes);
   }
 }

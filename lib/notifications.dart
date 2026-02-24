@@ -14,9 +14,7 @@ Future<void> sendNotification(
   final AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings(androidIcon);
   final DarwinInitializationSettings initializationSettingsIOS =
-      DarwinInitializationSettings(
-    onDidReceiveLocalNotification: (_, __, ___, ____) {},
-  );
+      DarwinInitializationSettings();
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
@@ -24,8 +22,9 @@ Future<void> sendNotification(
   );
 
   await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveNotificationResponse: (res) => notificationPayload(res.payload),
+    settings: initializationSettings,
+    onDidReceiveNotificationResponse: (res) =>
+        notificationPayload(res?.payload),
   );
 
   final NotificationDetails platformChannelSpecifics = NotificationDetails(
@@ -33,10 +32,10 @@ Future<void> sendNotification(
   );
 
   await flutterLocalNotificationsPlugin.show(
-    id,
-    title,
-    body,
-    platformChannelSpecifics,
+    id: id,
+    title: title,
+    body: body,
+    notificationDetails: platformChannelSpecifics,
     payload: payload,
   );
 }

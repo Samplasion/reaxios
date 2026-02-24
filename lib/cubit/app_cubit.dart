@@ -1,5 +1,6 @@
 // ignore_for_file: close_sinks
 
+import 'package:axios_api/axios_api.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -30,9 +31,7 @@ part 'app_state.dart';
 typedef Future<void> VoidFutureCallback();
 
 class AppCubit extends HydratedCubit<AppState> {
-  AppCubit() : super(AppState.empty()) {
-    hydrate();
-  }
+  AppCubit() : super(AppState.empty());
 
   BehaviorSubject<int> loadingTasks = BehaviorSubject<int>.seeded(0);
 
@@ -219,7 +218,8 @@ class AppCubit extends HydratedCubit<AppState> {
   }
 
   void setTestMode(bool testMode) {
-    emit(state.copyWith(testMode: testMode));
+    emit(state.copyWith(
+        testMode: testMode, axios: testMode ? TestAxios() : state.axios));
   }
 
   void setStudent(Student s) {
@@ -246,11 +246,5 @@ class AppCubit extends HydratedCubit<AppState> {
   @override
   Map<String, dynamic>? toJson(AppState state) {
     return state.toJson();
-  }
-
-  @override
-  void hydrate() {
-    Logger.d("AppCubit: Hydrate AppCubit");
-    super.hydrate();
   }
 }

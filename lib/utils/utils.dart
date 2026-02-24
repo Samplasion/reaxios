@@ -570,9 +570,7 @@ _showExitDialog(BuildContext context) {
           prefs.remove("user");
           prefs.remove("pass");
 
-          Navigator.pop(context);
-          Navigator.pop(context);
-          Navigator.pushReplacementNamed(context, "login");
+          Navigator.pushNamedAndRemoveUntil(context, "login", (route) => false);
         },
       ),
     ],

@@ -9,7 +9,7 @@ num sum(List<num> list) {
 num toReachAverage(List<List<num>> numbers, num target, [int steps = 1]) {
   // Calculate the target weight of the grade, or the weight of the
   // previous grades + the number of steps
-  final targetLength = numbers.fold(0, (a, b) => (a! as num) + b[1]) + steps;
+  final targetLength = numbers.fold<num>(0, (a, b) => a + b[1]) + steps;
 
   // Use the following formula to find out which number brings our average to x
   // N = ((X * L) - ∑A) / S

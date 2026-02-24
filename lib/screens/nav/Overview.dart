@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -214,7 +213,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
                 ).padding(bottom: 8),
                 Text(
                   context.dateToString(e.date),
-                  style: Theme.of(context).textTheme.caption!.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: scheme.onSecondaryContainer.withOpacity(0.75),
                       ),
                 ),
@@ -358,7 +357,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         ...[
           Text(
             context.loc.translate("overview.latestGrades"),
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ).padding(horizontal: 16, top: 8),
           ...gradeCards,
         ].map((e) => Center(child: MaxWidthContainer(child: e))),
@@ -369,7 +368,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         ...[
           Text(
             context.loc.translate("overview.homeworkForTomorrow"),
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ).padding(horizontal: 16, top: 8),
           _getAssignmentTimeline(tmrAssignments),
         ].map((e) => Center(child: MaxWidthContainer(child: e))),
@@ -378,7 +377,7 @@ class _OverviewPaneState extends ReloadableState<OverviewPane> {
         MaxWidthContainer(
           child: Text(
             context.loc.translate("overview.latestLessons"),
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ).padding(horizontal: 16, top: 8),
         ).center(),
         Scrollbar(

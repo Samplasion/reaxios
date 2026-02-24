@@ -9,10 +9,12 @@ part of 'Event.dart';
 Event _$EventFromJson(Map<String, dynamic> json) => Event(
       name: json['name'] as String,
       notes: json['notes'] as String,
-      start: const TimeOfDayConverter().fromJson(json['start'] as int),
-      end: const TimeOfDayConverter().fromJson(json['end'] as int),
-      color: const ColorConverter().fromJson(json['color'] as int),
-      weekday: const WeekdayConverter().fromJson(json['weekday'] as int),
+      start:
+          const TimeOfDayConverter().fromJson((json['start'] as num).toInt()),
+      end: const TimeOfDayConverter().fromJson((json['end'] as num).toInt()),
+      color: const ColorConverter().fromJson((json['color'] as num).toInt()),
+      weekday:
+          const WeekdayConverter().fromJson((json['weekday'] as num).toInt()),
       abbr: json['abbr'] as String? ?? "",
     );
 

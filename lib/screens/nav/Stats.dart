@@ -159,7 +159,7 @@ class _StatsPaneState extends State<StatsPane> {
           subtitle: Text(gradesByGrade.last.subject),
           details: RichText(
             text: TextSpan(
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
               children: [
                 TextSpan(text: context.loc.translate("stats.average")),
                 GradeText(context, grade: best),
@@ -177,7 +177,7 @@ class _StatsPaneState extends State<StatsPane> {
           subtitle: Text(gradesByGrade.first.subject),
           details: RichText(
             text: TextSpan(
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
               children: [
                 TextSpan(text: context.loc.translate("stats.average")),
                 GradeText(context, grade: worst),

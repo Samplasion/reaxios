@@ -2,5 +2,6 @@
   "conventionalCommits.scopes": [
     "debug",
     "version"
-  ]
+  ],
+  "dart.flutterSdkPath": ".fvm/versions/stable"
 }
