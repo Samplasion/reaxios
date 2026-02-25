@@ -14,11 +14,11 @@ jobs:
     runs-on: macos-11
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.7.0"
+          flutter-version: "3.41.2"
           channel: "stable"
       - name: Install dependencies
         run: flutter pub get
@@ -35,13 +35,13 @@ jobs:
           tools/build_macos.sh
       - name: Release
         if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: out/macos/Registro-*
           generate_release_notes: true
       - name: Upload artifacts
         if: github.event_name != 'release'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Registro macOS app
           path: out/macos/Registro-*
@@ -51,11 +51,11 @@ jobs:
     runs-on: macos-11
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.7.0"
+          flutter-version: "3.41.2"
           channel: "stable"
       - name: Install dependencies
         run: flutter pub get
@@ -70,13 +70,13 @@ jobs:
           tools/build_ios.sh
       - name: Release
         if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: out/ios/Registro-*
           generate_release_notes: true
       - name: Upload artifacts
         if: github.event_name != 'release'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Registro iOS app
           path: out/ios/Registro-*
@@ -86,11 +86,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.7.0"
+          flutter-version: "3.41.2"
           channel: "stable"
       - name: Install dependencies
         run: flutter pub get
@@ -100,13 +100,13 @@ jobs:
         run: tools/build_web.sh
       - name: Release
         if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: out/web/Registro-*
           generate_release_notes: true
       - name: Upload artifacts
         if: github.event_name != 'release'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Registro Web app
           path: out/web/Registro-*
@@ -120,11 +120,11 @@ jobs:
         flag: [a, b]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.7.0"
+          flutter-version: "3.41.2"
           channel: "stable"
       - name: Clean project
         run: flutter clean
@@ -148,13 +148,13 @@ jobs:
         run: tools/build_android.sh -${{ matrix.flag }}
       - name: Release
         if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: out/android/Registro-*
           generate_release_notes: true
       - name: Upload artifacts
         if: github.event_name != 'release'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Registro Android app [${{ matrix.flag }}]
           path: out/android/Registro-*
