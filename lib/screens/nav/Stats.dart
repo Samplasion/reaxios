@@ -80,9 +80,9 @@ class _StatsPaneState extends State<StatsPane> {
     final settings = Provider.of<Settings>(context);
     final averageMode = settings.getAverageMode();
 
-    final currentPeriod = (periods as List<Period?>).firstWhere(
-        (element) => element?.isCurrent() ?? false,
-        orElse: () => null);
+    final currentPeriod =
+        periods.firstWhereOrNull((element) => element.isCurrent());
+
     final currentGrades = grades
         .where((element) =>
             currentPeriod == null ? true : element.period == currentPeriod.desc)

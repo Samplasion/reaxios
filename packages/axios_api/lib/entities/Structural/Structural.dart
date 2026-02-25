@@ -1,3 +1,4 @@
+import 'package:axios_api/utils/utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:axios_api/utils/DateSerializer.dart';
@@ -163,9 +164,7 @@ class Periods extends Equatable {
 
   Period? getCurrentPeriod([DateTime? date]) {
     date ??= DateTime.now();
-    // ignore: unnecessary_cast
-    return (periods as List<Period?>)
-        .firstWhere((p) => p?.isCurrent(date) ?? false, orElse: () => null);
+    return periods.firstWhereOrNull((p) => p.isCurrent(date));
   }
 
   @override

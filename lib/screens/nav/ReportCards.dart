@@ -181,7 +181,8 @@ class _ReportCardsPaneState extends State<ReportCardsPane> {
                             })
                             .where((DropdownMenuItem<String>? item) =>
                                 item != null)
-                            .toList() as List<DropdownMenuItem<String>>,
+                            .toList()
+                            .cast<DropdownMenuItem<String>>(),
                       ),
                     ],
                     if (selectedPeriod.isNotEmpty)

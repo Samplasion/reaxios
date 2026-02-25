@@ -19,7 +19,6 @@ class DateSerializer implements JsonConverter<DateTime, String> {
 
     if (dateParts.length < 3) return DateTime.fromMillisecondsSinceEpoch(0);
 
-    // month is 0-based, that's why we need dataParts[1] - 1
     return DateTime(int.parse(dateParts[2]), int.parse(dateParts[1]),
         int.parse(dateParts[0]), hours, minutes, seconds);
   }
@@ -28,5 +27,13 @@ class DateSerializer implements JsonConverter<DateTime, String> {
   DateTime fromJson(String json) => _axiosStringToDate(json);
 
   @override
-  String toJson(DateTime color) => color.toIso8601String();
+  String toJson(DateTime date) {
+    final y = date.year.toString().padLeft(4, '0');
+    final m = date.month.toString().padLeft(2, '0');
+    final d = date.day.toString().padLeft(2, '0');
+    final h = date.hour.toString().padLeft(2, '0');
+    final min = date.minute.toString().padLeft(2, '0');
+    final s = date.second.toString().padLeft(2, '0');
+    return "$d/$m/$y $h:$min:$s";
+  }
 }

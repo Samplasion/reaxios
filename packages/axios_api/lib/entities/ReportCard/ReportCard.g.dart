@@ -20,8 +20,10 @@ ReportCard _$ReportCardFromJson(Map<String, dynamic> json) => ReportCard(
           .map((e) => ReportCardSubject.fromJson(e as Map<String, dynamic>))
           .toList(),
       dateReadRaw: json['dataVisualizzazione'] as String,
-      canViewAbsences: const BooleanSerializer()
-          .fromJson(json['flagAssenzeVisibili'] as String),
+      canViewAbsences: json['flagAssenzeVisibili'] == null
+          ? true
+          : const BooleanSerializer()
+              .fromJson(json['flagAssenzeVisibili'] as String),
       eduGrade: json['ordineScuola'] as String? ?? '',
       cardKind: json['tipoPagella'] as String? ?? '',
     );

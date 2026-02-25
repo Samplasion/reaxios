@@ -19,17 +19,20 @@ class Absence extends Equatable implements AbstractJson {
   @DateSerializer()
   DateTime date;
 
-  String kind = "";
+  @JsonKey(includeFromJson: false)
+  String? kind;
 
   @JsonKey(name: "tipo")
-  String rawKind;
+  String? rawKind;
 
   @JsonKey(name: "datagiust")
   String rawDateJustified;
   bool get isJustified => rawDateJustified.isNotEmpty;
-  DateTime get dateJustified => const DateSerializer().fromJson(rawDateJustified);
+  DateTime get dateJustified =>
+      const DateSerializer().fromJson(rawDateJustified);
 
-  String kindJustified = "";
+  @JsonKey(includeFromJson: false)
+  String? kindJustified;
 
   @JsonKey(name: "tipogiust")
   String rawKindJustified;
@@ -38,7 +41,7 @@ class Absence extends Equatable implements AbstractJson {
   String rawReason;
   String get reason => rawReason == "< non visibile >" ? "" : rawReason;
 
-  @JsonKey(name: "calcolo")
+  @JsonKey(name: "calcolo", defaultValue: true)
   @BooleanSerializer()
   bool concurs;
 
@@ -64,10 +67,10 @@ class Absence extends Equatable implements AbstractJson {
     required this.id,
     required this.date,
     required this.rawReason,
-    required this.kind,
-    required this.kindJustified,
+    this.kind,
+    this.kindJustified,
     required this.concurs,
-    required this.hasTime,
+    this.hasTime = false,
     required this.isJustifiable,
     required this.rawDateJustified,
     required this.rawKind,

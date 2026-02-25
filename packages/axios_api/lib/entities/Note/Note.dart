@@ -15,14 +15,18 @@ class Note extends Equatable implements AbstractJson {
   @JsonKey(name: "descNota")
   String content;
   String get cleanContent {
-    return content.replaceFirst(RegExp(r"<.+>Comunicazione: </.+>"), "").trim();
+    return content
+        .replaceFirst(RegExp(r"<.+>Comunicazione: </.+>"), "")
+        .replaceFirst(RegExp(r"<.+>.+<.+>"), "")
+        .replaceAll("&nbsp;", " ")
+        .trim();
   }
 
   @JsonKey(name: "tipo")
   @NoteKindSerializer()
   NoteKind rawKind;
   NoteKind get kind {
-    if (content.startsWith(RegExp(r"<.+>Comunicazione: </.+>"))) {
+    if (content.startsWith(RegExp(r"<.+>(Comunicazione: |Annotazione)</.+>"))) {
       return NoteKind.Note;
     } else {
       return NoteKind.Notice;

@@ -10,6 +10,8 @@ import 'package:reaxios/utils/format.dart';
 import 'package:reaxios/utils/utils.dart';
 import "package:styled_widget/styled_widget.dart";
 
+String _firstCharacter(String param) => param.isNotEmpty ? param[0] : "?";
+
 class AbsenceListItem extends StatelessWidget {
   AbsenceListItem(
       {Key? key,
@@ -35,7 +37,7 @@ class AbsenceListItem extends StatelessWidget {
     final bg =
         context.harmonize(color: colors[absence.kind] ?? colors["Other"]!);
     final av = GradientCircleAvatar(
-      child: Text(absence.kind.characters.first.toString()),
+      child: Text(_firstCharacter(absence.kind ?? absence.rawKind ?? "")),
       color: bg,
     );
 
@@ -52,12 +54,13 @@ class AbsenceListItem extends StatelessWidget {
 
     final tile = CardListItem(
       leading: leading,
-      title: context.loc.translate("absences.type${absence.kind}"),
+      title: context.loc.translate("absences.type${absence.kind ?? "Assenze"}"),
       subtitle: justifiedText != null && justifiedText.isNotEmpty
           ? MarkdownBody(
               data: justifiedText,
               styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Theme.of(context).textTheme.bodySmall!.color),
+                p: TextStyle(
+                    color: Theme.of(context).textTheme.bodySmall!.color),
               ),
             )
           : Container(),

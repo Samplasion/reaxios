@@ -10,14 +10,16 @@ Absence _$AbsenceFromJson(Map<String, dynamic> json) => Absence(
       id: json['id'] as String,
       date: const DateSerializer().fromJson(json['data'] as String),
       rawReason: json['motivo'] as String,
-      kind: json['kind'] as String,
-      kindJustified: json['kindJustified'] as String,
-      concurs: const BooleanSerializer().fromJson(json['calcolo'] as String),
-      hasTime: const BooleanSerializer().fromJson(json['ora'] as String),
+      concurs: json['calcolo'] == null
+          ? true
+          : const BooleanSerializer().fromJson(json['calcolo'] as String),
+      hasTime: json['ora'] == null
+          ? false
+          : const BooleanSerializer().fromJson(json['ora'] as String),
       isJustifiable:
           const BooleanSerializer().fromJson(json['giustificabile'] as String),
       rawDateJustified: json['datagiust'] as String,
-      rawKind: json['tipo'] as String,
+      rawKind: json['tipo'] as String?,
       rawKindJustified: json['tipogiust'] as String,
       lessonHour: json['oralez'] == null
           ? 0
@@ -27,10 +29,8 @@ Absence _$AbsenceFromJson(Map<String, dynamic> json) => Absence(
 Map<String, dynamic> _$AbsenceToJson(Absence instance) => <String, dynamic>{
       'id': instance.id,
       'data': const DateSerializer().toJson(instance.date),
-      'kind': instance.kind,
       'tipo': instance.rawKind,
       'datagiust': instance.rawDateJustified,
-      'kindJustified': instance.kindJustified,
       'tipogiust': instance.rawKindJustified,
       'motivo': instance.rawReason,
       'calcolo': const BooleanSerializer().toJson(instance.concurs),

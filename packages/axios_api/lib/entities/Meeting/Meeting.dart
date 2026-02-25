@@ -138,7 +138,10 @@ class MeetingDate {
   final String periodID;
 
   @JsonKey(name: 'idPrenotazione')
-  final String bookingID;
+
+  /// 2026-02-24: a quanto pare questo campo può essere sia int che string
+  /// (chissà che cazzo si sono fumati quelli che hanno scritto il codice)
+  final dynamic bookingID;
 
   @JsonKey(name: 'data')
   final String date;
@@ -178,7 +181,7 @@ class MeetingDate {
   static empty() {
     return MeetingDate(
       periodID: '',
-      bookingID: '',
+      bookingID: 0,
       date: '',
       rawSeats: '',
       rawTimes: '',
@@ -200,7 +203,7 @@ class MeetingDate {
   static test() {
     return MeetingDate(
       periodID: '',
-      bookingID: '',
+      bookingID: 0,
       date: '',
       rawSeats: '',
       rawTimes: '',

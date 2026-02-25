@@ -48,7 +48,7 @@ Map<String, dynamic> _$MeetingToJson(Meeting instance) => <String, dynamic>{
 
 MeetingDate _$MeetingDateFromJson(Map<String, dynamic> json) => MeetingDate(
       periodID: json['idPeriodo'] as String,
-      bookingID: json['idPrenotazione'] as String,
+      bookingID: json['idPrenotazione'],
       date: json['data'] as String,
       rawSeats: json['posti'] as String,
       rawTimes: json['orari'] as String,

@@ -46,7 +46,7 @@ class ReportCard extends Equatable {
     }
   }
 
-  @JsonKey(name: "flagAssenzeVisibili")
+  @JsonKey(name: "flagAssenzeVisibili", defaultValue: true)
   @BooleanSerializer()
   final bool canViewAbsences;
   @JsonKey(name: "ordineScuola", defaultValue: "")
