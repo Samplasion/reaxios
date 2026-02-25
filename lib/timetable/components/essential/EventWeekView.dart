@@ -63,6 +63,9 @@ class _EventWeekViewState extends State<EventWeekView>
               timeFormatter: (hm) {
                 return hm.hour.toString();
               }),
+          eventWidgetBuilder: (event, height, width) {
+            return event.buildWidget(context, height, width);
+          },
           events: widget.events.map((s) {
             return _WeekViewEventBase(
               s,
@@ -94,10 +97,8 @@ class _WeekViewEventBase extends FlutterWeekViewEvent {
           end: event.end.toDateTime(day),
         );
 
-  @override
-  Widget build(
+  Widget buildWidget(
     BuildContext context,
-    DayView dayView,
     double height,
     double width,
   ) {

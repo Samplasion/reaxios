@@ -137,8 +137,7 @@ class MaterialFolderData extends Equatable implements AbstractJson {
   }
 
   Future<List<MaterialData>> getMaterials() async {
-    return await session.getMaterialDetails(
-        teacher.id, id.toString());
+    return await session.getMaterialDetails(teacher.id, id.toString());
   }
 
   @override

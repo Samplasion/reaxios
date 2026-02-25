@@ -120,6 +120,7 @@ class _EventEditorState extends State<EventEditor> {
                   ),
                 ),
                 TypeAheadField<Event>(
+                  controller: name,
                   builder: (context, controller, focusNode) {
                     return TextFormField(
                       controller: controller,
@@ -460,7 +461,9 @@ class _EventEditorState extends State<EventEditor> {
       end: end,
       color: color,
       weekday: weekday,
-      abbr: abbreviation.text,
+      abbr: abbreviation.text.isNotEmpty
+          ? abbreviation.text
+          : generatedAbbreviation,
     ));
     Navigator.pop(context);
   }

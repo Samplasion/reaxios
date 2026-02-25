@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class BigCard extends StatefulWidget {
   final Widget? leading;
   final Widget body;

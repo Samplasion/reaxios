@@ -137,8 +137,8 @@ class Grade extends Equatable implements AbstractJson {
     final periods = structural.periods[0].periods;
 
     weight = grade == 0 ? 0 : weight / 100;
-    prettyGrade = /* this.weight == 0 ? this.prettyGrade : */ gradeToString(
-        grade == 0 ? prettyGrade : grade);
+    prettyGrade = /* this.weight == 0 ? this.prettyGrade : */
+        gradeToString(grade == 0 ? prettyGrade : grade);
     kind = kinds.firstWhere((element) => element.kind == kind).desc;
     period = periods
         .firstWhere((p) => p.id == periodID, orElse: () => periods[0])

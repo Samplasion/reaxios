@@ -33,13 +33,11 @@ class Event {
     required this.end,
     required this.color,
     required this.weekday,
-    this.abbr = "",
+    String abbr = "",
     this.ignoreList = const [],
-  }) {
-    if (abbr.isEmpty) {
-      abbr = generateAbbreviation(3, name, ignoreList: ignoreList);
-    }
-  }
+  }) : abbr = abbr.isEmpty
+            ? generateAbbreviation(3, name, ignoreList: ignoreList)
+            : abbr;
 
   Event copyWith({
     String? name,

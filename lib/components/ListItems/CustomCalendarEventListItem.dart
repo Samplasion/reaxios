@@ -45,8 +45,8 @@ class CustomCalendarEventListItem extends StatelessWidget {
           ? Container()
           : Linkify(
               text: event.description.trim(),
-              style:
-                  TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodySmall?.color),
               onOpen: (link) async {
                 if (await canLaunch(link.url)) {
                   await launch(link.url);

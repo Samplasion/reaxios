@@ -114,7 +114,8 @@ class _ResourcefulCardListItemState extends State<ResourcefulCardListItem> {
                           )
                           .merge(
                             TextStyle(
-                              color: Theme.of(context).textTheme.bodySmall!.color,
+                              color:
+                                  Theme.of(context).textTheme.bodySmall!.color,
                             ),
                           ),
                     ),
@@ -135,7 +136,8 @@ class _ResourcefulCardListItemState extends State<ResourcefulCardListItem> {
                           )
                           .merge(
                             TextStyle(
-                              color: Theme.of(context).textTheme.bodySmall!.color,
+                              color:
+                                  Theme.of(context).textTheme.bodySmall!.color,
                             ),
                           ),
                     ),
