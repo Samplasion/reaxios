@@ -6,11 +6,10 @@ import 'package:axios_api/utils/IntSerializer.dart';
 
 part 'Assignment.g.dart';
 
-// {
-//     date: Date,
-//     subject: string,
-//     assignment: string
-// }
+enum AssignmentType {
+  test,
+  homework,
+}
 
 @JsonSerializable()
 class Assignment extends Equatable implements AbstractJson {
@@ -28,15 +27,25 @@ class Assignment extends Equatable implements AbstractJson {
   @JsonKey(name: "idCompito")
   String id;
   @JsonKey(name: "descCompiti")
-  String assignment;
+  String assignmentRaw;
 
-  Assignment(
-      {required this.date,
-      required this.publicationDate,
-      required this.subject,
-      required this.lessonHour,
-      required this.id,
-      required this.assignment});
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String get assignment =>
+      assignmentRaw.replaceFirst("<b>Verifica</b>", "").trim();
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  AssignmentType get type => assignmentRaw.contains("<b>Verifica</b>")
+      ? AssignmentType.test
+      : AssignmentType.homework;
+
+  Assignment({
+    required this.date,
+    required this.publicationDate,
+    required this.subject,
+    required this.lessonHour,
+    required this.id,
+    required this.assignmentRaw,
+  });
 
   static empty() {
     return Assignment(
@@ -45,7 +54,7 @@ class Assignment extends Equatable implements AbstractJson {
       subject: "",
       lessonHour: 0,
       id: "",
-      assignment: "",
+      assignmentRaw: "",
     );
   }
 
@@ -56,7 +65,7 @@ class Assignment extends Equatable implements AbstractJson {
 
   @override
   String toString() {
-    return 'Assignment{date: $date, publicationDate: $publicationDate, subject: $subject, lessonHour: $lessonHour, id: $id, assignment: $assignment}';
+    return 'Assignment{date: $date, publicationDate: $publicationDate, subject: $subject, lessonHour: $lessonHour, id: $id, assignment: $assignment, type: $type}';
   }
 
   static test() {
@@ -66,7 +75,7 @@ class Assignment extends Equatable implements AbstractJson {
       subject: "Matematica",
       lessonHour: 2,
       id: "4",
-      assignment: "Verifica sistemi",
+      assignmentRaw: "Verifica sistemi",
     );
   }
 
@@ -77,7 +86,7 @@ class Assignment extends Equatable implements AbstractJson {
         subject,
         lessonHour,
         id,
-        assignment,
+        assignmentRaw,
       ];
 }
 

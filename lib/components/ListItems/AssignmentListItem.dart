@@ -31,8 +31,8 @@ class AssignmentListItem extends StatelessWidget {
           ? Container()
           : SelectableLinkify(
               text: assignment.assignment.trim(),
-              style:
-                  TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodySmall?.color),
               onOpen: (link) async {
                 if (await canLaunch(link.url)) {
                   await launch(link.url);
@@ -42,8 +42,28 @@ class AssignmentListItem extends StatelessWidget {
                 }
               },
             ),
-      details: Text(context.dateToString(assignment.date)),
-      // isThreeLine: true,
+      details: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          if (assignment.type == AssignmentType.test)
+            Chip(
+              avatar: Icon(Icons.warning,
+                  color: Theme.of(context).colorScheme.onErrorContainer,
+                  size: 16),
+              label: Text(
+                context.loc.translate("assignments.test"),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onErrorContainer),
+              ),
+              backgroundColor: Theme.of(context).colorScheme.errorContainer,
+              side: BorderSide.none,
+              visualDensity: VisualDensity.compact,
+            ),
+          Text(context.dateToString(assignment.date)),
+        ],
+      ),
       onClick: onClick,
     ).padding(horizontal: 16);
   }

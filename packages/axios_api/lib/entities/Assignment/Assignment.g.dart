@@ -14,7 +14,7 @@ Assignment _$AssignmentFromJson(Map<String, dynamic> json) => Assignment(
       lessonHour: _$JsonConverterFromJson<String, int>(
           json['oreLezione'], const IntSerializer().fromJson),
       id: json['idCompito'] as String,
-      assignment: json['descCompiti'] as String,
+      assignmentRaw: json['descCompiti'] as String,
     );
 
 Map<String, dynamic> _$AssignmentToJson(Assignment instance) =>
@@ -26,7 +26,7 @@ Map<String, dynamic> _$AssignmentToJson(Assignment instance) =>
       'oreLezione': _$JsonConverterToJson<String, int>(
           instance.lessonHour, const IntSerializer().toJson),
       'idCompito': instance.id,
-      'descCompiti': instance.assignment,
+      'descCompiti': instance.assignmentRaw,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

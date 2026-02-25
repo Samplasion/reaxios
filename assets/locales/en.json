@@ -255,7 +255,8 @@
   },
   "assignments": {
     "empty": "You've got no homework at all!",
-    "allSubjects": "All subjects"
+    "allSubjects": "All subjects",
+    "test": "Test"
   },
   "disciplinaryNotices": {
     "empty": "You haven't received disciplinary notices."

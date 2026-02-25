@@ -255,7 +255,8 @@
   },
   "assignments": {
     "empty": "Non hai compiti (in assoluto)!",
-    "allSubjects": "Tutte le materie"
+    "allSubjects": "Tutte le materie",
+    "test": "Verifica"
   },
   "disciplinaryNotices": {
     "empty": "Non hai note disciplinari."

@@ -53,7 +53,7 @@ class TestAxios implements Axios {
         subject: sub,
         lessonHour: (Random().nextInt(5) + 1),
         id: "76712890",
-        assignment: assmt,
+        assignmentRaw: assmt,
       );
   @override
   Future<List<Assignment>> getAssignments() async {
