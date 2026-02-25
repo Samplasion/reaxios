@@ -112,6 +112,7 @@ class AppCubit extends HydratedCubit<AppState> {
     if (force || this.state.assignments == null)
       await loadObject(() async {
         final assignments = await state.axios!.getAssignments();
+        assignments.sort((a, b) => b.date.compareTo(a.date));
         emit(state.copyWith(assignments: assignments));
       });
   }
@@ -124,6 +125,7 @@ class AppCubit extends HydratedCubit<AppState> {
           await this.loadStructural();
           return this.structural!;
         }());
+        grades.sort((a, b) => b.date.compareTo(a.date));
         emit(state.copyWith(grades: grades));
       });
   }

@@ -92,8 +92,8 @@ class _AssignmentsPaneState extends State<AssignmentsPane> {
           )
         ],
       ),
-      body: buildOk(context, cubit.assignments.reversed.toList()),
-      endDrawer: _getEndDrawer(cubit.assignments.reversed.toList()),
+      body: buildOk(context, cubit.assignments.toList()),
+      endDrawer: _getEndDrawer(cubit.assignments.toList()),
     );
   }
 
